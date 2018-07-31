@@ -1,0 +1,253 @@
+{
+    "data":[
+    {
+        "title": "MAKYAJ",
+        "id": "18775",
+        "img": "https://www.flormar.com.tr/UPLOAD/categories-images/makyaj.jpg",
+        "children": [{
+            "title": "YÜZ",
+            "id": "18775",
+            "img": "https://www.flormar.com.tr/UPLOAD/categories-images/makyaj.jpg",
+            "children": [{
+                "title": "TÜMÜNÜ GÖR",
+                "id": "18775"
+            }, {
+                "title": "BB KREM",
+                "id": "18775"
+            }, {
+                "title": "FONDÖTEN",
+                "id": "18775"
+            }, {
+                "title": "ALLIK",
+                "id": "18775"
+            }, {
+                "title": "PUDRA",
+                "id": "18775"
+            }, {
+                "title": "KAPATICI",
+                "id": "18775"
+            }, {
+                "title": "BAZ",
+                "id": "18775"
+            }, {
+                "title": "CC KREM",
+                "id": "18775"
+            }, {
+                "title": "BRONZLAŞTIRICI",
+                "id": "18775"
+            }, {
+                "title": "KONTÜR AYDINLATMA",
+                "id": "18775"
+            }, {
+                "title": "MAKYAJ SONRASI",
+                "id": "18775"
+            }]
+        }, {
+            "title": "GÖZ",
+            "id": "18775",
+            "img": "https://www.flormar.com.tr/UPLOAD/categories-images/makyaj.jpg",
+            "children": [{
+                "title": "TÜMÜNÜ GÖR",
+                "id": "18775"
+            }, {
+                "title": "GÖZ FARI",
+                "id": "18775"
+            }, {
+                "title": "MASKARA",
+                "id": "18775"
+            }, {
+                "title": "KAŞ",
+                "id": "18775"
+            }, {
+                "title": "GÖZ KALEMİ",
+                "id": "18775"
+            }, {
+                "title": "LİKİT EYELINER",
+                "id": "18775"
+            }, {
+                "title": "GÖZ MAKYAJI TEMİZLEME",
+                "id": "18775"
+            }, {
+                "title": "BAZ",
+                "id": "18775"
+            }]
+        }, {
+            "title": "DUDAK",
+            "id": "18775",
+            "img": "https://www.flormar.com.tr/UPLOAD/categories-images/makyaj.jpg",
+            "children": [{
+                "title": "TÜMÜNÜ GÖR",
+                "id": "18775"
+            }, {
+                "title": "DUDAK BAKIMI",
+                "id": "18775"
+            }, {
+                "title": "DUDAK PARLATICISI",
+                "id": "18775"
+            }, {
+                "title": "RUJ",
+                "id": "18775"
+            }, {
+                "title": "DUDAK KALEMİ",
+                "id": "18775"
+            }, {
+                "title": "BAZ",
+                "id": "18775"
+            }]
+        }, {
+            "title": "TIRNAK",
+            "id": "18775",
+            "img": "https://www.flormar.com.tr/UPLOAD/categories-images/makyaj.jpg",
+            "children": [{
+                "title": "TÜMÜNÜ GÖR",
+                "id": "18775"
+            }, {
+                "title": "OJE",
+                "id": "18775"
+            }, {
+                "title": "TIRNAK BAKIMI",
+                "id": "18775"
+            }, {
+                "title": "OJE KURUTUCU",
+                "id": "18775"
+            }, {
+                "title": "OJE TEMİZLEYİCİ",
+                "id": "18775"
+            }]
+        }, {
+            "title": "VÜCUT",
+            "id": "18775",
+            "img": "https://www.flormar.com.tr/UPLOAD/categories-images/makyaj.jpg",
+            "children": [{
+                "title": "TÜMÜNÜ GÖR",
+                "id": "18775"
+            }]
+        }]
+    },
+    {
+        "title": "CİLT BAKIMI",
+        "id": "18775",
+        "img": "https://www.flormar.com.tr/UPLOAD/categories-images/cilt-vucut.jpg",
+        "children": [{
+            "title": "YÜZ BAKIMI",
+            "id": "18775",
+            "img": "https://www.flormar.com.tr/UPLOAD/categories-images/makyaj.jpg",
+            "children": [{
+                "title": "TÜMÜNÜ GÖR",
+                "id": "18775"
+            }, {
+                "title": "TEMİZLEYİCİLER",
+                "id": "18775"
+            }, {
+                "title": "NEMLENDİRİCİLER",
+                "id": "18775"
+            }]
+        }, {
+            "title": "EL & VÜCUT BAKIMI",
+            "id": "18775",
+            "img": "https://www.flormar.com.tr/UPLOAD/categories-images/makyaj.jpg",
+            "children": [{
+                "title": "TÜMÜNÜ GÖR",
+                "id": "18775"
+            }, {
+                "title": "NEMLENDİRİCİ",
+                "id": "18775"
+            }, {
+                "title": "DUŞ JELİ",
+                "id": "18775"
+            }]
+        }, {
+            "title": "PARFÜM",
+            "id": "18775",
+            "img": "https://www.flormar.com.tr/UPLOAD/categories-images/makyaj.jpg",
+            "children": [{
+                "title": "TÜMÜNÜ GÖR",
+                "id": "18775"
+            }, {
+                "title": "VÜCUT SPREYLERİ",
+                "id": "18775"
+            }, {
+                "title": "PARFÜMLER",
+                "id": "18775"
+            }]
+        }]
+    },
+    {
+        "title": "AKSESUAR",
+        "id": "18775",
+        "img": "https://www.flormar.com.tr/UPLOAD/categories-images/aksesuar.jpg",
+        "children": [{
+            "title": "YÜZ",
+            "id": "18775",
+            "img": "https://www.flormar.com.tr/UPLOAD/categories-images/makyaj.jpg",
+            "children": [{
+                "title": "TÜMÜNÜ GÖR",
+                "id": "18775"
+            }, {
+                "title": "FIRÇA",
+                "id": "18775"
+            }, {
+                "title": "YARDIMCI MALZEMELER",
+                "id": "18775"
+            }, {
+                "title": "SÜNGER",
+                "id": "18775"
+            }, {
+                "title": "APLİKATÖR",
+                "id": "18775"
+            }]
+        }, {
+            "title": "GÖZ",
+            "id": "18775",
+            "img": "https://www.flormar.com.tr/UPLOAD/categories-images/makyaj.jpg",
+            "children": [{
+                "title": "TÜMÜNÜ GÖR",
+                "id": "18775"
+            }, {
+                "title": "FIRÇA",
+                "id": "18775"
+            }, {
+                "title": "YARDIMCI MALZEMELER",
+                "id": "18775"
+            }, {
+                "title": "TAKMA KİRPİK",
+                "id": "18775"
+            }, {
+                "title": "APLİKATÖR",
+                "id": "18775"
+            }]
+        }, {
+            "title": "TIRNAK",
+            "id": "18775",
+            "img": "https://www.flormar.com.tr/UPLOAD/categories-images/makyaj.jpg",
+            "children": [{
+                "title": "TÜMÜNÜ GÖR",
+                "id": "18775"
+            }, {
+                "title": "MAKAS",
+                "id": "18775"
+            }, {
+                "title": "TÖRPÜ",
+                "id": "18775"
+            }, {
+                "title": "TAKMA TIRNAK",
+                "id": "18775"
+            }, {
+                "title": "YARDIMCI MALZEMELER",
+                "id": "18775"
+            }, {
+                "title": "NAIL ART",
+                "id": "18775"
+            }]
+        }, {
+            "title": "DİĞER",
+            "id": "18775",
+            "img": "https://www.flormar.com.tr/UPLOAD/categories-images/makyaj.jpg",
+            "children": [{
+                "title": "TÜMÜNÜ GÖR",
+                "id": "18775"
+            }]
+        }]
+    }
+]
+}

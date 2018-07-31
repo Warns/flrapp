@@ -1,0 +1,16 @@
+{
+  "name": "root",
+  "main": "node_modules/expo/AppEntry.js",
+  "private": true,
+  "dependencies": {
+    "babel-preset-expo": "^4.0.0",
+    "expo": "^28.0.0",
+    "react": "16.3.1",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-28.0.0.tar.gz",
+    "react-native-safe-area-view": "^0.9.0",
+    "react-native-sideswipe": "^1.4.2",
+    "react-navigation": "^2.5.2",
+    "react-redux": "^5.0.7",
+    "redux": "^4.0.0"
+  }
+}
