@@ -25,6 +25,77 @@ const DefaultHeader = class DefaultHeader extends React.Component{
     }
   }
 
+  _onBackPress = () => {
+    //this.props.nav.goBack();
+  }
+
+  render(){
+
+    //console.log( this.props );
+
+    return(
+        <View style={styles.wrapper}>
+          <View style={{flex:1, flexDirection:'row'}}>
+            <TouchableOpacity style={{padding:5, paddingRight:0}} onPress={this._onBackPress}>
+              <Image source={require('../../../assets/images/icons/back.png')} style={{width:40, height:40, resizeMode:'contain'}} />
+            </TouchableOpacity>
+            <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
+              <Image style={styles.logo} source={require('../../../assets/images/logo-b.png')} />
+            </View>
+            <View style={{padding:5, paddingRight:10}}>
+              <Cart />
+            </View>
+          </View>
+        </View>
+    );
+  }
+}
+
+const styles = StyleSheet.create({
+  wrapper:{
+    height: 70,
+    backgroundColor: '#FFFFFF',
+    paddingTop:20,
+  },
+  title:{
+    fontFamily:'brandon',
+    fontSize:16,
+  },
+  logo:{
+    width:124, height:28, resizeMode:'contain'
+  },
+});
+
+export { DefaultHeader };
+
+
+/*
+import React from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  Animated,
+  TouchableOpacity,
+  nativeEvent,
+  Easing,
+  Image,
+  StyleSheet,
+} from 'react-native';
+
+import Cart from '../Cart';
+
+// Let's go
+
+const DefaultHeader = class DefaultHeader extends React.Component{
+
+  constructor(props){
+    super(props);
+    this.state = {
+      // state
+    }
+  }
+
   render(){
 
     return(
@@ -53,4 +124,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export { DefaultHeader };
+export { DefaultHeader };*/

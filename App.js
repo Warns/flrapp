@@ -3,6 +3,7 @@ import {
   Platform,
   StatusBar,
   StyleSheet,
+  Dimensions,
   View
 } from 'react-native';
 import { AppLoading, Asset, Font } from 'expo';

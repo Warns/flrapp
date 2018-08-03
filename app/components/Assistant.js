@@ -84,7 +84,7 @@ class Assistant extends React.Component{
             <Image source={require('../../assets/images/loader.gif')} style={{position:'absolute', alignSelf:'center', bottom:100, width:250, height:151, }} />
             {area}
             <WebView
-              source={{uri: 'https://www.goole.com'}}
+              source={{uri: 'https://www.minus99.com/lab'}}
               style={{margin: 0, opacity:this.state.opacity}}
               onLoadEnd={()=>{ this.setState({opacity:1})}}
             />

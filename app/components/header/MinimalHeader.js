@@ -42,7 +42,7 @@ const MinimalHeader = class DefaultHeader extends React.Component{
             <View style={{flex:1, justifyContent:'center'}}>
               <Text style={styles.title}>{this.props.title.toUpperCase()}</Text>
             </View>
-            <View style={{padding:5}}>
+            <View style={{padding:5, paddingRight:10}}>
               <Cart />
             </View>
           </View>

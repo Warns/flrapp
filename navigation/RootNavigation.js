@@ -4,24 +4,31 @@ import {
   Platform,
   StatusBar,
 } from 'react-native';
-import { createStackNavigator } from 'react-navigation';
+import { createStackNavigator, createMaterialTopTabNavigator } from 'react-navigation';
 
 import SplashPage from '../app/views/Splash';
 import CategoryPage from '../app/views/Category';
-import ShopMenuPage from '../app/views/ShopMenu';
+import HomeTabNavigator from './HomeTabNavigation';
+
+import { DefaultHeader } from '../app/components';
+
 //import registerForPushNotificationsAsync from '../api/registerForPushNotificationsAsync';
+
 
 export default RootStackNavigator = createStackNavigator(
   {
     Splash: {
       screen: SplashPage,
     },
+    Home: {
+      screen: HomeTabNavigator,
+      navigationOptions:{
+        header: () => <DefaultHeader />,
+      }
+    },
     Category: {
       screen: CategoryPage,
     },
-    ShopMenu: {
-      screen: ShopMenuPage,
-    }
   },
   {
     navigationOptions: () => ({

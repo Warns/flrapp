@@ -1,5 +1,13 @@
 import React from 'react';
-import { Animated, Easing, Image, KeyboardAvoidingView, Modal, View } from 'react-native';
+import { 
+  Animated, 
+  Easing, 
+  Image, 
+  KeyboardAvoidingView, 
+  Modal, 
+  View,
+  Dimensions,
+} from 'react-native';
 import { connect } from 'react-redux';
 import { SplashHeader } from '../components';
 import { DefaultButton, DefaultInput } from '../UI';
@@ -10,7 +18,7 @@ styles = require('../styles.js');
 globals = require('../globals.js');
 
 function mapStateToProps(state) {
-  return state.cart
+  return state
 }
 
 class Splash extends React.Component{
@@ -28,6 +36,9 @@ class Splash extends React.Component{
   }
 
   componentDidMount(){
+
+    const dimensions = Dimensions.get('screen');
+    this.props.dispatch({type: 'SET_SCREEN_DIMENSIONS', value: dimensions});
 
     _loadInitialState(this._routeAccordingToAsyncStorage);
 
@@ -81,7 +92,35 @@ class Splash extends React.Component{
       {
         selector: 'TÜMÜ',
         id: 'tumu',
-      }
+      },
+      {
+        selector: 'YENİ',
+        id: 'yeni',
+      },
+      {
+        selector: 'GÖZ FARI',
+        id: 'goz-fari',
+      },
+      {
+        selector: 'MASKARA',
+        id: 'maskara',
+      },
+      {
+        selector: 'KAŞ',
+        id: 'kas',
+      },
+      {
+        selector: 'GÖZ KALEMİ',
+        id: 'goz-kalemi',
+      },
+      {
+        selector: 'LİKİT EYELINER',
+        id: 'likit-eyeliner',
+      },
+      {
+        selector: 'GÖZ MAKYAJI TEMİZLEME',
+        id: 'goz-makyaj-temizleme',
+      },
     ];
 
     this.props.dispatch({type: 'SET_CATEGORIES', value: {categories: categories, selectedCategory: 'nails'}});
@@ -130,7 +169,7 @@ class Splash extends React.Component{
     ];
 
     //this.props.dispatch({type: 'SET_CATEGORIES', value: {categories: categories, selectedCategory: 'nails'}});
-    this.props.navigation.navigate("ShopMenu");
+    this.props.navigation.navigate("Home");
 
     //this.props.dispatch({type: 'ADD_CART_ITEM', value: 1});
   }
