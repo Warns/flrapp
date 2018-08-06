@@ -10,6 +10,8 @@ import SplashPage from '../app/views/Splash';
 import CategoryPage from '../app/views/Category';
 import HomeTabNavigator from './HomeTabNavigation';
 
+//import ProductPage from '../app/views/Product';
+
 import { DefaultHeader } from '../app/components';
 
 //import registerForPushNotificationsAsync from '../api/registerForPushNotificationsAsync';

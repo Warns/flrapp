@@ -26,7 +26,8 @@ const MinimalHeader = class DefaultHeader extends React.Component{
   }
 
   _onBackPress = () => {
-    this.props.nav.goBack();
+    this.props.onBackPress();
+    //this.props.nav.goBack();
   }
 
   render(){

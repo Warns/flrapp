@@ -51,7 +51,7 @@ class Palette extends React.Component{
     return(
       <View style={{flex:1, backgroundColor:'#ffffff'}}>
         <FlatList
-          style={{borderWidth:1, borderColor:'red'}}
+          //style={{borderWidth:1, borderColor:'red'}}
           scrollEnabled={true}
           data={this.state.items}
           keyExtractor={this._keyExtractor}
@@ -89,6 +89,7 @@ class ListItem extends React.Component {
             style={{width: 50, height: 60, resizeMode:'cover', marginTop:5}}
             source={{uri: thumbnail }}
           />
+          <Text>{item.shortCode}</Text>
         </View>
       </TouchableOpacity>
     );

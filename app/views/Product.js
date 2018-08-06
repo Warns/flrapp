@@ -14,8 +14,9 @@ import {
   ScrollView,
 } from 'react-native';
 import { connect } from 'react-redux';
+import Carousel from 'react-native-snap-carousel';
 
-const SCREEN_DIMENSIONS = {};
+const SCREEN_DIMENSIONS = Dimensions.get('screen');
 const HEADER_HEIGHT = Platform.OS === 'android' ? 80 : 65;
 const TOP = Platform.OS === 'android' ? 10 : 0;
 const DETAIL_HEADER_HEIGHT = Platform.OS === 'android' ? 52 : 65;
@@ -27,6 +28,8 @@ class ProductView extends React.Component {
   state = {
     data: null,
     anim: new Animated.Value(0),
+    item: {},
+    colors: [],
   }
 
   _animateContent = () => {
@@ -38,12 +41,99 @@ class ProductView extends React.Component {
         easing: Easing.out(Easing.cubic),
       }
     ).start();
-
   };
 
-  componentDidMount(){
-    this._animateContent();
+  componentWillMount(){
+
+    var data = require('../../data/product.json');
+
+    let colors = data.product.productGroups;
+        colors.push({
+          productId: data.product.productId,
+          productUrl: data.product.productUrl,
+          shortCode: data.product.shortCode,
+          smallImageUrl: data.product.productImages[0].smallImageUrl,
+          mediumImageUrl: data.product.productImages[0].mediumImageUrl,
+          hasStock: data.product.stockQty > 0 ? true : false,
+          name: data.product.shortName
+        });
+
+        colors.sort(function(a, b){return a.shortCode - b.shortCode });
+
+    //console.log( colors );
+
+
+    this.setState({
+      item: data,
+      colors: colors,
+    });
+    //this._animateContent();
   }
+
+  _renderItem({item, index}){
+    return(
+      <View>
+        <Image source={{uri:item.mediumImageUrl}} style={{left:-(SCREEN_DIMENSIONS.width - 270) * .5, width:270, height:337, resizeMode:'cover'}} />
+      </View>
+    );
+  }
+
+  render(){
+
+    const { item, colors } = this.state;
+
+    console.log(item.product.productImages);
+
+    let palette = colors.length > 1 ? <Palette items={colors} /> : null;
+
+    return(
+      <View style={{flex:1}}>
+        <View>
+        <Carousel
+            ref={(c) => {this._carousel = c;}}
+            data={item.product.productImages}
+            renderItem={this._renderItem}
+            sliderWidth={SCREEN_DIMENSIONS.width}
+            sliderHeight={337}
+            itemWidth={270}
+            inactiveSlideScale={1}
+            inactiveSlideOpacity={1}
+            />
+        </View>
+        {palette}
+
+        <View style={{flex:1, flexDirection:"column", padding:30,}}>
+          <DefaultButton
+              callback={this._updateCart}
+              name="SEPETE AT"
+              />
+          <View style={{flex:1, flexDirection:'row'}}>
+          <View style={{flex:1, marginRight:5,}}>
+          <DefaultButton
+              callback={this._openLoginForm}
+              name="FAVORIYE EKLE"
+              boxColor="#ffffff"
+              textColor="#000000"
+              />
+          </View>
+          <View style={{flex:1, marginLeft:5}}>
+          <DefaultButton
+              callback={this._updateCart2}
+              name="YAKIN MAGAZA"
+              boxColor="#ffffff"
+              textColor="#000000"
+              />
+          </View>
+          </View>
+        </View>
+
+
+      </View>
+    );
+  }
+}
+
+  /*
 
   onPressClose = () => {
     this.props.onClose();
@@ -102,6 +192,7 @@ class ProductView extends React.Component {
     )
   }
 }
+*/
 
 // filter state
 function mapStateToProps(state){

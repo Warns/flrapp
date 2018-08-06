@@ -101,26 +101,6 @@ class Splash extends React.Component{
         selector: 'GÖZ FARI',
         id: 'goz-fari',
       },
-      {
-        selector: 'MASKARA',
-        id: 'maskara',
-      },
-      {
-        selector: 'KAŞ',
-        id: 'kas',
-      },
-      {
-        selector: 'GÖZ KALEMİ',
-        id: 'goz-kalemi',
-      },
-      {
-        selector: 'LİKİT EYELINER',
-        id: 'likit-eyeliner',
-      },
-      {
-        selector: 'GÖZ MAKYAJI TEMİZLEME',
-        id: 'goz-makyaj-temizleme',
-      },
     ];
 
     this.props.dispatch({type: 'SET_CATEGORIES', value: {categories: categories, selectedCategory: 'nails'}});

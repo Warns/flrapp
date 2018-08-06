@@ -1,26 +1,26 @@
-Object {
-  "product": Object {
+ {
+  "product":  {
     "barcode": "8690604505388",
     "brandId": 3064,
     "brandName": "Flormar",
-    "campaigns": Array [],
+    "campaigns":  [],
     "catId": 18775,
     "creationDate": "2017-02-08T15:07:00",
     "currency": "",
     "description": "İpeksi bir matlık sunan kadifemsi Flormar Silk Matte Liquid Lipstick'in yumuşak dokusu sayesinde uygulama yapman çok kolay! İçeriğinde bulunan cupuacu yağı sayesinde dudaklarını kurutmayan ve besleyen Silk Matte, 16 renk alternatifiyle seni bekliyor.",
-    "discountRate": 0, p
-    "installments": Array [],
+    "discountRate": 0,
+    "installments":  [],
     "integrationId": "0313062-011",
     "isCampaignFl": false,
     "isNew": false,
     "isShipmentFree": false,
     "listPrice": 29.99,
     "minInstallmentPrice": "0",
-    "productAttributes": Array [],
+    "productAttributes":  [],
     "productCode": "0313062-011",
     "productGroupId": null,
-    "productGroups": Array [
-      Object {
+    "productGroups":  [
+       {
         "hasStock": true,
         "mediumImageUrl": "http://mcdn.flormar.com.tr/UPLOAD/Flormar/mobile_image_1/thumb/0313062-005_medium.jpg",
         "name": "AUTUMN TIMBER",
@@ -31,7 +31,7 @@ Object {
         "shortCode": "005",
         "smallImageUrl": "http://mcdn.flormar.com.tr/UPLOAD/Flormar/mobile_image_1/thumb/0313062-005_small.jpg",
       },
-      Object {
+       {
         "hasStock": true,
         "mediumImageUrl": "http://mcdn.flormar.com.tr/UPLOAD/Flormar/mobile_image_1/thumb/0313062-014_medium.jpg",
         "name": "CARNATION RED",
@@ -42,7 +42,7 @@ Object {
         "shortCode": "014",
         "smallImageUrl": "http://mcdn.flormar.com.tr/UPLOAD/Flormar/mobile_image_1/thumb/0313062-014_small.jpg",
       },
-      Object {
+       {
         "hasStock": true,
         "mediumImageUrl": "http://mcdn.flormar.com.tr/UPLOAD/Flormar/mobile_image_1/thumb/0313062-006_medium.jpg",
         "name": "CHERRY BLOSSOM",
@@ -53,7 +53,7 @@ Object {
         "shortCode": "006",
         "smallImageUrl": "http://mcdn.flormar.com.tr/UPLOAD/Flormar/mobile_image_1/thumb/0313062-006_small.jpg",
       },
-      Object {
+       {
         "hasStock": true,
         "mediumImageUrl": "http://mcdn.flormar.com.tr/UPLOAD/Flormar/mobile_image_1/thumb/0313062-007_medium.jpg",
         "name": "CLARET RED",
@@ -64,7 +64,7 @@ Object {
         "shortCode": "007",
         "smallImageUrl": "http://mcdn.flormar.com.tr/UPLOAD/Flormar/mobile_image_1/thumb/0313062-007_small.jpg",
       },
-      Object {
+       {
         "hasStock": true,
         "mediumImageUrl": "http://mcdn.flormar.com.tr/UPLOAD/Flormar/mobile_image_1/thumb/0313062-004_medium.jpg",
         "name": "DAISY",
@@ -75,7 +75,7 @@ Object {
         "shortCode": "004",
         "smallImageUrl": "http://mcdn.flormar.com.tr/UPLOAD/Flormar/mobile_image_1/thumb/0313062-004_small.jpg",
       },
-      Object {
+       {
         "hasStock": true,
         "mediumImageUrl": "http://mcdn.flormar.com.tr/UPLOAD/Flormar/mobile_image_1/thumb/0313062-008_medium.jpg",
         "name": "DARK VIOLET",
@@ -86,7 +86,7 @@ Object {
         "shortCode": "008",
         "smallImageUrl": "http://mcdn.flormar.com.tr/UPLOAD/Flormar/mobile_image_1/thumb/0313062-008_small.jpg",
       },
-      Object {
+       {
         "hasStock": true,
         "mediumImageUrl": "http://mcdn.flormar.com.tr/UPLOAD/Flormar/mobile_image_1/thumb/0313062-002_medium.jpg",
         "name": "FALL ROSE",
@@ -97,7 +97,7 @@ Object {
         "shortCode": "002",
         "smallImageUrl": "http://mcdn.flormar.com.tr/UPLOAD/Flormar/mobile_image_1/thumb/0313062-002_small.jpg",
       },
-      Object {
+       {
         "hasStock": true,
         "mediumImageUrl": "http://mcdn.flormar.com.tr/UPLOAD/Flormar/mobile_image_1/thumb/0313062-016_medium.jpg",
         "name": "HOT COCOA",
@@ -108,7 +108,7 @@ Object {
         "shortCode": "016",
         "smallImageUrl": "http://mcdn.flormar.com.tr/UPLOAD/Flormar/mobile_image_1/thumb/0313062-016_small.jpg",
       },
-      Object {
+       {
         "hasStock": true,
         "mediumImageUrl": "http://mcdn.flormar.com.tr/UPLOAD/Flormar/mobile_image_1/thumb/0313062-009_medium.jpg",
         "name": "NASTY CORAL",
@@ -119,7 +119,7 @@ Object {
         "shortCode": "009",
         "smallImageUrl": "http://mcdn.flormar.com.tr/UPLOAD/Flormar/mobile_image_1/thumb/0313062-009_small.jpg",
       },
-      Object {
+       {
         "hasStock": true,
         "mediumImageUrl": "http://mcdn.flormar.com.tr/UPLOAD/Flormar/mobile_image_1/thumb/0313062-013_medium.jpg",
         "name": "PINK DREAM",
@@ -130,7 +130,7 @@ Object {
         "shortCode": "013",
         "smallImageUrl": "http://mcdn.flormar.com.tr/UPLOAD/Flormar/mobile_image_1/thumb/0313062-013_small.jpg",
       },
-      Object {
+       {
         "hasStock": true,
         "mediumImageUrl": "http://mcdn.flormar.com.tr/UPLOAD/Flormar/mobile_image_1/thumb/0313062-015_medium.jpg",
         "name": "PRETTY PLUM",
@@ -141,7 +141,7 @@ Object {
         "shortCode": "015",
         "smallImageUrl": "http://mcdn.flormar.com.tr/UPLOAD/Flormar/mobile_image_1/thumb/0313062-015_small.jpg",
       },
-      Object {
+       {
         "hasStock": true,
         "mediumImageUrl": "http://mcdn.flormar.com.tr/UPLOAD/Flormar/mobile_image_1/thumb/0313062-003_medium.jpg",
         "name": "SUNSET",
@@ -152,7 +152,7 @@ Object {
         "shortCode": "003",
         "smallImageUrl": "http://mcdn.flormar.com.tr/UPLOAD/Flormar/mobile_image_1/thumb/0313062-003_small.jpg",
       },
-      Object {
+       {
         "hasStock": true,
         "mediumImageUrl": "http://mcdn.flormar.com.tr/UPLOAD/Flormar/mobile_image_1/thumb/0313062-010_medium.jpg",
         "name": "TENDER TERRA",
@@ -163,7 +163,7 @@ Object {
         "shortCode": "010",
         "smallImageUrl": "http://mcdn.flormar.com.tr/UPLOAD/Flormar/mobile_image_1/thumb/0313062-010_small.jpg",
       },
-      Object {
+       {
         "hasStock": true,
         "mediumImageUrl": "http://mcdn.flormar.com.tr/UPLOAD/Flormar/mobile_image_1/thumb/0313062-012_medium.jpg",
         "name": "TERRACOTTA",
@@ -174,7 +174,7 @@ Object {
         "shortCode": "012",
         "smallImageUrl": "http://mcdn.flormar.com.tr/UPLOAD/Flormar/mobile_image_1/thumb/0313062-012_small.jpg",
       },
-      Object {
+       {
         "hasStock": true,
         "mediumImageUrl": "http://mcdn.flormar.com.tr/UPLOAD/Flormar/mobile_image_1/thumb/0313062-001_medium.jpg",
         "name": "UNDRESSED",
@@ -187,8 +187,8 @@ Object {
       },
     ],
     "productId": 573100,
-    "productImages": Array [
-      Object {
+    "productImages":  [
+       {
         "imageNote": "",
         "imageUrl": "http://mcdn.flormar.com.tr/UPLOAD/Flormar/mobile_image_1/0313062-011.jpg",
         "isDefault": true,
@@ -197,7 +197,7 @@ Object {
         "mediumImageUrl": "http://mcdn.flormar.com.tr/UPLOAD/Flormar/mobile_image_1/thumb/0313062-011_medium.jpg",
         "smallImageUrl": "http://mcdn.flormar.com.tr/UPLOAD/Flormar/mobile_image_1/thumb/0313062-011_small.jpg",
       },
-      Object {
+       {
         "imageNote": "",
         "imageUrl": "http://mcdn.flormar.com.tr/UPLOAD/Flormar/mobile_image_2/0313062-011.jpg",
         "isDefault": false,
@@ -206,7 +206,7 @@ Object {
         "mediumImageUrl": "http://mcdn.flormar.com.tr/UPLOAD/Flormar/mobile_image_2/thumb/0313062-011_medium.jpg",
         "smallImageUrl": "http://mcdn.flormar.com.tr/UPLOAD/Flormar/mobile_image_2/thumb/0313062-011_small.jpg",
       },
-      Object {
+       {
         "imageNote": "",
         "imageUrl": "http://mcdn.flormar.com.tr/UPLOAD/Flormar/mobile_texture/0313062-011.jpg",
         "isDefault": false,
@@ -217,110 +217,110 @@ Object {
       },
     ],
     "productName": "SILK MATTE LIQUID LIPSTICK",
-    "productOptions": Array [],
-    "productRecommends": Array [],
+    "productOptions":  [],
+    "productRecommends":  [],
     "productType": "product",
-    "productTypes": Array [
-      Object {
+    "productTypes":  [
+       {
         "productTypeId": 113,
         "productTypeName": "KADINLAR GUNUNE OZEL",
       },
-      Object {
+       {
         "productTypeId": 123,
         "productTypeName": "SILK MATTE",
       },
-      Object {
+       {
         "productTypeId": 130,
         "productTypeName": "SAHUR KAMPANYASI",
       },
-      Object {
+       {
         "productTypeId": 133,
         "productTypeName": "DIRECTCOM",
       },
-      Object {
+       {
         "productTypeId": 135,
         "productTypeName": "DIRECTCOM LİSTE",
       },
-      Object {
+       {
         "productTypeId": 149,
         "productTypeName": "YUZDE70",
       },
-      Object {
+       {
         "productTypeId": 169,
         "productTypeName": "Dudak % 30 Kasım",
       },
-      Object {
+       {
         "productTypeId": 174,
         "productTypeName": "BLACK FRIDAY 2017",
       },
-      Object {
+       {
         "productTypeId": 175,
         "productTypeName": "2.ÜRÜNE %50 ARALIK",
       },
-      Object {
+       {
         "productTypeId": 177,
         "productTypeName": "ARALIK % 40 İNDİRİM",
       },
-      Object {
+       {
         "productTypeId": 191,
         "productTypeName": "DANLA BILIC",
       },
-      Object {
+       {
         "productTypeId": 192,
         "productTypeName": "KADINLAR GUNU 2018",
       },
-      Object {
+       {
         "productTypeId": 201,
         "productTypeName": "INSIDER-DSC30",
       },
-      Object {
+       {
         "productTypeId": 202,
         "productTypeName": "INSIDER-FLRY15",
       },
-      Object {
+       {
         "productTypeId": 205,
         "productTypeName": "ONLİNE OZEL % 50-NİSAN",
       },
-      Object {
+       {
         "productTypeId": 206,
         "productTypeName": "3 URUN ALANA 3.URUN 1 TL",
       },
-      Object {
+       {
         "productTypeId": 208,
         "productTypeName": "Net %50 İndirim",
       },
-      Object {
+       {
         "productTypeId": 210,
         "productTypeName": "Anneler Günü",
       },
-      Object {
+       {
         "productTypeId": 213,
         "productTypeName": "KARGO1TL",
       },
-      Object {
+       {
         "productTypeId": 214,
         "productTypeName": "ATASUNGOZLUK",
       },
-      Object {
+       {
         "productTypeId": 215,
         "productTypeName": "SAHUR2018",
       },
-      Object {
+       {
         "productTypeId": 216,
         "productTypeName": "250TL50INDIRIM",
       },
-      Object {
+       {
         "productTypeId": 225,
         "productTypeName": "GiftPackGP64",
       },
-      Object {
+       {
         "productTypeId": 230,
-        "productTypeName": "Temmuzİndirim",
+        "productTypeName": "Temmuzİndirim"
       },
-      Object {
+       {
         "productTypeId": 249,
-        "productTypeName": "Silk Matt",
-      },
+        "productTypeName": "Silk Matt"
+      }
     ],
     "productUrl": "https://www.flormar.com.tr/silk-matte-liquid-lipstick-misty-rosy/",
     "salePrice": 29.99,
@@ -329,6 +329,6 @@ Object {
     "shortDescription2": null,
     "shortName": "MISTY ROSY",
     "stockQty": 140,
-    "unit": "Adet",
-  },
+    "unit": "Adet"
+  }
 }

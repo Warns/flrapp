@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 
 import { connect } from 'react-redux';
+import { MinimalHeader } from '../components/header/MinimalHeader';
 
 //globals = require('../globals.js');
 
@@ -52,6 +53,10 @@ class Assistant extends React.Component{
     this.setState({expanded: true});
   }
 
+  _onMessage = ( m ) => {
+    console.log( m );
+  }
+
   render(){
 
     let topMargin = this.state.boxAnim.interpolate({
@@ -59,8 +64,10 @@ class Assistant extends React.Component{
       outputRange: [100, 0],
     });
 
-    let vailHeight = this.state.expanded ? 100 : null;
+    let vailHeight = this.state.expanded ? 0 : null;
     let area = this.state.expanded ? null : <TouchableOpacity style={styles.area} activeOpacity={1} onPress={this._expand} />;
+
+    let header = this.state.expanded ? <MinimalHeader title="" onBackPress={this._closeModal} /> : null;
 
     return(
       
@@ -76,17 +83,19 @@ class Assistant extends React.Component{
           visible={this.state.assistantIsVisible}
           onRequestClose={() => {}}
         >
-          <View style={{backgroundColor:'rgba(0,0,0,.2)', flex:1}}>
+          <View style={{backgroundColor:'rgba(0,0,0,.4)', flex:1}}>
           <View style={{flex:1, maxHeight:vailHeight}}>
           <TouchableOpacity style={{flex:1}} onPress={this._closeModal} />
           </View>
+          {header}
           <Animated.View style={{flex:1, marginTop:topMargin, backgroundColor:'#ffffff'}}>
             <Image source={require('../../assets/images/loader.gif')} style={{position:'absolute', alignSelf:'center', bottom:100, width:250, height:151, }} />
             {area}
             <WebView
-              source={{uri: 'https://www.minus99.com/lab'}}
+              source={{uri: 'https://www.minus99.com/lab/test/assistant.html'}}
               style={{margin: 0, opacity:this.state.opacity}}
               onLoadEnd={()=>{ this.setState({opacity:1})}}
+              onMessage={this._onMessage}
             />
           </Animated.View>
           </View>
