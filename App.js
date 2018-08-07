@@ -7,6 +7,7 @@ import {
   View
 } from 'react-native';
 import { AppLoading, Asset, Font } from 'expo';
+import Settings from 'root/app/helper/Settings';
 
 // navigation
 import RootNavigation from './navigation/RootNavigation';
@@ -35,12 +36,13 @@ export default class App extends React.Component {
     } else {
       return (
         <Provider store={store}>
-        <View style={styles.container}>
-          {/*Platform.OS === 'ios' && <StatusBar barStyle="default" />*/}
-          {/*Platform.OS === 'android' && <View style={styles.statusBarUnderlay} />*/}
-          <RootNavigation />
-          <Assistant />
-        </View>
+          <View style={styles.container}>
+            {/*Platform.OS === 'ios' && <StatusBar barStyle="default" />*/}
+            {/*Platform.OS === 'android' && <View style={styles.statusBarUnderlay} />*/}
+            <Settings />
+            <RootNavigation />
+            <Assistant />
+          </View>
         </Provider>
       );
     }
