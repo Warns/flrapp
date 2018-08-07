@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { AppLoading, Asset, Font } from 'expo';
 import Settings from 'root/app/helper/Settings';
+import TopMenu from 'root/app/views/TopMenu';
 
 // navigation
 import RootNavigation from './navigation/RootNavigation';
@@ -39,6 +40,7 @@ export default class App extends React.Component {
           <View style={styles.container}>
             {/*Platform.OS === 'ios' && <StatusBar barStyle="default" />*/}
             {/*Platform.OS === 'android' && <View style={styles.statusBarUnderlay} />*/}
+            <TopMenu />
             <Settings />
             <RootNavigation />
             <Assistant />
