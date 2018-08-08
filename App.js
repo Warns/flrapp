@@ -7,7 +7,7 @@ import {
   View
 } from 'react-native';
 import { AppLoading, Asset, Font } from 'expo';
-import Settings from 'root/app/helper/Settings';
+import { Settings } from 'root/app/helper/';
 import TopMenu from 'root/app/views/TopMenu';
 
 // navigation

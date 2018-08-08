@@ -4,10 +4,12 @@ import general from './general';
 import cart from './cart';
 import user from './user';
 import settings from './settings';
+import menu from './menu';
 
 export default combineReducers({
   general,
   cart,
   user,
   settings,
+  menu,
 });

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 const Utils = require('root/app/helper/Global.js');
 const Globals = require('root/app/globals.js');
 
-class Settings extends Component {
+class Setting extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -55,4 +55,5 @@ class Settings extends Component {
 }
 
 function mapStateToProps(state) { return state; }
-export default connect(mapStateToProps)(Settings);
+const Settings = connect(mapStateToProps)(Setting);
+export { Settings };
