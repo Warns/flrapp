@@ -8,6 +8,7 @@ import { createStackNavigator, createMaterialTopTabNavigator } from 'react-navig
 
 import SplashPage from '../app/views/Splash';
 import CategoryPage from '../app/views/Category';
+import ExtraPage from '../app/views/Extra';
 import HomeTabNavigator from './HomeTabNavigation';
 
 //import ProductPage from '../app/views/Product';
@@ -31,6 +32,10 @@ export default RootStackNavigator = createStackNavigator(
     Category: {
       screen: CategoryPage,
     },
+
+    Extra: {
+      screen: ExtraPage,
+    }
   },
   {
     navigationOptions: () => ({
