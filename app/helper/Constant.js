@@ -1,9 +1,8 @@
 /* app için gerekli iconlar burdan tanımlanır */
 export const ICONS = {
     rightArrow: require('root/assets/icons/rightArrow.png'),
-    cit: require('root/assets/cit.png'),
-    back: require('root/assets/icons/back.png'),
     storeLocation: require('root/assets/icons/storeLocation.png'),
+    location: require('root/assets/icons/location.png'),
 };
 
 /* VIEWER SAYFA TİPLERİ */

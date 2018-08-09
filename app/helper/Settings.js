@@ -15,10 +15,14 @@ class Setting extends Component {
     componentDidMount() {
         const _self = this;
         _self._isMounted = true;
+        /*
         _self.ajx({ uri: _self.getUri(), data: { "exportType": "mobiAppSettingsJson" } }, (res) => {
             const settings = JSON.parse(res['data']['html'] || '{}');
             _self.props.dispatch({ type: 'SET_SETTINGS', value: settings });
         });
+        */
+       const settings = require('root/data/settings.json');
+       _self.props.dispatch({ type: 'SET_SETTINGS', value: settings });
     }
 
     componentWillUnmount() {

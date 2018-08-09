@@ -66,6 +66,10 @@
             {
                 "title": "MAĞAZALAR",
                 "type": "serviceList",
+                "fontStyle": {
+                    "color": "#7c3993"
+                },
+                "ico": "location"
             },
             {
                 "title": "KURUMSAL",

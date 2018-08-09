@@ -7,8 +7,32 @@ import {
     Easing,
     TouchableOpacity,
 } from 'react-native';
+import { SafeAreaView } from 'react-navigation';
 import { connect } from 'react-redux';
 import { LineButton } from 'root/app/UI';
+import { GestureRecognizer } from 'root/app/helper';
+
+class CustomModal extends Component {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        const _self = this,
+            { animationType = 'none', transparent = true, visible = 'false' } = _self.props;
+        return (
+            <Modal
+                animationType={animationType}
+                transparent={transparent}
+                visible={visible}
+            >
+                <SafeAreaView style={{ flex: 1 }}>
+                    {_self.props.children}
+                </SafeAreaView>
+            </Modal>
+
+        );
+    }
+}
 
 class Navigation extends Component {
     constructor(props) {
@@ -25,7 +49,10 @@ class Navigation extends Component {
         if (items.length == 0)
             return null;
         return items.map((item, ind) => {
-            return <LineButton sequence={ind} item={item} key={'btn-' + ind} onPress={this._onPress}>{item.title}</LineButton>
+            const fontStyle = item['fontStyle'] || {},
+                ico = item['ico'] || '';
+
+            return <LineButton ico={ico} fontStyle={fontStyle} sequence={ind} item={item} key={'btn-' + ind} onPress={this._onPress}>{item.title}</LineButton>
         });
     }
 
@@ -42,26 +69,32 @@ class Menu extends Component {
         }
     }
     componentDidMount() {
-        this._animate();
+        this._animate({ type: 'show' });
     }
 
     /* https://gist.github.com/dabit3/19844207dc9f64a4cbd70f31734353e6 */
-    _animate = () => {
+    _animate = ({ typ = 'show' }, callback) => {
         const _self = this;
         Animated.timing(
             _self.state.anim,
             {
-                toValue: 1,
+                toValue: typ == 'show' ? 1 : 0,
                 duration: 300,
                 easing: Easing.inOut(Easing.quad)
             }
-        ).start();
+        ).start(() => {
+            if (typeof callback !== 'undefined')
+                callback();
+        });
     }
 
     _onClose = () => {
-        const { onClose } = this.props;
-        if (onClose)
-            onClose();
+        const _self = this,
+            { onClose } = _self.props;
+        _self._animate({ typ: 'hide' }, () => {
+            if (onClose)
+                onClose();
+        });
     }
 
     _header = () => {
@@ -85,8 +118,21 @@ class Menu extends Component {
         return null;
     }
 
+    /* Gesture */
+    _onSwipe = (k) => {
+        const _self = this,
+            dir = _self.props.direction || 'left';
+
+        if (k == dir)
+            _self._onClose();
+    }
+
     render() {
         const _self = this,
+            config = {
+                velocityThreshold: 0.3,
+                directionalOffsetThreshold: 80
+            },
             dir = _self.props.direction || 'left',
             items = _self.props.items,
             header = _self._header(),
@@ -99,24 +145,32 @@ class Menu extends Component {
                 inputRange: [0, 1],
                 outputRange: [0, .3]
             }),
-            alignSelf = dir == 'left' ? 'flex-start' : 'flex-end';
-
-        let direction = { left: pos };
-        if (dir == 'right')
-            direction = { right: pos };
+            alignSelf = dir == 'left' ? 'flex-start' : 'flex-end',
+            direction = dir == 'right' ? { right: pos } : { left: pos };
 
         return (
-            <View style={{ flex: 1 }}>
-                <Animated.View style={{ opacity: op, zIndex: 1, flex: 1, position: 'absolute', backgroundColor: '#000000', left: 0, right: 0, top: 0, bottom: 0, width: '100%', height: '100%' }}></Animated.View>
-
-                <View style={{ flex: 1, alignSelf: alignSelf, flexDirection: 'column', zIndex: 2, position: 'relative' }}>
-                    <Animated.View style={{ ...direction, zIndex: 2, width: 320, flex: 1, backgroundColor: '#FFFFFF', paddingLeft: 10, paddingRight: 10 }}>
-                        {header}
-                        <Navigation items={items} />
-                        {footer}
+            <GestureRecognizer
+                onSwipeLeft={() => _self._onSwipe('left')}
+                onSwipeRight={() => _self._onSwipe('right')}
+                config={config}
+                style={{
+                    flex: 1,
+                }}
+            >
+                <View style={{ flex: 1 }}>
+                    <Animated.View style={{ opacity: op, zIndex: 1, flex: 1, position: 'absolute', backgroundColor: '#000000', left: 0, right: 0, top: 0, bottom: 0, width: '100%', height: '100%' }}>
+                        <TouchableOpacity style={{ flex: 1 }} activeOpacity={1} onPress={this._onClose}></TouchableOpacity>
                     </Animated.View>
+
+                    <View style={{ flex: 1, alignSelf: alignSelf, flexDirection: 'column', zIndex: 2, position: 'relative' }}>
+                        <Animated.View style={{ ...direction, zIndex: 2, width: 320, flex: 1, backgroundColor: '#FFFFFF', paddingLeft: 10, paddingRight: 10 }}>
+                            {header}
+                            <Navigation items={items} />
+                            {footer}
+                        </Animated.View>
+                    </View>
                 </View>
-            </View>
+            </GestureRecognizer>
         )
     }
 }
@@ -137,15 +191,9 @@ class TopMenu extends Component {
             { isVisible, direction, type } = _self.props.menu;
 
         return (
-            <View>
-                <Modal
-                    animationType="none"
-                    transparent={true}
-                    visible={isVisible}
-                >
-                    <Menu onClose={_self._onClose} direction={direction} items={menu[type]} />
-                </Modal>
-            </View>
+            <CustomModal visible={isVisible}>
+                <Menu onClose={_self._onClose} direction={direction} items={menu[type]} />
+            </CustomModal>
         );
     }
 }
