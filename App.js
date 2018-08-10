@@ -61,6 +61,13 @@ export default class App extends React.Component {
         // to remove this if you are not using it in your app
         'brandon': require('./assets/fonts/BrandonGrotesque-Medium.otf'),
         'proxima': require('./assets/fonts/proximanova-regular.otf'),
+
+
+        'Medium': require('root/assets/fonts/BrandonGrotesque-Medium.otf'),
+        'Bold': require('root/assets/fonts/brandongrotesque-bold-webfont.ttf'),
+        'Regular': require('root/assets/fonts/BrandonGrotesque-Regular.otf'),
+        'RegularTyp2': require('root/assets/fonts/proximanova-regular.otf'),
+
       }),
     ]);
   };

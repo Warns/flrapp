@@ -1,4 +1,5 @@
 module.exports = {
+    mapApiKey: 'AIzaSyAvSoqfCr4I9Vb11HtQ6cDEAMki6THBgrQ',
     prefix: 'https://www.flormar.com.tr/',
     URLs: {
         user: {
@@ -43,7 +44,18 @@ module.exports = {
         content: {
             getContent: 'webapi/v3/Content/getContent',
             getDataByUrl: '/v3/Content/getDataByUrl',
-        }
+        },
+    },
+    customURLs: {
+        location: 'https://maps.googleapis.com/maps/api/distancematrix/json?language={{lang}}&units=metric&origins={{origins}}&destinations={{destinations}}&key={{mapApikey}}'
+    },
+    getCustomURL: function ({ key = '', lang = 'tr-TR', origins = '', destinations = '' }) {
+        const _t = this;
+        return (_t.customURLs[key] || '')
+            .replace(/{{lang}}/g, lang)
+            .replace(/{{origins}}/g, origins)
+            .replace(/{{destinations}}/g, destinations)
+            .replace(/{{mapApikey}}/g, _t.mapApiKey);
     },
     getURL: function ({ key = '', subKey = '' }) {
         const _t = this;
@@ -156,6 +168,18 @@ module.exports = {
     getDateFormat: function (k) {
         /* date formatlama, "orderDate": "02012017 17:48:00" */
         k = k.split(' ')[0];
-        return ( k.slice(0, 2 ) + '.' + k.slice(2, 4 ) + '.' + k.slice(4, 8 ) );
+        return (k.slice(0, 2) + '.' + k.slice(2, 4) + '.' + k.slice(4, 8));
+    },
+    ajx: function ({ uri = '' }, callback) {
+        return fetch(uri)
+            .then((res) => res.json())
+            .then((res) => {
+                if (typeof callback !== 'undefined')
+                    callback({ type: 'success', data: res });
+            })
+            .catch((error) => {
+                if (typeof callback !== 'undefined')
+                    callback({ type: 'error', data: error });
+            });
     }
 };

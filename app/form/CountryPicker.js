@@ -7,7 +7,7 @@ import {
 import { Minus99MultipleSelect } from 'root/app/components/';
 import { Container } from './';
 const Utils = require('root/app/helper/Global.js');
-const Globals = require('root/app/Globals.js');
+const Globals = require('root/app/globals.js');
 
 class CountryPicker extends Component {
     constructor(props) {

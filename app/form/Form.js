@@ -10,7 +10,7 @@ import { FormInput, SelectBox, CheckBox, RadioGroup, DateTimePicker, ErrorBox, C
 import { CustomKeyboard } from 'root/app/helper';
 const Validation = require('root/app/helper/Validation.js');
 const Utils = require('root/app/helper/Global.js');
-const Globals = require('root/app/Globals.js');
+const Globals = require('root/app/globals.js');
 
 class Form extends Component {
 

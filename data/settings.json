@@ -3,7 +3,7 @@
         "user": [
             {
                 "title": "FAVORİLERİM",
-                "type": "viewer",
+                "type": "listViewer",
                 "itemType": "favorite",
                 "uri": { "key": "user", "subKey": "getFavoriteProductList" },
                 "keys": {
@@ -17,7 +17,7 @@
             },
             {
                 "title": "TAKİP LİSTEM",
-                "type": "viewer",
+                "type": "listViewer",
                 "itemType": "followList",
                 "uri": { "key": "user", "subKey": "getPriceFollowUpList" },
                 /*"uri": { "key": "user", "subKey": "getStockFollowUpList" },*/
@@ -29,7 +29,7 @@
             },
             {
                 "title": "SİPARİŞLERİM",
-                "type": "viewer",
+                "type": "listViewer",
                 "itemType": "order",
                 "uri": { "key": "order", "subKey": "getOrder" },
                 "keys": {
@@ -45,7 +45,7 @@
             },
             {
                 "title": "ADRES BİLGİLERİM",
-                "type": "viewer",
+                "type": "listViewer",
                 "itemType": "address",
                 "uri": { "key": "address", "subKey": "getAddress" },
                 "keys": {
@@ -63,11 +63,22 @@
             }
         ],
         "extra": [
+
             {
                 "title": "MAĞAZALAR",
-                "type": "serviceList",
+                "type": "listViewer",
+                "itemType": "serviceList",
+                "uri": { "key": "service", "subKey": "getServiceList" },
+                "keys": {
+                    "id": "serviceId",
+                    "arr": "services"
+                },
+                "data": {},
+                "refreshing": false,
+
                 "fontStyle": {
-                    "color": "#7c3993"
+                    "color": "#7c3993",
+                    "fontFamily": "Bold"
                 },
                 "ico": "location"
             },
@@ -152,22 +163,28 @@
                 },
                 "siteURI": "/sss/"
             },
+            
             {
                 "title": "İNSAN KAYNAKLARI",
                 "type": "htmlViewer",
                 "uri": {
-                    "key": "content",
-                    "subKey": "getContent"
+                    "key": "export",
+                    "subKey": "getExport"
                 },
                 "keys": {
                     "arr": "html"
                 },
                 "data": {
-                    "contentId": 19275
+                    "exportType": "coporateEXP",
+                    "customParameters": [
+                        {
+                            "key": "icr",
+                            "value": "19275"
+                        }
+                    ]
                 },
                 "siteURI": "/insan-kaynaklari-politikasi/"
             },
-
             {
                 "title": "KİŞİSEL VERİLERİN KORUNMASI",
                 "type": "htmlViewer",

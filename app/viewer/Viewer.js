@@ -11,18 +11,18 @@ import {
     Image
 } from 'react-native';
 import HTML from 'react-native-render-html';
-import { 
-    ICONS, 
-    VIEWERTYPE, 
-    ITEMTYPE, 
-    DATA_LOADED, 
-    SERVICE_LIST_CLICKED, 
-    ORDER_LIST_CLICKED, 
-    ADDRESS_LIST_CLICKED 
+import {
+    ICONS,
+    VIEWERTYPE,
+    ITEMTYPE,
+    DATA_LOADED,
+    SERVICE_LIST_CLICKED,
+    ORDER_LIST_CLICKED,
+    ADDRESS_LIST_CLICKED
 } from 'root/app/helper/Constant';
 
 const Utils = require('root/app/helper/Global.js');
-const Globals = require('root/app/Globals.js');
+const Globals = require('root/app/globals.js');
 
 /*
 const config = {
@@ -202,29 +202,34 @@ class ServiceListItem extends Component {
             distance: null,
             duration: null
         };
-
-        //https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=41.43206,-81.38992&destinations=40.6905615,-73.9976592&key=AIzaSyAvSoqfCr4I9Vb11HtQ6cDEAMki6THBgrQ
     }
 
     componentDidMount() {
+        const _self = this;
+        _self._isMounted = true;
+        _self.setAjx();
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
+    }
+
+    setAjx = () => {
         const _self = this,
             origin = { lat: 41.020334, long: 28.889993499999996 },
             { serviceLatitude = '', serviceLongitude = '' } = _self.props.data;
         if (serviceLatitude != '' && serviceLongitude != '') {
-            const uri = 'https://maps.googleapis.com/maps/api/distancematrix/json?language=tr-TR&units=metric&origins=' + origin['lat'] + ',' + origin['long'] + '&destinations=' + serviceLatitude + ',' + serviceLongitude + '&key=AIzaSyAvSoqfCr4I9Vb11HtQ6cDEAMki6THBgrQ';
+            const uri = Utils.getCustomURL({ key: 'location', origins: (origin['lat'] + ',' + origin['long']), destinations: (serviceLatitude + ',' + serviceLongitude) });
 
-            return fetch(uri)
-                .then((response) => response.json())
-                .then((responseJson) => {
-                    const elements = responseJson['rows'][0]['elements'][0],
+            Utils.ajx({ uri: uri }, (res) => {
+                if (res['type'] == 'success' && _self._isMounted) {
+                    const data = res['data'] || {},
+                        elements = data['rows'][0]['elements'][0],
                         duration = elements['duration'] || {},
                         distance = elements['distance'] || {};
                     _self.setState({ distance: distance['text'] || '', duration: duration['text'] || '' });
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
-
+                }
+            });
         }
     }
 
@@ -321,7 +326,7 @@ class Viewer extends Component {
 
     getUri = () => {
         const { uri } = this.props.config;
-        return uri;
+        return Utils.getURL(uri);
     }
 
     _getData = () => {
