@@ -47,7 +47,7 @@ class Extra extends Component {
 
     _getScreen = () => {
         const _self = this,
-            data = _self.props.settings.menu.extra,
+            data = _self.props.settings.menu.user,
             obj = {};
 
         data.map((item, ind) => {

@@ -26,6 +26,16 @@ class Form extends Component {
     }
 
     componentDidMount() {
+        const _self = this;
+        _self._isMounted = true;
+        _self.setAjx();
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
+    }
+
+    setAjx = () => {
         const _self = this,
             { defValue = '' } = _self.props.data;
         if (defValue != '') {
@@ -38,15 +48,11 @@ class Form extends Component {
                 if (keys != '')
                     data = d.data[keys['arr']][0] || [];
                 else
-                    data = d.data ||  [];
+                    data = d.data || [];
 
                 _self.setState({ defaultData: data, show: true });
             })
         }
-        _self._isMounted = true;
-    }
-    componentWillUnmount() {
-        this._isMounted = false;
     }
 
     ajx = ({ uri, data = {} }, callback) => {

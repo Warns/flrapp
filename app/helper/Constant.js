@@ -30,5 +30,16 @@ export const ORDER_LIST_CLICKED = 'ORDER_LIST_CLICKED';
 export const ADDRESS_LIST_CLICKED = 'ADDRESS_LIST_CLICKED';
 export const LOCATION_SERVICE = 'LOCATION_SERVICE';
 
+/* form */
+export const FORMDATA = {
+    login: require('root/data/login.js'),
+    createUser: require('root/data/createUser.js'),
+    recoverPassword: require('root/data/recoverPassword.js'),
+    changePassword: require('root/data/changePassword.js'),
+    createAddress: require('root/data/createAddress.js'),
+    setAddress: require('root/data/setAddress.js'),
+    setUser: require('root/data/setUser.js'),
+};
+
 /* Redux Actions */
 export const SET_SETTINGS = 'SET_SETTINGS';

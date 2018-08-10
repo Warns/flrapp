@@ -1,10 +1,10 @@
 import React from 'react';
-import { 
-  Animated, 
-  Easing, 
-  Image, 
-  KeyboardAvoidingView, 
-  Modal, 
+import {
+  Animated,
+  Easing,
+  Image,
+  KeyboardAvoidingView,
+  Modal,
   View,
   Dimensions,
 } from 'react-native';
@@ -12,7 +12,8 @@ import { connect } from 'react-redux';
 import { SplashHeader } from '../components';
 import { DefaultButton, DefaultInput } from '../UI';
 
-
+import { Form } from 'root/app/form';
+import { FORMDATA } from 'root/app/helper/Constant';
 
 styles = require('../styles.js');
 globals = require('../globals.js');
@@ -21,7 +22,7 @@ function mapStateToProps(state) {
   return state
 }
 
-class Splash extends React.Component{
+class Splash extends React.Component {
 
   static navigationOptions = {
     title: 'Flormar',
@@ -35,10 +36,10 @@ class Splash extends React.Component{
     localStorage: {},
   }
 
-  componentDidMount(){
+  componentDidMount() {
 
     const dimensions = Dimensions.get('screen');
-    this.props.dispatch({type: 'SET_SCREEN_DIMENSIONS', value: dimensions});
+    this.props.dispatch({ type: 'SET_SCREEN_DIMENSIONS', value: dimensions });
 
     _loadInitialState(this._routeAccordingToAsyncStorage);
 
@@ -48,13 +49,13 @@ class Splash extends React.Component{
 
     console.log('rooting');
 
-    if( globals.CLIENT.Login != null ){
+    if (globals.CLIENT.Login != null) {
 
       //this._requestLogin();
       this._requestLogin();
 
     }
-    else{
+    else {
 
       console.log('there is no login info')
 
@@ -75,7 +76,7 @@ class Splash extends React.Component{
 
   }
 
-  _loginResultHandler = ( answer ) => {
+  _loginResultHandler = (answer) => {
 
     globals.CLIENT.Login = answer;
 
@@ -103,7 +104,7 @@ class Splash extends React.Component{
       },
     ];
 
-    this.props.dispatch({type: 'SET_CATEGORIES', value: {categories: categories, selectedCategory: 'nails'}});
+    this.props.dispatch({ type: 'SET_CATEGORIES', value: { categories: categories, selectedCategory: 'nails' } });
     //this.props.navigation.navigate("Category");
     this.props.navigation.navigate("Extra");
   }
@@ -164,7 +165,7 @@ class Splash extends React.Component{
 
     Animated.timing(
       this.state.fadeAnim, {
-        toValue:1,
+        toValue: 1,
         duration: 500,
         easing: Easing.out(Easing.cubic),
       }
@@ -181,7 +182,7 @@ class Splash extends React.Component{
 
     Animated.timing(
       this.state.fadeAnim, {
-        toValue:0,
+        toValue: 0,
         duration: 500,
         easing: Easing.inOut(Easing.cubic),
       }
@@ -198,14 +199,19 @@ class Splash extends React.Component{
 
     Animated.timing(
       this.state.fadeAnim, {
-        toValue:0,
+        toValue: 0,
         duration: 500,
         easing: Easing.inOut(Easing.cubic),
       }
     ).start();
   }
 
-  render(){
+  _onLoginState =({ data })=>{
+    /* login durumu dönecek */
+    console.log(data);
+  }
+
+  render() {
 
     let { fadeAnim } = this.state;
 
@@ -229,9 +235,9 @@ class Splash extends React.Component{
       outputRange: [210, 180],
     });
 
-    return(
-      <View style={{backgroundColor:"#222222", flex:1}}>
-      {/*
+    return (
+      <View style={{ backgroundColor: "#222222", flex: 1 }}>
+        {/*
       <Video
         source={require('../../assets/loop.mp4')}
         rate={1.0}
@@ -243,70 +249,74 @@ class Splash extends React.Component{
         style={styles.backgroundImage}
       />
       */}
-      <Animated.Image
-        style={[
-          styles.backgroundImage,
-          {
-            opacity: fadeAnim,
-            transform: [{ translateY: 0 }, {scale:scale}],
-          },
-        ]}
-        source={require('../../assets/images/welcome-blurred.png')}
-      />
-      <Image style={{width:180, position:'absolute', top:50, resizeMode:'contain', alignSelf:'center'}} source={require('../../assets/images/logo-w.png')} />
-        <Animated.View style={{flex:1, flexDirection:"column-reverse", padding:30, opacity: reverseFadeAnim}}>
+        <Animated.Image
+          style={[
+            styles.backgroundImage,
+            {
+              opacity: fadeAnim,
+              transform: [{ translateY: 0 }, { scale: scale }],
+            },
+          ]}
+          source={require('../../assets/images/welcome-blurred.png')}
+        />
+        <Image style={{ width: 180, position: 'absolute', top: 50, resizeMode: 'contain', alignSelf: 'center' }} source={require('../../assets/images/logo-w.png')} />
+        <Animated.View style={{ flex: 1, flexDirection: "column-reverse", padding: 30, opacity: reverseFadeAnim }}>
           <DefaultButton
-              callback={this._updateCart}
-              name="ÜYELİKSİZ DEVAM ET"
-              boxColor="transparent"
-              textColor="#ffffff"
+            callback={this._updateCart}
+            name="ÜYELİKSİZ DEVAM ET"
+            boxColor="transparent"
+            textColor="#ffffff"
+          />
+          <View style={{ flex: 1, maxHeight: 70, flexDirection: 'row' }}>
+            <View style={{ flex: 1, marginRight: 5 }}>
+              <DefaultButton
+                callback={this._openLoginForm}
+                name="GİRİŞ YAP"
+                boxColor="#ffffff"
+                textColor="#000000"
               />
-          <View style={{flex:1, maxHeight:70, flexDirection:'row'}}>
-          <View style={{flex:1, marginRight:5}}>
-          <DefaultButton
-              callback={this._openLoginForm}
-              name="GİRİŞ YAP"
-              boxColor="#ffffff"
-              textColor="#000000"
+            </View>
+            <View style={{ flex: 1, marginLeft: 5 }}>
+              <DefaultButton
+                callback={this._updateCart2}
+                name="ÜYE OL"
+                boxColor="#ffffff"
+                textColor="#000000"
               />
-          </View>
-          <View style={{flex:1, marginLeft:5}}>
-          <DefaultButton
-              callback={this._updateCart2}
-              name="ÜYE OL"
-              boxColor="#ffffff"
-              textColor="#000000"
-              />
-          </View>
+            </View>
           </View>
         </Animated.View>
-            <Modal
-              animationType="none"
-              transparent={true}
-              visible={this.state.loginIsVisible}
-              onRequestClose={() => {}}
-            >
-              <SplashHeader onCloseLogin={this._onCloseLogin} />
-              <Animated.View style={{flex:1, padding:30, paddingTop:boxPadding, opacity: 1 /*fadeAnim*/ }}>
-                <KeyboardAvoidingView>
-                <DefaultInput label="E-posta" />
-                <DefaultInput label="Şifre" />
-                <View style={{height:20}} />
-                <DefaultButton
-                    callback={this._skipLogin}
-                    name="GİRİŞ YAP"
-                    boxColor="#ffffff"
-                    textColor="#000000"
-                    />
-                <DefaultButton
-                    callback={this._skipLogin}
-                    name="Şifremi Unuttum"
-                    boxColor="transparent"
-                    textColor="#ffffff"
-                    />
-                </KeyboardAvoidingView>
-              </Animated.View>
-            </Modal>
+        <Modal
+          animationType="none"
+          transparent={true}
+          visible={this.state.loginIsVisible}
+          onRequestClose={() => { }}
+        >
+          <SplashHeader onCloseLogin={this._onCloseLogin} />
+
+
+          <Form data={FORMDATA['login']} callback={this._onLoginState} />
+
+          <Animated.View style={{ flex: 1, padding: 30, paddingTop: boxPadding, opacity: 1 /*fadeAnim*/ }}>
+            <KeyboardAvoidingView>
+              <DefaultInput label="E-posta" />
+              <DefaultInput label="Şifre" />
+              <View style={{ height: 20 }} />
+              <DefaultButton
+                callback={this._skipLogin}
+                name="GİRİŞ YAP"
+                boxColor="#ffffff"
+                textColor="#000000"
+              />
+              <DefaultButton
+                callback={this._skipLogin}
+                name="Şifremi Unuttum"
+                boxColor="transparent"
+                textColor="#ffffff"
+              />
+            </KeyboardAvoidingView>
+          </Animated.View>
+        </Modal>
       </View>
     )
   }
@@ -315,10 +325,10 @@ class Splash extends React.Component{
 export default connect(mapStateToProps)(Splash);
 
 // check Async Local Secure Storage for user information.
-async function _loadInitialState( callback ){
-  globals.getSecureStorage( '__USER__', ( answer ) => {
-    if( answer !== 'no' )
-      globals.CLIENT = JSON.parse( answer );
-      callback();
+async function _loadInitialState(callback) {
+  globals.getSecureStorage('__USER__', (answer) => {
+    if (answer !== 'no')
+      globals.CLIENT = JSON.parse(answer);
+    callback();
   });
 }
