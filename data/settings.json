@@ -80,7 +80,8 @@
                     "color": "#7c3993",
                     "fontFamily": "Bold"
                 },
-                "ico": "location"
+                "ico": "location",
+                "navigation": "Store"
             },
             {
                 "title": "KURUMSAL",

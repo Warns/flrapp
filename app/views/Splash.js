@@ -13,7 +13,7 @@ import { SplashHeader } from '../components';
 import { DefaultButton, DefaultInput } from '../UI';
 
 import { Form } from 'root/app/form';
-import { FORMDATA } from 'root/app/helper/Constant';
+import { FORMDATA, SET_NAVIGATION, SET_SCREEN_DIMENSIONS } from 'root/app/helper/Constant';
 
 styles = require('../styles.js');
 globals = require('../globals.js');
@@ -39,10 +39,12 @@ class Splash extends React.Component {
   componentDidMount() {
 
     const dimensions = Dimensions.get('screen');
-    this.props.dispatch({ type: 'SET_SCREEN_DIMENSIONS', value: dimensions });
+    this.props.dispatch({ type: SET_SCREEN_DIMENSIONS, value: dimensions });
 
     _loadInitialState(this._routeAccordingToAsyncStorage);
 
+    /* root navigation redux bağlamak için kullanırız */
+    this.props.dispatch({ type: SET_NAVIGATION, value: this.props.navigation });
   }
 
   _routeAccordingToAsyncStorage = () => {

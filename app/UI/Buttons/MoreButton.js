@@ -5,6 +5,7 @@ import {
     TouchableOpacity,
 } from 'react-native';
 import { connect } from 'react-redux';
+import { SHOW_MENU } from 'root/app/helper/Constant';
 
 class MoreBtn extends Component {
     constructor(props) {
@@ -12,7 +13,7 @@ class MoreBtn extends Component {
     }
 
     _onPress = () => {
-        this.props.dispatch({ type: 'SHOW_MENU', value: { direction: 'right', type: 'extra' } });
+        this.props.dispatch({ type: SHOW_MENU, value: { direction: 'right', type: 'extra' } });
     }
 
     render() {

@@ -15,6 +15,8 @@ import { connect } from 'react-redux';
 
 import Cart from '../Cart';
 
+import { SHOW_MENU } from 'root/app/helper/Constant';
+
 // Let's go
 
 class DefaultHdr extends Component{
@@ -28,7 +30,7 @@ class DefaultHdr extends Component{
 
   _onBackPress = () => {
     //this.props.nav.goBack();
-    this.props.dispatch({ type: 'SHOW_MENU', value: { direction: 'left', type: 'user' } });
+    this.props.dispatch({ type: SHOW_MENU, value: { direction: 'left', type: 'user' } });
   }
 
   render(){

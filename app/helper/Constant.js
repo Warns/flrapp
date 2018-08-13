@@ -41,5 +41,27 @@ export const FORMDATA = {
     setUser: require('root/data/setUser.js'),
 };
 
-/* Redux Actions */
+/*** Redux Actions ***/
+
+/* settings */
 export const SET_SETTINGS = 'SET_SETTINGS';
+
+/* root navigation */
+export const SET_NAVIGATION = 'SET_NAVIGATION';
+export const NAVIGATE = 'NAVIGATE';
+
+/* cart */
+export const SET_CART_ITEMS = 'SET_CART_ITEMS';
+export const ADD_CART_ITEM = 'ADD_CART_ITEM';
+
+/* general */
+export const SET_CATEGORIES = 'SET_CATEGORIES';
+export const SET_SCREEN_DIMENSIONS = 'SET_SCREEN_DIMENSIONS';
+
+/* user */
+export const SET_CART_NUM = 'SET_CART_NUM';
+
+/* menu */
+export const SHOW_MENU = 'SHOW_MENU';
+export const HIDE_MENU = 'HIDE_MENU';
+

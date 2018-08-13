@@ -11,6 +11,7 @@ import { SafeAreaView } from 'react-navigation';
 import { connect } from 'react-redux';
 import { LineButton } from 'root/app/UI';
 import { GestureRecognizer } from 'root/app/helper';
+import { NAVIGATE, HIDE_MENU } from 'root/app/helper/Constant';
 
 class CustomModal extends Component {
     constructor(props) {
@@ -40,7 +41,7 @@ class Navigation extends Component {
     }
 
     _onPress = (obj) => {
-        alert(JSON.stringify(obj));
+        this.props.onMenuClicked(obj);
     }
 
     _add = () => {
@@ -88,12 +89,23 @@ class Menu extends Component {
         });
     }
 
+    /* menu closed */
     _onClose = () => {
         const _self = this,
             { onClose } = _self.props;
         _self._animate({ typ: 'hide' }, () => {
             if (onClose)
                 onClose();
+        });
+    }
+
+    /* menu item clicked */
+    _onMenuClicked = (obj) => {
+        const _self = this,
+            { onMenuClicked } = _self.props;
+        _self._animate({ typ: 'hide' }, () => {
+            if (onMenuClicked)
+                onMenuClicked(obj);
         });
     }
 
@@ -165,7 +177,7 @@ class Menu extends Component {
                     <View style={{ flex: 1, alignSelf: alignSelf, flexDirection: 'column', zIndex: 2, position: 'relative' }}>
                         <Animated.View style={{ ...direction, zIndex: 2, width: 320, flex: 1, backgroundColor: '#FFFFFF', paddingLeft: 10, paddingRight: 10 }}>
                             {header}
-                            <Navigation items={items} />
+                            <Navigation onMenuClicked={this._onMenuClicked} items={items} />
                             {footer}
                         </Animated.View>
                     </View>
@@ -181,7 +193,13 @@ class TopMenu extends Component {
     }
 
     _onClose = () => {
-        this.props.dispatch({ type: 'HIDE_MENU' });
+        this.props.dispatch({ type: HIDE_MENU });
+    }
+
+    _onMenuClicked = (obj) => {
+        const _self = this;
+        _self.props.dispatch({ type: HIDE_MENU });
+        _self.props.dispatch({ type: NAVIGATE, value: obj });
     }
 
     render() {
@@ -192,7 +210,7 @@ class TopMenu extends Component {
 
         return (
             <CustomModal visible={isVisible}>
-                <Menu onClose={_self._onClose} direction={direction} items={menu[type]} />
+                <Menu onMenuClicked={this._onMenuClicked} onClose={_self._onClose} direction={direction} items={menu[type]} />
             </CustomModal>
         );
     }

@@ -1,3 +1,5 @@
+import { SHOW_MENU, HIDE_MENU } from 'root/app/helper/Constant';
+
 const initialState = {
     isVisible: false,
     direction: 'left',
@@ -5,12 +7,12 @@ const initialState = {
 };
 export default function menu(state = initialState, action) {
     switch (action.type) {
-        case 'SHOW_MENU': return {
+        case SHOW_MENU: return {
             isVisible: true,
             direction: action.value.direction,
             type: action.value.type,
         };
-        case 'HIDE_MENU': return {
+        case HIDE_MENU: return {
             ...state,
             isVisible: false,
         };

@@ -39,7 +39,7 @@ class Extra extends Component {
             { type } = item;
         let view = null;
 
-        if (type == VIEWERTYPE['LIST'] || type == VIEWERTYPE['HTMLTOJSON'] ||  type == VIEWERTYPE['HTML'] || type == VIEWERTYPE['WEBVIEW'])
+        if (type == VIEWERTYPE['LIST'] || type == VIEWERTYPE['HTMLTOJSON'] || type == VIEWERTYPE['HTML'] || type == VIEWERTYPE['WEBVIEW'])
             view = <Viewer {...props} config={item} callback={this._callback} />
 
         return view;
@@ -47,9 +47,10 @@ class Extra extends Component {
 
     _getScreen = () => {
         const _self = this,
-            data = _self.props.settings.menu.user,
+            type = _self.props.menu.type || 'extra', // menu type değerini redux üstünden alıyor   
+            data = _self.props.settings.menu[type],
             obj = {};
-
+        
         data.map((item, ind) => {
             const { title } = item;
             obj[title] = {
@@ -62,12 +63,19 @@ class Extra extends Component {
         return obj;
     }
 
+    _getRouteName =()=>{
+        /* başlangıç route ayarlıyoruz. değerini topmenu.js _onMenuClicked gönderilen object içinden alıyor alıyor. */
+        const params = this.props.navigation.state.params || {};
+        return params.item.title;
+    }
+
     TabNavigator = createMaterialTopTabNavigator(
         this._getScreen(),
         {
             lazy: true,
             tabBarPosition: 'top',
             tabBarComponent: CustomHorizontalTabs,
+            initialRouteName: this._getRouteName(),
         }
     );
 

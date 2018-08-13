@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { SET_SETTINGS } from 'root/app/helper/Constant';
 
 const Utils = require('root/app/helper/Global.js');
 const Globals = require('root/app/globals.js');
@@ -18,11 +19,11 @@ class Setting extends Component {
         /*
         _self.ajx({ uri: _self.getUri(), data: { "exportType": "mobiAppSettingsJson" } }, (res) => {
             const settings = JSON.parse(res['data']['html'] || '{}');
-            _self.props.dispatch({ type: 'SET_SETTINGS', value: settings });
+            _self.props.dispatch({ type: SET_SETTINGS, value: settings });
         });
         */
        const settings = require('root/data/settings.json');
-       _self.props.dispatch({ type: 'SET_SETTINGS', value: settings });
+       _self.props.dispatch({ type: SET_SETTINGS, value: settings });
     }
 
     componentWillUnmount() {

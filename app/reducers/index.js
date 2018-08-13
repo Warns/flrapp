@@ -5,6 +5,7 @@ import cart from './cart';
 import user from './user';
 import settings from './settings';
 import menu from './menu';
+import rootNavigation from './rootNavigation';
 
 export default combineReducers({
   general,
@@ -12,4 +13,5 @@ export default combineReducers({
   user,
   settings,
   menu,
+  rootNavigation,
 });
