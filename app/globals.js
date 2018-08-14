@@ -74,7 +74,7 @@ module.exports = {
         // login olduktan sonra kişinin session bilgisi headerdan dönüyor. Bu bilgiyi global session bilgisine yazdırmak 
         const header = response.headers || {},
           map = header.map || {},
-          session = map.session || '';
+          session = map.session || ''; console.log('session', session[0]);
         if (session != '' && _this.CLIENT.Auth)
           _this.CLIENT.Auth.session = session[0];
         
@@ -109,8 +109,6 @@ module.exports = {
           if (answer.status == 200) {
             this.CLIENT.Auth = answer.data;
             this.CLIENT.Auth.issue = new Date();
-
-            this.CLIENT.Auth.session = 'ljw2ZkJXP3Aolk0e09y7AS/iy71WkjoiglVogHhoIfyqKAgOscp/m/bZhIE83SaPIELztJAdO193X2XNJ+Er0zLswCLWo82dkgJhwBG+k/Srd85gBnCGYFjK56y93tHWvUxlXI11RBDvIqoAUlDaYRTXcSTXQPLaN5MtIQDFXGcfQHgRyPb+hAC8uVDS4lpW';
 
             console.log('token renewed successfully!');
             this._fetchURL(url, data, callback);

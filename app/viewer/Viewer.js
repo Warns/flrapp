@@ -125,7 +125,7 @@ class OrderListItem extends Component {
 
     _onPress = () => {
         const _self = this,
-            { callback, data } = _self.props; console.log(data);
+            { callback, data } = _self.props;
         if (callback)
             callback({ type: ORDER_LIST_CLICKED, data: data });
     }
@@ -423,7 +423,7 @@ class Viewer extends Component {
             case ITEMTYPE['FAVORITE']:
                 return <FavoriteListItem onPress={this._onGotoDetail} data={item} />;
             case ITEMTYPE['ORDER']:
-                return <OrderListItem onPress={this._onGotoDetail} data={item} />;
+                return <OrderListItem callback={this._callback} data={item} />;
             case ITEMTYPE['COUPON']:
                 return <CouponListItem onPress={this._onGotoDetail} data={item} />;
             case ITEMTYPE['FOLLOWLIST']:

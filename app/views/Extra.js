@@ -10,6 +10,7 @@ import { Viewer, MapViewer, OrderViewer } from 'root/app/viewer';
 import { Form } from 'root/app/form';
 import { DATA_LOADED, ORDER_LIST_CLICKED, VIEWERTYPE } from 'root/app/helper/Constant';
 
+
 class CustomHorizontalTabs extends React.Component {
 
     jumpToIndex = this.props.jumpTo;
@@ -33,6 +34,14 @@ class Extra extends Component {
         super(props);
     }
 
+    _callback = (obj) => {
+        const _self = this,
+            { type } = obj;
+
+        if (type != DATA_LOADED)
+            _self.props.navigation.navigate('ExtraDetail', obj);
+    }
+
     /* ilgili componentleri tipine göre çağırmak */
     _getComponent = ({ props = {}, item }) => {
         const _self = this,
@@ -50,7 +59,7 @@ class Extra extends Component {
             type = _self.props.menu.type || 'extra', // menu type değerini redux üstünden alıyor   
             data = _self.props.settings.menu[type],
             obj = {};
-        
+
         data.map((item, ind) => {
             const { title } = item;
             obj[title] = {
@@ -63,7 +72,7 @@ class Extra extends Component {
         return obj;
     }
 
-    _getRouteName =()=>{
+    _getRouteName = () => {
         /* başlangıç route ayarlıyoruz. değerini topmenu.js _onMenuClicked gönderilen object içinden alıyor alıyor. */
         const params = this.props.navigation.state.params || {};
         return params.item.title;
