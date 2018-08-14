@@ -74,7 +74,7 @@ module.exports = {
         // login olduktan sonra kişinin session bilgisi headerdan dönüyor. Bu bilgiyi global session bilgisine yazdırmak 
         const header = response.headers || {},
           map = header.map || {},
-          session = map.session || ''; console.log('session', session[0]);
+          session = map.session || '';
         if (session != '' && _this.CLIENT.Auth)
           _this.CLIENT.Auth.session = session[0];
         

@@ -4,9 +4,7 @@ import {
     StyleSheet,
     Text,
 } from 'react-native';
-import { Container } from './';
-import { Minus99MultipleSelect } from 'root/app/components/';
-
+import { Container, Minus99MultipleSelect } from './';
 
 class SelectBox extends Component {
     constructor(props) {

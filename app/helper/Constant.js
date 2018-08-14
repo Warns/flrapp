@@ -10,7 +10,8 @@ export const VIEWERTYPE = {
     LIST: 'listViewer',
     HTML: 'htmlViewer',
     HTMLTOJSON: 'htmlToJSON',
-    WEBVIEW: 'webViewer'
+    WEBVIEW: 'webViewer',
+    FORM: 'form'
 };
 
 /* VIEWER FLATLIST ITEM TYPE */

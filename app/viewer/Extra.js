@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import { createMaterialTopTabNavigator } from 'react-navigation';
 import { Viewer, MapViewer, OrderViewer } from 'root/app/viewer';
 import { Form } from 'root/app/form';
-import { DATA_LOADED, ORDER_LIST_CLICKED, VIEWERTYPE } from 'root/app/helper/Constant';
+import { DATA_LOADED, ORDER_LIST_CLICKED, VIEWERTYPE, FORMDATA } from 'root/app/helper/Constant';
 
 
 class CustomHorizontalTabs extends React.Component {
@@ -45,11 +45,13 @@ class Extra extends Component {
     /* ilgili componentleri tipine göre çağırmak */
     _getComponent = ({ props = {}, item }) => {
         const _self = this,
-            { type } = item;
+            { type, itemType = '' } = item;
         let view = null;
 
         if (type == VIEWERTYPE['LIST'] || type == VIEWERTYPE['HTMLTOJSON'] || type == VIEWERTYPE['HTML'] || type == VIEWERTYPE['WEBVIEW'])
             view = <Viewer {...props} config={item} callback={this._callback} />
+        else if (type == VIEWERTYPE['FORM'])
+            view = <Form data={FORMDATA[itemType]} callback={this._callback} />;
 
         return view;
     }

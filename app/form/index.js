@@ -8,3 +8,4 @@ export * from './RadioGroup';
 export * from './DateTimePicker';
 export * from './CountryPicker';
 export * from './HiddenObject';
+export * from './Minus99MultipleSelect';
