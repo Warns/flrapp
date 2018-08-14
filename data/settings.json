@@ -5,7 +5,10 @@
                 "title": "FAVORİLERİM",
                 "type": "listViewer",
                 "itemType": "favorite",
-                "uri": { "key": "user", "subKey": "getFavoriteProductList" },
+                "uri": {
+                    "key": "user",
+                    "subKey": "getFavoriteProductList"
+                },
                 "keys": {
                     "id": "productId",
                     "arr": "products",
@@ -19,7 +22,10 @@
                 "title": "TAKİP LİSTEM",
                 "type": "listViewer",
                 "itemType": "followList",
-                "uri": { "key": "user", "subKey": "getPriceFollowUpList" },
+                "uri": {
+                    "key": "user",
+                    "subKey": "getPriceFollowUpList"
+                },
                 /*"uri": { "key": "user", "subKey": "getStockFollowUpList" },*/
                 "keys": {
                     "id": "productId",
@@ -31,7 +37,10 @@
                 "title": "SİPARİŞLERİM",
                 "type": "listViewer",
                 "itemType": "order",
-                "uri": { "key": "order", "subKey": "getOrder" },
+                "uri": {
+                    "key": "order",
+                    "subKey": "getOrder"
+                },
                 "keys": {
                     "id": "orderId",
                     "arr": "orders"
@@ -47,7 +56,10 @@
                 "title": "ADRES BİLGİLERİM",
                 "type": "listViewer",
                 "itemType": "address",
-                "uri": { "key": "address", "subKey": "getAddress" },
+                "uri": {
+                    "key": "address",
+                    "subKey": "getAddress"
+                },
                 "keys": {
                     "id": "addressId",
                     "arr": "addresses",
@@ -59,29 +71,35 @@
             {
                 "title": "ÇIKIŞ",
                 "type": "trigger",
-                "uri": { "key": "user", "subKey": "logout" },
+                "uri": {
+                    "key": "user",
+                    "subKey": "logout"
+                },
+                "showCategory": false
             }
         ],
         "extra": [
-
             {
                 "title": "MAĞAZALAR",
                 "type": "listViewer",
                 "itemType": "serviceList",
-                "uri": { "key": "service", "subKey": "getServiceList" },
+                "uri": {
+                    "key": "service",
+                    "subKey": "getServiceList"
+                },
                 "keys": {
                     "id": "serviceId",
                     "arr": "services"
                 },
                 "data": {},
                 "refreshing": false,
-
                 "fontStyle": {
                     "color": "#7c3993",
                     "fontFamily": "Bold"
                 },
                 "ico": "location",
-                "navigation": "Store"
+                "navigation": "Store",
+                "showCategory": false
             },
             {
                 "title": "KURUMSAL",
@@ -104,7 +122,182 @@
                 },
                 "siteURI": "/biz-kimiz/"
             },
-
+            {
+                "showMenu": false,
+                "title": "TARİHÇE",
+                "type": "htmlViewer",
+                "uri": {
+                    "key": "export",
+                    "subKey": "getExport"
+                },
+                "siteURI": "/tarihce/",
+                "keys": {
+                    "arr": "html"
+                },
+                "data": {
+                    "exportType": "coporateEXP",
+                    "customParameters": [
+                        {
+                            "key": "icr",
+                            "value": "19199"
+                        }
+                    ]
+                }
+            },
+            {
+                "showMenu": false,
+                "title": "VİZYON & MİSYON",
+                "type": "htmlViewer",
+                "uri": {
+                    "key": "export",
+                    "subKey": "getExport"
+                },
+                "siteURI": "/vizyon-misyon/",
+                "keys": {
+                    "arr": "html"
+                },
+                "data": {
+                    "exportType": "coporateEXP",
+                    "customParameters": [
+                        {
+                            "key": "icr",
+                            "value": "19200"
+                        }
+                    ]
+                }
+            },
+            {
+                "showMenu": false,
+                "title": "DEĞERLER",
+                "type": "htmlViewer",
+                "uri": {
+                    "key": "export",
+                    "subKey": "getExport"
+                },
+                "siteURI": "/degerler/",
+                "keys": {
+                    "arr": "html"
+                },
+                "data": {
+                    "exportType": "coporateEXP",
+                    "customParameters": [
+                        {
+                            "key": "icr",
+                            "value": "19201"
+                        }
+                    ]
+                }
+            },
+            {
+                "showMenu": false,
+                "title": "ŞİRKET BİLGİLERİ",
+                "type": "webViewer",
+                "uri": {
+                    "key": "export",
+                    "subKey": "getExport"
+                },
+                "siteURI": "/sirket-bilgileri/",
+                "keys": {
+                    "arr": "html"
+                },
+                "data": {
+                    "exportType": "coporateEXP",
+                    "customParameters": [
+                        {
+                            "key": "icr",
+                            "value": "19202"
+                        }
+                    ]
+                }
+            },
+            {
+                "showMenu": false,
+                "title": "KALİTE POLİTİKAMIZ",
+                "type": "htmlViewer",
+                "uri": {
+                    "key": "export",
+                    "subKey": "getExport"
+                },
+                "siteURI": "/kalite-politikamiz/",
+                "keys": {
+                    "arr": "html",
+                },
+                "data": {
+                    "exportType": "coporateEXP",
+                    "customParameters": [
+                        {
+                            "key": "icr",
+                            "value": "19204"
+                        }
+                    ]
+                }
+            },
+            {
+                "showMenu": false,
+                "title": "İNSAN KAYNAKLARI POLİTİKASI",
+                "type": "htmlViewer",
+                "uri": {
+                    "key": "export",
+                    "subKey": "getExport"
+                },
+                "siteURI": "/insan-kaynaklari-politikasi/",
+                "keys": {
+                    "arr": "html"
+                },
+                "data": {
+                    "exportType": "coporateEXP",
+                    "customParameters": [
+                        {
+                            "key": "icr",
+                            "value": "19275"
+                        }
+                    ]
+                }
+            },
+            {
+                "showMenu": false,
+                "title": "KÜNYE",
+                "type": "htmlViewer",
+                "uri": {
+                    "key": "export",
+                    "subKey": "getExport"
+                },
+                "siteURI": "/kunye/",
+                "keys": {
+                    "arr": "html"
+                },
+                "data": {
+                    "exportType": "coporateEXP",
+                    "customParameters": [
+                        {
+                            "key": "icr",
+                            "value": "19277"
+                        }
+                    ]
+                }
+            },
+            {
+                "showMenu": false,
+                "title": "BİLGİ TOPLUMU MERKEZİ",
+                "type": "htmlViewer",
+                "uri": {
+                    "key": "export",
+                    "subKey": "getExport"
+                },
+                "siteURI": "/bilgi-toplumu-merkezi/",
+                "keys": {
+                    "arr": "html"
+                },
+                "data": {
+                    "exportType": "coporateEXP",
+                    "customParameters": [
+                        {
+                            "key": "icr",
+                            "value": "19690"
+                        }
+                    ]
+                }
+            },
             {
                 "title": "İADE İŞLEMLERİ",
                 "type": "htmlViewer",
@@ -126,7 +319,6 @@
                 },
                 "siteURI": "/iade-islemleri/"
             },
-
             {
                 "title": "MESAFELİ SATIŞ SÖZLEŞMESİ",
                 "type": "htmlViewer",
@@ -148,7 +340,6 @@
                 },
                 "siteURI": "/mesafeli-satis-sozlesmesi/"
             },
-
             {
                 "title": "SIKÇA SORULAN SORULAR",
                 "type": "htmlViewer",
@@ -164,7 +355,6 @@
                 },
                 "siteURI": "/sss/"
             },
-            
             {
                 "title": "İNSAN KAYNAKLARI",
                 "type": "htmlViewer",
@@ -207,7 +397,6 @@
                 },
                 "siteURI": "/kvk/"
             },
-
         ],
         "main": [
             {

@@ -63,13 +63,17 @@ class Extra extends Component {
             obj = {};
 
         data.map((item, ind) => {
-            const { title } = item;
-            obj[title] = {
-                screen: props => _self._getComponent({ item: item, props: props }),
-                navigationOptions: {
-                    title: title,
+            /*
+            showCategory değerini settings json üzerinden alıyor. kategoride gözüküp, gözükmeme olayı
+            */
+            const { title, showCategory = true } = item;
+            if (showCategory)
+                obj[title] = {
+                    screen: props => _self._getComponent({ item: item, props: props }),
+                    navigationOptions: {
+                        title: title,
+                    }
                 }
-            }
         });
         return obj;
     }

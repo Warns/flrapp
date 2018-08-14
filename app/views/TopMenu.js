@@ -50,10 +50,14 @@ class Navigation extends Component {
         if (items.length == 0)
             return null;
         return items.map((item, ind) => {
-            const fontStyle = item['fontStyle'] || {},
-                ico = item['ico'] || '';
-
-            return <LineButton ico={ico} fontStyle={fontStyle} sequence={ind} item={item} key={'btn-' + ind} onPress={this._onPress}>{item.title}</LineButton>
+            /*
+            showMenu değerini settings json üzerinden alıyor. menude gözüküp, gözükmeme olayı
+            */
+            const { fontStyle = {}, ico = '', showMenu = true } = item;
+            if (showMenu)
+                return <LineButton ico={ico} fontStyle={fontStyle} sequence={ind} item={item} key={'btn-' + ind} onPress={this._onPress}>{item.title}</LineButton>
+            else
+                return null;
         });
     }
 
