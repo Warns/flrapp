@@ -51,7 +51,7 @@ class Extra extends Component {
         if (type == VIEWERTYPE['LIST'] || type == VIEWERTYPE['HTMLTOJSON'] || type == VIEWERTYPE['HTML'] || type == VIEWERTYPE['WEBVIEW'])
             view = <Viewer {...props} config={item} callback={this._callback} />
         else if (type == VIEWERTYPE['FORM'])
-            view = <Form data={FORMDATA[itemType]} callback={this._callback} />;
+            view = <Form {...props} data={FORMDATA[itemType]} callback={this._callback} />;
 
         return view;
     }

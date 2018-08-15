@@ -107,8 +107,7 @@ class Splash extends React.Component {
     ];
 
     this.props.dispatch({ type: 'SET_CATEGORIES', value: { categories: categories, selectedCategory: 'nails' } });
-    //this.props.navigation.navigate("Category");
-    this.props.navigation.navigate("Extra");
+    this.props.navigation.navigate("Category");
   }
 
   _updateCart2 = () => {
