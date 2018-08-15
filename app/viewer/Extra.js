@@ -39,7 +39,7 @@ class Extra extends Component {
             { type } = obj;
 
         if (type != DATA_LOADED)
-            _self.props.navigation.navigate('ExtraDetail', obj);
+            _self.props.navigation.navigate('Detail', obj);
     }
 
     /* ilgili componentleri tipine göre çağırmak */
@@ -101,4 +101,5 @@ class Extra extends Component {
 }
 
 function mapStateToProps(state) { return state }
-export default connect(mapStateToProps)(Extra);
+const ExtraPage = connect(mapStateToProps)(Extra);
+export { ExtraPage }

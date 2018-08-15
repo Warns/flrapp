@@ -9,8 +9,11 @@ import { createStackNavigator, createMaterialTopTabNavigator } from 'react-navig
 
 import SplashPage from '../app/views/Splash';
 import CategoryPage from '../app/views/Category';
+import StoreNavigation from './StoreNavigation';
 import ExtraNavigation from './ExtraNavigation';
 import HomeTabNavigator from './HomeTabNavigation';
+
+import { MapViewer } from 'root/app/viewer';
 
 //import ProductPage from '../app/views/Product';
 
@@ -29,28 +32,19 @@ class CartPage extends React.Component {
   }
 }
 
-class StorePage extends React.Component {
-
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    return null;
-  }
-}
-
 const RootStackNavigator = createStackNavigator(
   {
     Splash: {
       screen: SplashPage,
     },
+    
     Home: {
       screen: HomeTabNavigator,
       navigationOptions: {
         header: () => <DefaultHeader />,
       }
     },
+
     Category: {
       screen: CategoryPage,
     },
@@ -67,7 +61,7 @@ const RootStackNavigator = createStackNavigator(
     },
 
     Store: {
-      screen: StorePage,
+      screen: props => <MapViewer {...props} />
     }
 
   },

@@ -46,6 +46,6 @@ class ExtraDetail extends Component {
 }
 
 function mapStateToProps(state) { return state }
-export default connect(mapStateToProps)(ExtraDetail);
-
+const ExtraPageDetail = connect(mapStateToProps)(ExtraDetail);
+export { ExtraPageDetail }
 

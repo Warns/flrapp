@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
 import { createStackNavigator } from 'react-navigation';
-import ExtraPage from 'root/app/viewer/Extra';
-import ExtraPageDetail from 'root/app/viewer/ExtraPageDetail';
+import { ExtraPage, ExtraPageDetail } from 'root/app/viewer/';
 
 /* Extra Page: user ve extra menuleri için navigator */
 const ExtraPageNavigator = createStackNavigator(
     {
-        Extra: {
+        Main: {
             screen: props => <ExtraPage {...props} />,
         },
-        ExtraDetail: {
+        Detail: {
             screen: props => <ExtraPageDetail {...props} />,
         },
     },

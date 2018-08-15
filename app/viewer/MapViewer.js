@@ -15,17 +15,24 @@ import {
     SERVICE_LIST_CLICKED,
     DATA_LOADED,
 } from 'root/app/helper/Constant';
-import ClusteredMapView from 'react-native-maps-super-cluster';
 
 const Utils = require('root/app/helper/Global.js');
-const VIEWER = require('root/data/Viewer.js');
-
-
-/*
-
-https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=41.43206,-81.38992&destinations=40.6905615,-73.9976592&key=AIzaSyAvSoqfCr4I9Vb11HtQ6cDEAMki6THBgrQ
-
-*/
+const DATA = {
+    itemType: 'serviceList',
+    uri: { key: 'service', subKey: 'getServiceList' },
+    keys: {
+        id: 'serviceId',
+        arr: 'services',
+    }
+};
+const CONFIG = {
+    initialRegion: {
+        latitude: 39.08719,
+        longitude: 35.177914,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+    }
+};
 
 /*
                             
@@ -44,25 +51,6 @@ https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=41
     }
                 
 */
-
-const CONFIG = {
-    initialRegion: {
-        latitude: 39.08719,
-        longitude: 35.177914,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-    },
-    keys: {
-        id: 'serviceId',
-        name: 'serviceName',
-        address: 'address',
-        fax: 'fax',
-        phone: 'phoneNo',
-        picture: 'picture',
-        latitude: 'serviceLatitude',
-        longitude: 'serviceLongitude',
-    }
-};
 
 class AddressDetail extends Component {
     constructor(props) {
@@ -240,15 +228,6 @@ class MapViewer extends Component {
                     {items}
                 </MapView>
             );
-            /*view = (
-                <ClusteredMapView
-                    style={{ flex: 1 }}
-                    data={this.state.markers}
-                    renderMarker={this.renderMarker}
-                    renderCluster={this.renderCluster}
-                    initialRegion={CONFIG['initialRegion']}
-                />
-            );*/
         }
 
         return view;
@@ -273,7 +252,7 @@ class MapViewer extends Component {
         return (
             <View style={{ flex: 1 }}>
                 <LocationService callback={this._callback} />
-                <Viewer style={{ paddingLeft: 10, paddingRight: 10 }} config={VIEWER['serviceList']} callback={this._callback} />
+                <Viewer {..._self.props} style={{ paddingLeft: 10, paddingRight: 10 }} config={DATA} callback={this._callback} />
                 {modal}
             </View>
         )
