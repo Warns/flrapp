@@ -39,7 +39,7 @@ class Main extends Component {
 
     render() {
         const _self = this;
-        return <Viewer {..._self.props} config={data} callback={_self._callback} />
+        return <Viewer config={data} callback={_self._callback} />
     }
 }
 

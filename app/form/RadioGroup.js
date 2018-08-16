@@ -70,7 +70,7 @@ class RadioGroup extends Component {
             this._callback();
 
         return (
-            <Container title={title} error={error} errorMsg={errorMsg}>
+            <Container titleShow={true} title={title} error={error} errorMsg={errorMsg}>
                 <View style={{ flexDirection: 'row' }}>
                     {this._add()}
                 </View>

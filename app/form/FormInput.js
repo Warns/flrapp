@@ -4,16 +4,24 @@ import {
     Text,
     StyleSheet,
     TextInput,
+    TouchableOpacity,
 } from 'react-native';
 import { Container } from './';
 import { TextInputMask } from 'react-native-masked-text';
+import { FORMSTYLE } from 'root/app/helper/Constant';
+
 const Utils = require('root/app/helper/Global.js');
 
 class FormInput extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            value: this.props.data.value,
+        const _self = this,
+            { value = '', title } = _self.props.data;
+
+        _self.state = {
+            value: value,
+            placeholder: value != '' ? '' : title,
+            titleShow: value != '' ? true : false
         }
     }
 
@@ -30,15 +38,36 @@ class FormInput extends Component {
 
     input = null
 
+    _onPress = () => {
+        this.input.focus();
+    }
+
     _onFocus = () => {
-        const { onFocus, id = '' } = this.props;
+        const _self = this,
+            { onFocus, id = '' } = _self.props;
+
         if (onFocus)
             onFocus({ key: id });
+
+        setTimeout(() => {
+            const { value } = _self.state;
+            if (value == '')
+                _self.setState({ placeholder: '', titleShow: true });
+        }, 5);
     }
     _onBlur = () => {
-        const { onBlur, id = '' } = this.props;
+        const _self = this,
+            { onBlur, id = '' } = _self.props,
+            { title } = _self.props.data;
+
         if (onBlur)
             onBlur({ key: id });
+
+        setTimeout(() => {
+            const { value } = _self.state;
+            if (value == '')
+                _self.setState({ placeholder: title, titleShow: false });
+        }, 5)
     }
     _onChangeText = (value) => {
 
@@ -71,28 +100,33 @@ class FormInput extends Component {
     }
 
     render() {
-        const {
-            inputSty,
-        } = styles;
-
-        const {
-            title,
-            placeholder,
-            secureTextEntry = false,
-            keyboardType = 'default',
-            multiline = false,
-            maxLength = 1000,
-            error = false,
-            errorMsg = null,
-            autoCorrect = false,
-            mask = null
-        } = this.props.data;
-
-        const {
-            control = false,
-        } = this.props;
+        const _self = this,
+            {
+                inputSty
+            } = styles,
+            {
+                title,
+                secureTextEntry = false,
+                keyboardType = 'default',
+                multiline = false,
+                maxLength = 1000,
+                error = false,
+                errorMsg = null,
+                autoCorrect = false,
+                mask = null
+            } = _self.props.data,
+            {
+                control = false,
+                theme
+            } = _self.props,
+            { TITLE_COLOR = '#9b9b9b' } = FORMSTYLE[theme],
+            {
+                placeholder,
+                titleShow,
+            } = _self.state;
 
         let input = null;
+
         if (mask)
             input = (
                 <TextInputMask
@@ -109,7 +143,7 @@ class FormInput extends Component {
                     value={this.state.value}
                     secureTextEntry={secureTextEntry}
                     keyboardType={keyboardType}
-                    placeholderTextColor={'#818181'}
+                    placeholderTextColor={TITLE_COLOR}
                     onFocus={this._onFocus}
                     onBlur={this._onBlur}
                     onChangeText={this._onChangeText}
@@ -137,7 +171,7 @@ class FormInput extends Component {
                     value={this.state.value}
                     secureTextEntry={secureTextEntry}
                     keyboardType={keyboardType}
-                    placeholderTextColor={'#818181'}
+                    placeholderTextColor={TITLE_COLOR}
                     onFocus={this._onFocus}
                     onBlur={this._onBlur}
                     onChangeText={this._onChangeText}
@@ -148,9 +182,11 @@ class FormInput extends Component {
             this._callback();
 
         return (
-            <Container title={title} error={error} errorMsg={errorMsg}>
-                {input}
-            </Container>
+            <TouchableOpacity activeOpacity={0.7} onPress={this._onPress}>
+                <Container titleShow={titleShow} theme={theme} title={title} error={error} errorMsg={errorMsg}>
+                    {input}
+                </Container>
+            </TouchableOpacity>
         );
     }
 }

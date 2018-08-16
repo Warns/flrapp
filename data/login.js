@@ -1,6 +1,9 @@
 const Utils = require('root/app/helper/Global.js');
 
 module.exports = {
+
+    theme: 'LIGHT',
+
     uri: Utils.getURL({ key: 'user', subKey: 'login' }),
 
     successMessage: '',
@@ -10,9 +13,8 @@ module.exports = {
             items: [
                 {
                     id: 'email',
-                    title: 'E-mail',
+                    title: 'Kullanıcı Adı',
                     type: 'text',
-                    placeholder: '',
                     value: 'info@proj-e.com',
                     validation: [{ key: 'isEmpty' }, { key: 'isMail', }],
                     keyboardType: 'email-address',
@@ -26,7 +28,6 @@ module.exports = {
                     title: 'Şifre',
                     type: 'text',
                     secureTextEntry: true,
-                    placeholder: '',
                     value: '111111',
                     validation: [{ key: 'isEmpty' }, { key: 'isMin', value: 6 }, { key: 'isPassword' },],
                 }

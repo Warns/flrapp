@@ -42,6 +42,24 @@ export const FORMDATA = {
     setUser: require('root/data/setUser.js'),
 };
 
+/* form style, from->container.js */
+export const FORMSTYLE = {
+    LIGHT: {
+        BORDER_WIDTH: 0,
+        BORDER_COLOR: 'rgba(255, 255, 255, 0)',
+        TITLE_COLOR: '#FFFFFF',
+        ERROR_COLOR: '#d3838d',
+        BACKGROUND_COLOR: 'rgba(255, 255, 255, 0.4)'
+    },
+    DARK: {
+        BORDER_WIDTH: 1,
+        BORDER_COLOR: '#dddddd',
+        TITLE_COLOR: '#9b9b9b',
+        ERROR_COLOR: '#d3838d',
+        BACKGROUND_COLOR: '#FFFFFF'
+    }
+};
+
 /*** Redux Actions ***/
 
 /* settings */

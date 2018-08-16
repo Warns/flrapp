@@ -61,7 +61,8 @@ const RootStackNavigator = createStackNavigator(
     },
 
     Store: {
-      screen: props => <MapViewer {...props} />
+      //screen: props => <MapViewer {...props} />
+      screen: props => <StoreNavigation />
     }
 
   },

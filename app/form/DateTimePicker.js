@@ -53,7 +53,7 @@ class DateTimePicker extends Component {
             this._callback();
 
         return (
-            <Container title={title} error={error} errorMsg={errorMsg}>
+            <Container titleShow={true} title={title} error={error} errorMsg={errorMsg}>
                 <DatePicker
                     style={{ flex: 1, }}
                     date={this.state.value}

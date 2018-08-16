@@ -211,22 +211,27 @@ class Form extends Component {
     }
 
     addField = (obj) => {
-        const { id, type } = obj;
+        const _self = this,
+            { id, type } = obj,
+            { theme = 'DARK' } = _self.props.data,
+            validation = this.state.validation,
+            _callback = this._callback;
+
         switch (type) {
             case 'text':
-                return <FormInput callback={this._callback} control={this.state.validation} key={id} data={obj} />;
+                return <FormInput theme={theme} callback={_callback} control={validation} key={id} data={obj} />;
             case 'select':
-                return <SelectBox callback={this._callback} control={this.state.validation} key={id} data={obj} />;
+                return <SelectBox theme={theme} callback={_callback} control={validation} key={id} data={obj} />;
             case 'chekbox':
-                return <CheckBox callback={this._callback} control={this.state.validation} key={id} data={obj} />;
+                return <CheckBox theme={theme} callback={_callback} control={validation} key={id} data={obj} />;
             case 'radio':
-                return <RadioGroup callback={this._callback} control={this.state.validation} key={id} data={obj} />;
+                return <RadioGroup theme={theme} callback={_callback} control={validation} key={id} data={obj} />;
             case 'dataTimePicker':
-                return <DateTimePicker callback={this._callback} control={this.state.validation} key={id} data={obj} />;
+                return <DateTimePicker theme={theme} callback={_callback} control={validation} key={id} data={obj} />;
             case 'countryPicker':
-                return <CountryPicker callback={this._callback} control={this.state.validation} key={id} data={obj} />;
+                return <CountryPicker theme={theme} callback={_callback} control={validation} key={id} data={obj} />;
             case 'hiddenObject':
-                return <HiddenObject callback={this._callback} control={this.state.validation} key={id} data={obj} />;
+                return <HiddenObject callback={_callback} control={validation} key={id} data={obj} />;
             default:
                 return null;
         }

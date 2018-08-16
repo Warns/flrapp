@@ -220,15 +220,15 @@ class CountryPicker extends Component {
 
         return (
             <View>
-                <Container title={'Ülke'} error={countryId['error']} errorMsg={countryId['errorMsg']}>
+                <Container titleShow={true} title={'Ülke'} error={countryId['error']} errorMsg={countryId['errorMsg']}>
                     <Minus99MultipleSelect slug={'country'} callback={this._closed} selected={this._getIndex({ key: 'country' })} multiple={false} items={this._getItems({ key: 'country' })} />
                 </Container>
 
-                <Container title={'İl'} error={cityId['error']} errorMsg={cityId['errorMsg']}>
+                <Container titleShow={true} title={'İl'} error={cityId['error']} errorMsg={cityId['errorMsg']}>
                     <Minus99MultipleSelect slug={'city'} callback={this._closed} selected={this._getIndex({ key: 'city' })} multiple={false} items={this._getItems({ key: 'city' })} />
                 </Container>
 
-                <Container title={'İlçe'} error={districtId['error']} errorMsg={districtId['errorMsg']}>
+                <Container titleShow={true} title={'İlçe'} error={districtId['error']} errorMsg={districtId['errorMsg']}>
                     <Minus99MultipleSelect slug={'district'} callback={this._closed} selected={this._getIndex({ key: 'district' })} multiple={false} items={this._getItems({ key: 'district' })} />
                 </Container>
             </View>

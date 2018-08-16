@@ -38,7 +38,7 @@ class CheckBox extends Component {
             this._callback();
 
         return (
-            <Container error={error} errorMsg={errorMsg}>
+            <Container titleShow={true} error={error} errorMsg={errorMsg}>
                 <TouchableOpacity style={{ flexDirection: 'row' }} activeOpacity={0.8} onPress={this._onPress}>
                     {check}
                     <Text>{desc}</Text>

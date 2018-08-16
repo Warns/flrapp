@@ -314,22 +314,30 @@ class Viewer extends Component {
     }
 
     onDidFocus = () => {
-        const _self = this;
-        _self._Listener.remove();
+        const _self = this,
+            { navigation } = _self.props;
+        if (navigation)
+            _self._Listener.remove();
         _self.setAjx({ uri: _self.getUri(), data: _self._getData() });
     }
 
     componentDidMount() {
-        const _self = this;
+        const _self = this,
+            { navigation } = _self.props;
         _self._isMounted = true;
-        _self._Listener = _self.props.navigation.addListener('didFocus', _self.onDidFocus);
+        if (navigation)
+            _self._Listener = navigation.addListener('didFocus', _self.onDidFocus);
+        else
+            _self.onDidFocus();
     }
 
     /* https://medium.com/@TaylorBriggs/your-react-component-can-t-promise-to-stay-mounted-e5d6eb10cbb */
     componentWillUnmount() {
-        const _self = this;
+        const _self = this,
+            { navigation } = _self.props;
         _self._isMounted = false;
-        _self._Listener.remove();
+        if (navigation)
+            _self._Listener.remove();
     }
 
     getUri = () => {
@@ -342,10 +350,10 @@ class Viewer extends Component {
         return data;
     }
 
-    ajx = ({ uri, data = {} }, callback) => { 
+    ajx = ({ uri, data = {} }, callback) => {
         const _self = this;
         _self.setState({ loading: true });
-        Globals.fetch(uri, JSON.stringify(data), (answer) => { 
+        Globals.fetch(uri, JSON.stringify(data), (answer) => {
             if (_self._isMounted) {
                 if (answer === 'error') {
                     console.log('fatalllll error: could not get access token');

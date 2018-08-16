@@ -73,7 +73,7 @@ class SelectBox extends Component {
             this._callback();
 
         return (
-            <Container title={title} error={error} errorMsg={errorMsg}>
+            <Container titleShow={true} title={title} error={error} errorMsg={errorMsg}>
                 <Minus99MultipleSelect callback={this._closed} selected={this._getIndex()} multiple={multiple} items={this._getItems()} />
             </Container>
         );
