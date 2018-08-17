@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         paddingLeft: 15,
         paddingRight: 15,
-        borderRadius: 5,
+        borderRadius: 3,
     },
     titleSty: {
         fontSize: 13,

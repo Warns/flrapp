@@ -3,7 +3,20 @@ import {
     Text,
     TouchableOpacity,
     StyleSheet,
+    View,
 } from 'react-native';
+
+/* BU COMPONENTE ÖZEL THEME SEÇİMİ */
+export const FORMSTYLE = {
+    LIGHT: {
+        TEXT_COLOR: '#000000',
+        BACKGROUND_COLOR: '#FFFFFF'
+    },
+    DARK: {
+        TEXT_COLOR: '#FFFFFF',
+        BACKGROUND_COLOR: '#000000'
+    }
+};
 
 class LoadingButton extends Component {
 
@@ -19,10 +32,16 @@ class LoadingButton extends Component {
             onDimensions({ layout: e.nativeEvent.layout, sequence: sequence || 0 });
     }
 
-    render() {        
+    render() {
+        const _self = this,
+            { theme = 'DARK' } = _self.props,
+            { TEXT_COLOR, BACKGROUND_COLOR } = FORMSTYLE[theme],
+            { wrapper, txt } = styles;
         return (
-            <TouchableOpacity onLayout={e => this._measureDimensions(e)} style={[wrapper, { ...this.props.style }]} activeOpacity={0.8} onPress={this._onPressButton}>
-                <Text style={txt}>{this.props.children}</Text>
+            <TouchableOpacity onLayout={e => this._measureDimensions(e)} activeOpacity={0.8} onPress={this._onPressButton}>
+                <View style={[wrapper, { backgroundColor: BACKGROUND_COLOR }, { ..._self.props.style }]}>
+                    <Text style={[txt, { color: TEXT_COLOR }, { ..._self.props.fontStyle }]}>{this.props.children}</Text>
+                </View>
             </TouchableOpacity>
         );
     }
@@ -30,16 +49,14 @@ class LoadingButton extends Component {
 
 const styles = StyleSheet.create({
     wrapper: {
-        width: '100%',
-        alignItems: 'center',
-        backgroundColor: '#000000',
-        paddingLeft: 10,
-        paddingRight: 10,
+        alignItems: "center",
+        justifyContent: "center",
+        height: 50,
+        borderRadius: 3,
     },
     txt: {
         fontSize: 13,
         fontFamily: 'brandon',
-        color: '#FFFFFF',
         lineHeight: 50
     },
 });

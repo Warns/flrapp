@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import { SplashHeader } from '../components';
-import { DefaultButton, DefaultInput } from '../UI';
+import { DefaultButton, DefaultInput, LoadingButton } from '../UI';
 
 import { Form } from 'root/app/form';
 import { FORMDATA, SET_NAVIGATION, SET_SCREEN_DIMENSIONS } from 'root/app/helper/Constant';
@@ -207,9 +207,15 @@ class Splash extends React.Component {
     ).start();
   }
 
-  _onLoginState =({ data })=>{
+  _onLoginStatus = ({ type, data }) => {
     /* login durumu dönecek */
-    console.log(data);
+    const { status, message } = data;
+    if (type == 'success')
+      alert('tebrikler');
+    else
+      alert(message);
+
+    console.log('_onLoginStatus', data);
   }
 
   render() {
@@ -294,28 +300,8 @@ class Splash extends React.Component {
           onRequestClose={() => { }}
         >
           <SplashHeader onCloseLogin={this._onCloseLogin} />
-
-
-          <Form data={FORMDATA['login']} callback={this._onLoginState} />
-
           <Animated.View style={{ flex: 1, padding: 30, paddingTop: boxPadding, opacity: 1 /*fadeAnim*/ }}>
-            <KeyboardAvoidingView>
-              <DefaultInput label="E-posta" />
-              <DefaultInput label="Şifre" />
-              <View style={{ height: 20 }} />
-              <DefaultButton
-                callback={this._skipLogin}
-                name="GİRİŞ YAP"
-                boxColor="#ffffff"
-                textColor="#000000"
-              />
-              <DefaultButton
-                callback={this._skipLogin}
-                name="Şifremi Unuttum"
-                boxColor="transparent"
-                textColor="#ffffff"
-              />
-            </KeyboardAvoidingView>
+            <Form scrollEnabled={false} style={{ paddingLeft: 0, paddingRight: 0 }} data={FORMDATA['login']} callback={this._onLoginStatus} />
           </Animated.View>
         </Modal>
       </View>

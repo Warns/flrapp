@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { FormInput, SelectBox, CheckBox, RadioGroup, DateTimePicker, ErrorBox, CountryPicker, HiddenObject } from './';
 import { CustomKeyboard } from 'root/app/helper';
+import { LoadingButton } from 'root/app/UI';
 const Validation = require('root/app/helper/Validation.js');
 const Utils = require('root/app/helper/Global.js');
 const Globals = require('root/app/globals.js');
@@ -42,15 +43,17 @@ class Form extends Component {
             /* default value varsa formu gizleriz serverdan default dataları çektikten sonra formu tekrardan gösteririz. */
             const { postData = {} } = _self.props;
             _self.setState({ show: false });
-            _self.ajx({ uri: defValue.uri || '', data: postData }, function (d) {
-                const keys = defValue['keys'] || '';
-                let data = [];
-                if (keys != '')
-                    data = d.data[keys['arr']][0] || [];
-                else
-                    data = d.data || [];
+            _self.ajx({ uri: defValue.uri || '', data: postData }, function ({ type, d }) {
+                if (type == 'success') {
+                    const keys = defValue['keys'] || '';
+                    let data = [];
+                    if (keys != '')
+                        data = d.data[keys['arr']][0] || [];
+                    else
+                        data = d.data || [];
 
-                _self.setState({ defaultData: data, show: true });
+                    _self.setState({ defaultData: data, show: true });
+                }
             })
         }
     }
@@ -66,9 +69,10 @@ class Form extends Component {
                 } else {
                     if (answer.status == 200) {
                         if (typeof callback !== 'undefined')
-                            callback(answer);
+                            callback({ type: 'success', d: answer });
                     } else {
-
+                        if (typeof callback !== 'undefined')
+                            callback({ type: 'error', d: answer });
                     }
                 }
                 _self.setState({ loading: false });
@@ -203,10 +207,10 @@ class Form extends Component {
             });
 
         console.log(JSON.stringify(obj));
-        _self.ajx({ uri: uri, data: obj }, function (d) {
+        _self.ajx({ uri: uri, data: obj }, function ({ type, d }) {
             const { callback } = _self.props;
             if (callback)
-                callback({ data: d });
+                callback({ type: type, data: d });
         });
     }
 
@@ -299,15 +303,16 @@ class Form extends Component {
     }
 
     render() {
-        return (
+        const _self = this,
+            { theme = 'DARK' } = _self.props.data,
+            { scrollEnabled = true } = _self.props;
 
-            <ScrollView style={{ flex: 1, paddingLeft: 40, paddingRight: 40 }}>
+        return (
+            <ScrollView scrollEnabled={scrollEnabled} style={[{ flex: 1, paddingLeft: 40, paddingRight: 40 }, { ..._self.props.style }]}>
                 <CustomKeyboard style={{ flex: 1, }}>
-                    {this._getAllErrMsg()}
-                    {this.add()}
-                    <TouchableOpacity onPress={this._onPress.bind(this)}>
-                        <Text>Apply</Text>
-                    </TouchableOpacity>
+                    {_self._getAllErrMsg()}
+                    {_self.add()}
+                    <LoadingButton theme={theme} onPress={_self._onPress.bind(_self)}>{'GİRİŞ YAP'}</LoadingButton>
                 </CustomKeyboard >
             </ScrollView>
         );
