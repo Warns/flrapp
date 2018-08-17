@@ -1,49 +1,49 @@
 module.exports = {
     mapApiKey: 'AIzaSyAvSoqfCr4I9Vb11HtQ6cDEAMki6THBgrQ',
-    prefix: 'https://www.flormar.com.tr/',
+    prefix: 'https://www.flormar.com.tr',
     URLs: {
         user: {
-            getUser: 'webapi/v3/User/getUser',
-            setUser: 'webapi/v3/User/setUser',
-            createUser: 'webapi/v3/User/createUser',
-            login: 'webapi/v3/User/login',
-            recoverPassword: 'webapi/v3/User/recoverPassword',
-            changePassword: 'webapi/v3/User/changePassword',
-            getFavoriteProductList: 'webapi/v3/User/getFavoriteProductList',
-            getStockFollowUpList: 'webapi/v3/User/getStockFollowUpList', // takip listem - Stoğa Girenler
-            getPriceFollowUpList: 'webapi/v3/User/getPriceFollowUpList', // takip listem - fiyatı düşenler
+            getUser: '/webapi/v3/User/getUser',
+            setUser: '/webapi/v3/User/setUser',
+            createUser: '/webapi/v3/User/createUser',
+            login: '/webapi/v3/User/login',
+            recoverPassword: '/webapi/v3/User/recoverPassword',
+            changePassword: '/webapi/v3/User/changePassword',
+            getFavoriteProductList: '/webapi/v3/User/getFavoriteProductList',
+            getStockFollowUpList: '/webapi/v3/User/getStockFollowUpList', // takip listem - Stoğa Girenler
+            getPriceFollowUpList: '/webapi/v3/User/getPriceFollowUpList', // takip listem - fiyatı düşenler
         },
         address: {
-            country: 'webapi/v3/Address/getCountry',
-            city: 'webapi/v3/Address/getCity',
-            district: 'webapi/v3/Address/getDistrict',
-            createAddress: 'webapi/v3/Address/createAddress',
-            getAddress: 'webapi/v3/Address/getAddress',
-            setAddress: 'webapi/v3/Address/setAddress',
-            deleteAddress: 'webapi/v3/Address/deleteAddress',
+            country: '/webapi/v3/Address/getCountry',
+            city: '/webapi/v3/Address/getCity',
+            district: '/webapi/v3/Address/getDistrict',
+            createAddress: '/webapi/v3/Address/createAddress',
+            getAddress: '/webapi/v3/Address/getAddress',
+            setAddress: '/webapi/v3/Address/setAddress',
+            deleteAddress: '/webapi/v3/Address/deleteAddress',
         },
         order: {
-            getOrder: 'webapi/v3/Order/getOrder', // siparişlerim
-            getOrderDetail: 'webapi/v3/Order/getOrderDetail', // sipariş detay
-            repeatOrder: 'webapi/v3/Order/repeatOrder', // sipariş tekrarla
+            getOrder: '/webapi/v3/Order/getOrder', // siparişlerim
+            getOrderDetail: '/webapi/v3/Order/getOrderDetail', // sipariş detay
+            repeatOrder: '/webapi/v3/Order/repeatOrder', // sipariş tekrarla
         },
         integrator: {
             /*
                 Implementation Notes
                 StatusId : 1(New), 2(Approved), 3(Cancel), 4(Used) - Type : 1(Gift Cart), 2(Discount Coupon)
             */
-            getCouponDetail: 'webapi/v3/Integrator/getCouponDetail' // kuponlarım
+            getCouponDetail: '/webapi/v3/Integrator/getCouponDetail' // kuponlarım
         },
         service: {
-            getServiceList: 'webapi/v3/Service/getServiceList', // servis listesi
-            getServiceTypeList: 'webapi/v3/Service/getServiceTypeList',
+            getServiceList: '/webapi/v3/Service/getServiceList', // servis listesi
+            getServiceTypeList: '/webapi/v3/Service/getServiceTypeList',
         },
         export: {
-            getExport: 'webapi/v3/Export/getExport',
+            getExport: '/webapi/v3/Export/getExport',
         },
         content: {
-            getContent: 'webapi/v3/Content/getContent',
-            getDataByUrl: '/v3/Content/getDataByUrl',
+            getContent: '/webapi/v3/Content/getContent',
+            getDataByUrl: '/webapi/v3/Content/getDataByUrl',
         },
     },
     customURLs: {
@@ -160,6 +160,13 @@ module.exports = {
         // If nothing failed, return true
         return true;
 
+    },
+    getImage: function (k) {
+        const _t = this;
+        /* favori ürünlerde resmin tam yolu gelmiyor o durumu çözmek için kullanılacak */
+        if (k.indexOf(_t.prefix) == -1)
+            k = _t.prefix + k;
+        return k;
     },
     getPriceFormat: function (k) {
         /* fiyat formatlama */

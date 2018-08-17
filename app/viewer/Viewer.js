@@ -41,27 +41,27 @@ const config = {
 
 class AdressListItem extends Component {
     /*
-    {
-        "addressId": 0,
-        "addressName": "string",
-        "fullName": "string",
-        "address": "string",
-        "countryId": 0,
-        "countryName": "string",
-        "cityId": 0,
-        "cityName": "string",
-        "districtId": 0,
-        "districtName": "string",
-        "corprateFl": true,
-        "companyName": "string",
-        "taxOffice": "string",
-        "taxNumber": "string",
-        "phone": "string",
-        "mobilePhone": "string",
-        "tckn": "string",
-        "zipCode": "string",
-        "readOnly": true
-      }
+        {
+            "address": "DAVUTPAŞA DAVUTPAŞA DAVUTPAŞA DAVUTPAŞA DAVUTPAŞA DAVUTPAŞA DAVUTPAŞA DAVUTPAŞA DAVUTPAŞA DAVUTPAŞA DAVUTPAŞA DAVUTPAŞA",
+            "addressId": 473044,
+            "addressName": "TEST P",
+            "cityId": 1,
+            "cityName": "İstanbul",
+            "companyName": "",
+            "corprateFl": false,
+            "countryId": 1,
+            "countryName": "Türkiye",
+            "districtId": 980,
+            "districtName": "ESENLER",
+            "fullName": "Proj-E Proj-E",
+            "mobilePhone": "900(555) 5555555",
+            "phone": "",
+            "readOnly": false,
+            "taxNumber": "",
+            "taxOffice": "",
+            "tckn": "26072013304",
+            "zipCode": "34080",
+        }
     */
 
     constructor(props) {
@@ -77,11 +77,19 @@ class AdressListItem extends Component {
 
     render() {
         const _self = this,
-            { addressId, addressName } = _self.props.data;
+            { addressName, address } = _self.props.data;
         return (
             <TouchableOpacity activeOpacity={0.4} onPress={_self._onPress}>
-                <Text>{addressId}</Text>
-                <Text>{addressName}</Text>
+                <View style={{ flexDirection: 'column', paddingTop: 20, paddingBottom: 20, paddingRight: 20, paddingLeft: 10, borderBottomColor: '#dcdcdc', borderBottomWidth: 1, }}>
+                    <View>
+                        <Text style={{ fontFamily: 'Medium', fontSize: 15 }}>{addressName}</Text>
+                        <Text style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#555555' }}>{address}</Text>
+                    </View>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 21 }}>
+                        <Text style={{ fontFamily: 'RegularTyp2', fontSize: 15 }}>{'Sil'}</Text>
+                        <BoxButton>{'Düzenle'}</BoxButton>
+                    </View>
+                </View>
             </TouchableOpacity>
         )
     }
@@ -89,14 +97,62 @@ class AdressListItem extends Component {
 
 
 
-class FavoriteListItem extends Component {
+class BoxButton extends Component {
     constructor(props) {
         super(props);
     }
     render() {
-        const { productName } = this.props.data;
+        const _self = this;
         return (
-            <Text>{productName}</Text>
+            <TouchableOpacity activeOpacity={0.8}>
+                <View style={{ alignItems: "center", justifyContent: "center", borderColor: '#666666', borderWidth: 1, backgroundColor: "#FFFFFF", borderRadius: 3, height: 36, paddingLeft: 30, paddingRight: 30 }}>
+                    <Text style={{ fontFamily: 'Bold', fontSize: 14 }}>{_self.props.children}</Text>
+                </View>
+            </TouchableOpacity>
+        )
+    }
+}
+
+class FavoriteListItem extends Component {
+    /*
+    
+    {
+        "creationDate": "2018-07-18T10:45:00",
+        "listPrice": 24.99,
+        "mediumImageUrl": "/UPLOAD/Flormar/mobile_image_1/thumb/0313035-D37_medium.jpg",
+        "productCode": "0313035-D37",
+        "productId": 572359,
+        "productName": "DELUXE SHINE GLOSS STYLO",
+        "salePrice": 9.99,
+        "shortCode": "D37",
+        "shortName": "GOLDEN BEIGE",
+        "smallImageUrl": "/UPLOAD/Flormar/mobile_image_1/thumb/0313035-D37_small.jpg",
+    }
+    */
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        const { shortName, productName, smallImageUrl, salePrice } = this.props.data; console.log(this.props.data)
+        return (
+            <View style={{ flexDirection: 'row', paddingTop: 20, paddingBottom: 20, paddingRight: 20, paddingLeft: 10, borderBottomColor: '#dcdcdc', borderBottomWidth: 1, }}>
+                <View style={{ width: 60, justifyContent: 'center', }}>
+                    <Image
+                        style={{ height: 60 }}
+                        source={{ uri: Utils.getImage(smallImageUrl) }}
+                    />
+                </View>
+                <View style={{ flex: 1 }}>
+                    <View>
+                        <Text numberOfLines={1} style={{ fontFamily: 'Medium', fontSize: 15 }}>{productName}</Text>
+                        <Text numberOfLines={1} style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#555555' }}>{shortName}</Text>
+                    </View>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 21 }}>
+                        <Text style={{ fontFamily: 'Bold', fontSize: 16 }}>{Utils.getPriceFormat(salePrice)}</Text>
+                        <BoxButton>{'SEPETE AT'}</BoxButton>
+                    </View>
+                </View>
+            </View>
         )
     }
 }
@@ -169,13 +225,44 @@ class CouponListItem extends Component {
 }
 
 class FollowListItem extends Component {
+    /*
+        {
+            "creationDate": "2017-07-03T15:45:00",
+            "listPrice": 14.99,
+            "mediumImageUrl": "/UPLOAD/Flormar/mobile_image_1/thumb/0313078-005_medium.jpg",
+            "productCode": "0313078-005",
+            "productId": 571029,
+            "productName": "CARE4LIPS",
+            "salePrice": 14.99,
+            "shortCode": "005",
+            "shortName": "WATERMELON",
+            "smallImageUrl": "/UPLOAD/Flormar/mobile_image_1/thumb/0313078-005_small.jpg",
+        }
+    */
     constructor(props) {
         super(props);
     }
     render() {
-        const { productName } = this.props.data;
+        const { shortName, productName, smallImageUrl, salePrice } = this.props.data;
         return (
-            <Text>{productName}</Text>
+            <View style={{ flexDirection: 'row', paddingTop: 20, paddingBottom: 20, paddingRight: 20, paddingLeft: 10, borderBottomColor: '#dcdcdc', borderBottomWidth: 1, }}>
+                <View style={{ width: 60, justifyContent: 'center', }}>
+                    <Image
+                        style={{ height: 60 }}
+                        source={{ uri: Utils.getImage(smallImageUrl) }}
+                    />
+                </View>
+                <View style={{ flex: 1 }}>
+                    <View>
+                        <Text numberOfLines={1} style={{ fontFamily: 'Medium', fontSize: 15 }}>{productName}</Text>
+                        <Text numberOfLines={1} style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#555555' }}>{shortName}</Text>
+                    </View>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 21 }}>
+                        <Text style={{ fontFamily: 'Bold', fontSize: 16 }}>{Utils.getPriceFormat(salePrice)}</Text>
+                        <BoxButton>{'SEPETE AT'}</BoxButton>
+                    </View>
+                </View>
+            </View>
         )
     }
 }
