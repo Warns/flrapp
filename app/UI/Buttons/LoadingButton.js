@@ -19,13 +19,7 @@ class LoadingButton extends Component {
             onDimensions({ layout: e.nativeEvent.layout, sequence: sequence || 0 });
     }
 
-    render() {
-        let { wrapper, txt } = styles;
-        const { active = false } = this.props;
-        if (active) {
-            wrapper = styles.activeWrapper;
-            txt = styles.activeTxt;
-        }
+    render() {        
         return (
             <TouchableOpacity onLayout={e => this._measureDimensions(e)} style={[wrapper, { ...this.props.style }]} activeOpacity={0.8} onPress={this._onPressButton}>
                 <Text style={txt}>{this.props.children}</Text>
@@ -47,13 +41,6 @@ const styles = StyleSheet.create({
         fontFamily: 'brandon',
         color: '#FFFFFF',
         lineHeight: 50
-    },
-
-    activeWrapper: {
-
-    },
-    activeTxt: {
-
     },
 });
 

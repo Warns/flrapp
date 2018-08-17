@@ -8,9 +8,9 @@ import {
   StyleSheet,
 } from 'react-native';
 
-const Minus99HorizontalTabs = class Minus99HorizontalTabs extends React.Component{
+const Minus99HorizontalTabs = class Minus99HorizontalTabs extends React.Component {
 
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
 
@@ -26,22 +26,30 @@ const Minus99HorizontalTabs = class Minus99HorizontalTabs extends React.Componen
   arr = [];
   width = null;
 
-  _onPressItem = ( object, sequence ) => {
+  componentWillReceiveProps(nextProps) {
+    const _self = this;
+    if (nextProps.selected != _self.props.selected)
+      _self._focused(nextProps.selected);
+  }
 
-    this.setState({selectedItem: object.key });
-    this.props.callback( object, sequence );
-
-    var max = this.state.offsets[this.state.offsets.length-1].x + this.state.offsets[this.state.offsets.length-1].width - this.width;
-    var min = 0;
-    var s = this.state.offsets[sequence].x + (this.state.offsets[sequence].width * .5) - (this.width * .5);
-
-    this.ScrollView.scrollTo({x: s <= min ? min : s >= max ? max : s });
-
+  _onPressItem = (object, sequence) => {
+    const _self = this;
+    _self.setState({ selectedItem: object.key });
+    _self.props.callback(object, sequence);
+    _self._focused(sequence);
   };
 
-  _onDimensions = ( layout, sequence ) => {
-    this.state.offsets.push({width:layout.width, sequence: sequence});
-    if( this.state.offsets.length == this.props.items.length )
+  _focused = (sequence) => {
+    const _self = this,
+      max = _self.state.offsets[_self.state.offsets.length - 1].x + _self.state.offsets[_self.state.offsets.length - 1].width - _self.width,
+      min = 0,
+      s = _self.state.offsets[sequence].x + (_self.state.offsets[sequence].width * .5) - (_self.width * .5);
+    _self.ScrollView.scrollTo({ x: s <= min ? min : s >= max ? max : s });
+  }
+
+  _onDimensions = (layout, sequence) => {
+    this.state.offsets.push({ width: layout.width, sequence: sequence });
+    if (this.state.offsets.length == this.props.items.length)
       this._makeMeasurements();
   }
 
@@ -50,35 +58,38 @@ const Minus99HorizontalTabs = class Minus99HorizontalTabs extends React.Componen
     this.width = Dimensions.get('window').width
 
     this.arr = this.state.offsets;
-    this.arr.sort(function(a, b){ return a.sequence - b.sequence });
+    this.arr.sort(function (a, b) { return a.sequence - b.sequence });
 
-    for(var i in this.arr)
-    {
+    for (var i in this.arr) {
       this.arr[i].x = this._x;
       this._x += this.arr[i].width;
     }
+
+    const _self = this;
+    setTimeout(() => {
+      _self._focused(_self.props.selected);
+    }, 1);
   }
 
-  componentDidUpdate(){
-    if( this.state.selected != this.props.selected )
-      this.setState({selected: this.props.selected});
+  componentDidUpdate() {
+    if (this.state.selected != this.props.selected)
+      this.setState({ selected: this.props.selected });
   }
 
   render() {
 
     const items = [];
-    if(this.props.items)
-      for(item in this.props.items)
-      {
+    if (this.props.items)
+      for (item in this.props.items) {
         let bool = item == this.state.selected ? true : false;
-        items.push(<TabItem 
-                        selected={bool} 
-                        key={item} 
-                        sequence={item} 
-                        onPressItem={this._onPressItem} 
-                        item={this.props.items[item]} 
-                        onDimensions={this._onDimensions} 
-                    />);
+        items.push(<TabItem
+          selected={bool}
+          key={item}
+          sequence={item}
+          onPressItem={this._onPressItem}
+          item={this.props.items[item]}
+          onDimensions={this._onDimensions}
+        />);
       }
 
     return (
@@ -87,7 +98,7 @@ const Minus99HorizontalTabs = class Minus99HorizontalTabs extends React.Componen
         showsHorizontalScrollIndicator={false}
         horizontal={true}
         style={styles.horizontalTabsWrapper}
-        >
+      >
         {items}
       </ScrollView>
     );
@@ -100,18 +111,18 @@ class TabItem extends React.Component {
     this.props.onPressItem(this.props.item, this.props.sequence);
   }
 
-  _measureDimensions = ( e ) => {
+  _measureDimensions = (e) => {
     this.props.onDimensions(e.nativeEvent.layout, this.props.sequence);
   }
 
-  render(){
+  render() {
 
     const item = this.props.item;
 
-    return(
+    return (
       <TouchableHighlight underlayColor="#ffffff" onPress={this._onPress}>
-        <View onLayout={e => this._measureDimensions(e) } style={[{paddingRight:15, paddingLeft:15,}, styles.horizontalTab, this.props.selected ? styles.borderBottom : null ]}>
-          <Text style={[{fontSize:14, fontFamily:'brandon', fontWeight:"bold", color:'#000000'}]}>{item.key.toUpperCase()}</Text>
+        <View onLayout={e => this._measureDimensions(e)} style={[{ paddingRight: 15, paddingLeft: 15, }, styles.horizontalTab, this.props.selected ? styles.borderBottom : null]}>
+          <Text style={[{ fontSize: 14, fontFamily: 'brandon', fontWeight: "bold", color: '#000000' }]}>{item.key.toUpperCase()}</Text>
         </View>
       </TouchableHighlight>
     );
@@ -124,7 +135,7 @@ export { Minus99HorizontalTabs };
 const styles = StyleSheet.create({
 
   // HORIZONTAL tabs
-  horizontalTabsWrapper:{ flex:1, flexDirection:"row", maxHeight:40, backgroundColor:"#ffffff", },
-  horizontalTab:{ height:40, justifyContent:"center", },
-  borderBottom:{ borderBottomColor:"#000000", borderBottomWidth:3 },
+  horizontalTabsWrapper: { flex: 1, flexDirection: "row", maxHeight: 40, backgroundColor: "#ffffff", },
+  horizontalTab: { height: 40, justifyContent: "center", },
+  borderBottom: { borderBottomColor: "#000000", borderBottomWidth: 3 },
 });
