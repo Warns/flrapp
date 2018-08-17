@@ -11,7 +11,6 @@ module.exports = {
         billAddressText: 'Fatura Adresi',
         totalPrice: 'Toplam',
         shippingTotal: 'Kargo',
-        cargoKey: 'Kargo Takip No',
         buttonCargoFollow: 'Kargo Takibi',
         totalPriceWithoutProm: 'Kargo hariç toplam',
 
