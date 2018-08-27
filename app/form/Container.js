@@ -76,7 +76,12 @@ class Container extends Component {
         return (
             <View style={[container]}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5 }}>
-                    {title} {errorMsg}
+                    <View>
+                        {title}
+                    </View>
+                    <View>
+                        {errorMsg}
+                    </View>
                 </View>
                 <View style={[wrapper, { borderWidth: BORDER_WIDTH, borderColor: color, backgroundColor: BACKGROUND_COLOR, }]}>
                     {children}

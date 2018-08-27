@@ -25,6 +25,7 @@ class CustomModal extends Component {
                 animationType={animationType}
                 transparent={transparent}
                 visible={visible}
+                onRequestClose={() => { }}
             >
                 <SafeAreaView style={{ flex: 1 }}>
                     {_self.props.children}
