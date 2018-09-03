@@ -23,8 +23,17 @@ const DETAIL_HEADER_HEIGHT = Platform.OS === 'android' ? 52 : 65;
 
 import { DefaultButton } from '../UI';
 import { Palette } from '../components/';
+import { MinimalHeader } from '../components';
 
 class ProductView extends React.Component {
+  
+  static navigationOptions = ({ navigation, navigationOptions }) => {
+    const { params } = navigation.state;
+    return {
+      header: null,
+    };
+  };
+
   state = {
     data: null,
     anim: new Animated.Value(0),
@@ -72,7 +81,7 @@ class ProductView extends React.Component {
 
   _renderItem({item, index}){
     return(
-      <View>
+      <View style={{overflow:'visible'}}>
         <Image source={{uri:item.mediumImageUrl}} style={{left:-(SCREEN_DIMENSIONS.width - 270) * .5, width:270, height:337, resizeMode:'cover'}} />
       </View>
     );
@@ -82,12 +91,13 @@ class ProductView extends React.Component {
 
     const { item, colors } = this.state;
 
-    console.log(item.product.productImages);
+    //console.log(item.product.productImages);
 
-    let palette = colors.length > 1 ? <Palette items={colors} /> : null;
+    let palette = colors.length > 1 ? <Palette items={colors} selected={item.product.shortCode} /> : null;
 
     return(
       <View style={{flex:1}}>
+        <MinimalHeader title={item.product.productName} />
         <View>
         <Carousel
             ref={(c) => {this._carousel = c;}}

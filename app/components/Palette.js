@@ -24,22 +24,34 @@ class Palette extends React.Component{
   componentDidMount(){
     //console.log(this.props.items);
     this.setState({
-      items: this.props.items
+      items: this.props.items,
+      selected: this.props.selected,
     });
   }
 
   _keyExtractor = (item, index) => index + 'k';
 
   _renderItem = ({item, index}) => {
+    //console.log(this.state.selected);
+    let sel = item.shortCode === this.state.selected? true : false;
     return(
-      <ListItem item={item} index={index} onPressItem={this._onPressItem} />
+      <ListItem isSelected={sel} item={item} index={index} onPressItem={this._onPressItem} />
     )
   }
 
-  _onPressItem = (index, measurements) => {
+  _onPressItem = (index, item, measurements) => {
     //this.props.navigation.navigate('Details', {user: index});
 
+    console.log('on presss');
+
+    let data = [];
+    for(var i=0; i<this.props.items.length; ++i){
+      data.push(this.props.items[i]);
+    }
+
     this.setState({
+      items: data,
+      selected: item.shortCode,
       selectedDetail: index,
       animatingUri: this.state.items[index].mediumImageUrl,
       measurements: measurements,
@@ -48,8 +60,11 @@ class Palette extends React.Component{
   }
 
   render(){
+
+   //console.log('render list');
+
     return(
-      <View style={{flex:1, backgroundColor:'#ffffff'}}>
+      <View style={{flex:1, backgroundColor:'#ffffff', maxHeight:65,}}>
         <FlatList
           //style={{borderWidth:1, borderColor:'red'}}
           scrollEnabled={true}
@@ -66,16 +81,28 @@ class Palette extends React.Component{
 class ListItem extends React.Component {
 
   state = {
-    anim: new Animated.Value(0)
+    anim: new Animated.Value(0),
+    imageHeight: 60,
   }
 
   _onPress = (measurements) => {
-    this.props.onPressItem(this.props.index, measurements);
+    this.props.onPressItem(this.props.index, this.props.item, measurements);
+    this.setState({
+      imageHeight: 65,
+    })
+  }
+
+  componentDidMount(){
+    if( this.props.isSelected )
+      this.setState({
+        imageHeight: 65,
+      });
   }
 
   render(){
 
-    const { item, index } = this.props;
+    const { item, index, } = this.props;
+    const { imageHeight } = this.state;
 
     let thumbnail = item.smallImageUrl.replace('mobile_image_1', 'mobile_texture').replace('http', 'https');
 
@@ -83,13 +110,12 @@ class ListItem extends React.Component {
       <TouchableOpacity
         activeOpacity={0.9}
         ref='Single'
-        onPress={() => {}}>
-        <View style={{width:50, height:65}}>
+        onPress={this._onPress}>
+        <View style={{width:50, height:65, flexDirection:'column-reverse'}}>
           <Image
-            style={{width: 50, height: 60, resizeMode:'cover', marginTop:5}}
+            style={{width: 50, height: imageHeight, resizeMode:'cover',}}
             source={{uri: thumbnail }}
           />
-          <Text>{item.shortCode}</Text>
         </View>
       </TouchableOpacity>
     );
