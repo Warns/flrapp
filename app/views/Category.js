@@ -53,7 +53,6 @@ function getTabForCategory( category ){
   return() => (<ListPage category={category} />);
 }
 
-
 export default class CategoryTabs extends React.Component{
 
   static navigationOptions = ({ navigation }) => {

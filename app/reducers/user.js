@@ -1,5 +1,4 @@
-
-// User reducer
+import { SET_CART_NUM } from 'root/app/helper/Constant';
 
 const userInitialState = {
     ID: '007',
@@ -10,7 +9,7 @@ export default function user( state = userInitialState, action ){
     console.log('this is user');
 
     switch ( action.type ) {
-        case 'SET_CART_NUM': return {
+        case SET_CART_NUM: return {
             ID: action.value
         };
         default:

@@ -4,11 +4,16 @@ import {
   Platform,
   StatusBar,
 } from 'react-native';
+import { connect } from 'react-redux';
 import { createStackNavigator, createMaterialTopTabNavigator } from 'react-navigation';
 
 import SplashPage from '../app/views/Splash';
 import CategoryPage from '../app/views/Category';
+import StoreNavigation from './StoreNavigation';
+import ExtraNavigation from './ExtraNavigation';
 import HomeTabNavigator from './HomeTabNavigation';
+
+import { MapViewer } from 'root/app/viewer';
 
 //import ProductPage from '../app/views/Product';
 
@@ -16,21 +21,50 @@ import { DefaultHeader } from '../app/components';
 
 //import registerForPushNotificationsAsync from '../api/registerForPushNotificationsAsync';
 
+class CartPage extends React.Component {
 
-export default RootStackNavigator = createStackNavigator(
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return null;
+  }
+}
+
+const RootStackNavigator = createStackNavigator(
   {
     Splash: {
       screen: SplashPage,
     },
+    
     Home: {
       screen: HomeTabNavigator,
-      navigationOptions:{
+      navigationOptions: {
         header: () => <DefaultHeader />,
       }
     },
+
     Category: {
       screen: CategoryPage,
     },
+
+    Extra: {
+      screen: ExtraNavigation,
+      navigationOptions: {
+        header: () => <DefaultHeader />,
+      }
+    },
+
+    Cart: {
+      screen: CartPage,
+    },
+
+    Store: {
+      //screen: props => <MapViewer {...props} />
+      screen: props => <StoreNavigation />
+    }
+
   },
   {
     navigationOptions: () => ({
@@ -45,3 +79,6 @@ export default RootStackNavigator = createStackNavigator(
     }
   }
 );
+
+function mapStateToProps(state) { return state }
+export default connect(mapStateToProps)(RootStackNavigator);

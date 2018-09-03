@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, {Component} from 'react';
 import {
   View,
   Text,
@@ -11,12 +11,15 @@ import {
   Image,
   StyleSheet,
 } from 'react-native';
+import { connect } from 'react-redux';
 
 import Cart from '../Cart';
 
+import { SHOW_MENU } from 'root/app/helper/Constant';
+
 // Let's go
 
-const DefaultHeader = class DefaultHeader extends React.Component{
+class DefaultHdr extends Component{
 
   constructor(props){
     super(props);
@@ -27,6 +30,7 @@ const DefaultHeader = class DefaultHeader extends React.Component{
 
   _onBackPress = () => {
     //this.props.nav.goBack();
+    this.props.dispatch({ type: SHOW_MENU, value: { direction: 'left', type: 'user' } });
   }
 
   render(){
@@ -66,6 +70,8 @@ const styles = StyleSheet.create({
   },
 });
 
+function mapStateToProps(state) { return state }
+const DefaultHeader = connect(mapStateToProps)(DefaultHdr);
 export { DefaultHeader };
 
 

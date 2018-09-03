@@ -7,6 +7,8 @@ import {
   View
 } from 'react-native';
 import { AppLoading, Asset, Font } from 'expo';
+import { Settings } from 'root/app/helper/';
+import TopMenu from 'root/app/views/TopMenu';
 
 // navigation
 import RootNavigation from './navigation/RootNavigation';
@@ -35,12 +37,14 @@ export default class App extends React.Component {
     } else {
       return (
         <Provider store={store}>
-        <View style={styles.container}>
-          {/*Platform.OS === 'ios' && <StatusBar barStyle="default" />*/}
-          {/*Platform.OS === 'android' && <View style={styles.statusBarUnderlay} />*/}
-          <RootNavigation />
-          <Assistant />
-        </View>
+          <View style={styles.container}>
+            {/*Platform.OS === 'ios' && <StatusBar barStyle="default" />*/}
+            {/*Platform.OS === 'android' && <View style={styles.statusBarUnderlay} />*/}
+            <TopMenu />
+            <Settings />
+            <RootNavigation />
+            <Assistant />
+          </View>
         </Provider>
       );
     }
@@ -57,6 +61,13 @@ export default class App extends React.Component {
         // to remove this if you are not using it in your app
         'brandon': require('./assets/fonts/BrandonGrotesque-Medium.otf'),
         'proxima': require('./assets/fonts/proximanova-regular.otf'),
+
+
+        'Medium': require('root/assets/fonts/BrandonGrotesque-Medium.otf'),
+        'Bold': require('root/assets/fonts/brandongrotesque-bold-webfont.ttf'),
+        'Regular': require('root/assets/fonts/BrandonGrotesque-Regular.otf'),
+        'RegularTyp2': require('root/assets/fonts/proximanova-regular.otf'),
+
       }),
     ]);
   };

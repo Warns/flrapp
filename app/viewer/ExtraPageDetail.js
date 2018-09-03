@@ -1,0 +1,51 @@
+import React, { Component } from 'react';
+import {
+    View,
+    Text,
+} from 'react-native';
+import { connect } from 'react-redux';
+import { Viewer, MapViewer, OrderViewer } from 'root/app/viewer';
+import { ORDER_LIST_CLICKED } from 'root/app/helper/Constant';
+
+class ExtraDetail extends Component {
+
+    constructor(props) {
+        super(props);
+    }
+
+    static navigationOptions = ({ navigation }) => {
+        const { params } = navigation.state;
+        return {
+            title: params.title,
+        };
+    };
+
+    _getParams = () => {
+        const { navigation } = this.props,
+            obj = navigation.state.params;
+        return obj;
+    }
+
+    _getContent = () => {
+        const _self = this,
+            obj = _self._getParams(),
+            { id, type, postData = {} } = obj;
+            
+        switch (type) {
+            case ORDER_LIST_CLICKED:
+                return <OrderViewer data={obj} />;
+            default:
+                return null;
+        }
+    }
+
+    render() {
+        const _self = this;
+        return _self._getContent();
+    }
+}
+
+function mapStateToProps(state) { return state }
+const ExtraPageDetail = connect(mapStateToProps)(ExtraDetail);
+export { ExtraPageDetail }
+

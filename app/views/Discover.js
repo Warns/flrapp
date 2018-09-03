@@ -31,8 +31,8 @@ class Navigation extends React.Component {
   }
 
   componentDidMount() {
-      let data = require('root/data/navigation.json');
-      this.setState({ navigation: data['data'] });
+      const { settings } = store.getState();
+      this.setState({ navigation: settings['menu']['main'] });
   }
 
   _onPressButton = (o) => {

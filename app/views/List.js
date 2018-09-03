@@ -67,7 +67,6 @@ export default class List extends React.Component{
   }
 
   _updateList = () => {
-
     globals.fetch(
       "https://www.flormar.com.tr/webapi/v3/Product/getProductList",
       JSON.stringify({
