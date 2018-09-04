@@ -3,6 +3,9 @@ export const ICONS = {
     rightArrow: require('root/assets/icons/rightArrow.png'),
     storeLocation: require('root/assets/icons/storeLocation.png'),
     location: require('root/assets/icons/location.png'),
+    feedInstagram: require('root/assets/icons/feedInstagram.png'),
+    feedCampaing: require('root/assets/icons/feedPromo.png'),
+    feedVideo: require('root/assets/icons/feedVideo.png'),
 };
 
 /* VIEWER SAYFA TİPLERİ */
@@ -23,6 +26,16 @@ export const ITEMTYPE = {
     FOLLOWLIST: 'followList',
     SERVICELIST: 'serviceList',
     VIDEO: 'video',
+    FEEDS: 'feeds'
+};
+
+export const FEEDSTYPE = {
+    INSTAGRAM: 'instagram',
+	VIDEO: 'video',
+	CAMPAING: 'campaing',
+    PRODUCT: 'product',
+    BLOGPOST: 'blog_post',
+    COLLECTION: 'collection'
 };
 
 export const DATA_LOADED = 'DATA_LOADED';

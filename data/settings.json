@@ -79,6 +79,24 @@
             }
         ],
         "extra": [
+
+            {
+                "title": "FEEDS",
+                "type": "htmlToJSON",
+                "itemType": "feeds",
+                "uri": { "key": "export", "subKey": "getExport" },
+                "siteURI": "/mobiapp-segmentify.html",
+                "keys": {
+                    "id": "id",
+                    "arr": "html",
+                    "obj": "data",
+                    "objArr": "feeds",
+                },
+                "data": {
+                    "exportType": "mobiAppSegmentify"
+                }
+            },
+
             {
                 "title": "MAĞAZALAR",
                 "type": "listViewer",

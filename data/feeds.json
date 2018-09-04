@@ -1,0 +1,61 @@
+{
+    "status": 200,
+    "data": {
+        "feeds": [
+            {
+                "type": "instagram",
+                "id": "instagram_125847",
+                "url": "",
+                "image": "https://picsum.photos/394/394/?random",
+                "like": 5,
+                "user_like": true,
+                "desc": "Alışverişe Başla"
+            },
+            {
+                "type": "video",
+                "id": "video_125847",
+                "url": "",
+                "image": "https://picsum.photos/394/394/?random",
+                "like": 5,
+                "user_like": false,
+                "desc": "Alışverişe Başla"
+            },
+            {
+                "type": "campaing",
+                "id": "campaing_125847",
+                "url": "",
+                "image": "https://picsum.photos/394/394/?random",
+                "like": 5,
+                "user_like": false,
+                "desc": "Alışverişe Başla"
+            },
+            {
+                "type": "product",
+                "id": "product_125847",
+                "url": "",
+                "image": "https://picsum.photos/394/394/?random",
+                "like": 5,
+                "user_like": true,
+                "desc": "Alışverişe Başla"
+            },
+            {
+                "type": "blog_post",
+                "id": "blog_post_125847",
+                "url": "",
+                "image": "https://picsum.photos/394/394/?random",
+                "like": 5,
+                "user_like": false,
+                "desc": "Alışverişe Başla"
+            },
+            {
+                "type": "banner",
+                "id": "banner_125847",
+                "url": "",
+                "image": "https://picsum.photos/394/394/?random",
+                "like": 5,
+                "user_like": false,
+                "desc": "Alışverişe Başla"
+            }
+        ]
+    }
+}

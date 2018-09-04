@@ -13,6 +13,7 @@ import {
 import HTML from 'react-native-render-html';
 import {
     ICONS,
+    FEEDSTYPE,
     VIEWERTYPE,
     ITEMTYPE,
     DATA_LOADED,
@@ -373,6 +374,111 @@ class VideoListItem extends Component {
     }
 }
 
+/*
+    Segmentify feeds
+    
+    type:
+    - instagram
+	- video
+	- kampanya
+	- ürün
+	- blog post
+	- collection
+
+*/
+class FeedsItem extends Component {
+    constructor(props) {
+        super(props);
+    }
+
+
+    _getLike = () => {
+        const _self = this,
+            { like, user_like = false } = _self.props.data;
+        return (
+            <View>
+
+            </View>
+        );
+    }
+
+    _getIcon = () => {
+        const _self = this,
+            { type } = _self.props.data;
+
+        let source = null;
+
+        if (type == FEEDSTYPE['VIDEO'])
+            source = ICONS['feedVideo'];
+        else if (type == FEEDSTYPE['INSTAGRAM'])
+            source = ICONS['feedInstagram']
+        else if (type == FEEDSTYPE['CAMPAING'])
+            source = ICONS['feedCampaing']
+
+        if (source == null) return null;
+
+        return (
+            <Image
+                style={{ width: 40, height: 40, position: 'absolute', bottom: 5, right: 5 }}
+                source={source}
+            />
+        );
+    }
+
+    _getImage = () => {
+        const _self = this,
+            { image = '', type } = _self.props.data;
+
+        let h = 394;
+        if (type == FEEDSTYPE['VIDEO'] || type == FEEDSTYPE['COLLECTION'])
+            h = 300;
+
+        return (
+            <Image
+                style={{ height: h }}
+                source={{ uri: image }}
+            />
+        );
+    }
+
+    _getFooter = () => {
+        let view = null;
+
+        const _self = this,
+            { desc = '' } = _self.props.data;
+
+        if (desc != '')
+            view = (
+                <View style={{ flexDirection: 'row', height: 40, borderColor: '#dcdcdc', borderRadius: 3, borderTopEndRadius: 0, borderTopLeftRadius: 0, borderWidth: 1, borderTopWidth: 0 }}>
+                    <TouchableOpacity style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} activeOpacity={0.8} onPress={_self._onPress}>
+                        <Text style={{ fontFamily: 'Medium', fontSize: 16 }}>{desc}</Text>
+                    </TouchableOpacity>
+                    <Image
+                        style={{ width: 40, height: 40 }}
+                        source={ICONS['rightArrow']}
+                    />
+                </View>
+            );
+        return view;
+    }
+
+    render() {
+        const _self = this;
+
+        return (
+            <View style={{ marginBottom: 20 }}>
+                <View>
+                    {_self._getImage()}
+                    {_self._getIcon()}
+                </View>
+                {_self._getFooter()}
+            </View>
+
+
+        )
+    }
+}
+
 const HTML_DEFAULT_PROPS = {
     tagsStyles: { h1: { color: 'red' } },
     classesStyles: { 'blue': { color: 'blue', fontWeight: '800' } },
@@ -535,6 +641,8 @@ class Viewer extends Component {
                 return <ServiceListItem callback={this._callback} onPress={this._onGotoDetail} data={item} />;
             case ITEMTYPE['VIDEO']:
                 return <VideoListItem onPress={this._onGotoDetail} data={item} />;
+            case ITEMTYPE['FEEDS']:
+                return <FeedsItem data={item} />;
             default:
                 return null;
         }
@@ -552,6 +660,14 @@ class Viewer extends Component {
             _self.setState({ refreshing: true }, () => { _self.setAjx({ uri: _self.getUri(), data: _self._getData() }); })
     }
 
+    _onViewableItemsChanged = ({ viewableItems }) => {
+        /* viewport giren itemları döndürür */
+        const _self = this,
+            { onViewableItemsChanged } = _self.props;
+        if (onViewableItemsChanged)
+            onViewableItemsChanged(viewableItems)
+    }
+
     _getViewer = () => {
         const _self = this,
             { type = VIEWERTYPE['LIST'] } = _self.props.config;
@@ -561,23 +677,24 @@ class Viewer extends Component {
             view = (
                 <FlatList
                     style={[{ paddingLeft: 10, paddingRight: 10 }, { ..._self.props.style }]}
-                    data={this.state.data}
-                    keyExtractor={this._keyExtractor}
-                    renderItem={this._renderItem}
-                    ListHeaderComponent={this._getHeader}
-                    refreshing={this.state.refreshing}
-                    onRefresh={this._onRefresh}
+                    data={_self.state.data}
+                    keyExtractor={_self._keyExtractor}
+                    renderItem={_self._renderItem}
+                    ListHeaderComponent={_self._getHeader}
+                    refreshing={_self.state.refreshing}
+                    onRefresh={_self._onRefresh}
+                    onViewableItemsChanged={_self._onViewableItemsChanged}
                 />
             );
         else if (type == VIEWERTYPE['HTML'])
             view = (
                 <ScrollView style={{ flex: 1, }}>
-                    <HTML {...HTML_DEFAULT_PROPS} html={this.state.html} />
+                    <HTML {...HTML_DEFAULT_PROPS} html={_self.state.html} />
                 </ScrollView>
             );
         else if (type == VIEWERTYPE['WEBVIEW'])
             view = (
-                <WebView source={{ html: this.state.html }} />
+                <WebView source={{ html: _self.state.html }} />
             );
 
         return view;
