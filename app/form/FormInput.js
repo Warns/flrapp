@@ -39,7 +39,9 @@ class FormInput extends Component {
     input = null
 
     _onPress = () => {
-        this.input.focus();
+        const _self = this;
+        if (_self.input && _self.input.focus)
+            _self.input.focus();
     }
 
     _onFocus = () => {
@@ -182,7 +184,7 @@ class FormInput extends Component {
             this._callback();
 
         return (
-            <TouchableOpacity activeOpacity={0.7} onPress={this._onPress}>
+            <TouchableOpacity activeOpacity={0.7} onPress={this._onPress.bind(this)}>
                 <Container titleShow={titleShow} theme={theme} title={title} error={error} errorMsg={errorMsg}>
                     {input}
                 </Container>
