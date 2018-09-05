@@ -8,7 +8,9 @@ import {
     TouchableOpacity,
     WebView,
     View,
-    Image
+    Image,
+    Animated,
+    Easing,
 } from 'react-native';
 import HTML from 'react-native-render-html';
 import {
@@ -19,8 +21,12 @@ import {
     DATA_LOADED,
     SERVICE_LIST_CLICKED,
     ORDER_LIST_CLICKED,
-    ADDRESS_LIST_CLICKED
+    ADDRESS_LIST_CLICKED,
+    CLICK,
+    DOUBLE_CLICK,
 } from 'root/app/helper/Constant';
+
+import { RatingButton, DoubleClickButton } from 'root/app/UI';
 
 const Utils = require('root/app/helper/Global.js');
 const Globals = require('root/app/globals.js');
@@ -389,17 +395,41 @@ class VideoListItem extends Component {
 class FeedsItem extends Component {
     constructor(props) {
         super(props);
+        const _self = this,
+            { like = 0, user_like = false } = _self.props.data;
+        _self.state = {
+            userLike: user_like,
+            like: like
+        };
+        _self.anim = new Animated.Value(0);
     }
 
+    _animate = (status, callback) => {
+        const _self = this;
+
+        Animated.timing(
+            _self.anim,
+            {
+                toValue: status ? 1 : 0,
+                duration: 222,
+                easing: Easing.inOut(Easing.quad)
+            }
+        ).start(() => {
+            if (typeof callback !== 'undefined')
+                callback();
+        });
+    }
+
+    _onRatingClicked = ({ id, userLike }) => {
+        const _self = this;
+        _self.setState({ userLike: userLike });
+    }
 
     _getLike = () => {
         const _self = this,
-            { like, user_like = false } = _self.props.data;
-        return (
-            <View>
+            { userLike, like } = _self.state;
 
-            </View>
-        );
+        return <RatingButton onPress={_self._onRatingClicked} id="rating" value={like} userLike={userLike} style={{ position: 'absolute', top: 10, left: 10 }} />
     }
 
     _getIcon = () => {
@@ -425,6 +455,19 @@ class FeedsItem extends Component {
         );
     }
 
+    _callback = ({ type }) => {
+        const _self = this;
+        if (type == DOUBLE_CLICK) {
+            _self.setState({ userLike: true });
+            _self._animate(true, () => {
+                setTimeout(() => {
+                    _self._animate(false);
+                }, 100);
+            });
+        }
+
+    };
+
     _getImage = () => {
         const _self = this,
             { image = '', type } = _self.props.data;
@@ -434,10 +477,33 @@ class FeedsItem extends Component {
             h = 300;
 
         return (
-            <Image
-                style={{ height: h }}
-                source={{ uri: image }}
-            />
+            <DoubleClickButton callback={_self._callback}>
+                <Image
+                    style={{ height: h }}
+                    source={{ uri: image }}
+                />
+                <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center' }}>
+                    <Animated.Image
+                        style={[
+                            {
+                                width: 180,
+                                height: 180,
+                            },
+                            {
+                                opacity: _self.anim,
+                                transform: [{
+                                    scale: _self.anim.interpolate({
+                                        inputRange: [0, 1],
+                                        outputRange: [0.6, 1]
+                                    }),
+                                }]
+                            }
+                        ]}
+                        source={ICONS['like']}
+                    />
+                </View>
+
+            </DoubleClickButton>
         );
     }
 
@@ -467,8 +533,9 @@ class FeedsItem extends Component {
 
         return (
             <View style={{ marginBottom: 20 }}>
-                <View>
+                <View style={{ position: 'relative' }}>
                     {_self._getImage()}
+                    {_self._getLike()}
                     {_self._getIcon()}
                 </View>
                 {_self._getFooter()}
@@ -660,12 +727,25 @@ class Viewer extends Component {
             _self.setState({ refreshing: true }, () => { _self.setAjx({ uri: _self.getUri(), data: _self._getData() }); })
     }
 
-    _onViewableItemsChanged = ({ viewableItems }) => {
-        /* viewport giren itemları döndürür */
+    _viewable = [];
+
+    _onViewableItemChanged = ({ index, item }) => {
         const _self = this,
             { onViewableItemsChanged } = _self.props;
-        if (onViewableItemsChanged)
-            onViewableItemsChanged(viewableItems)
+        if (!_self._viewable.includes(index)) {
+            _self._viewable.push(index);
+            console.log('_onViewableItemChanged', item);
+            if (onViewableItemsChanged)
+                onViewableItemsChanged(item);
+        }
+    }
+
+    _onViewableItemsChanged = ({ viewableItems }) => {
+        /* viewport giren itemları döndürür */
+        const _self = this;
+        viewableItems.map((item) => {
+            _self._onViewableItemChanged(item)
+        });
     }
 
     _getViewer = () => {
