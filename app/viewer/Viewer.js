@@ -25,8 +25,8 @@ import {
     CLICK,
     DOUBLE_CLICK,
 } from 'root/app/helper/Constant';
-
 import { RatingButton, DoubleClickButton } from 'root/app/UI';
+import { connect } from 'react-redux';
 
 const Utils = require('root/app/helper/Global.js');
 const Globals = require('root/app/globals.js');
@@ -308,12 +308,13 @@ class ServiceListItem extends Component {
         this._isMounted = false;
     }
 
-    setAjx = () => {
+    setAjx = async () => {
         const _self = this,
-            origin = { lat: 41.020334, long: 28.889993499999996 },
+            { permission, location } = _self.props.rdx,
             { serviceLatitude = '', serviceLongitude = '' } = _self.props.data;
-        if (serviceLatitude != '' && serviceLongitude != '') {
-            const uri = Utils.getCustomURL({ key: 'location', origins: (origin['lat'] + ',' + origin['long']), destinations: (serviceLatitude + ',' + serviceLongitude) });
+        
+        if (serviceLatitude != '' && serviceLongitude != '' && permission) {
+            const uri = Utils.getCustomURL({ key: 'location', origins: (location['coords']['latitude'] + ',' + location['coords']['longitude']), destinations: (serviceLatitude + ',' + serviceLongitude) });
 
             Utils.ajx({ uri: uri }, (res) => {
                 if (res['type'] == 'success' && _self._isMounted) {
@@ -356,6 +357,7 @@ class ServiceListItem extends Component {
     render() {
         const _self = this,
             { serviceName, address } = _self.props.data;
+
         return (
             <TouchableOpacity activeOpacity={0.8} onPress={_self._onPress}>
                 <View style={{ paddingBottom: 20, paddingTop: 20, borderBottomColor: '#dcdcdc', borderBottomWidth: 1 }}>
@@ -554,7 +556,7 @@ const HTML_DEFAULT_PROPS = {
     debug: false
 };
 
-class Viewer extends Component {
+class Viewers extends Component {
 
     constructor(props) {
         super(props);
@@ -705,7 +707,7 @@ class Viewer extends Component {
             case ITEMTYPE['FOLLOWLIST']:
                 return <FollowListItem onPress={this._onGotoDetail} data={item} />;
             case ITEMTYPE['SERVICELIST']:
-                return <ServiceListItem callback={this._callback} onPress={this._onGotoDetail} data={item} />;
+                return <ServiceListItem callback={_self._callback} rdx={_self.props.location} data={item} />;
             case ITEMTYPE['VIDEO']:
                 return <VideoListItem onPress={this._onGotoDetail} data={item} />;
             case ITEMTYPE['FEEDS']:
@@ -734,7 +736,6 @@ class Viewer extends Component {
             { onViewableItemsChanged } = _self.props;
         if (!_self._viewable.includes(index)) {
             _self._viewable.push(index);
-            console.log('_onViewableItemChanged', item);
             if (onViewableItemsChanged)
                 onViewableItemsChanged(item);
         }
@@ -782,8 +783,12 @@ class Viewer extends Component {
 
     render() {
         const _self = this;
+        console.log(_self.props.location)
         return _self._getViewer();
     }
 }
 
-export { Viewer };
+
+function mapStateToProps(state) { return state }
+const Viewer = connect(mapStateToProps)(Viewers);
+export { Viewer }

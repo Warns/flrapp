@@ -6,6 +6,7 @@ import user from './user';
 import settings from './settings';
 import menu from './menu';
 import rootNavigation from './rootNavigation';
+import location from './location';
 
 export default combineReducers({
   general,
@@ -14,4 +15,5 @@ export default combineReducers({
   settings,
   menu,
   rootNavigation,
+  location,
 });

@@ -102,3 +102,6 @@ export const SET_CART_NUM = 'SET_CART_NUM';
 export const SHOW_MENU = 'SHOW_MENU';
 export const HIDE_MENU = 'HIDE_MENU';
 
+/* location */
+export const SET_LOCATION = 'SET_LOCATION';
+
