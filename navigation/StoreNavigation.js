@@ -16,6 +16,8 @@ import {
 } from 'root/app/helper/Constant';
 import { MapView } from 'expo';
 
+const Utils = require('root/app/helper/Global.js');
+
 const DATA = {
     itemType: 'serviceList',
     uri: { key: 'service', subKey: 'getServiceList' },
@@ -42,7 +44,42 @@ class Warning extends Component {
 class AddressDetail extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            distance: null,
+            duration: null
+        };
     }
+
+    componentDidMount() {
+        const _self = this;
+        _self._isMounted = true;
+        _self.setAjx();
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
+    }
+
+    setAjx = async () => {
+        const _self = this,
+            { permission, location } = _self.props,
+            { serviceLatitude = '', serviceLongitude = '' } = _self.props.data;
+
+        if (serviceLatitude != '' && serviceLongitude != '' && permission) {
+            const uri = Utils.getCustomURL({ key: 'location', origins: (location['coords']['latitude'] + ',' + location['coords']['longitude']), destinations: (serviceLatitude + ',' + serviceLongitude) });
+
+            Utils.ajx({ uri: uri }, (res) => {
+                if (res['type'] == 'success' && _self._isMounted) {
+                    const data = res['data'] || {},
+                        elements = data['rows'][0]['elements'][0],
+                        duration = elements['duration'] || {},
+                        distance = elements['distance'] || {};
+                    _self.setState({ distance: distance['text'] || '', duration: duration['text'] || '' });
+                }
+            });
+        }
+    }
+
     render() {
         const _self = this,
             { serviceName, address, phoneNo } = _self.props.data;
@@ -50,6 +87,7 @@ class AddressDetail extends Component {
             <Animated.View style={{ position: 'absolute', bottom: 0, zIndex: 2, backgroundColor: '#FFFFFF', width: '100%', minHeight: 100, paddingLeft: 30, paddingBottom: 20, paddingTop: 30, paddingRight: 20 }}>
                 <Text style={{ fontFamily: 'Medium', fontSize: 16, marginBottom: 6 }}>{serviceName}</Text>
                 <Text style={{ fontFamily: 'RegularTyp2', fontSize: 15, marginBottom: 12 }}>{address}</Text>
+                <Text style={{ fontFamily: 'Regular', fontSize: 15, }}>{_self.state.distance}   {_self.state.duration}</Text>
                 <Text>{phoneNo}</Text>
             </Animated.View>
         );
@@ -61,12 +99,12 @@ class Detail extends React.Component {
     constructor(props) {
         super(props);
         const _self = this,
-            { activeItem = null, data = {}, location, permission } = _self.props.navigation.state.params; console.log(activeItem);
+            { activeItem = null, data = {}, location, permission } = _self.props.navigation.state.params;
         _self.Map = null;
         _self.state = {
             markers: data['data'], // all data
             showDetail: activeItem ? true : false, // address detail show, hide
-            detail: activeItem['data'], // address detail data
+            detail: activeItem || {}, // address detail data
             location: location,
             permission: permission
         };
@@ -76,35 +114,50 @@ class Detail extends React.Component {
         const _self = this,
             { markers } = _self.state;
 
-        _self.setState({ showDetail: true, detail: markers[index] });
+        _self._reset();
+        setTimeout(() => {
+            _self.setState({ showDetail: true, detail: markers[index] });
+        }, 1);
     }
 
     _addressDetail = () => {
         const _self = this,
-            { showDetail = false, detail } = _self.state;
+            { showDetail = false, detail, location, permission } = _self.state;
         let view = null;
         if (showDetail)
-            view = <AddressDetail data={detail} />;
+            view = <AddressDetail data={detail} location={location} permission={permission} />;
         return view;
+    }
+
+    /* https://github.com/react-community/react-native-maps/issues/758 */
+    _reset = () => {
+        const _self = this;
+        _self.setState({ showDetail: false, })
     }
 
     _getViewer = () => {
         const _self = this,
-            { markers } = _self.state;
+            { markers, showDetail, detail = {} } = _self.state;
         let view = null;
 
         if (markers.length > 0) {
             const coordsArr = [],
                 items = markers.map((item, index) => {
-                    const { serviceLatitude, serviceLongitude, serviceName, address } = item;
+                    const { serviceId, serviceLatitude, serviceLongitude, serviceName, address } = item;
                     if (serviceLatitude != '' && serviceLongitude != '') {
                         const coords = { latitude: parseFloat(serviceLatitude), longitude: parseFloat(serviceLongitude) };
                         coordsArr.push(coords);
+
+                        let op = 1;
+                        if (showDetail && serviceId != detail['serviceId'])
+                            op = 0.5;
+
                         return (
                             <MapView.Marker
                                 key={index}
                                 coordinate={coords}
-                                onPress={e => _self._onMarkerClicked(e.nativeEvent, index)}
+                                onPress={e => { e.stopPropagation(); _self._onMarkerClicked(e.nativeEvent, index) }}
+                                style={{ opacity: op }}
                             >
                                 <View>
                                     <Image source={ICONS['storeLocation']} style={{ width: 40, height: 40 }} />
@@ -116,6 +169,7 @@ class Detail extends React.Component {
             view = (
                 <MapView
                     style={{ flex: 1 }}
+                    onPress={() => _self._reset()}
                     ref={(ref) => { _self.Map = ref }}
                     onLayout={() => _self.Map.fitToCoordinates(coordsArr, { edgePadding: { top: 10, right: 10, bottom: 10, left: 10 }, animated: false })}
                     maxZoomLevel={13}
@@ -155,7 +209,7 @@ class Main extends Component {
             { type } = obj;
 
         if (type == SERVICE_LIST_CLICKED)
-            _self.props.navigation.navigate('Detail', { activeItem: obj, ..._self.state });
+            _self.props.navigation.navigate('Detail', { activeItem: obj['data'], ..._self.state });
         else if (type == DATA_LOADED)
             _self.setState({ data: obj });
         else if (type == LOCATION_SERVICE)
