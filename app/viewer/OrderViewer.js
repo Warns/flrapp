@@ -53,7 +53,7 @@ class OrderViewer extends Component {
 
     _getData = () => {
         const { orderId, orderNo, } = this.props.data.data;
-        return { orderId: orderId, orderNo: orderNo, isGuest: true };
+        return { orderId: orderId, orderNo: orderNo };
     }
 
     getUri = () => {
