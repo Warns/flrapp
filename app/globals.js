@@ -77,13 +77,12 @@ module.exports = {
           session = map.session || '';
         if (session != '' && _this.CLIENT.Auth)
           _this.CLIENT.Auth.session = session[0];
-        
+
         return response.json();
       })
       .then(function (json) {
-
         // logging the incoming response.
-        _this._log(json);
+        //_this._log(json);
         return callback(json);
       })
       .catch(error => callback('error', error));

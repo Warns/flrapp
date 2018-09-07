@@ -312,7 +312,7 @@ class ServiceListItem extends Component {
         const _self = this,
             { permission, location } = _self.props.rdx,
             { serviceLatitude = '', serviceLongitude = '' } = _self.props.data;
-        
+
         if (serviceLatitude != '' && serviceLongitude != '' && permission) {
             const uri = Utils.getCustomURL({ key: 'location', origins: (location['coords']['latitude'] + ',' + location['coords']['longitude']), destinations: (serviceLatitude + ',' + serviceLongitude) });
 
@@ -580,6 +580,7 @@ class Viewers extends Component {
             { navigation } = _self.props;
         if (navigation)
             _self._Listener.remove();
+
         _self.setAjx({ uri: _self.getUri(), data: _self._getData() });
     }
 
@@ -676,7 +677,7 @@ class Viewers extends Component {
     _keyExtractor = (item, index) => {
         const _self = this,
             { keys } = _self.props.config;
-        return (keys['arr'] + '-' + item[keys['id']]).toString();
+        return (keys['arr'] + '-' + item[keys['id']] + '-' + index).toString();
     }
 
     _onGotoDetail = (o) => {
@@ -783,11 +784,9 @@ class Viewers extends Component {
 
     render() {
         const _self = this;
-        console.log(_self.props.location)
         return _self._getViewer();
     }
 }
-
 
 function mapStateToProps(state) { return state }
 const Viewer = connect(mapStateToProps)(Viewers);

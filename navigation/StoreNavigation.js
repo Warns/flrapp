@@ -17,6 +17,7 @@ import {
 import { MapView } from 'expo';
 
 const Utils = require('root/app/helper/Global.js');
+const Globals = require('root/app/globals.js');
 
 const DATA = {
     itemType: 'serviceList',
@@ -24,7 +25,8 @@ const DATA = {
     keys: {
         id: 'serviceId',
         arr: 'services',
-    }
+    },
+    refreshing: false
 };
 
 class Warning extends Component {
@@ -191,6 +193,23 @@ class Detail extends React.Component {
                 {_self._getViewer()}
             </View>
         );
+    }
+}
+
+class Test extends Component{
+    constructor(props){
+        super(props)
+    }
+
+    componentDidMount(){
+        Globals.fetch(Utils.getURL({ key: 'service', subKey: 'getServiceList' }), {}, (answer) => {
+            alert(JSON.stringify(answer));
+        });
+        
+    }
+
+    render(){
+        return null;
     }
 }
 
