@@ -26,6 +26,7 @@ import {
     DOUBLE_CLICK,
 } from 'root/app/helper/Constant';
 import { RatingButton, DoubleClickButton } from 'root/app/UI';
+import { CountryPicker } from 'root/app/form';
 import { connect } from 'react-redux';
 
 const Utils = require('root/app/helper/Global.js');
@@ -650,7 +651,7 @@ class Viewers extends Component {
         const _self = this,
             { type = VIEWERTYPE['LIST'] } = _self.props.config;
 
-        _self.ajx({ uri: uri, data: data }, function (res) {
+        _self.ajx({ uri: uri, data: data }, function (res) { console.log(res);
 
             const { keys } = _self.props.config,
                 keyArr = keys['arr'] || '',
@@ -719,8 +720,42 @@ class Viewers extends Component {
     }
 
     _getHeader = () => {
-        let header = null;
-        return header;
+        const _self = this,
+            { itemType } = _self.props.config;
+
+        return null;
+    }
+
+    _filtered = (obj) => {
+        const _self = this,
+            { itemType } = _self.props.config;
+        if (itemType == ITEMTYPE['SERVICELIST']) {
+            const { multiValue = [] } = obj,
+                data = {},
+                keys = ['countryId', 'cityId']; //'districtName' 
+            Object
+                .entries(multiValue)
+                .forEach(([ind, item]) => {
+                    const { key, value } = item;
+                    if (value != -1 && keys.includes(key))
+                        data[key] = value;
+                });
+                console.log(data);
+            _self.setAjx({ uri: _self.getUri(), data: data });
+        }
+
+    }
+
+    _getFilter = () => {
+        const _self = this,
+            { itemType, filterData = {} } = _self.props.config;
+
+        switch (itemType) {
+            case ITEMTYPE['SERVICELIST']:
+                return <CountryPicker selectionValue={true} callback={_self._filtered} theme={'LIGHT'} control={false} key={'country'} data={filterData} />;
+            default:
+                return null;
+        }
     }
 
     _onRefresh = () => {
@@ -784,7 +819,13 @@ class Viewers extends Component {
 
     render() {
         const _self = this;
-        return _self._getViewer();
+        return (
+            <View style={{ flex: 1 }}>
+                {_self._getFilter()}
+                {_self._getViewer()}
+            </View>
+
+        )
     }
 }
 

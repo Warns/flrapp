@@ -18,6 +18,7 @@ import BoxButton from 'root/app/UI/Buttons/BoxButton';
 import get from 'lodash/get';
 
 const Utils = require('root/app/helper/Global.js');
+const styles = require('root/app/styles.js');
 const MIN_ITEMS_NUM = 5;
 
 /* regex türlçe karekter problemine çözüm */
@@ -77,7 +78,7 @@ class Minus99MultipleSelect extends React.Component {
             let selected = [];
             selItems.forEach((ind) => {
                 selected.push(items[ind]);
-            })
+            });
             callback({ key: slug, selected: selected });
         }
 
@@ -90,6 +91,11 @@ class Minus99MultipleSelect extends React.Component {
     componentWillReceiveProps(nextProps) {
         const { items, selected, } = nextProps;
         if (!Utils.isArrEqual(this.props.items, items)) {
+
+            /* items varsa ve seçili gönderilmemişse ilk eleman seçili gelsin */
+            if (items.length > 0 && selected.length == 0)
+                selected.push(0);
+
             this.setState({ items: items, selectedItems: selected });
         }
     }
@@ -312,7 +318,6 @@ class ListItem extends React.Component {
     render() {
 
         const { item, selected } = this.props;
-
         return (
             <TouchableOpacity
                 activeOpacity={0.8}

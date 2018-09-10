@@ -17,7 +17,6 @@ import {
 import { MapView } from 'expo';
 
 const Utils = require('root/app/helper/Global.js');
-const Globals = require('root/app/globals.js');
 
 const DATA = {
     itemType: 'serviceList',
@@ -196,23 +195,6 @@ class Detail extends React.Component {
     }
 }
 
-class Test extends Component{
-    constructor(props){
-        super(props)
-    }
-
-    componentDidMount(){
-        Globals.fetch(Utils.getURL({ key: 'service', subKey: 'getServiceList' }), {}, (answer) => {
-            alert(JSON.stringify(answer));
-        });
-        
-    }
-
-    render(){
-        return null;
-    }
-}
-
 class Main extends Component {
     constructor(props) {
         super(props);
@@ -237,12 +219,28 @@ class Main extends Component {
 
     render() {
         const _self = this,
-            { permission } = _self.state;
+            { permission, location = {} } = _self.state;
 
         let view = null;
-        if (permission === true)
+        if (permission === true) {
+            const { latitude = '', longitude = '' } = location['coords'] || {};
+            
+            DATA['data'] = {
+                latitude: latitude,
+                longitude: longitude
+            };
+            
+            DATA['filterData'] = {
+                id: 'country',
+                value: {  
+                    country: 0,
+                    city: 0,
+                    district: 0,
+                }
+            };
+
             view = <Viewer config={DATA} callback={_self._callback} />;
-        else if (permission === false)
+        } else if (permission === false)
             view = <Warning />;
         else
             view = <LocationService callback={_self._callback} />;

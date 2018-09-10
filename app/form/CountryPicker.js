@@ -4,8 +4,7 @@ import {
     StyleSheet,
     Text,
 } from 'react-native';
-import { Minus99MultipleSelect } from 'root/app/components/';
-import { Container } from './';
+import { Container, Minus99MultipleSelect } from './';
 const Utils = require('root/app/helper/Global.js');
 const Globals = require('root/app/globals.js');
 
@@ -20,6 +19,13 @@ class CountryPicker extends Component {
         }
     }
 
+    _getDefValue = (key) => {
+        const _self = this,
+            { value = {} } = _self.props.data || {},
+            k = value[key];
+        return typeof k !== 'undefined' ? k : -1;
+    }
+
     config = {
         country: {
             uri: Utils.getURL({ key: 'address', subKey: 'country' }),
@@ -30,7 +36,7 @@ class CountryPicker extends Component {
                 name: 'countryName'
             },
             name: '',
-            value: this.props.data.value.country || -1
+            value: this._getDefValue('country')
         },
         city: {
             uri: Utils.getURL({ key: 'address', subKey: 'city' }),
@@ -41,7 +47,7 @@ class CountryPicker extends Component {
                 name: 'cityName'
             },
             name: '',
-            value: this.props.data.value.city || -1
+            value: this._getDefValue('city')
         },
         district: {
             uri: Utils.getURL({ key: 'address', subKey: 'district' }),
@@ -51,7 +57,7 @@ class CountryPicker extends Component {
                 name: 'districtName'
             },
             name: '',
-            value: this.props.data.value.district || -1
+            value: this._getDefValue('district')
         },
     }
 
@@ -70,7 +76,6 @@ class CountryPicker extends Component {
         _self.setAjx({ key: 'country', data: { countryId: countryId } });
         _self.setAjx({ key: 'city', data: { countryId: countryId } });
         _self.setAjx({ key: 'district', data: { countryId: countryId, cityId: cityId } });
-
     }
 
     /* https://medium.com/@TaylorBriggs/your-react-component-can-t-promise-to-stay-mounted-e5d6eb10cbb */
@@ -182,6 +187,11 @@ class CountryPicker extends Component {
         } else if (key == 'district') {
 
         }
+
+        /* her bir seçimde dışarı callback döndürmek için kullanılır */
+        const { selectionValue = false } = this.props;
+        if (selectionValue)
+            _self._callback();
     }
 
     _callback = () => {
@@ -207,12 +217,12 @@ class CountryPicker extends Component {
                 multiValue: arr
             });
 
-
     }
 
     render() {
-        const { title, error = false, errorMsg = null, errorState } = this.props.data,
-            { countryId, cityId, districtId } = errorState,
+        const _self = this,
+            { errorState = {} } = this.props.data,
+            { countryId = {}, cityId = {}, districtId = {} } = errorState,
             { control = false, } = this.props;
 
         if (control)
@@ -220,15 +230,15 @@ class CountryPicker extends Component {
 
         return (
             <View>
-                <Container titleShow={true} title={'Ülke'} error={countryId['error']} errorMsg={countryId['errorMsg']}>
+                <Container titleShow={true} title={'Ülke'} error={countryId['error'] || false} errorMsg={countryId['errorMsg'] || null}>
                     <Minus99MultipleSelect slug={'country'} callback={this._closed} selected={this._getIndex({ key: 'country' })} multiple={false} items={this._getItems({ key: 'country' })} />
                 </Container>
 
-                <Container titleShow={true} title={'İl'} error={cityId['error']} errorMsg={cityId['errorMsg']}>
+                <Container titleShow={true} title={'İl'} error={cityId['error'] || false} errorMsg={cityId['errorMsg'] || null}>
                     <Minus99MultipleSelect slug={'city'} callback={this._closed} selected={this._getIndex({ key: 'city' })} multiple={false} items={this._getItems({ key: 'city' })} />
                 </Container>
 
-                <Container titleShow={true} title={'İlçe'} error={districtId['error']} errorMsg={districtId['errorMsg']}>
+                <Container titleShow={true} title={'İlçe'} error={districtId['error'] || false} errorMsg={districtId['errorMsg'] || null}>
                     <Minus99MultipleSelect slug={'district'} callback={this._closed} selected={this._getIndex({ key: 'district' })} multiple={false} items={this._getItems({ key: 'district' })} />
                 </Container>
             </View>
