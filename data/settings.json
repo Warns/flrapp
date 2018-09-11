@@ -121,7 +121,7 @@
             },
             {
                 "title": "KURUMSAL",
-                "type": "htmlViewer",
+                "type": "webViewer",
                 "uri": {
                     "key": "export",
                     "subKey": "getExport"
@@ -143,7 +143,7 @@
             {
                 "showMenu": false,
                 "title": "TARİHÇE",
-                "type": "htmlViewer",
+                "type": "webViewer",
                 "uri": {
                     "key": "export",
                     "subKey": "getExport"
@@ -165,7 +165,7 @@
             {
                 "showMenu": false,
                 "title": "VİZYON & MİSYON",
-                "type": "htmlViewer",
+                "type": "webViewer",
                 "uri": {
                     "key": "export",
                     "subKey": "getExport"
@@ -187,7 +187,7 @@
             {
                 "showMenu": false,
                 "title": "DEĞERLER",
-                "type": "htmlViewer",
+                "type": "webViewer",
                 "uri": {
                     "key": "export",
                     "subKey": "getExport"
@@ -207,6 +207,7 @@
                 }
             },
             {
+                "customClass": "ems-page-company-information",
                 "showMenu": false,
                 "title": "ŞİRKET BİLGİLERİ",
                 "type": "webViewer",
@@ -231,7 +232,7 @@
             {
                 "showMenu": false,
                 "title": "KALİTE POLİTİKAMIZ",
-                "type": "htmlViewer",
+                "type": "webViewer",
                 "uri": {
                     "key": "export",
                     "subKey": "getExport"
@@ -253,7 +254,7 @@
             {
                 "showMenu": false,
                 "title": "İNSAN KAYNAKLARI POLİTİKASI",
-                "type": "htmlViewer",
+                "type": "webViewer",
                 "uri": {
                     "key": "export",
                     "subKey": "getExport"
@@ -275,7 +276,7 @@
             {
                 "showMenu": false,
                 "title": "KÜNYE",
-                "type": "htmlViewer",
+                "type": "webViewer",
                 "uri": {
                     "key": "export",
                     "subKey": "getExport"
@@ -297,7 +298,7 @@
             {
                 "showMenu": false,
                 "title": "BİLGİ TOPLUMU MERKEZİ",
-                "type": "htmlViewer",
+                "type": "webViewer",
                 "uri": {
                     "key": "export",
                     "subKey": "getExport"
@@ -318,7 +319,7 @@
             },
             {
                 "title": "İADE İŞLEMLERİ",
-                "type": "htmlViewer",
+                "type": "webViewer",
                 "uri": {
                     "key": "export",
                     "subKey": "getExport"
@@ -339,7 +340,7 @@
             },
             {
                 "title": "MESAFELİ SATIŞ SÖZLEŞMESİ",
-                "type": "htmlViewer",
+                "type": "webViewer",
                 "uri": {
                     "key": "export",
                     "subKey": "getExport"
@@ -360,7 +361,7 @@
             },
             {
                 "title": "SIKÇA SORULAN SORULAR",
-                "type": "htmlViewer",
+                "type": "webViewer",
                 "uri": {
                     "key": "content",
                     "subKey": "getContent"
@@ -375,7 +376,7 @@
             },
             {
                 "title": "İNSAN KAYNAKLARI",
-                "type": "htmlViewer",
+                "type": "webViewer",
                 "uri": {
                     "key": "export",
                     "subKey": "getExport"
@@ -396,7 +397,7 @@
             },
             {
                 "title": "KİŞİSEL VERİLERİN KORUNMASI",
-                "type": "htmlViewer",
+                "type": "webViewer",
                 "uri": {
                     "key": "export",
                     "subKey": "getExport"

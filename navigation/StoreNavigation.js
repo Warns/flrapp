@@ -233,7 +233,7 @@ class Main extends Component {
             DATA['filterData'] = {
                 id: 'country',
                 value: {  
-                    country: 0,
+                    country: 1,
                     city: 0,
                     district: 0,
                 }

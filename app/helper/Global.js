@@ -2,6 +2,9 @@ module.exports = {
     mapApiKey: 'AIzaSyAvSoqfCr4I9Vb11HtQ6cDEAMki6THBgrQ',
     prefix: 'https://www.flormar.com.tr',
     URLs: {
+        style: {
+            main: '/styles/mobiApp.css'
+        },
         user: {
             getUser: '/webapi/v3/User/getUser',
             setUser: '/webapi/v3/User/setUser',
@@ -44,7 +47,7 @@ module.exports = {
         content: {
             getContent: '/webapi/v3/Content/getContent',
             getDataByUrl: '/webapi/v3/Content/getDataByUrl',
-        },
+        }
     },
     customURLs: {
         location: 'https://maps.googleapis.com/maps/api/distancematrix/json?language={{lang}}&units=metric&origins={{origins}}&destinations={{destinations}}&key={{mapApikey}}'

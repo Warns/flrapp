@@ -1,6 +1,9 @@
 'use strict';
 var React = require('react-native');
 module.exports = {
+    dropdown:{
+        choose: 'Seçiniz'
+    },
     orders: {
         orderNo: 'Sipariş Numarası',
         orderDate: 'Sipariş Tarihi',

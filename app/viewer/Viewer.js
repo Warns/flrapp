@@ -29,6 +29,7 @@ import { RatingButton, DoubleClickButton } from 'root/app/UI';
 import { CountryPicker } from 'root/app/form';
 import { connect } from 'react-redux';
 
+const Translation = require('root/app/helper/Translation.js');
 const Utils = require('root/app/helper/Global.js');
 const Globals = require('root/app/globals.js');
 
@@ -647,13 +648,21 @@ class Viewers extends Component {
             .replace(/<\/td/g, '</div');
     }
 
+    _addStyle = ({ customClass, data }) => {
+        const uri = Utils.getURL({ key: 'style', subKey: 'main' }) + '?' + parseInt(Math.random() * new Date()),
+            css = '<link href="' + uri + '" rel="stylesheet" type="text/css" />',
+            htm = '<div class="ems-mobi-app-container ' + customClass + '">' + (css + data) + '</div>';
+        console.log(htm);
+        return htm;
+    }
+
     setAjx = ({ uri, data = {} }, callback) => {
         const _self = this,
             { type = VIEWERTYPE['LIST'] } = _self.props.config;
 
-        _self.ajx({ uri: uri, data: data }, function (res) { console.log(res);
+        _self.ajx({ uri: uri, data: data }, function (res) {
 
-            const { keys } = _self.props.config,
+            const { keys, customClass = '' } = _self.props.config,
                 keyArr = keys['arr'] || '',
                 keyTotal = keys['total'] || '';
 
@@ -664,7 +673,7 @@ class Viewers extends Component {
             if (type == VIEWERTYPE['LIST'] || type == VIEWERTYPE['HTMLTOJSON'])
                 _self.setState({ data: data, total: res.data[keyTotal] || 0 });
             else if (type == VIEWERTYPE['WEBVIEW'])
-                _self.setState({ html: data });
+                _self.setState({ html: _self._addStyle({ customClass: customClass, data: data }) });
             else
                 _self.setState({ html: _self._clearTag(data) });
 
@@ -732,15 +741,16 @@ class Viewers extends Component {
         if (itemType == ITEMTYPE['SERVICELIST']) {
             const { multiValue = [] } = obj,
                 data = {},
-                keys = ['countryId', 'cityId']; //'districtName' 
+                keys = ['countryId', 'cityId', 'districtName'];
+
             Object
                 .entries(multiValue)
                 .forEach(([ind, item]) => {
                     const { key, value } = item;
-                    if (value != -1 && keys.includes(key))
+                    if (value != -1 && value != Translation['dropdown']['choose'] && keys.includes(key))
                         data[key] = value;
                 });
-                console.log(data);
+            console.log(data);
             _self.setAjx({ uri: _self.getUri(), data: data });
         }
 
@@ -811,7 +821,14 @@ class Viewers extends Component {
             );
         else if (type == VIEWERTYPE['WEBVIEW'])
             view = (
-                <WebView source={{ html: _self.state.html }} />
+                <View style={[{ paddingLeft: 10, paddingRight: 10, flex: 1 }, { ..._self.props.style }]}>
+                    <WebView
+                        scalesPageToFit={false}
+                        automaticallyAdjustContentInsets={false}
+                        source={{ html: _self.state.html }}
+                    />
+                </View>
+
             );
 
         return view;

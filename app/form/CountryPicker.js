@@ -5,6 +5,8 @@ import {
     Text,
 } from 'react-native';
 import { Container, Minus99MultipleSelect } from './';
+
+const Translation = require('root/app/helper/Translation.js');
 const Utils = require('root/app/helper/Global.js');
 const Globals = require('root/app/globals.js');
 
@@ -89,7 +91,7 @@ class CountryPicker extends Component {
             { keys } = _self.config[key] || {},
             obj = {};
         obj[keys['id']] = -1;
-        obj[keys['name']] = 'Seçiniz';
+        obj[keys['name']] = Translation['dropdown']['choose'] || 'Seçiniz';
         data = [obj, ...data];
 
         return data;
