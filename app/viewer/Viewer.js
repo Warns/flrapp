@@ -750,7 +750,7 @@ class Viewers extends Component {
                     if (value != -1 && value != Translation['dropdown']['choose'] && keys.includes(key))
                         data[key] = value;
                 });
-            console.log(data);
+            
             _self.setAjx({ uri: _self.getUri(), data: data });
         }
 

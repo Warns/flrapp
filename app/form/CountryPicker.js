@@ -75,7 +75,7 @@ class CountryPicker extends Component {
             cityId = _self.config['city']['value'];
 
         _self._isMounted = true;
-        _self.setAjx({ key: 'country', data: { countryId: countryId } });
+        _self.setAjx({ key: 'country', data: { countryId: 0 } });
         _self.setAjx({ key: 'city', data: { countryId: countryId } });
         _self.setAjx({ key: 'district', data: { countryId: countryId, cityId: cityId } });
     }
