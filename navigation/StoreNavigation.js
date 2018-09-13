@@ -15,6 +15,8 @@ import {
     LOCATION_SERVICE
 } from 'root/app/helper/Constant';
 import { MapView } from 'expo';
+const { Marker } = MapView;
+
 
 const Utils = require('root/app/helper/Global.js');
 
@@ -154,7 +156,7 @@ class Detail extends React.Component {
                             op = 0.5;
 
                         return (
-                            <MapView.Marker
+                            <Marker
                                 key={index}
                                 coordinate={coords}
                                 onPress={e => { e.stopPropagation(); _self._onMarkerClicked(e.nativeEvent, index) }}
@@ -163,7 +165,7 @@ class Detail extends React.Component {
                                 <View>
                                     <Image source={ICONS['storeLocation']} style={{ width: 40, height: 40 }} />
                                 </View>
-                            </MapView.Marker>
+                            </Marker>
                         );
                     }
                 });
@@ -219,20 +221,22 @@ class Main extends Component {
 
     render() {
         const _self = this,
-            { permission, location = {} } = _self.state;
+            { permission, location = {} } = _self.state,
+            { filtered = false } = _self.props;
 
         let view = null;
         if (permission === true) {
             const { latitude = '', longitude = '' } = location['coords'] || {};
-            
+
             DATA['data'] = {
                 latitude: latitude,
                 longitude: longitude
             };
-            
+
             DATA['filterData'] = {
+                filtered: filtered,
                 id: 'country',
-                value: {  
+                value: {
                     country: 1,
                     city: 0,
                     district: 0,
@@ -256,7 +260,10 @@ class Main extends Component {
 const StoreNavigator = createStackNavigator(
     {
         Main: {
-            screen: props => <Main {...props} />,
+            screen: props => <Main filtered={false} {...props} />,
+        },
+        Search: {
+            screen: props => <Main filtered={true} {...props} />,
         },
         Detail: {
             screen: props => <Detail {...props} />,

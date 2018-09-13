@@ -48,6 +48,7 @@ export const SERVICE_LIST_CLICKED = 'SERVICE_LIST_CLICKED';
 export const ORDER_LIST_CLICKED = 'ORDER_LIST_CLICKED';
 export const ADDRESS_LIST_CLICKED = 'ADDRESS_LIST_CLICKED';
 export const LOCATION_SERVICE = 'LOCATION_SERVICE';
+export const SET_FORM = 'SET_FORM';
 
 /* form */
 export const FORMDATA = {

@@ -1,3 +1,7 @@
+import {
+    Alert,
+} from 'react-native';
+const Translation = require('root/app/helper/Translation.js');
 module.exports = {
     mapApiKey: 'AIzaSyAvSoqfCr4I9Vb11HtQ6cDEAMki6THBgrQ',
     prefix: 'https://www.flormar.com.tr',
@@ -191,5 +195,31 @@ module.exports = {
                 if (typeof callback !== 'undefined')
                     callback({ type: 'error', data: error });
             });
+    },
+    confirm: function ({ title = 'Uyarı', message = '' }, callback) {
+        const { cancel, ok } = Translation['confirm'];
+        Alert.alert(
+            title,
+            message,
+            [
+                {
+                    text: cancel,
+                    onPress: () => {
+                        if (typeof callback !== 'undefined')
+                            callback({ type: 'cancel' });
+                    }
+                },
+                {
+                    text: ok,
+                    onPress: () => {
+                        if (typeof callback !== 'undefined')
+                            callback({ type: 'ok' });
+                    }
+                }
+            ],
+            {
+                cancelable: false
+            }
+        )
     }
 };
