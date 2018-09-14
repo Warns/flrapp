@@ -33,6 +33,22 @@ import { connect } from 'react-redux';
 const Translation = require('root/app/helper/Translation.js');
 const Utils = require('root/app/helper/Global.js');
 const Globals = require('root/app/globals.js');
+const AJX = async ({ _self, uri, data = {} }, callback) => {
+    _self.setState({ loading: true });
+    Globals.fetch(uri, JSON.stringify(data), (answer) => {
+        if (_self._isMounted) {
+            if (answer === 'error') {
+                console.log('fatalllll error: could not get access token');
+            } else {
+                if (answer.status == 200) {
+                    if (typeof callback !== 'undefined')
+                        callback(answer);
+                }
+            }
+            _self.setState({ loading: false, refreshing: false });
+        }
+    });
+}
 
 /*
 const config = {
@@ -48,6 +64,69 @@ const config = {
     }
 };
 */
+
+class IconButton extends Component {
+    constructor(props) {
+        super(props);
+    }
+
+    _onPressButton = () => {
+        const { callback, item = {}, sequence = 0 } = this.props;
+        if (callback)
+            callback({ item, sequence });
+    }
+
+    _measureDimensions = (e) => {
+        const { onDimensions, sequence = 0 } = this.props;
+        if (onDimensions)
+            onDimensions({ layout: e.nativeEvent.layout, sequence });
+    }
+
+    render() {
+        const _self = this,
+            { ico, icoStyle = {}, style = {} } = _self.props;
+
+        return (
+            <TouchableOpacity activeOpacity={0.8} onPress={_self._onPressButton} onLayout={e => _self._measureDimensions(e)}>
+                <View style={[{ width: 12, height: 12, justifyContent: 'center', alignItems: 'center' }, style]}>
+                    <Image
+                        style={[{ width: 12, height: 12 }, icoStyle]}
+                        source={ICONS[ico]}
+                    />
+                </View>
+            </TouchableOpacity>
+        );
+    }
+}
+
+class BoxButton extends Component {
+    constructor(props) {
+        super(props);
+    }
+
+    _onPressButton = () => {
+        const { callback, item = {}, sequence = 0 } = this.props;
+        if (callback)
+            callback({ item, sequence });
+    }
+
+    _measureDimensions = (e) => {
+        const { onDimensions, sequence = 0 } = this.props;
+        if (onDimensions)
+            onDimensions({ layout: e.nativeEvent.layout, sequence });
+    }
+
+    render() {
+        const _self = this;
+        return (
+            <TouchableOpacity activeOpacity={0.8} onPress={_self._onPressButton} onLayout={e => _self._measureDimensions(e)}>
+                <View style={{ alignItems: "center", justifyContent: "center", borderColor: '#666666', borderWidth: 1, backgroundColor: "#FFFFFF", borderRadius: 3, height: 36, paddingLeft: 30, paddingRight: 30 }}>
+                    <Text style={{ fontFamily: 'Bold', fontSize: 14 }}>{_self.props.children}</Text>
+                </View>
+            </TouchableOpacity>
+        )
+    }
+}
 
 class AdressListItem extends Component {
     /*
@@ -91,36 +170,16 @@ class AdressListItem extends Component {
         _self._isMounted = false;
     }
 
-    ajx = async ({ uri, data = {} }, callback) => {
-        const _self = this;
-        _self.setState({ loading: true });
-        Globals.fetch(uri, JSON.stringify(data), (answer) => {
-            if (_self._isMounted) {
-                if (answer === 'error') {
-                    console.log('fatalllll error: could not get access token');
-                } else {
-                    if (answer.status == 200) {
-                        if (typeof callback !== 'undefined')
-                            callback(answer);
-                    } else {
-
-                    }
-                }
-                _self.setState({ loading: false });
-            }
-        });
-    }
-
     _onPress = () => {
         const _self = this,
             { callback, data = {} } = _self.props;
         if (callback)
-            callback({ 
-                type: SET_FORM, 
+            callback({
+                type: SET_FORM,
                 data: {
                     itemType: 'setAddress',
                     postData: { addressId: data['addressId'] || '' }
-                } 
+                }
             });
     }
 
@@ -130,7 +189,7 @@ class AdressListItem extends Component {
         Utils.confirm({ message: Translation['confirm']['removeMessage'] }, ({ type }) => {
             if (type == 'ok') {
                 const { addressId } = data;
-                _self.ajx({ uri: Utils.getURL({ key: 'address', subKey: 'deleteAddress' }), data: { addressId: addressId } }, (res) => {
+                AJX({ _self: _self, uri: Utils.getURL({ key: 'address', subKey: 'deleteAddress' }), data: { addressId: addressId } }, (res) => {
                     const { status, message } = res;
                     if (onRemove && status == 200)
                         setTimeout(() => {
@@ -166,37 +225,6 @@ class AdressListItem extends Component {
     }
 }
 
-
-
-class BoxButton extends Component {
-    constructor(props) {
-        super(props);
-    }
-
-    _onPressButton = () => {
-        const { callback, item = {}, sequence = 0 } = this.props;
-        if (callback)
-            callback({ item, sequence });
-    }
-
-    _measureDimensions = (e) => {
-        const { onDimensions, sequence = 0 } = this.props;
-        if (onDimensions)
-            onDimensions({ layout: e.nativeEvent.layout, sequence });
-    }
-
-    render() {
-        const _self = this;
-        return (
-            <TouchableOpacity activeOpacity={0.8} onPress={_self._onPressButton} onLayout={e => _self._measureDimensions(e)}>
-                <View style={{ alignItems: "center", justifyContent: "center", borderColor: '#666666', borderWidth: 1, backgroundColor: "#FFFFFF", borderRadius: 3, height: 36, paddingLeft: 30, paddingRight: 30 }}>
-                    <Text style={{ fontFamily: 'Bold', fontSize: 14 }}>{_self.props.children}</Text>
-                </View>
-            </TouchableOpacity>
-        )
-    }
-}
-
 class FavoriteListItem extends Component {
     /*
     
@@ -216,8 +244,48 @@ class FavoriteListItem extends Component {
     constructor(props) {
         super(props);
     }
+
+    componentDidMount() {
+        const _self = this;
+        _self._isMounted = true;
+    }
+
+    componentWillUnmount() {
+        const _self = this;
+        _self._isMounted = false;
+    }
+
+    _onPress = () => {
+        const _self = this,
+            { data = {} } = _self.props;
+
+    }
+
+    _onRemove = () => {
+        const _self = this,
+            { data, onRemove } = _self.props;
+        Utils.confirm({ message: Translation['confirm']['removeMessage'] }, ({ type }) => {
+            if (type == 'ok') {
+                const { productId } = data;
+                AJX({ _self: _self, uri: Utils.getURL({ key: 'user', subKey: 'deleteFavoriteProduct' }), data: { productId: productId } }, (res) => {
+                    const { status, message } = res;
+                    if (onRemove && status == 200)
+                        setTimeout(() => {
+                            onRemove({ key: 'productId', value: productId });
+                        }, 100);
+
+                })
+
+            }
+        });
+    }
+
     render() {
-        const { shortName, productName, smallImageUrl, salePrice } = this.props.data; console.log(this.props.data)
+
+        const _self = this,
+            { shortName, productName, smallImageUrl, salePrice } = _self.props.data,
+            { addTo } = Translation['cart'] || {};
+
         return (
             <View style={{ flexDirection: 'row', paddingTop: 20, paddingBottom: 20, paddingRight: 20, paddingLeft: 10, borderBottomColor: '#dcdcdc', borderBottomWidth: 1, }}>
                 <View style={{ width: 60, justifyContent: 'center', }}>
@@ -228,12 +296,16 @@ class FavoriteListItem extends Component {
                 </View>
                 <View style={{ flex: 1 }}>
                     <View>
-                        <Text numberOfLines={1} style={{ fontFamily: 'Medium', fontSize: 15 }}>{productName}</Text>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <Text numberOfLines={1} style={{ fontFamily: 'Medium', fontSize: 15 }}>{productName}</Text>
+                            <IconButton ico={'close'} callback={_self._onRemove} />
+                        </View>
                         <Text numberOfLines={1} style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#555555' }}>{shortName}</Text>
+
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 21 }}>
                         <Text style={{ fontFamily: 'Bold', fontSize: 16 }}>{Utils.getPriceFormat(salePrice)}</Text>
-                        <BoxButton>{'SEPETE AT'}</BoxButton>
+                        <BoxButton callback={_self._onPress}>{addTo}</BoxButton>
                     </View>
                 </View>
             </View>
@@ -690,26 +762,6 @@ class Viewers extends Component {
         return data;
     }
 
-    ajx = async ({ uri, data = {} }, callback) => {
-        const _self = this;
-        _self.setState({ loading: true });
-        Globals.fetch(uri, JSON.stringify(data), (answer) => {
-            if (_self._isMounted) {
-                if (answer === 'error') {
-                    console.log('fatalllll error: could not get access token');
-                } else {
-                    if (answer.status == 200) {
-                        if (typeof callback !== 'undefined')
-                            callback(answer);
-                    } else {
-
-                    }
-                }
-                _self.setState({ loading: false, refreshing: false });
-            }
-        });
-    }
-
     /* react-native-render-html componenti table tagını çeviremiyor bu yüzden böyle bir kontrol ekledik */
     _clearTag = (data) => {
         return data
@@ -735,7 +787,7 @@ class Viewers extends Component {
         const _self = this,
             { type = VIEWERTYPE['LIST'] } = _self.props.config;
 
-        _self.ajx({ uri: uri, data: data }, function (res) {
+        AJX({ _self: _self, uri: uri, data: data }, function (res) {
 
             const { keys, customClass = '' } = _self.props.config,
                 keyArr = keys['arr'] || '',
@@ -782,7 +834,7 @@ class Viewers extends Component {
     /* Viewer genel callback */
     _callback = (obj) => {
         const _self = this,
-            { callback } = _self.props; 
+            { callback } = _self.props;
         if (callback)
             callback(obj);
     }
@@ -795,7 +847,7 @@ class Viewers extends Component {
             case ITEMTYPE['ADDRESS']:
                 return <AdressListItem callback={_self._callback} onRemove={_self._removeItem} data={item} />;
             case ITEMTYPE['FAVORITE']:
-                return <FavoriteListItem onPress={this._onGotoDetail} data={item} />;
+                return <FavoriteListItem onRemove={_self._removeItem} data={item} />;
             case ITEMTYPE['ORDER']:
                 return <OrderListItem callback={this._callback} data={item} />;
             case ITEMTYPE['COUPON']:

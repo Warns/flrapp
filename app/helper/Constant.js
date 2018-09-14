@@ -8,6 +8,7 @@ export const ICONS = {
     feedVideo: require('root/assets/icons/feedVideo.png'),
     like: require('root/assets/icons/heartFull.png'),
     unLike: require('root/assets/icons/heartOutline.png'),
+    close: require('root/assets/icons/close.png'),
 };
 
 /* VIEWER SAYFA TİPLERİ */

@@ -1,4 +1,7 @@
 module.exports = {
+    cart: {
+        addTo: 'SEPETE AT'
+    },
     confirm: {
         cancel: 'İptal',
         ok: 'Tamam',

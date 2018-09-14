@@ -10,6 +10,7 @@ module.exports = {
             main: '/styles/mobiApp.css'
         },
         user: {
+            getToken: '/webapi/v3/User/getToken',
             getUser: '/webapi/v3/User/getUser',
             setUser: '/webapi/v3/User/setUser',
             createUser: '/webapi/v3/User/createUser',
@@ -17,6 +18,7 @@ module.exports = {
             recoverPassword: '/webapi/v3/User/recoverPassword',
             changePassword: '/webapi/v3/User/changePassword',
             getFavoriteProductList: '/webapi/v3/User/getFavoriteProductList',
+            deleteFavoriteProduct: '/webapi/v3/User/deleteFavoriteProduct',
             getStockFollowUpList: '/webapi/v3/User/getStockFollowUpList', // takip listem - Stoğa Girenler
             getPriceFollowUpList: '/webapi/v3/User/getPriceFollowUpList', // takip listem - fiyatı düşenler
         },
