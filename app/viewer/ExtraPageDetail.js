@@ -27,6 +27,19 @@ class ExtraDetail extends Component {
         return obj;
     }
 
+    _callback = ({ type, data }) => {
+        const _self = this,
+            { navigation = {} } = _self.props,
+            { params = {} } = navigation.state || {},
+            { refreshing } = params;
+
+        if (refreshing)
+            refreshing();
+
+        if (navigation)
+            navigation.goBack();
+    }
+
     _getContent = () => {
         const _self = this,
             obj = _self._getParams(),
@@ -37,7 +50,7 @@ class ExtraDetail extends Component {
             case ORDER_LIST_CLICKED:
                 return <OrderViewer data={obj} />;
             case SET_FORM:
-                return <Form postData={postData} data={FORMDATA[itemType]} />;
+                return <Form callback={_self._callback} postData={postData} data={FORMDATA[itemType]} />;
             default:
                 return null;
         }

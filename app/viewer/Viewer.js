@@ -834,9 +834,19 @@ class Viewers extends Component {
     /* Viewer genel callback */
     _callback = (obj) => {
         const _self = this,
-            { callback } = _self.props;
+            { callback, refreshing = false } = _self.props;
+
+        if (refreshing)
+            obj['refreshing'] = _self._refreshing;
+
         if (callback)
             callback(obj);
+    }
+
+    /* refreshing */
+    _refreshing = () => {
+        const _self = this;
+        _self.onDidFocus();
     }
 
     _renderItem = ({ item }) => {
