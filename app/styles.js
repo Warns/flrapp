@@ -23,7 +23,6 @@ module.exports = StyleSheet.create({
   },
 
   iconButton:{ width:40, height:40, justifyContent:"center", alignItems:"center" },
-  boxButton:{ alignItems:"center", justifyContent:"center", backgroundColor:"#5F00D8", height:50 },
 
   xlarge:{ fontSize: 28 },
   large:{ fontSize: 22 },
@@ -47,7 +46,6 @@ module.exports = StyleSheet.create({
   iconSmallSize: {width:16, height:16},
   iconTinySize: {width:12, height:12},
 
-  iconButton:{ width:40, height:40, justifyContent:"center", alignItems:"center" },
   boxButton:{ alignItems:"center", justifyContent:"center", backgroundColor:"#5F00D8", height:50 },
 
   // multiselect box
