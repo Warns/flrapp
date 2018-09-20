@@ -30,14 +30,18 @@ class CheckBox extends Component {
     }
 
     render() {
-        const { desc, error = false, errorMsg = null } = this.props.data;
-        const check = this.state.value ? <View style={{ width: 10, height: 10, backgroundColor: 'red' }} /> : <View style={{ width: 10, height: 10, backgroundColor: 'yellow' }} />;
-        const { control = false, } = this.props;
+
+        const _self = this,
+            { desc, error = false, errorMsg = null } = _self.props.data,
+            { control = false } = _self.props,
+            { value } = _self.state,
+            active = value ? { borderColor: '#000000', backgroundColor: '#000000' } : {};
+        check = <View style={[{ width: 18, height: 18, borderRadius: 3, borderWidth: 1, borderColor: '#dddddd', backgroundColor: '#FFFFFF' }, active]} />;
 
         if (control)
-            this._callback();
-
-        return (
+            _self._callback();
+        
+            return (
             <Container titleShow={true} error={error} errorMsg={errorMsg}>
                 <TouchableOpacity style={{ flexDirection: 'row' }} activeOpacity={0.8} onPress={this._onPress}>
                     {check}
