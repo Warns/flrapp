@@ -1,6 +1,9 @@
 /* STYLES */
 'use strict';
 var React = require('react-native');
+
+const Utils = require('root/app/helper/Global.js');
+
 module.exports = {
   // Constants
   API_KEY: '1b9b737f-5582-c8d7-f535-b9750bdeeb90',
@@ -77,13 +80,12 @@ module.exports = {
           session = map.session || '';
         if (session != '' && _this.CLIENT.Auth)
           _this.CLIENT.Auth.session = session[0];
-        
+
         return response.json();
       })
       .then(function (json) {
-
         // logging the incoming response.
-        _this._log(json);
+        //_this._log(json);
         return callback(json);
       })
       .catch(error => callback('error', error));
@@ -94,7 +96,7 @@ module.exports = {
     var _this = this;
 
     this._fetchURL(
-      "https://www.flormar.com.tr/webapi/v3/User/getToken",
+      Utils.getURL({ key: 'user', subKey: 'getToken' }),
       JSON.stringify({
         "password": globals.API_KEY,
         "grant_type": "password"

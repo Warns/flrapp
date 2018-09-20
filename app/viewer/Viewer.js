@@ -8,7 +8,9 @@ import {
     TouchableOpacity,
     WebView,
     View,
-    Image
+    Image,
+    Animated,
+    Easing,
 } from 'react-native';
 import HTML from 'react-native-render-html';
 import {
@@ -19,11 +21,34 @@ import {
     DATA_LOADED,
     SERVICE_LIST_CLICKED,
     ORDER_LIST_CLICKED,
-    ADDRESS_LIST_CLICKED
+    ADDRESS_LIST_CLICKED,
+    CLICK,
+    DOUBLE_CLICK,
+    SET_FORM,
 } from 'root/app/helper/Constant';
+import { RatingButton, DoubleClickButton } from 'root/app/UI';
+import { CountryPicker } from 'root/app/form';
+import { connect } from 'react-redux';
 
+const Translation = require('root/app/helper/Translation.js');
 const Utils = require('root/app/helper/Global.js');
 const Globals = require('root/app/globals.js');
+const AJX = async ({ _self, uri, data = {} }, callback) => {
+    _self.setState({ loading: true });
+    Globals.fetch(uri, JSON.stringify(data), (answer) => {
+        if (_self._isMounted) {
+            if (answer === 'error') {
+                console.log('fatalllll error: could not get access token');
+            } else {
+                if (answer.status == 200) {
+                    if (typeof callback !== 'undefined')
+                        callback(answer);
+                }
+            }
+            _self.setState({ loading: false, refreshing: false });
+        }
+    });
+}
 
 /*
 const config = {
@@ -39,6 +64,69 @@ const config = {
     }
 };
 */
+
+class IconButton extends Component {
+    constructor(props) {
+        super(props);
+    }
+
+    _onPressButton = () => {
+        const { callback, item = {}, sequence = 0 } = this.props;
+        if (callback)
+            callback({ item, sequence });
+    }
+
+    _measureDimensions = (e) => {
+        const { onDimensions, sequence = 0 } = this.props;
+        if (onDimensions)
+            onDimensions({ layout: e.nativeEvent.layout, sequence });
+    }
+
+    render() {
+        const _self = this,
+            { ico, icoStyle = {}, style = {} } = _self.props;
+
+        return (
+            <TouchableOpacity activeOpacity={0.8} onPress={_self._onPressButton} onLayout={e => _self._measureDimensions(e)}>
+                <View style={[{ width: 12, height: 12, justifyContent: 'center', alignItems: 'center' }, style]}>
+                    <Image
+                        style={[{ width: 12, height: 12 }, icoStyle]}
+                        source={ICONS[ico]}
+                    />
+                </View>
+            </TouchableOpacity>
+        );
+    }
+}
+
+class BoxButton extends Component {
+    constructor(props) {
+        super(props);
+    }
+
+    _onPressButton = () => {
+        const { callback, item = {}, sequence = 0 } = this.props;
+        if (callback)
+            callback({ item, sequence });
+    }
+
+    _measureDimensions = (e) => {
+        const { onDimensions, sequence = 0 } = this.props;
+        if (onDimensions)
+            onDimensions({ layout: e.nativeEvent.layout, sequence });
+    }
+
+    render() {
+        const _self = this;
+        return (
+            <TouchableOpacity activeOpacity={0.8} onPress={_self._onPressButton} onLayout={e => _self._measureDimensions(e)}>
+                <View style={{ alignItems: "center", justifyContent: "center", borderColor: '#666666', borderWidth: 1, backgroundColor: "#FFFFFF", borderRadius: 3, height: 36, paddingLeft: 30, paddingRight: 30 }}>
+                    <Text style={{ fontFamily: 'Bold', fontSize: 14 }}>{_self.props.children}</Text>
+                </View>
+            </TouchableOpacity>
+        )
+    }
+}
 
 class AdressListItem extends Component {
     /*
@@ -67,49 +155,72 @@ class AdressListItem extends Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            loading: false
+        }
+    }
+
+    componentDidMount() {
+        const _self = this;
+        _self._isMounted = true;
+    }
+
+    componentWillUnmount() {
+        const _self = this;
+        _self._isMounted = false;
     }
 
     _onPress = () => {
         const _self = this,
-            { callback, data } = _self.props;
+            { callback, data = {} } = _self.props;
         if (callback)
-            callback({ type: ADDRESS_LIST_CLICKED, data: data });
+            callback({
+                type: SET_FORM,
+                data: {
+                    itemType: 'setAddress',
+                    postData: { addressId: data['addressId'] || '' }
+                }
+            });
+    }
+
+    _onRemove = () => {
+        const _self = this,
+            { data, onRemove } = _self.props;
+        Utils.confirm({ message: Translation['confirm']['removeMessage'] }, ({ type }) => {
+            if (type == 'ok') {
+                const { addressId } = data;
+                AJX({ _self: _self, uri: Utils.getURL({ key: 'address', subKey: 'deleteAddress' }), data: { addressId: addressId } }, (res) => {
+                    const { status, message } = res;
+                    if (onRemove && status == 200)
+                        setTimeout(() => {
+                            onRemove({ key: 'addressId', value: addressId });
+                        }, 100);
+
+                })
+
+            }
+        });
     }
 
     render() {
         const _self = this,
-            { addressName, address } = _self.props.data;
+            { addressName, address } = _self.props.data,
+            { remove, edit } = Translation['address'] || {};
         return (
-            <TouchableOpacity activeOpacity={0.4} onPress={_self._onPress}>
-                <View style={{ flexDirection: 'column', paddingTop: 20, paddingBottom: 20, paddingRight: 20, paddingLeft: 10, borderBottomColor: '#dcdcdc', borderBottomWidth: 1, }}>
-                    <View>
-                        <Text style={{ fontFamily: 'Medium', fontSize: 15 }}>{addressName}</Text>
-                        <Text style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#555555' }}>{address}</Text>
-                    </View>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 21 }}>
-                        <Text style={{ fontFamily: 'RegularTyp2', fontSize: 15 }}>{'Sil'}</Text>
-                        <BoxButton>{'Düzenle'}</BoxButton>
-                    </View>
+
+            <View style={{ flexDirection: 'column', paddingTop: 20, paddingBottom: 20, paddingRight: 20, paddingLeft: 10, borderBottomColor: '#dcdcdc', borderBottomWidth: 1, }}>
+                <View>
+                    <Text style={{ fontFamily: 'Medium', fontSize: 15 }}>{addressName}</Text>
+                    <Text style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#555555' }}>{address}</Text>
                 </View>
-            </TouchableOpacity>
-        )
-    }
-}
-
-
-
-class BoxButton extends Component {
-    constructor(props) {
-        super(props);
-    }
-    render() {
-        const _self = this;
-        return (
-            <TouchableOpacity activeOpacity={0.8}>
-                <View style={{ alignItems: "center", justifyContent: "center", borderColor: '#666666', borderWidth: 1, backgroundColor: "#FFFFFF", borderRadius: 3, height: 36, paddingLeft: 30, paddingRight: 30 }}>
-                    <Text style={{ fontFamily: 'Bold', fontSize: 14 }}>{_self.props.children}</Text>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 21 }}>
+                    <TouchableOpacity activeOpacity={0.8} onPress={_self._onRemove}>
+                        <Text style={{ fontFamily: 'RegularTyp2', fontSize: 15 }}>{remove}</Text>
+                    </TouchableOpacity>
+                    <BoxButton callback={_self._onPress}>{edit}</BoxButton>
                 </View>
-            </TouchableOpacity>
+            </View>
+
         )
     }
 }
@@ -133,8 +244,48 @@ class FavoriteListItem extends Component {
     constructor(props) {
         super(props);
     }
+
+    componentDidMount() {
+        const _self = this;
+        _self._isMounted = true;
+    }
+
+    componentWillUnmount() {
+        const _self = this;
+        _self._isMounted = false;
+    }
+
+    _onPress = () => {
+        const _self = this,
+            { data = {} } = _self.props;
+
+    }
+
+    _onRemove = () => {
+        const _self = this,
+            { data, onRemove } = _self.props;
+        Utils.confirm({ message: Translation['confirm']['removeMessage'] }, ({ type }) => {
+            if (type == 'ok') {
+                const { productId } = data;
+                AJX({ _self: _self, uri: Utils.getURL({ key: 'user', subKey: 'deleteFavoriteProduct' }), data: { productId: productId } }, (res) => {
+                    const { status, message } = res;
+                    if (onRemove && status == 200)
+                        setTimeout(() => {
+                            onRemove({ key: 'productId', value: productId });
+                        }, 100);
+
+                })
+
+            }
+        });
+    }
+
     render() {
-        const { shortName, productName, smallImageUrl, salePrice } = this.props.data; console.log(this.props.data)
+
+        const _self = this,
+            { shortName, productName, smallImageUrl, salePrice } = _self.props.data,
+            { addTo } = Translation['cart'] || {};
+
         return (
             <View style={{ flexDirection: 'row', paddingTop: 20, paddingBottom: 20, paddingRight: 20, paddingLeft: 10, borderBottomColor: '#dcdcdc', borderBottomWidth: 1, }}>
                 <View style={{ width: 60, justifyContent: 'center', }}>
@@ -145,12 +296,16 @@ class FavoriteListItem extends Component {
                 </View>
                 <View style={{ flex: 1 }}>
                     <View>
-                        <Text numberOfLines={1} style={{ fontFamily: 'Medium', fontSize: 15 }}>{productName}</Text>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <Text numberOfLines={1} style={{ fontFamily: 'Medium', fontSize: 15 }}>{productName}</Text>
+                            <IconButton ico={'close'} callback={_self._onRemove} />
+                        </View>
                         <Text numberOfLines={1} style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#555555' }}>{shortName}</Text>
+
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 21 }}>
                         <Text style={{ fontFamily: 'Bold', fontSize: 16 }}>{Utils.getPriceFormat(salePrice)}</Text>
-                        <BoxButton>{'SEPETE AT'}</BoxButton>
+                        <BoxButton callback={_self._onPress}>{addTo}</BoxButton>
                     </View>
                 </View>
             </View>
@@ -302,12 +457,13 @@ class ServiceListItem extends Component {
         this._isMounted = false;
     }
 
-    setAjx = () => {
+    setAjx = async () => {
         const _self = this,
-            origin = { lat: 41.020334, long: 28.889993499999996 },
+            { permission, location } = _self.props.rdx,
             { serviceLatitude = '', serviceLongitude = '' } = _self.props.data;
-        if (serviceLatitude != '' && serviceLongitude != '') {
-            const uri = Utils.getCustomURL({ key: 'location', origins: (origin['lat'] + ',' + origin['long']), destinations: (serviceLatitude + ',' + serviceLongitude) });
+
+        if (serviceLatitude != '' && serviceLongitude != '' && permission) {
+            const uri = Utils.getCustomURL({ key: 'location', origins: (location['coords']['latitude'] + ',' + location['coords']['longitude']), destinations: (serviceLatitude + ',' + serviceLongitude) });
 
             Utils.ajx({ uri: uri }, (res) => {
                 if (res['type'] == 'success' && _self._isMounted) {
@@ -350,6 +506,7 @@ class ServiceListItem extends Component {
     render() {
         const _self = this,
             { serviceName, address } = _self.props.data;
+
         return (
             <TouchableOpacity activeOpacity={0.8} onPress={_self._onPress}>
                 <View style={{ paddingBottom: 20, paddingTop: 20, borderBottomColor: '#dcdcdc', borderBottomWidth: 1 }}>
@@ -389,17 +546,41 @@ class VideoListItem extends Component {
 class FeedsItem extends Component {
     constructor(props) {
         super(props);
+        const _self = this,
+            { like = 0, user_like = false } = _self.props.data;
+        _self.state = {
+            userLike: user_like,
+            like: like
+        };
+        _self.anim = new Animated.Value(0);
     }
 
+    _animate = (status, callback) => {
+        const _self = this;
+
+        Animated.timing(
+            _self.anim,
+            {
+                toValue: status ? 1 : 0,
+                duration: 222,
+                easing: Easing.inOut(Easing.quad)
+            }
+        ).start(() => {
+            if (typeof callback !== 'undefined')
+                callback();
+        });
+    }
+
+    _onRatingClicked = ({ id, userLike }) => {
+        const _self = this;
+        _self.setState({ userLike: userLike });
+    }
 
     _getLike = () => {
         const _self = this,
-            { like, user_like = false } = _self.props.data;
-        return (
-            <View>
+            { userLike, like } = _self.state;
 
-            </View>
-        );
+        return <RatingButton onPress={_self._onRatingClicked} id="rating" value={like} userLike={userLike} style={{ position: 'absolute', top: 10, left: 10 }} />
     }
 
     _getIcon = () => {
@@ -425,6 +606,19 @@ class FeedsItem extends Component {
         );
     }
 
+    _callback = ({ type }) => {
+        const _self = this;
+        if (type == DOUBLE_CLICK) {
+            _self.setState({ userLike: true });
+            _self._animate(true, () => {
+                setTimeout(() => {
+                    _self._animate(false);
+                }, 100);
+            });
+        }
+
+    };
+
     _getImage = () => {
         const _self = this,
             { image = '', type } = _self.props.data;
@@ -434,10 +628,33 @@ class FeedsItem extends Component {
             h = 300;
 
         return (
-            <Image
-                style={{ height: h }}
-                source={{ uri: image }}
-            />
+            <DoubleClickButton callback={_self._callback}>
+                <Image
+                    style={{ height: h }}
+                    source={{ uri: image }}
+                />
+                <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center' }}>
+                    <Animated.Image
+                        style={[
+                            {
+                                width: 180,
+                                height: 180,
+                            },
+                            {
+                                opacity: _self.anim,
+                                transform: [{
+                                    scale: _self.anim.interpolate({
+                                        inputRange: [0, 1],
+                                        outputRange: [0.6, 1]
+                                    }),
+                                }]
+                            }
+                        ]}
+                        source={ICONS['like']}
+                    />
+                </View>
+
+            </DoubleClickButton>
         );
     }
 
@@ -467,8 +684,9 @@ class FeedsItem extends Component {
 
         return (
             <View style={{ marginBottom: 20 }}>
-                <View>
+                <View style={{ position: 'relative' }}>
                     {_self._getImage()}
+                    {_self._getLike()}
                     {_self._getIcon()}
                 </View>
                 {_self._getFooter()}
@@ -487,7 +705,7 @@ const HTML_DEFAULT_PROPS = {
     debug: false
 };
 
-class Viewer extends Component {
+class Viewers extends Component {
 
     constructor(props) {
         super(props);
@@ -511,6 +729,7 @@ class Viewer extends Component {
             { navigation } = _self.props;
         if (navigation)
             _self._Listener.remove();
+
         _self.setAjx({ uri: _self.getUri(), data: _self._getData() });
     }
 
@@ -543,26 +762,6 @@ class Viewer extends Component {
         return data;
     }
 
-    ajx = ({ uri, data = {} }, callback) => {
-        const _self = this;
-        _self.setState({ loading: true });
-        Globals.fetch(uri, JSON.stringify(data), (answer) => {
-            if (_self._isMounted) {
-                if (answer === 'error') {
-                    console.log('fatalllll error: could not get access token');
-                } else {
-                    if (answer.status == 200) {
-                        if (typeof callback !== 'undefined')
-                            callback(answer);
-                    } else {
-
-                    }
-                }
-                _self.setState({ loading: false, refreshing: false });
-            }
-        });
-    }
-
     /* react-native-render-html componenti table tagını çeviremiyor bu yüzden böyle bir kontrol ekledik */
     _clearTag = (data) => {
         return data
@@ -576,13 +775,21 @@ class Viewer extends Component {
             .replace(/<\/td/g, '</div');
     }
 
+    _addStyle = ({ customClass, data }) => {
+        const uri = Utils.getURL({ key: 'style', subKey: 'main' }) + '?' + parseInt(Math.random() * new Date()),
+            css = '<link href="' + uri + '" rel="stylesheet" type="text/css" />',
+            htm = '<div class="ems-mobi-app-container ' + customClass + '">' + (css + data) + '</div>';
+
+        return htm;
+    }
+
     setAjx = ({ uri, data = {} }, callback) => {
         const _self = this,
             { type = VIEWERTYPE['LIST'] } = _self.props.config;
 
-        _self.ajx({ uri: uri, data: data }, function (res) {
+        AJX({ _self: _self, uri: uri, data: data }, function (res) {
 
-            const { keys } = _self.props.config,
+            const { keys, customClass = '' } = _self.props.config,
                 keyArr = keys['arr'] || '',
                 keyTotal = keys['total'] || '';
 
@@ -593,7 +800,7 @@ class Viewer extends Component {
             if (type == VIEWERTYPE['LIST'] || type == VIEWERTYPE['HTMLTOJSON'])
                 _self.setState({ data: data, total: res.data[keyTotal] || 0 });
             else if (type == VIEWERTYPE['WEBVIEW'])
-                _self.setState({ html: data });
+                _self.setState({ html: _self._addStyle({ customClass: customClass, data: data }) });
             else
                 _self.setState({ html: _self._clearTag(data) });
 
@@ -607,19 +814,39 @@ class Viewer extends Component {
     _keyExtractor = (item, index) => {
         const _self = this,
             { keys } = _self.props.config;
-        return (keys['arr'] + '-' + item[keys['id']]).toString();
+        return (keys['arr'] + '-' + item[keys['id']] + '-' + index).toString();
     }
 
     _onGotoDetail = (o) => {
         this.props.navigation.navigate('Detail', o);
     };
 
+    /* item element remove */
+    _removeItem = ({ key = '', value = '' }) => {
+        const _self = this,
+            { data } = _self.state,
+            arr = data.filter(function (item, index) {
+                return item[key] != value;
+            });
+        _self.setState({ data: arr });
+    }
+
     /* Viewer genel callback */
     _callback = (obj) => {
         const _self = this,
-            { callback } = _self.props;
+            { callback, refreshing = false } = _self.props;
+
+        if (refreshing)
+            obj['refreshing'] = _self._refreshing;
+
         if (callback)
             callback(obj);
+    }
+
+    /* refreshing */
+    _refreshing = () => {
+        const _self = this;
+        _self.onDidFocus();
     }
 
     _renderItem = ({ item }) => {
@@ -628,9 +855,9 @@ class Viewer extends Component {
 
         switch (itemType) {
             case ITEMTYPE['ADDRESS']:
-                return <AdressListItem callback={this._callback} onPress={this._onGotoDetail} data={item} />;
+                return <AdressListItem callback={_self._callback} onRemove={_self._removeItem} data={item} />;
             case ITEMTYPE['FAVORITE']:
-                return <FavoriteListItem onPress={this._onGotoDetail} data={item} />;
+                return <FavoriteListItem onRemove={_self._removeItem} data={item} />;
             case ITEMTYPE['ORDER']:
                 return <OrderListItem callback={this._callback} data={item} />;
             case ITEMTYPE['COUPON']:
@@ -638,7 +865,7 @@ class Viewer extends Component {
             case ITEMTYPE['FOLLOWLIST']:
                 return <FollowListItem onPress={this._onGotoDetail} data={item} />;
             case ITEMTYPE['SERVICELIST']:
-                return <ServiceListItem callback={this._callback} onPress={this._onGotoDetail} data={item} />;
+                return <ServiceListItem callback={_self._callback} rdx={_self.props.location} data={item} />;
             case ITEMTYPE['VIDEO']:
                 return <VideoListItem onPress={this._onGotoDetail} data={item} />;
             case ITEMTYPE['FEEDS']:
@@ -649,8 +876,45 @@ class Viewer extends Component {
     }
 
     _getHeader = () => {
-        let header = null;
-        return header;
+        const _self = this,
+            { itemType } = _self.props.config;
+
+        return null;
+    }
+
+    _filtered = (obj) => {
+        const _self = this,
+            { itemType } = _self.props.config;
+        if (itemType == ITEMTYPE['SERVICELIST']) {
+            const { multiValue = [] } = obj,
+                data = {},
+                keys = ['countryId', 'cityId', 'districtName'];
+
+            Object
+                .entries(multiValue)
+                .forEach(([ind, item]) => {
+                    const { key, value } = item;
+                    if (value != -1 && value != Translation['dropdown']['choose'] && keys.includes(key))
+                        data[key] = value;
+                });
+
+            _self.setAjx({ uri: _self.getUri(), data: data });
+        }
+
+    }
+
+    _getFilter = () => {
+        const _self = this,
+            { itemType, filterData = {} } = _self.props.config,
+            { filtered = false } = filterData;
+
+        if (!filtered) return null;
+        switch (itemType) {
+            case ITEMTYPE['SERVICELIST']:
+                return <CountryPicker selectionValue={true} callback={_self._filtered} theme={'LIGHT'} control={false} key={'country'} data={filterData} />;
+            default:
+                return null;
+        }
     }
 
     _onRefresh = () => {
@@ -660,12 +924,24 @@ class Viewer extends Component {
             _self.setState({ refreshing: true }, () => { _self.setAjx({ uri: _self.getUri(), data: _self._getData() }); })
     }
 
-    _onViewableItemsChanged = ({ viewableItems }) => {
-        /* viewport giren itemları döndürür */
+    _viewable = [];
+
+    _onViewableItemChanged = ({ index, item }) => {
         const _self = this,
             { onViewableItemsChanged } = _self.props;
-        if (onViewableItemsChanged)
-            onViewableItemsChanged(viewableItems)
+        if (!_self._viewable.includes(index)) {
+            _self._viewable.push(index);
+            if (onViewableItemsChanged)
+                onViewableItemsChanged(item);
+        }
+    }
+
+    _onViewableItemsChanged = ({ viewableItems }) => {
+        /* viewport giren itemları döndürür */
+        const _self = this;
+        viewableItems.map((item) => {
+            _self._onViewableItemChanged(item)
+        });
     }
 
     _getViewer = () => {
@@ -694,7 +970,14 @@ class Viewer extends Component {
             );
         else if (type == VIEWERTYPE['WEBVIEW'])
             view = (
-                <WebView source={{ html: _self.state.html }} />
+                <View style={[{ paddingLeft: 10, paddingRight: 10, flex: 1 }, { ..._self.props.style }]}>
+                    <WebView
+                        scalesPageToFit={false}
+                        automaticallyAdjustContentInsets={false}
+                        source={{ html: _self.state.html }}
+                    />
+                </View>
+
             );
 
         return view;
@@ -702,8 +985,16 @@ class Viewer extends Component {
 
     render() {
         const _self = this;
-        return _self._getViewer();
+        return (
+            <View style={{ flex: 1 }}>
+                {_self._getFilter()}
+                {_self._getViewer()}
+            </View>
+
+        )
     }
 }
 
-export { Viewer };
+function mapStateToProps(state) { return state }
+const Viewer = connect(mapStateToProps)(Viewers);
+export { Viewer }

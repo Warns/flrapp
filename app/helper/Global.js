@@ -1,8 +1,16 @@
+import {
+    Alert,
+} from 'react-native';
+const Translation = require('root/app/helper/Translation.js');
 module.exports = {
     mapApiKey: 'AIzaSyAvSoqfCr4I9Vb11HtQ6cDEAMki6THBgrQ',
     prefix: 'https://www.flormar.com.tr',
     URLs: {
+        style: {
+            main: '/styles/mobiApp.css'
+        },
         user: {
+            getToken: '/webapi/v3/User/getToken',
             getUser: '/webapi/v3/User/getUser',
             setUser: '/webapi/v3/User/setUser',
             createUser: '/webapi/v3/User/createUser',
@@ -10,6 +18,7 @@ module.exports = {
             recoverPassword: '/webapi/v3/User/recoverPassword',
             changePassword: '/webapi/v3/User/changePassword',
             getFavoriteProductList: '/webapi/v3/User/getFavoriteProductList',
+            deleteFavoriteProduct: '/webapi/v3/User/deleteFavoriteProduct',
             getStockFollowUpList: '/webapi/v3/User/getStockFollowUpList', // takip listem - Stoğa Girenler
             getPriceFollowUpList: '/webapi/v3/User/getPriceFollowUpList', // takip listem - fiyatı düşenler
         },
@@ -44,7 +53,7 @@ module.exports = {
         content: {
             getContent: '/webapi/v3/Content/getContent',
             getDataByUrl: '/webapi/v3/Content/getDataByUrl',
-        },
+        }
     },
     customURLs: {
         location: 'https://maps.googleapis.com/maps/api/distancematrix/json?language={{lang}}&units=metric&origins={{origins}}&destinations={{destinations}}&key={{mapApikey}}'
@@ -188,5 +197,31 @@ module.exports = {
                 if (typeof callback !== 'undefined')
                     callback({ type: 'error', data: error });
             });
+    },
+    confirm: function ({ title = 'Uyarı', message = '' }, callback) {
+        const { cancel, ok } = Translation['confirm'];
+        Alert.alert(
+            title,
+            message,
+            [
+                {
+                    text: cancel,
+                    onPress: () => {
+                        if (typeof callback !== 'undefined')
+                            callback({ type: 'cancel' });
+                    }
+                },
+                {
+                    text: ok,
+                    onPress: () => {
+                        if (typeof callback !== 'undefined')
+                            callback({ type: 'ok' });
+                    }
+                }
+            ],
+            {
+                cancelable: false
+            }
+        )
     }
 };

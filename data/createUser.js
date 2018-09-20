@@ -1,4 +1,5 @@
 const Utils = require('root/app/helper/Global.js');
+const Translation = require('root/app/helper/Translation.js');
 
 module.exports = {
 
@@ -95,7 +96,7 @@ module.exports = {
                     id: 'gender',
                     title: 'Cinsiyet',
                     type: 'select',
-                    values: [{ key: 'Seçiniz', value: -1 }, { key: 'Erkek', value: 'E' }, { key: 'Kadın', value: 'K' }],
+                    values: [{ key: Translation['dropdown']['choose'] || 'Seçiniz', value: -1 }, { key: 'Erkek', value: 'E' }, { key: 'Kadın', value: 'K' }],
                     value: -1,
                     multiple: false,
                     validation: [{ key: 'isSelection' }],
@@ -104,7 +105,7 @@ module.exports = {
                     id: 'genders',
                     title: 'Cinsiyet',
                     type: 'radio',
-                    values: [{ key: 'Seçiniz', value: -1 }, { key: 'Erkek', value: 'E' }, { key: 'Kadın', value: 'K' }],
+                    values: [{ key: Translation['dropdown']['choose'] || 'Seçiniz', value: -1 }, { key: 'Erkek', value: 'E' }, { key: 'Kadın', value: 'K' }],
                     value: -1,
                     validation: [{ key: 'isSelection' }],
                 },

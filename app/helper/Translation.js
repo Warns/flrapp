@@ -1,6 +1,19 @@
-'use strict';
-var React = require('react-native');
 module.exports = {
+    cart: {
+        addTo: 'SEPETE AT'
+    },
+    confirm: {
+        cancel: 'İptal',
+        ok: 'Tamam',
+        removeMessage: 'Silmek istediğinize emin misiniz?'
+    },
+    dropdown:{
+        choose: 'Seçiniz'
+    },
+    address: {
+        remove: 'Sil',
+        edit: 'Düzenle'
+    },
     orders: {
         orderNo: 'Sipariş Numarası',
         orderDate: 'Sipariş Tarihi',
@@ -13,10 +26,11 @@ module.exports = {
         shippingTotal: 'Kargo',
         buttonCargoFollow: 'Kargo Takibi',
         totalPriceWithoutProm: 'Kargo hariç toplam',
-
-        paymentTour: 'Ödeme Türü',
-        bankInformation: 'Banka Bilgisi',
-        cargoCompany: 'Kargo Firması',
+        paymentType: 'Ödeme Türü',
+        bankName: 'Banka Bilgisi',
+        cargoName: 'Kargo Firması',
+        vatExcludingTotal: 'KDV hariç toplam',
+        vat: 'Toplam KDV'
     },
     errorMessage: {
         isEmpty: 'Lütfen {{title}} alanını doldurunuz.',

@@ -6,6 +6,9 @@ export const ICONS = {
     feedInstagram: require('root/assets/icons/feedInstagram.png'),
     feedCampaing: require('root/assets/icons/feedPromo.png'),
     feedVideo: require('root/assets/icons/feedVideo.png'),
+    like: require('root/assets/icons/heartFull.png'),
+    unLike: require('root/assets/icons/heartOutline.png'),
+    close: require('root/assets/icons/close.png'),
 };
 
 /* VIEWER SAYFA TİPLERİ */
@@ -38,11 +41,15 @@ export const FEEDSTYPE = {
     COLLECTION: 'collection'
 };
 
+
+export const CLICK = 'CLICK';
+export const DOUBLE_CLICK = 'DOUBLE_CLICK';
 export const DATA_LOADED = 'DATA_LOADED';
 export const SERVICE_LIST_CLICKED = 'SERVICE_LIST_CLICKED';
 export const ORDER_LIST_CLICKED = 'ORDER_LIST_CLICKED';
 export const ADDRESS_LIST_CLICKED = 'ADDRESS_LIST_CLICKED';
 export const LOCATION_SERVICE = 'LOCATION_SERVICE';
+export const SET_FORM = 'SET_FORM';
 
 /* form */
 export const FORMDATA = {
@@ -96,4 +103,7 @@ export const SET_CART_NUM = 'SET_CART_NUM';
 /* menu */
 export const SHOW_MENU = 'SHOW_MENU';
 export const HIDE_MENU = 'HIDE_MENU';
+
+/* location */
+export const SET_LOCATION = 'SET_LOCATION';
 

@@ -42,7 +42,7 @@ class OrderViewer extends Component {
 
     componentDidMount() {
         const _self = this;
-        _self._isMounted = true; console.log(_self._getData())
+        _self._isMounted = true;
         _self.setAjx({ uri: _self.getUri(), data: _self._getData() });
     }
 
@@ -53,7 +53,7 @@ class OrderViewer extends Component {
 
     _getData = () => {
         const { orderId, orderNo, } = this.props.data.data;
-        return { orderId: orderId, orderNo: orderNo, isGuest: true };
+        return { orderId: orderId, orderNo: orderNo };
     }
 
     getUri = () => {
@@ -129,7 +129,7 @@ class OrderViewer extends Component {
             products = _self.state.data.products;
 
         return products.map((value, index) => {
-            const { productName, smallImageUrl, productCode, unitCode, quantity, salePriceWithoutPromTotal } = value,
+            const { productName, smallImageUrl, shortName, unitCode, quantity, salePriceWithoutPromTotal } = value,
                 view = (
                     <View key={index} style={{ flexDirection: 'row', paddingTop: 20, paddingBottom: 20, paddingRight: 20, paddingLeft: 10, borderBottomColor: '#dcdcdc', borderBottomWidth: 1, }}>
                         <View style={{ width: 60, justifyContent: 'center', }}>
@@ -141,7 +141,7 @@ class OrderViewer extends Component {
                         <View style={{ flex: 1 }}>
                             <View>
                                 <Text style={{ fontFamily: 'Medium', fontSize: 15 }}>{productName}</Text>
-                                <Text style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#555555' }}>{productCode}</Text>
+                                <Text style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#555555' }}>{shortName}</Text>
                             </View>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 21 }}>
                                 <Text style={{ fontFamily: 'RegularTyp2', fontSize: 12 }}>{quantity} {unitCode}</Text>
@@ -179,14 +179,14 @@ class OrderViewer extends Component {
                     <View style={{ paddingLeft: 10, paddingRight: 10, borderBottomColor: '#dcdcdc', borderBottomWidth: 1, paddingBottom: 30 }}>
                         {_self._getTemplate({
                             keys:
-                                ['orderNo', 'paymentTour', 'bankInformation', 'cargoCompany', 'orderDate', 'status', 'currency'], data: data
+                                ['orderNo', 'paymentType', 'bankName', 'cargoName', 'orderDate', 'status', 'currency'], data: data
                         })}
                         {_self._getTemplate({ keys: ['cargoKey'], data: data['cargo'][0] })}
                         {_self._getTemplate({ keys: ['shipAddressText', 'billAddressText'], data: data, style: { alignItems: 'flex-start' } })}
                         {_self._getCargoButton()}
                     </View>
                     <View style={{ paddingLeft: 10, paddingRight: 10, paddingBottom: 10, paddingTop: 20, borderBottomColor: '#dcdcdc', borderBottomWidth: 1, }}>
-                        {_self._getTemplate({ keys: ['totalPriceWithoutProm', 'shippingTotal', 'totalPrice'], data: data, defValue: 0 })}
+                        {_self._getTemplate({ keys: ['vatExcludingTotal', 'vat', 'totalPriceWithoutProm', 'shippingTotal', 'totalPrice'], data: data, defValue: 0 })}
                     </View>
                     <View>
                         {_self._getProducts()}

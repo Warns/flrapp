@@ -49,7 +49,7 @@ class Container extends Component {
 
     render() {
         const _self = this,
-            { theme = 'DARK' } = _self.props,
+            { theme = 'DARK', containerStyle = {}, wrapperStyle = {} } = _self.props,
             { container, wrapper, titleSty, errorMsgSty } = styles,
             { BORDER_WIDTH = 1, BORDER_COLOR = '#dddddd', TITLE_COLOR = '#9b9b9b', ERROR_COLOR = '#d3838d', BACKGROUND_COLOR = '#FFFFFF' } = FORMSTYLE[theme],
             children = _self.props.children,
@@ -74,7 +74,7 @@ class Container extends Component {
             title = <Animated.Text style={[titleSty, { transform: [{ translateY: translateY }], opacity: op, color: TITLE_COLOR }]}>{title}</Animated.Text>
 
         return (
-            <View style={[container]}>
+            <View style={[container, containerStyle]}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5 }}>
                     <View>
                         {title}
@@ -83,7 +83,7 @@ class Container extends Component {
                         {errorMsg}
                     </View>
                 </View>
-                <View style={[wrapper, { borderWidth: BORDER_WIDTH, borderColor: color, backgroundColor: BACKGROUND_COLOR, }]}>
+                <View style={[wrapper, { borderWidth: BORDER_WIDTH, borderColor: color, backgroundColor: BACKGROUND_COLOR, }, wrapperStyle]}>
                     {children}
                 </View>
             </View>

@@ -26,12 +26,11 @@
                     "key": "user",
                     "subKey": "getPriceFollowUpList"
                 },
-                /*"uri": { "key": "user", "subKey": "getStockFollowUpList" },*/
                 "keys": {
                     "id": "productId",
-                    "arr": "products",
+                    "arr": "products"
                 },
-                "data": {},
+                "data": {}
             },
             {
                 "title": "SİPARİŞLERİM",
@@ -62,7 +61,7 @@
                 },
                 "keys": {
                     "id": "addressId",
-                    "arr": "addresses",
+                    "arr": "addresses"
                 },
                 "data": {
                     "addressId": 0
@@ -79,24 +78,25 @@
             }
         ],
         "extra": [
-
             {
                 "title": "FEEDS",
                 "type": "htmlToJSON",
                 "itemType": "feeds",
-                "uri": { "key": "export", "subKey": "getExport" },
+                "uri": {
+                    "key": "export",
+                    "subKey": "getExport"
+                },
                 "siteURI": "/mobiapp-segmentify.html",
                 "keys": {
                     "id": "id",
                     "arr": "html",
                     "obj": "data",
-                    "objArr": "feeds",
+                    "objArr": "feeds"
                 },
                 "data": {
                     "exportType": "mobiAppSegmentify"
                 }
             },
-
             {
                 "title": "MAĞAZALAR",
                 "type": "listViewer",
@@ -121,7 +121,7 @@
             },
             {
                 "title": "KURUMSAL",
-                "type": "htmlViewer",
+                "type": "webViewer",
                 "uri": {
                     "key": "export",
                     "subKey": "getExport"
@@ -143,7 +143,7 @@
             {
                 "showMenu": false,
                 "title": "TARİHÇE",
-                "type": "htmlViewer",
+                "type": "webViewer",
                 "uri": {
                     "key": "export",
                     "subKey": "getExport"
@@ -165,7 +165,7 @@
             {
                 "showMenu": false,
                 "title": "VİZYON & MİSYON",
-                "type": "htmlViewer",
+                "type": "webViewer",
                 "uri": {
                     "key": "export",
                     "subKey": "getExport"
@@ -187,7 +187,7 @@
             {
                 "showMenu": false,
                 "title": "DEĞERLER",
-                "type": "htmlViewer",
+                "type": "webViewer",
                 "uri": {
                     "key": "export",
                     "subKey": "getExport"
@@ -207,6 +207,7 @@
                 }
             },
             {
+                "customClass": "ems-page-company-information",
                 "showMenu": false,
                 "title": "ŞİRKET BİLGİLERİ",
                 "type": "webViewer",
@@ -231,14 +232,14 @@
             {
                 "showMenu": false,
                 "title": "KALİTE POLİTİKAMIZ",
-                "type": "htmlViewer",
+                "type": "webViewer",
                 "uri": {
                     "key": "export",
                     "subKey": "getExport"
                 },
                 "siteURI": "/kalite-politikamiz/",
                 "keys": {
-                    "arr": "html",
+                    "arr": "html"
                 },
                 "data": {
                     "exportType": "coporateEXP",
@@ -253,7 +254,7 @@
             {
                 "showMenu": false,
                 "title": "İNSAN KAYNAKLARI POLİTİKASI",
-                "type": "htmlViewer",
+                "type": "webViewer",
                 "uri": {
                     "key": "export",
                     "subKey": "getExport"
@@ -275,7 +276,7 @@
             {
                 "showMenu": false,
                 "title": "KÜNYE",
-                "type": "htmlViewer",
+                "type": "webViewer",
                 "uri": {
                     "key": "export",
                     "subKey": "getExport"
@@ -297,7 +298,7 @@
             {
                 "showMenu": false,
                 "title": "BİLGİ TOPLUMU MERKEZİ",
-                "type": "htmlViewer",
+                "type": "webViewer",
                 "uri": {
                     "key": "export",
                     "subKey": "getExport"
@@ -318,7 +319,7 @@
             },
             {
                 "title": "İADE İŞLEMLERİ",
-                "type": "htmlViewer",
+                "type": "webViewer",
                 "uri": {
                     "key": "export",
                     "subKey": "getExport"
@@ -339,7 +340,7 @@
             },
             {
                 "title": "MESAFELİ SATIŞ SÖZLEŞMESİ",
-                "type": "htmlViewer",
+                "type": "webViewer",
                 "uri": {
                     "key": "export",
                     "subKey": "getExport"
@@ -360,7 +361,7 @@
             },
             {
                 "title": "SIKÇA SORULAN SORULAR",
-                "type": "htmlViewer",
+                "type": "webViewer",
                 "uri": {
                     "key": "content",
                     "subKey": "getContent"
@@ -375,7 +376,7 @@
             },
             {
                 "title": "İNSAN KAYNAKLARI",
-                "type": "htmlViewer",
+                "type": "webViewer",
                 "uri": {
                     "key": "export",
                     "subKey": "getExport"
@@ -396,7 +397,7 @@
             },
             {
                 "title": "KİŞİSEL VERİLERİN KORUNMASI",
-                "type": "htmlViewer",
+                "type": "webViewer",
                 "uri": {
                     "key": "export",
                     "subKey": "getExport"
@@ -414,120 +415,112 @@
                     ]
                 },
                 "siteURI": "/kvk/"
-            },
+            }
         ],
         "main": [
             {
                 "title": "MAKYAJ",
-                "id": "18775",
-                "img": "https://www.flormar.com.tr/UPLOAD/categories-images/makyaj.jpg",
+                "id": "18655",
+                "img": "/UPLOAD/categories-images/makyaj.jpg",
                 "children": [
                     {
                         "title": "YÜZ",
-                        "id": "18775",
-                        "img": "https://www.flormar.com.tr/UPLOAD/categories-images/makyaj.jpg",
+                        "id": "18708",
+                        "img": "/UPLOAD/categories-images/yuz.jpg",
                         "children": [
                             {
-                                "title": "TÜMÜNÜ GÖR",
-                                "id": "18775"
-                            },
-                            {
                                 "title": "BB KREM",
-                                "id": "18775"
+                                "id": "18713"
                             },
                             {
                                 "title": "FONDÖTEN",
-                                "id": "18775"
+                                "id": "18714"
                             },
                             {
                                 "title": "ALLIK",
-                                "id": "18775"
+                                "id": "18715"
                             },
                             {
                                 "title": "PUDRA",
-                                "id": "18775"
+                                "id": "18716"
                             },
                             {
                                 "title": "KAPATICI",
-                                "id": "18775"
+                                "id": "18717"
                             },
                             {
                                 "title": "BAZ",
-                                "id": "18775"
+                                "id": "18718"
                             },
                             {
                                 "title": "CC KREM",
-                                "id": "18775"
+                                "id": "18719"
                             },
                             {
                                 "title": "BRONZLAŞTIRICI",
-                                "id": "18775"
+                                "id": "18917"
                             },
                             {
-                                "title": "KONTÜR AYDINLATMA",
-                                "id": "18775"
+                                "title": "HIGHLIGHTER VE AYDINLATICI",
+                                "id": "19317"
+                            },
+                            {
+                                "title": "KONTÜR",
+                                "id": "18918"
                             },
                             {
                                 "title": "MAKYAJ SONRASI",
-                                "id": "18775"
+                                "id": "18919"
                             }
                         ]
                     },
                     {
                         "title": "GÖZ",
-                        "id": "18775",
-                        "img": "https://www.flormar.com.tr/UPLOAD/categories-images/makyaj.jpg",
+                        "id": "18709",
+                        "img": "/UPLOAD/categories-images/goz.jpg",
                         "children": [
                             {
-                                "title": "TÜMÜNÜ GÖR",
-                                "id": "18775"
-                            },
-                            {
                                 "title": "GÖZ FARI",
-                                "id": "18775"
+                                "id": "18741"
                             },
                             {
                                 "title": "MASKARA",
-                                "id": "18775"
+                                "id": "18742"
                             },
                             {
-                                "title": "KAŞ",
-                                "id": "18775"
+                                "title": "Kaş Maskarası ve Kaş Farı",
+                                "id": "18743"
                             },
                             {
                                 "title": "GÖZ KALEMİ",
-                                "id": "18775"
+                                "id": "18744"
                             },
                             {
                                 "title": "LİKİT EYELINER",
-                                "id": "18775"
+                                "id": "18745"
                             },
                             {
                                 "title": "GÖZ MAKYAJI TEMİZLEME",
-                                "id": "18775"
+                                "id": "18746"
                             },
                             {
                                 "title": "BAZ",
-                                "id": "18775"
+                                "id": "18747"
                             }
                         ]
                     },
                     {
                         "title": "DUDAK",
-                        "id": "18775",
-                        "img": "https://www.flormar.com.tr/UPLOAD/categories-images/makyaj.jpg",
+                        "id": "18710",
+                        "img": "/UPLOAD/categories-images/dudak.jpg",
                         "children": [
                             {
-                                "title": "TÜMÜNÜ GÖR",
-                                "id": "18775"
-                            },
-                            {
                                 "title": "DUDAK BAKIMI",
-                                "id": "18775"
+                                "id": "18773"
                             },
                             {
                                 "title": "DUDAK PARLATICISI",
-                                "id": "18775"
+                                "id": "18774"
                             },
                             {
                                 "title": "RUJ",
@@ -535,113 +528,96 @@
                             },
                             {
                                 "title": "DUDAK KALEMİ",
-                                "id": "18775"
+                                "id": "18776"
                             },
                             {
                                 "title": "BAZ",
-                                "id": "18775"
+                                "id": "18777"
                             }
                         ]
                     },
                     {
                         "title": "TIRNAK",
-                        "id": "18775",
-                        "img": "https://www.flormar.com.tr/UPLOAD/categories-images/makyaj.jpg",
+                        "id": "18711",
+                        "img": "/UPLOAD/categories-images/tirnak.jpg",
                         "children": [
                             {
-                                "title": "TÜMÜNÜ GÖR",
-                                "id": "18775"
-                            },
-                            {
                                 "title": "OJE",
-                                "id": "18775"
+                                "id": "18789"
                             },
                             {
                                 "title": "TIRNAK BAKIMI",
-                                "id": "18775"
+                                "id": "18790"
                             },
                             {
                                 "title": "OJE KURUTUCU",
-                                "id": "18775"
+                                "id": "18791"
                             },
                             {
                                 "title": "OJE TEMİZLEYİCİ",
-                                "id": "18775"
+                                "id": "18792"
                             }
                         ]
                     },
                     {
                         "title": "VÜCUT",
-                        "id": "18775",
-                        "img": "https://www.flormar.com.tr/UPLOAD/categories-images/makyaj.jpg",
-                        "children": [
-                            {
-                                "title": "TÜMÜNÜ GÖR",
-                                "id": "18775"
-                            }
-                        ]
+                        "id": "18712",
+                        "img": "/UPLOAD/categories-images/vucut-bronsing.jpg",
+                        "children": []
                     }
                 ]
             },
             {
                 "title": "CİLT BAKIMI",
-                "id": "18775",
-                "img": "https://www.flormar.com.tr/UPLOAD/categories-images/cilt-vucut.jpg",
+                "id": "18658",
+                "img": "/UPLOAD/categories-images/cilt-vucut.jpg",
                 "children": [
                     {
                         "title": "YÜZ BAKIMI",
-                        "id": "18775",
-                        "img": "https://www.flormar.com.tr/UPLOAD/categories-images/makyaj.jpg",
+                        "id": "18826",
+                        "img": "/UPLOAD/categories-images/cilt-vucut.jpg",
                         "children": [
                             {
-                                "title": "TÜMÜNÜ GÖR",
-                                "id": "18775"
-                            },
-                            {
                                 "title": "TEMİZLEYİCİLER",
-                                "id": "18775"
+                                "id": "18827"
                             },
                             {
                                 "title": "NEMLENDİRİCİLER",
-                                "id": "18775"
+                                "id": "18831"
+                            },
+                            {
+                                "title": "MASKE",
+                                "id": "19321"
                             }
                         ]
                     },
                     {
                         "title": "EL & VÜCUT BAKIMI",
-                        "id": "18775",
-                        "img": "https://www.flormar.com.tr/UPLOAD/categories-images/makyaj.jpg",
+                        "id": "18834",
+                        "img": "/UPLOAD/categories-images/cilt-vucut.jpg",
                         "children": [
                             {
-                                "title": "TÜMÜNÜ GÖR",
-                                "id": "18775"
-                            },
-                            {
                                 "title": "NEMLENDİRİCİ",
-                                "id": "18775"
+                                "id": "18913"
                             },
                             {
                                 "title": "DUŞ JELİ",
-                                "id": "18775"
+                                "id": "19271"
                             }
                         ]
                     },
                     {
                         "title": "PARFÜM",
-                        "id": "18775",
-                        "img": "https://www.flormar.com.tr/UPLOAD/categories-images/makyaj.jpg",
+                        "id": "18861",
+                        "img": "/UPLOAD/categories-images/parfum.jpg",
                         "children": [
                             {
-                                "title": "TÜMÜNÜ GÖR",
-                                "id": "18775"
-                            },
-                            {
                                 "title": "VÜCUT SPREYLERİ",
-                                "id": "18775"
+                                "id": "18915"
                             },
                             {
                                 "title": "PARFÜMLER",
-                                "id": "18775"
+                                "id": "18916"
                             }
                         ]
                     }
@@ -649,104 +625,87 @@
             },
             {
                 "title": "AKSESUAR",
-                "id": "18775",
-                "img": "https://www.flormar.com.tr/UPLOAD/categories-images/aksesuar.jpg",
+                "id": "18821",
+                "img": "/UPLOAD/categories-images/aksesuar.jpg",
                 "children": [
                     {
                         "title": "YÜZ",
-                        "id": "18775",
-                        "img": "https://www.flormar.com.tr/UPLOAD/categories-images/makyaj.jpg",
+                        "id": "18835",
+                        "img": "/UPLOAD/categories-images/aksesuar.jpg",
                         "children": [
                             {
-                                "title": "TÜMÜNÜ GÖR",
-                                "id": "18775"
-                            },
-                            {
                                 "title": "FIRÇA",
-                                "id": "18775"
+                                "id": "18836"
                             },
                             {
                                 "title": "YARDIMCI MALZEMELER",
-                                "id": "18775"
+                                "id": "18837"
                             },
                             {
                                 "title": "SÜNGER",
-                                "id": "18775"
+                                "id": "18922"
                             },
                             {
                                 "title": "APLİKATÖR",
-                                "id": "18775"
+                                "id": "18923"
                             }
                         ]
                     },
                     {
                         "title": "GÖZ",
-                        "id": "18775",
-                        "img": "https://www.flormar.com.tr/UPLOAD/categories-images/makyaj.jpg",
+                        "id": "18838",
+                        "img": "/UPLOAD/categories-images/aksesuar.jpg",
                         "children": [
                             {
-                                "title": "TÜMÜNÜ GÖR",
-                                "id": "18775"
-                            },
-                            {
                                 "title": "FIRÇA",
-                                "id": "18775"
+                                "id": "18839"
                             },
                             {
                                 "title": "YARDIMCI MALZEMELER",
-                                "id": "18775"
+                                "id": "18840"
                             },
                             {
                                 "title": "TAKMA KİRPİK",
-                                "id": "18775"
+                                "id": "18841"
                             },
                             {
                                 "title": "APLİKATÖR",
-                                "id": "18775"
+                                "id": "18930"
                             }
                         ]
                     },
                     {
                         "title": "TIRNAK",
-                        "id": "18775",
-                        "img": "https://www.flormar.com.tr/UPLOAD/categories-images/makyaj.jpg",
+                        "id": "18843",
+                        "img": "/UPLOAD/categories-images/aksesuar.jpg",
                         "children": [
                             {
-                                "title": "TÜMÜNÜ GÖR",
-                                "id": "18775"
-                            },
-                            {
                                 "title": "MAKAS",
-                                "id": "18775"
+                                "id": "18844"
                             },
                             {
                                 "title": "TÖRPÜ",
-                                "id": "18775"
+                                "id": "18845"
                             },
                             {
                                 "title": "TAKMA TIRNAK",
-                                "id": "18775"
+                                "id": "18846"
                             },
                             {
                                 "title": "YARDIMCI MALZEMELER",
-                                "id": "18775"
+                                "id": "18848"
                             },
                             {
                                 "title": "NAIL ART",
-                                "id": "18775"
+                                "id": "18924"
                             }
                         ]
                     },
                     {
                         "title": "DİĞER",
-                        "id": "18775",
-                        "img": "https://www.flormar.com.tr/UPLOAD/categories-images/makyaj.jpg",
-                        "children": [
-                            {
-                                "title": "TÜMÜNÜ GÖR",
-                                "id": "18775"
-                            }
-                        ]
+                        "id": "18850",
+                        "img": "/UPLOAD/categories-images/aksesuar.jpg",
+                        "children": []
                     }
                 ]
             }
