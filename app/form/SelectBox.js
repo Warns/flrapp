@@ -2,9 +2,12 @@ import React, { Component } from 'react';
 import {
     View,
     StyleSheet,
-    Text,
+    Image,
 } from 'react-native';
 import { Container, Minus99MultipleSelect } from './';
+import {
+    ICONS,
+} from 'root/app/helper/Constant';
 
 class SelectBox extends Component {
     constructor(props) {
@@ -50,7 +53,7 @@ class SelectBox extends Component {
             if (value == item['value'])
                 arr.push(ind);
         });
-        if( arr.length == 0)
+        if (arr.length == 0)
             arr = [0];
         return arr;
     }
@@ -65,16 +68,17 @@ class SelectBox extends Component {
     }
 
     render() {
-        /*const { } = styles;*/
-        const { title, value, error = false, errorMsg = null, multiple = false } = this.props.data;
-        const { control = false, } = this.props;
+        const _self = this,
+            { title, error = false, errorMsg = null, multiple = false } = _self.props.data,
+            { control = false, } = _self.props;
 
         if (control)
-            this._callback();
+            _self._callback();
 
         return (
             <Container titleShow={true} title={title} error={error} errorMsg={errorMsg}>
-                <Minus99MultipleSelect callback={this._closed} selected={this._getIndex()} multiple={multiple} items={this._getItems()} />
+                <Minus99MultipleSelect callback={_self._closed} selected={_self._getIndex()} multiple={multiple} items={_self._getItems()} />
+                <Image source={ICONS['drpIco']} style={{ width: 12, height: 8 }} />
             </Container>
         );
     }

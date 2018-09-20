@@ -308,11 +308,13 @@ class Form extends Component {
             { scrollEnabled = true } = _self.props;
 
         return (
-            <ScrollView scrollEnabled={scrollEnabled} style={[{ flex: 1, paddingLeft: 40, paddingRight: 40 }, { ..._self.props.style }]}>
-                <CustomKeyboard style={{ flex: 1, }}>
-                    {_self._getAllErrMsg()}
-                    {_self.add()}
-                    <LoadingButton theme={theme} onPress={_self._onPress.bind(_self)}>{'GİRİŞ YAP'}</LoadingButton>
+            <ScrollView scrollEnabled={scrollEnabled} style={[{ flex: 1 }]}>
+                <CustomKeyboard style={[{ flex: 1 }]}>
+                    <View style={[{ flex: 1, paddingLeft: 40, paddingRight: 40, paddingBottom: 40 }, { ..._self.props.style }]}>
+                        {_self._getAllErrMsg()}
+                        {_self.add()}
+                        <LoadingButton theme={theme} onPress={_self._onPress.bind(_self)}>{'GİRİŞ YAP'}</LoadingButton>
+                    </View>
                 </CustomKeyboard >
             </ScrollView>
         );

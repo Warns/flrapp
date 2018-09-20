@@ -260,7 +260,7 @@ class Main extends Component {
 const StoreNavigator = createStackNavigator(
     {
         Main: {
-            screen: props => <Main filtered={false} {...props} />,
+            screen: props => <Main filtered={true} {...props} />,
         },
         Search: {
             screen: props => <Main filtered={true} {...props} />,

@@ -72,6 +72,7 @@ class DateTimePicker extends Component {
                         },
                         dateInput: {
                             borderWidth: 0,
+                            alignItems: 'flex-start'
                         },
                         dateText: {
                             color: '#000000',

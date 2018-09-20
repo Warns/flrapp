@@ -26,6 +26,9 @@ import {
     DOUBLE_CLICK,
     SET_FORM,
 } from 'root/app/helper/Constant';
+import {
+    ElevatedView,
+} from 'root/app/components';
 import { RatingButton, DoubleClickButton } from 'root/app/UI';
 import { CountryPicker } from 'root/app/form';
 import { connect } from 'react-redux';
@@ -451,6 +454,14 @@ class ServiceListItem extends Component {
         const _self = this;
         _self._isMounted = true;
         _self.setAjx();
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        const _self = this;
+        if (!Utils.isArrEqual(_self.state.distance, nextState.distance))
+            return true;
+
+        return false;
     }
 
     componentWillUnmount() {
@@ -911,7 +922,33 @@ class Viewers extends Component {
         if (!filtered) return null;
         switch (itemType) {
             case ITEMTYPE['SERVICELIST']:
-                return <CountryPicker selectionValue={true} callback={_self._filtered} theme={'LIGHT'} control={false} key={'country'} data={filterData} />;
+                return (
+                    <ElevatedView
+                        elevation={4}
+                        style={{
+                            backgroundColor: '#FFFFFF',
+                            paddingLeft: 20,
+                            paddingRight: 20,
+                            paddingBottom: 12,
+                            paddingTop: 12,
+                        }}>
+                        <CountryPicker
+                            selectionValue={true}
+                            callback={_self._filtered}
+                            theme={'LIGHT'}
+                            control={false}
+                            key={'country'}
+                            data={filterData}
+                            style={{ flexDirection: 'row', justifyContent: 'space-between', }}
+                            countryContainerStyle={{ width: '50%', paddingRight: 5, marginBottom: 0 }}
+                            countryTitleShow={true}
+                            cityContainerStyle={{ width: '50%', paddingLeft: 5, marginBottom: 0 }}
+                            cityTitleShow={true}
+                            districtContainerStyle={{ width: 0, height: 0, marginBottom: 0 }}
+                            districtTitleShow={true}
+                        />
+                    </ElevatedView>
+                )
             default:
                 return null;
         }

@@ -17,3 +17,4 @@ export * from './Assistant';
 // Other
 export * from './Carousel';
 export * from './Navigation';
+export * from './ElevatedView';
