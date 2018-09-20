@@ -2,9 +2,12 @@ import React, { Component } from 'react';
 import {
     View,
     StyleSheet,
-    Text,
+    Image,
 } from 'react-native';
 import { Container, Minus99MultipleSelect } from './';
+import {
+    ICONS,
+} from 'root/app/helper/Constant';
 
 const Translation = require('root/app/helper/Translation.js');
 const Utils = require('root/app/helper/Global.js');
@@ -223,25 +226,67 @@ class CountryPicker extends Component {
 
     render() {
         const _self = this,
-            { errorState = {} } = this.props.data,
+            { errorState = {} } = _self.props.data,
             { countryId = {}, cityId = {}, districtId = {} } = errorState,
-            { control = false, } = this.props;
-
+            { control = false, countryTitleShow = true, cityTitleShow = true, districtTitleShow = true, } = _self.props,
+            ico = <Image source={ICONS['drpIco']} style={{ width: 12, height: 8 }} />;
+            
         if (control)
-            this._callback();
+            _self._callback();
 
         return (
-            <View>
-                <Container titleShow={true} title={'Ülke'} error={countryId['error'] || false} errorMsg={countryId['errorMsg'] || null}>
-                    <Minus99MultipleSelect slug={'country'} callback={this._closed} selected={this._getIndex({ key: 'country' })} multiple={false} items={this._getItems({ key: 'country' })} />
+            <View style={{ ..._self.props.style }}>
+                <Container
+                    containerStyle={{ ..._self.props.countryContainerStyle }}
+                    wrapperStyle={{ ..._self.props.countryWrapperStyle }}
+                    titleShow={countryTitleShow}
+                    title={'Ülke'}
+                    error={countryId['error'] || false}
+                    errorMsg={countryId['errorMsg'] || null}
+                >
+                    <Minus99MultipleSelect
+                        slug={'country'}
+                        callback={_self._closed}
+                        selected={_self._getIndex({ key: 'country' })}
+                        multiple={false}
+                        items={_self._getItems({ key: 'country' })}
+                    />
+                    {ico}
                 </Container>
 
-                <Container titleShow={true} title={'İl'} error={cityId['error'] || false} errorMsg={cityId['errorMsg'] || null}>
-                    <Minus99MultipleSelect slug={'city'} callback={this._closed} selected={this._getIndex({ key: 'city' })} multiple={false} items={this._getItems({ key: 'city' })} />
+                <Container
+                    containerStyle={{ ..._self.props.cityContainerStyle }}
+                    wrapperStyle={{ ..._self.props.cityWrapperStyle }}
+                    titleShow={cityTitleShow}
+                    title={'İl'}
+                    error={cityId['error'] || false}
+                    errorMsg={cityId['errorMsg'] || null}
+                >
+                    <Minus99MultipleSelect
+                        slug={'city'}
+                        callback={_self._closed}
+                        selected={_self._getIndex({ key: 'city' })}
+                        multiple={false}
+                        items={_self._getItems({ key: 'city' })}
+                    />
+                    {ico}
                 </Container>
 
-                <Container titleShow={true} title={'İlçe'} error={districtId['error'] || false} errorMsg={districtId['errorMsg'] || null}>
-                    <Minus99MultipleSelect slug={'district'} callback={this._closed} selected={this._getIndex({ key: 'district' })} multiple={false} items={this._getItems({ key: 'district' })} />
+                <Container
+                    containerStyle={{ ..._self.props.districtContainerStyle }}
+                    wrapperStyle={{ ..._self.props.districtWrapperStyle }}
+                    titleShow={districtTitleShow}
+                    title={'İlçe'}
+                    error={districtId['error'] || false}
+                    errorMsg={districtId['errorMsg'] || null}
+                >
+                    <Minus99MultipleSelect
+                        slug={'district'}
+                        callback={_self._closed}
+                        selected={_self._getIndex({ key: 'district' })}
+                        multiple={false}
+                        items={_self._getItems({ key: 'district' })} />
+                    {ico}
                 </Container>
             </View>
         );

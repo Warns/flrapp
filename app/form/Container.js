@@ -95,6 +95,7 @@ const styles = StyleSheet.create({
     container: {
         marginBottom: 13,
         position: 'relative',
+        overflow: 'hidden'
     },
     wrapper: {
         height: 50,
