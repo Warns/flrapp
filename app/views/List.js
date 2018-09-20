@@ -61,18 +61,52 @@ export default class List extends React.Component{
 
   };
 
+  onDidFocus = () => {
+    const _self = this,
+        { navigation } = _self.props;
+    if (navigation)
+        _self._Listener.remove();
+
+    this._updateList();
+  }
+
+  componentDidMount() {
+      const _self = this,
+          { navigation } = _self.props;
+      _self._isMounted = true;
+      if (navigation)
+          _self._Listener = navigation.addListener('didFocus', _self.onDidFocus);
+      else
+          _self.onDidFocus();
+
+          SCREEN_DIMENSIONS = Dimensions.get('screen');
+  }
+
+  /* https://medium.com/@TaylorBriggs/your-react-component-can-t-promise-to-stay-mounted-e5d6eb10cbb */
+  componentWillUnmount() {
+      const _self = this,
+          { navigation } = _self.props;
+      _self._isMounted = false;
+      if (navigation)
+          _self._Listener.remove();
+  }
+
+  /*
   componentDidMount(){
+
+    console.log(this.props);
+
     this._updateList();
     SCREEN_DIMENSIONS = Dimensions.get('screen');
   }
-
+*/
   _updateList = () => {
     globals.fetch(
       "https://www.flormar.com.tr/webapi/v3/Product/getProductList",
       JSON.stringify({
         "page": 1,
         "pageSize": 20,
-        "catId": 18775
+        "catId": this.props.category.id,
       }),
       this._listResultHandler
     );

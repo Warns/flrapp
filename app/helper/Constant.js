@@ -9,6 +9,7 @@ export const ICONS = {
     like: require('root/assets/icons/heartFull.png'),
     unLike: require('root/assets/icons/heartOutline.png'),
     close: require('root/assets/icons/close.png'),
+    drpIco: require('root/assets/icons/drpIco.png'),
 };
 
 /* VIEWER SAYFA TİPLERİ */
@@ -95,6 +96,7 @@ export const ADD_CART_ITEM = 'ADD_CART_ITEM';
 
 /* general */
 export const SET_CATEGORIES = 'SET_CATEGORIES';
+export const SET_SELECTED_CATEGORY = 'SET_SELECTED_CATEGORY';
 export const SET_SCREEN_DIMENSIONS = 'SET_SCREEN_DIMENSIONS';
 
 /* user */

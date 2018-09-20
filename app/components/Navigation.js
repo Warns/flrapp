@@ -143,7 +143,7 @@ class Navigation extends Component {
 
     componentDidMount() {
         let data = require('root/data/navigation.json');
-        this.setState({ navigation: data['data'] });
+        //this.setState({ navigation: data['data'] });
     }
 
     // AddEvents

@@ -421,7 +421,7 @@
             {
                 "title": "MAKYAJ",
                 "id": "18655",
-                "img": "/UPLOAD/categories-images/makyaj.jpg",
+                "img": "/UPLOAD/APP/assets/menu-makeup.png",
                 "children": [
                     {
                         "title": "YÜZ",
@@ -488,7 +488,7 @@
                                 "id": "18742"
                             },
                             {
-                                "title": "Kaş Maskarası ve Kaş Farı",
+                                "title": "KAŞ MASKARASI VE KAŞ FARI",
                                 "id": "18743"
                             },
                             {
@@ -570,7 +570,7 @@
             {
                 "title": "CİLT BAKIMI",
                 "id": "18658",
-                "img": "/UPLOAD/categories-images/cilt-vucut.jpg",
+                "img": "/UPLOAD/APP/assets/menu-skincare.png",
                 "children": [
                     {
                         "title": "YÜZ BAKIMI",
@@ -626,7 +626,7 @@
             {
                 "title": "AKSESUAR",
                 "id": "18821",
-                "img": "/UPLOAD/categories-images/aksesuar.jpg",
+                "img": "/UPLOAD/APP/assets/menu-accessories.png",
                 "children": [
                     {
                         "title": "YÜZ",

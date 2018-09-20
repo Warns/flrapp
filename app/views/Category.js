@@ -26,8 +26,8 @@ import ListPage from './List';
 function tabs(categories) {
   let routes = [];
   categories.forEach(element => {
-    routes[element.id] = tab( element );
-    //routes[element.id].routeName = element.selector;
+    routes[element.title] = tab( element );
+    //routes[element.title].params = 'nanay';
   });
 
   return routes;
@@ -37,20 +37,20 @@ function tab( category ){
 
   //console.log( category );
   //const {} = this.props;
-  const screen = getTabForCategory( category );
+  //const screen = getTabForCategory( category );
 
   //console.log( category );
 
   return{
-    screen: screen,
+    screen:  props => getTabForCategory({ category: category, props: props }),
     navigationOptions:{
       title: category.selector,
     }
   }
 }
 
-function getTabForCategory( category ){
-  return() => (<ListPage category={category} />);
+function getTabForCategory( {category, props} ){
+  return <ListPage {...props} category={category} />;
 }
 
 export default class CategoryTabs extends React.Component{
@@ -71,14 +71,17 @@ export default class CategoryTabs extends React.Component{
       tabBarComponent: CustomHorizontalTabs,
       lazy: true,
       tabBarPosition: 'top',
-      initialRouteName:'tumu',
+      initialRouteName: store.getState().general.selectedCategory,
     }
   );
-  
 
   render(){
 
     //console.log('>>>>>', store.getState().general.selectedCategory);
+
+    //console.log( store.getState().general );
+
+    //return(<View />);
 
     return( <this.CategoriesNavigator /> );
     

@@ -12,10 +12,17 @@ import {
   Dimensions,
   Modal,
   ScrollView,
+  SafeAreaView,
 } from 'react-native';
 import Carousel, { ParallaxImage } from 'react-native-snap-carousel';
 import { store } from '../../app/store';
+import { MinimalHeader } from '../components';
 import { BlackButton, LineButton } from '../UI';
+
+import {NAVIGATE, SET_CATEGORIES, SET_SELECTED_CATEGORY} from 'root/app/helper/Constant';
+
+const Utils = require('root/app/helper/Global.js');
+
 
 const width = Dimensions.get('window').width;
 
@@ -27,6 +34,7 @@ class Navigation extends React.Component {
           currentIndex: 0,
           modalVisible: false,
           modalData: [],
+          currentTitle: '',
       }
   }
 
@@ -36,6 +44,11 @@ class Navigation extends React.Component {
   }
 
   _onPressButton = (o) => {
+
+      const { general } = store.getState();
+      store.dispatch( { type: SET_CATEGORIES, value: o.item.children } );
+      this.setState({currentTitle: o.item.title });
+      
       this.setModalVisible(({ visible: true, data: o }));
   }
 
@@ -156,10 +169,13 @@ class Navigation extends React.Component {
           return null;
 
       const itemWidth = 220, offset = (width - itemWidth) * .5;
-      //const modal = <NavigationModal mainTitle={navigation[this.state.currentIndex].title} data={this.state.modalData} onClose={() => { this.setModalVisible({ visible: false }); }} visible={this.state.modalVisible} />
+      const modal = <NavigationModal mainTitle={this.state.currentTitle} data={this.state.modalData} onClose={() => { this.setModalVisible({ visible: false }); }} visible={this.state.modalVisible} />
 
       return (
-              <View style={{flex:1, borderWidth:0}}>{this._getContent()}</View>
+              <View style={{flex:1, borderWidth:0}}>
+                {this._getContent()}
+                {modal}
+              </View>
       );
   }
 }
@@ -167,17 +183,18 @@ class Navigation extends React.Component {
 export default class Discover extends React.Component{
 
   state = {
-    enteries: [
-      {title:'MAKYAJ', key:'a1', thumbnail: require('../../assets/images/menu-makeup.png') },
-      {title:'CILT BAKIMI', key:'a2', thumbnail: require('../../assets/images/menu-skincare.png')},
-      {title:'AKSESUAR', key:'a3', thumbnail: require('../../assets/images/menu-accessories.png')},
-    ],
+    enteries: [],
     dimensions: null,
     ActiveSlide: 0,
     scrollValue: new Animated.Value(0),
   }
 
   componentWillMount(){
+
+    const { settings } = store.getState();
+    this.setState({enteries: settings['menu']['main'] });
+
+
     this.setState({
       dimensions: store.getState().general.SCREEN_DIMENSIONS
     });
@@ -192,7 +209,7 @@ export default class Discover extends React.Component{
     return(
       <View style={{width:width*.7, height:200, paddingLeft:3, paddingRight:3}}>
         <ParallaxImage
-          source={item.thumbnail}
+          source={{uri:Utils.getImage(item.img)}}
           parallaxFactor={0.3}
           containerStyle={{flex:1}}
           style={{resizeMode:'cover'}}
@@ -271,4 +288,101 @@ export default class Discover extends React.Component{
         </View>
     );
   }
+}
+
+
+class NavigationModal extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    _onClose = () => {
+        const { onClose } = this.props;
+        if (onClose)
+            onClose();
+    }
+
+    _onPressButton = ( obj ) => {
+
+        this._onClose();
+
+        store.dispatch( { type: SET_SELECTED_CATEGORY, value: obj.item.title } );
+
+        store.dispatch({type: NAVIGATE, value:{item:{navigation:"Category"}}});
+
+        
+    }
+
+
+    _getContent = () => {
+        const { item } = this.props.data;
+        const main = [];
+
+        const obj = item,
+            k = obj['children'],
+            arr = [],
+            lng = k.length;
+        for (let j = 0; j < lng; ++j) {
+            const n = k[j];
+            const b = <LineButton item={n} key={'btn-' + j} style={{ borderBottomWidth: (j == lng - 1) ? 1 : 0 }} onPress={this._onPressButton}>{n.title}</LineButton>
+            arr.push(b);
+        }
+
+        const wrp = (
+            <View key={'btnWrp'} style={[{paddingTop: 0, flex: 1 }]}>
+                <ScrollView>
+                    {/*<Image
+                        style={{ height: 120 }}
+                        source={{ uri: Utils.getImage(obj.img) }}
+                    />*/}
+                    <View style={{paddingLeft: 20, paddingRight: 20}}>
+                        <LineButton item={{ id: obj.id }} key={'btn-000'} style={{ borderTopWidth: 0 }} onPress={this._onAllPrdPress}>TÜM {obj.title} ÜRÜNLERİ</LineButton>
+                        {arr}
+                    </View>
+                </ScrollView>
+                {/*
+                <View style={{ paddingLeft: 37, paddingRight: 37, justifyContent: 'center', alignItems: 'center', height: 100 }}>
+                    <BlackButton item={{ id: obj.id }} onPress={this._onAllPrdPress}>TÜM {obj.title} ÜRÜNLERİ</BlackButton>
+                </View>
+                */}
+            </View>
+        );
+
+        main.push(wrp);
+
+
+        return main
+
+
+    }
+
+
+    render() {
+        const { visible = false, data, mainTitle } = this.props;
+
+        if (data.length == 0)
+            return null;
+
+        const { img, title } = data.item;
+
+        return (
+            <Modal
+                animationType="slide"
+                transparent={false}
+                visible={visible}
+                onRequestClose={() => { }}
+            >
+                <SafeAreaView style={{ flex: 1, }}>
+                    <View style={{flex: 1, }}>
+
+
+                        <MinimalHeader onPress={this._onClose} title={mainTitle} />
+
+                        {this._getContent()}
+
+                    </View>
+                </SafeAreaView>
+            </Modal>
+        );
+    }
 }
