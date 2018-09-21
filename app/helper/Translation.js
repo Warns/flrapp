@@ -8,7 +8,9 @@ module.exports = {
         removeMessage: 'Silmek istediğinize emin misiniz?'
     },
     dropdown:{
-        choose: 'Seçiniz'
+        choose: 'Seçiniz',
+        countryChoose: 'Ülke Seçiniz',
+        cityChoose: 'İl Seçiniz',
     },
     address: {
         remove: 'Sil',
