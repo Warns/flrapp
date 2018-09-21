@@ -41,7 +41,8 @@ class CountryPicker extends Component {
                 name: 'countryName'
             },
             name: '',
-            value: this._getDefValue('country')
+            value: this._getDefValue('country'),
+            drpChoose: this.props.countryChoose || Translation['dropdown']['choose']
         },
         city: {
             uri: Utils.getURL({ key: 'address', subKey: 'city' }),
@@ -52,7 +53,8 @@ class CountryPicker extends Component {
                 name: 'cityName'
             },
             name: '',
-            value: this._getDefValue('city')
+            value: this._getDefValue('city'),
+            drpChoose: this.props.cityChoose || Translation['dropdown']['choose']
         },
         district: {
             uri: Utils.getURL({ key: 'address', subKey: 'district' }),
@@ -62,7 +64,8 @@ class CountryPicker extends Component {
                 name: 'districtName'
             },
             name: '',
-            value: this._getDefValue('district')
+            value: this._getDefValue('district'),
+            drpChoose: this.props.districtChoose || Translation['dropdown']['choose']
         },
     }
 
@@ -91,10 +94,10 @@ class CountryPicker extends Component {
     _unshift = ({ key, data = [] }) => {
         /* dönen arrayın ilk elemanına seçiniz eklemek için */
         const _self = this,
-            { keys } = _self.config[key] || {},
+            { keys, drpChoose  } = _self.config[key] || {},
             obj = {};
         obj[keys['id']] = -1;
-        obj[keys['name']] = Translation['dropdown']['choose'] || 'Seçiniz';
+        obj[keys['name']] = drpChoose;
         data = [obj, ...data];
 
         return data;
@@ -228,7 +231,7 @@ class CountryPicker extends Component {
         const _self = this,
             { errorState = {} } = _self.props.data,
             { countryId = {}, cityId = {}, districtId = {} } = errorState,
-            { control = false, countryTitleShow = true, cityTitleShow = true, districtTitleShow = true, } = _self.props,
+            { control = false, countryHeaderShow = true, cityHeaderShow = true, districtHeaderShow = true, } = _self.props,
             ico = <Image source={ICONS['drpIco']} style={{ width: 12, height: 8 }} />;
             
         if (control)
@@ -239,7 +242,7 @@ class CountryPicker extends Component {
                 <Container
                     containerStyle={{ ..._self.props.countryContainerStyle }}
                     wrapperStyle={{ ..._self.props.countryWrapperStyle }}
-                    titleShow={countryTitleShow}
+                    showHeader={countryHeaderShow}
                     title={'Ülke'}
                     error={countryId['error'] || false}
                     errorMsg={countryId['errorMsg'] || null}
@@ -257,7 +260,7 @@ class CountryPicker extends Component {
                 <Container
                     containerStyle={{ ..._self.props.cityContainerStyle }}
                     wrapperStyle={{ ..._self.props.cityWrapperStyle }}
-                    titleShow={cityTitleShow}
+                    showHeader={cityHeaderShow}
                     title={'İl'}
                     error={cityId['error'] || false}
                     errorMsg={cityId['errorMsg'] || null}
@@ -275,7 +278,7 @@ class CountryPicker extends Component {
                 <Container
                     containerStyle={{ ..._self.props.districtContainerStyle }}
                     wrapperStyle={{ ..._self.props.districtWrapperStyle }}
-                    titleShow={districtTitleShow}
+                    showHeader={districtHeaderShow}
                     title={'İlçe'}
                     error={districtId['error'] || false}
                     errorMsg={districtId['errorMsg'] || null}

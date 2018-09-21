@@ -1,5 +1,5 @@
 
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   Text,
@@ -19,9 +19,9 @@ import { SHOW_MENU } from 'root/app/helper/Constant';
 
 // Let's go
 
-class DefaultHdr extends Component{
+class DefaultHdr extends Component {
 
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       // state
@@ -30,43 +30,61 @@ class DefaultHdr extends Component{
 
   _onBackPress = () => {
     //this.props.nav.goBack();
+  }
+
+  _onUserMenuPress = () => {
     this.props.dispatch({ type: SHOW_MENU, value: { direction: 'left', type: 'user' } });
   }
 
-  render(){
+  _getUserMenu = () => {
+    const _self = this,
+      { user = {} } = _self.props,
+      { firstName = '' } = user;
+    if (firstName != '')
+      return (
+        <TouchableOpacity style={{ padding: 5, paddingRight: 0 }} onPress={this._onUserMenuPress}>
+          <Text>{firstName}</Text>
+        </TouchableOpacity>
+      );
+    else
+      return null;
+  }
 
+  render() {
+    const _self = this;
     //console.log( this.props );
 
-    return(
-        <View style={styles.wrapper}>
-          <View style={{flex:1, flexDirection:'row'}}>
-            <TouchableOpacity style={{padding:5, paddingRight:0}} onPress={this._onBackPress}>
-              <Image source={require('../../../assets/images/icons/back.png')} style={{width:40, height:40, resizeMode:'contain'}} />
-            </TouchableOpacity>
-            <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
-              <Image style={styles.logo} source={require('../../../assets/images/logo-b.png')} />
-            </View>
-            <View style={{padding:5, paddingRight:10}}>
-              <Cart />
-            </View>
+    return (
+      <View style={styles.wrapper}>
+        <View style={{ flex: 1, flexDirection: 'row' }}>
+          <TouchableOpacity style={{ padding: 5, paddingRight: 0 }} onPress={this._onBackPress}>
+            <Image source={require('../../../assets/images/icons/back.png')} style={{ width: 40, height: 40, resizeMode: 'contain' }} />
+          </TouchableOpacity>
+          {_self._getUserMenu()}
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <Image style={styles.logo} source={require('../../../assets/images/logo-b.png')} />
+          </View>
+          <View style={{ padding: 5, paddingRight: 10 }}>
+            <Cart />
           </View>
         </View>
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  wrapper:{
+  wrapper: {
     height: 70,
     backgroundColor: '#FFFFFF',
-    paddingTop:20,
+    paddingTop: 20,
   },
-  title:{
-    fontFamily:'brandon',
-    fontSize:16,
+  title: {
+    fontFamily: 'brandon',
+    fontSize: 16,
   },
-  logo:{
-    width:124, height:28, resizeMode:'contain'
+  logo: {
+    width: 124, height: 28, resizeMode: 'contain'
   },
 });
 

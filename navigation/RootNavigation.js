@@ -13,8 +13,6 @@ import StoreNavigation from './StoreNavigation';
 import ExtraNavigation from './ExtraNavigation';
 import HomeTabNavigator from './HomeTabNavigation';
 
-import { MapViewer } from 'root/app/viewer';
-
 //import ProductPage from '../app/views/Product';
 
 import { DefaultHeader } from '../app/components';
@@ -37,7 +35,7 @@ const RootStackNavigator = createStackNavigator(
     Splash: {
       screen: SplashPage,
     },
-    
+
     Home: {
       screen: HomeTabNavigator,
       navigationOptions: {
@@ -61,8 +59,10 @@ const RootStackNavigator = createStackNavigator(
     },
 
     Store: {
-      //screen: props => <MapViewer {...props} />
-      screen: props => <StoreNavigation />
+      screen: props => <StoreNavigation />,
+      navigationOptions: {
+        header: () => <DefaultHeader />,
+      }
     }
 
   },

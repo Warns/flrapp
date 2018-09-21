@@ -30,7 +30,8 @@ export const ITEMTYPE = {
     FOLLOWLIST: 'followList',
     SERVICELIST: 'serviceList',
     VIDEO: 'video',
-    FEEDS: 'feeds'
+    FEEDS: 'feeds',
+    TRIGGERBUTTON: 'trigger'
 };
 
 export const FEEDSTYPE = {
@@ -100,6 +101,7 @@ export const SET_SELECTED_CATEGORY = 'SET_SELECTED_CATEGORY';
 export const SET_SCREEN_DIMENSIONS = 'SET_SCREEN_DIMENSIONS';
 
 /* user */
+export const SET_USER = 'SET_USER';
 export const SET_CART_NUM = 'SET_CART_NUM';
 
 /* menu */

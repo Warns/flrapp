@@ -903,12 +903,12 @@ class Viewers extends Component {
 
             Object
                 .entries(multiValue)
-                .forEach(([ind, item]) => {
-                    const { key, value } = item;
-                    if (value != -1 && value != Translation['dropdown']['choose'] && keys.includes(key))
+                .forEach(([ind, item]) => { 
+                    const { key, value } = item; 
+                    if (value != -1 && ( value != '' && value != Translation['dropdown']['choose'] && value != Translation['dropdown']['countryChoose'] && value != Translation['dropdown']['cityChoose'] && value != Translation['dropdown']['districtChoose'] ) && keys.includes(key))
                         data[key] = value;
                 });
-
+               
             _self.setAjx({ uri: _self.getUri(), data: data });
         }
 
@@ -941,11 +941,14 @@ class Viewers extends Component {
                             data={filterData}
                             style={{ flexDirection: 'row', justifyContent: 'space-between', }}
                             countryContainerStyle={{ width: '50%', paddingRight: 5, marginBottom: 0 }}
-                            countryTitleShow={true}
+                            countryHeaderShow={false}
                             cityContainerStyle={{ width: '50%', paddingLeft: 5, marginBottom: 0 }}
-                            cityTitleShow={true}
-                            districtContainerStyle={{ width: 0, height: 0, marginBottom: 0 }}
-                            districtTitleShow={true}
+                            cityHeaderShow={false}
+                            districtContainerStyle={{ width: 0, height: 0, marginBottom: 0, opacity: 0 }}
+                            districtHeaderShow={false}
+                            countryChoose={Translation['dropdown']['countryChoose']}
+                            cityChoose={Translation['dropdown']['cityChoose']}
+                            districtChoose={Translation['dropdown']['districtChoose']}
                         />
                     </ElevatedView>
                 )

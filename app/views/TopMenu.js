@@ -11,7 +11,7 @@ import { SafeAreaView } from 'react-navigation';
 import { connect } from 'react-redux';
 import { LineButton } from 'root/app/UI';
 import { GestureRecognizer } from 'root/app/helper';
-import { NAVIGATE, HIDE_MENU } from 'root/app/helper/Constant';
+import { NAVIGATE, HIDE_MENU, ITEMTYPE } from 'root/app/helper/Constant';
 
 class CustomModal extends Component {
     constructor(props) {
@@ -202,9 +202,15 @@ class TopMenu extends Component {
     }
 
     _onMenuClicked = (obj) => {
-        const _self = this;
-        _self.props.dispatch({ type: HIDE_MENU });
-        _self.props.dispatch({ type: NAVIGATE, value: obj });
+        const _self = this,
+            { type } = obj['item'] || {};
+        _self.props.dispatch({ type: HIDE_MENU });/* modal komple kapatıyor */
+
+        /* setting.json ile oluşturulan button tipine göre işlem yapmak */
+        if (type == ITEMTYPE['TRIGGERBUTTON'])
+            console.log(type);
+        else
+            _self.props.dispatch({ type: NAVIGATE, value: obj });
     }
 
     render() {
