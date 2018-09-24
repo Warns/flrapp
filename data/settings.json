@@ -99,6 +99,24 @@
                 }
             },
             {
+                "title": "KAMPANYALAR",
+                "type": "listViewer",
+                "itemType": "campaing",
+                "uri": {
+                    "key": "banner",
+                    "subKey": "getBannerList"
+                },
+                "siteURI": "/kampanyalar.html",
+                "keys": {
+                    "id": "id",
+                    "arr": "banners",
+                },
+                "data": {
+                    "bgrCode": "6764"
+                },
+                "customFunc": "campaing"
+            },
+            {
                 "title": "MAĞAZALAR",
                 "type": "listViewer",
                 "itemType": "serviceList",

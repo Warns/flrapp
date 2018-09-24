@@ -9,6 +9,9 @@ module.exports = {
         style: {
             main: '/styles/mobiApp.css'
         },
+        banner: {
+            getBannerList: '/webapi/v3/Banner/getBannerList' 
+        },
         product: {
             getProductList: '/webapi/v3/Product/getProductList',
         },

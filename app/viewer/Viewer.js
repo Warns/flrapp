@@ -542,6 +542,21 @@ class VideoListItem extends Component {
     }
 }
 
+class CampaingItem extends Component {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        const { image, utpCode } = this.props.data;
+        return (
+            <Image
+                style={{ height: 300 }}
+                source={{ uri: Utils.getImage(image) }}
+            />
+        )
+    }
+}
+
 /*
     Segmentify feeds
     
@@ -794,17 +809,48 @@ class Viewers extends Component {
         return htm;
     }
 
+    /* özel durumlarda datayı manipule etmek için kullanacağız. Örneğin kampanya sayfası için dönen datayı */
+    _customFunc = (data) => {
+        const _self = this,
+            { customFunc = '' } = _self.props.config;
+
+        if (customFunc == 'campaing') {
+            const arr = [];
+            Object
+                .entries(data)
+                .forEach(([ind, item]) => {
+                    const obj = {};
+                    Object
+                        .entries(item['parameters'])
+                        .forEach(([childInd, child]) => {
+                            obj['id'] = ind;
+                            if (child['parameterKey'] == 'prmCamImgMobile')
+                                obj['image'] = child['parameterValue'];
+                            else if (child['parameterKey'] == 'prmCamID')
+                                obj['utpCode'] = child['parameterValue'];
+                        })
+                    arr.push(obj);
+                });
+            data = arr;
+        }
+        return data;
+    }
+
     setAjx = ({ uri, data = {} }, callback) => {
         const _self = this,
             { type = VIEWERTYPE['LIST'] } = _self.props.config;
 
         AJX({ _self: _self, uri: uri, data: data }, function (res) {
 
-            const { keys, customClass = '' } = _self.props.config,
+            const { keys, customClass = '', customFunc = '' } = _self.props.config,
                 keyArr = keys['arr'] || '',
                 keyTotal = keys['total'] || '';
 
             let data = res.data[keyArr];
+
+            if (customFunc != '')
+                data = _self._customFunc(data);
+
             if (type == VIEWERTYPE['HTMLTOJSON'])
                 data = JSON.parse(data)[keys['obj']][keys['objArr']];
 
@@ -881,6 +927,8 @@ class Viewers extends Component {
                 return <VideoListItem onPress={this._onGotoDetail} data={item} />;
             case ITEMTYPE['FEEDS']:
                 return <FeedsItem data={item} />;
+            case ITEMTYPE['CAMPAING']:
+                return <CampaingItem data={item} />;                
             default:
                 return null;
         }
@@ -903,12 +951,12 @@ class Viewers extends Component {
 
             Object
                 .entries(multiValue)
-                .forEach(([ind, item]) => { 
-                    const { key, value } = item; 
-                    if (value != -1 && ( value != '' && value != Translation['dropdown']['choose'] && value != Translation['dropdown']['countryChoose'] && value != Translation['dropdown']['cityChoose'] && value != Translation['dropdown']['districtChoose'] ) && keys.includes(key))
+                .forEach(([ind, item]) => {
+                    const { key, value } = item;
+                    if (value != -1 && (value != '' && value != Translation['dropdown']['choose'] && value != Translation['dropdown']['countryChoose'] && value != Translation['dropdown']['cityChoose'] && value != Translation['dropdown']['districtChoose']) && keys.includes(key))
                         data[key] = value;
                 });
-               
+
             _self.setAjx({ uri: _self.getUri(), data: data });
         }
 
