@@ -31,7 +31,8 @@ export const ITEMTYPE = {
     SERVICELIST: 'serviceList',
     VIDEO: 'video',
     FEEDS: 'feeds',
-    TRIGGERBUTTON: 'trigger'
+    TRIGGERBUTTON: 'triggerButton',
+    EXITBUTTON: 'exitButton'
 };
 
 export const FEEDSTYPE = {
@@ -102,6 +103,7 @@ export const SET_SCREEN_DIMENSIONS = 'SET_SCREEN_DIMENSIONS';
 
 /* user */
 export const SET_USER = 'SET_USER';
+export const REMOVE_USER = 'REMOVE_USER';
 export const SET_CART_NUM = 'SET_CART_NUM';
 
 /* menu */

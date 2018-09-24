@@ -1,5 +1,6 @@
 import { 
     SET_USER,
+    REMOVE_USER,
     SET_CART_NUM 
 } from 'root/app/helper/Constant';
 
@@ -19,6 +20,7 @@ export default function user( state = userInitialState, action ){
             ...state,
             ...action.value
         };
+        case REMOVE_USER: return {};
         default:
             return state;
     }

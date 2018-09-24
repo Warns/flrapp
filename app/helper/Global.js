@@ -18,6 +18,7 @@ module.exports = {
             setUser: '/webapi/v3/User/setUser',
             createUser: '/webapi/v3/User/createUser',
             login: '/webapi/v3/User/login',
+            logout: '/webapi/v3/User/logout',
             recoverPassword: '/webapi/v3/User/recoverPassword',
             changePassword: '/webapi/v3/User/changePassword',
             getFavoriteProductList: '/webapi/v3/User/getFavoriteProductList',

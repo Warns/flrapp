@@ -69,7 +69,8 @@
             },
             {
                 "title": "ÇIKIŞ",
-                "type": "trigger",
+                "type": "triggerButton",
+                "itemType": "exitButton",
                 "uri": {
                     "key": "user",
                     "subKey": "logout"
