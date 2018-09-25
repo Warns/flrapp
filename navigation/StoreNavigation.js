@@ -4,6 +4,7 @@ import {
     Text,
     Animated,
     Image,
+    Platform,
 } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 import { StoreHeader, } from 'root/app/components/';
@@ -156,6 +157,14 @@ class Detail extends React.Component {
                         if (showDetail && serviceId != detail['serviceId'])
                             op = 0.5;
 
+                        let img = null;
+                        if (Platform.OS === 'ios')
+                            img = (
+                                <View>
+                                    <Image source={ICONS['storeLocation']} style={{ width: 40, height: 40 }} />
+                                </View>
+                            );
+
                         return (
                             <Marker
                                 key={index}
@@ -163,9 +172,7 @@ class Detail extends React.Component {
                                 onPress={e => { e.stopPropagation(); _self._onMarkerClicked(e.nativeEvent, index) }}
                                 style={{ opacity: op }}
                             >
-                                <View>
-                                    <Image source={ICONS['storeLocation']} style={{ width: 40, height: 40 }} />
-                                </View>
+                                {img}
                             </Marker>
                         );
                     }
@@ -260,6 +267,7 @@ class Main extends Component {
 
 const StoreNavigator = createStackNavigator(
     {
+
         Main: {
             screen: props => <Main filtered={true} {...props} />,
             navigationOptions: {
