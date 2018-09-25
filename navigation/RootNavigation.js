@@ -61,7 +61,7 @@ const RootStackNavigator = createStackNavigator(
     Store: {
       screen: props => <StoreNavigation />,
       navigationOptions: {
-        header: () => <DefaultHeader />,
+        header: () => null,
       }
     }
 

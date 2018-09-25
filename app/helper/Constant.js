@@ -10,6 +10,9 @@ export const ICONS = {
     unLike: require('root/assets/icons/heartOutline.png'),
     close: require('root/assets/icons/close.png'),
     drpIco: require('root/assets/icons/drpIco.png'),
+    list: require('root/assets/icons/list.png'),
+    map: require('root/assets/icons/map.png'),
+    back: require('root/assets/images/icons/back.png')
 };
 
 /* VIEWER SAYFA TİPLERİ */

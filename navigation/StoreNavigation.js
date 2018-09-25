@@ -6,6 +6,7 @@ import {
     Image,
 } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
+import { StoreHeader, } from 'root/app/components/';
 import { LocationService, } from 'root/app/helper/';
 import { Viewer } from 'root/app/viewer/';
 import {
@@ -261,6 +262,9 @@ const StoreNavigator = createStackNavigator(
     {
         Main: {
             screen: props => <Main filtered={true} {...props} />,
+            navigationOptions: {
+                header: () => <StoreHeader />,
+            }
         },
         Search: {
             screen: props => <Main filtered={true} {...props} />,

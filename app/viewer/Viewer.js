@@ -803,8 +803,10 @@ class Viewers extends Component {
 
     _addStyle = ({ customClass, data }) => {
         const uri = Utils.getURL({ key: 'style', subKey: 'main' }) + '?' + parseInt(Math.random() * new Date()),
+            opened = '<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"></head><body>',
+            closed = '</body></html>',
             css = '<link href="' + uri + '" rel="stylesheet" type="text/css" />',
-            htm = '<div class="ems-mobi-app-container ' + customClass + '">' + (css + data) + '</div>';
+            htm = opened + '<div class="ems-mobi-app-container ' + customClass + '">' + (css + data) + '</div>' + closed;
 
         return htm;
     }
@@ -928,7 +930,7 @@ class Viewers extends Component {
             case ITEMTYPE['FEEDS']:
                 return <FeedsItem data={item} />;
             case ITEMTYPE['CAMPAING']:
-                return <CampaingItem data={item} />;                
+                return <CampaingItem data={item} />;
             default:
                 return null;
         }
@@ -1040,7 +1042,6 @@ class Viewers extends Component {
         if (type == VIEWERTYPE['LIST'] || type == VIEWERTYPE['HTMLTOJSON'])
             view = (
                 <FlatList
-                    style={[{ paddingLeft: 10, paddingRight: 10 }, { ..._self.props.style }]}
                     data={_self.state.data}
                     keyExtractor={_self._keyExtractor}
                     renderItem={_self._renderItem}
@@ -1058,7 +1059,7 @@ class Viewers extends Component {
             );
         else if (type == VIEWERTYPE['WEBVIEW'])
             view = (
-                <View style={[{ paddingLeft: 10, paddingRight: 10, flex: 1 }, { ..._self.props.style }]}>
+                <View style={{ flex: 1, }}>
                     <WebView
                         scalesPageToFit={false}
                         automaticallyAdjustContentInsets={false}
@@ -1074,10 +1075,12 @@ class Viewers extends Component {
     render() {
         const _self = this;
         return (
-            <View style={{ flex: 1 }}>
+            <View style={{ flex: 1, }}>
                 {_self._getFilter()}
-                {_self._getViewer()}
-            </View>
+                <View style={[{ flex: 1, paddingLeft: 10, paddingRight: 10 }, { ..._self.props.style }]}>
+                    {_self._getViewer()}
+                </View>
+            </View >
 
         )
     }
