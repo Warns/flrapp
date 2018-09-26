@@ -9,25 +9,40 @@ import {
 import {
     ICONS,
 } from 'root/app/helper/Constant';
+import { IconButton } from 'root/app/UI';
+
+const Translation = require('root/app/helper/Translation.js');
 
 class StoreHeader extends Component {
     constructor(props) {
         super(props);
     }
 
+    _onBack = () => {
+
+    }
+
+    _onGotoScene = () => {
+        const _self = this,
+            { navigation } = _self.props;
+
+        if (navigation)
+            navigation.navigate('Detail', {});
+    }
+
     render() {
+
         return (
             <View style={styles.wrapper}>
-                <View style={{ flex: 1, flexDirection: 'row' }}>
-                    <TouchableOpacity style={{ padding: 5, paddingRight: 0 }} onPress={this._onBackPress}>
-                    <Image source={ICONS['back']} style={{width:40, height:40, resizeMode:'contain'}} />
-                    </TouchableOpacity>
-                    <View style={{ flex: 1, justifyContent: 'center' }}>
-                        <Text style={styles.title}>{'YAKIN MAĞAZALAR'}</Text>
-                    </View>
-                    <View style={{ padding: 5, paddingRight: 10 }}>
+                <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
 
+                    <IconButton callback={this._onBack} ico={'back'} icoStyle={{ width: 40, height: 40, resizeMode: 'contain' }} style={{ width: 40, height: 40 }} />
+
+                    <View style={{ flex: 1, justifyContent: 'center' }}>
+                        <Text style={styles.title}>{Translation['store']['headerTitle']}</Text>
                     </View>
+
+                    <IconButton callback={this._onGotoScene} ico={'map'} icoStyle={{ width: 40, height: 40, resizeMode: 'contain' }} style={{ width: 40, height: 40 }} />
                 </View>
             </View>
         );
@@ -41,6 +56,8 @@ const styles = StyleSheet.create({
         height: 70,
         backgroundColor: '#FFFFFF',
         paddingTop: 20,
+        paddingRight: 10,
+        paddingLeft: 10,
     },
     title: {
         fontFamily: 'brandon',

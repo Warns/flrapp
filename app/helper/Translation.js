@@ -17,6 +17,9 @@ module.exports = {
         remove: 'Sil',
         edit: 'Düzenle'
     },
+    store: {
+        headerTitle: 'YAKIN MAĞAZALAR'
+    },
     orders: {
         orderNo: 'Sipariş Numarası',
         orderDate: 'Sipariş Tarihi',

@@ -104,10 +104,12 @@ class Detail extends React.Component {
     constructor(props) {
         super(props);
         const _self = this,
-            { activeItem = null, data = {}, location, permission } = _self.props.navigation.state.params;
+            { navigation = {} } = _self.props,
+            { activeItem = null, data = {}, location, permission } = navigation.state.params;
+
         _self.Map = null;
         _self.state = {
-            markers: data['data'], // all data
+            markers: data['data'] || [], // all data
             showDetail: activeItem ? true : false, // address detail show, hide
             detail: activeItem || {}, // address detail data
             location: location,
@@ -267,11 +269,10 @@ class Main extends Component {
 
 const StoreNavigator = createStackNavigator(
     {
-
         Main: {
             screen: props => <Main filtered={true} {...props} />,
             navigationOptions: {
-                header: () => <StoreHeader />,
+                header: (props) => <StoreHeader {...props} />,
             }
         },
         Search: {
