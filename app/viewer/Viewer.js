@@ -721,7 +721,7 @@ class Viewers extends Component {
             { navigation } = _self.props;
         if (navigation)
             _self._Listener.remove();
-
+        
         _self.setAjx({ uri: _self.getUri(), data: _self._getData() });
     }
 

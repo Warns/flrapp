@@ -24,6 +24,20 @@ class CountryPicker extends Component {
         }
     }
 
+    _addServices = ({ type, obj }) => {
+        const _self = this,
+            { services = false } = _self.props.data;
+        if (services) {
+            if (type == 'country')
+                obj['countryOfServiceFl'] = true;
+            else if (type == 'city')
+                obj['cityOfServiceFl'] = true;
+            else if (type == 'district')
+                obj['districtOfServiceFl'] = true;
+        }
+        return obj;
+    }
+
     _getDefValue = (key) => {
         const _self = this,
             { value = {} } = _self.props.data || {},
@@ -81,9 +95,9 @@ class CountryPicker extends Component {
             cityId = _self.config['city']['value'];
 
         _self._isMounted = true;
-        _self.setAjx({ key: 'country', data: { countryId: 0 } });
-        _self.setAjx({ key: 'city', data: { countryId: countryId } });
-        _self.setAjx({ key: 'district', data: { countryId: countryId, cityId: cityId } });
+        _self.setAjx({ key: 'country', data: _self._addServices({ type: 'country', obj: { countryId: 0 } }) });
+        _self.setAjx({ key: 'city', data: _self._addServices({ type: 'city', obj: { countryId: countryId } }) });
+        _self.setAjx({ key: 'district', data: _self._addServices({ type: 'district', obj: { countryId: countryId, cityId: cityId } }) });
     }
 
     /* https://medium.com/@TaylorBriggs/your-react-component-can-t-promise-to-stay-mounted-e5d6eb10cbb */
@@ -94,7 +108,7 @@ class CountryPicker extends Component {
     _unshift = ({ key, data = [] }) => {
         /* dönen arrayın ilk elemanına seçiniz eklemek için */
         const _self = this,
-            { keys, drpChoose  } = _self.config[key] || {},
+            { keys, drpChoose } = _self.config[key] || {},
             obj = {};
         obj[keys['id']] = -1;
         obj[keys['name']] = drpChoose;
@@ -186,12 +200,12 @@ class CountryPicker extends Component {
         if (key == 'country') {
             _self.config['city']['value'] = -1;
             _self.config['district']['value'] = -1;
-            _self.setAjx({ key: 'city', data: { countryId: id } }, function () {
+            _self.setAjx({ key: 'city', data: _self._addServices({ type: 'city', obj: { countryId: id } }) }, function () {
                 _self.setState({ district: _self._unshift({ key: 'district' }) })
             });
         } else if (key == 'city') {
             _self.config['district']['value'] = -1;
-            _self.setAjx({ key: 'district', data: { countryId: countryId, cityId: cityId } });
+            _self.setAjx({ key: 'district', data: _self._addServices({ type: 'district', obj: { countryId: countryId, cityId: cityId } }) });
         } else if (key == 'district') {
 
         }
@@ -233,7 +247,7 @@ class CountryPicker extends Component {
             { countryId = {}, cityId = {}, districtId = {} } = errorState,
             { control = false, countryHeaderShow = true, cityHeaderShow = true, districtHeaderShow = true, } = _self.props,
             ico = <Image source={ICONS['drpIco']} style={{ width: 12, height: 8 }} />;
-            
+
         if (control)
             _self._callback();
 

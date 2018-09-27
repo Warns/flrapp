@@ -109,7 +109,7 @@ class Detail extends React.Component {
 
         _self.Map = null;
         _self.state = {
-            markers: data['data'] || [], // all data
+            markers: data['data'] || [], // all data
             showDetail: activeItem ? true : false, // address detail show, hide
             detail: activeItem || {}, // address detail data
             location: location,
@@ -208,6 +208,7 @@ class Detail extends React.Component {
 }
 
 class Main extends Component {
+
     constructor(props) {
         super(props);
         this.state = {
@@ -238,20 +239,34 @@ class Main extends Component {
         if (permission === true) {
             const { latitude = '', longitude = '' } = location['coords'] || {};
 
-            DATA['data'] = {
-                latitude: latitude,
-                longitude: longitude
-            };
+            if (filtered) {
 
-            DATA['filterData'] = {
-                filtered: filtered,
-                id: 'country',
-                value: {
-                    country: 1,
-                    city: 0,
-                    district: 0,
-                }
-            };
+                /* 
+                    not: iilk açılışta tüm data gelsin denilirse data kısmından countryId silinmeli
+                */
+                const defCountry = 1;
+
+                DATA['data'] = {
+                    countryId: defCountry,
+                };
+
+                DATA['filterData'] = {
+                    filtered: filtered,
+                    id: 'country',
+                    value: {
+                        country: defCountry,
+                        city: 0,
+                        district: 0,
+                    },
+                    services: true
+                };
+            } else {
+                DATA['data'] = {
+                    latitude: latitude,
+                    longitude: longitude,
+                    distance: 3,
+                };
+            }
 
             view = <Viewer config={DATA} callback={_self._callback} />;
         } else if (permission === false)

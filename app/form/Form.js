@@ -33,7 +33,28 @@ class Form extends Component {
     }
 
     componentWillUnmount() {
-        this._isMounted = false;
+        const _self = this,
+            { data = {} } = _self.props;
+        _self._isMounted = false;
+
+        /*  
+            not: Form Modalda açıldığında hatalı giriş yapılmışsa ve modal kapatılıp tekrar açılmışsa hata mesajını resetlemek için kullanılır 
+        */
+        data['fields'].map((item, ind) => {
+            item['items'].map((itm) => {
+                const { type } = itm;
+                if (type == 'countryPicker')
+                    itm['errorState'] = {
+                        countryId: { error: false, errorMsg: null },
+                        cityId: { error: false, errorMsg: null },
+                        districtId: { error: false, errorMsg: null }
+                    }
+                else{
+                    itm['error'] = false;
+                    itm['errorMsg'] = null;
+                }  
+            });
+        });
     }
 
     setAjx = () => {
