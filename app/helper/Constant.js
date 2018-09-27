@@ -117,3 +117,5 @@ export const HIDE_MENU = 'HIDE_MENU';
 /* location */
 export const SET_LOCATION = 'SET_LOCATION';
 
+/* offline notice */
+export const SET_CONNECTION = 'SET_CONNECTION';

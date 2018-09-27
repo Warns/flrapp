@@ -10,8 +10,6 @@ const userInitialState = {
 
 export default function user( state = userInitialState, action ){
     
-    console.log('this is user');
-
     switch ( action.type ) {
         case SET_CART_NUM: return {
             ID: action.value
