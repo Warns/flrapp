@@ -67,6 +67,7 @@ export const FORMDATA = {
     createAddress: require('root/data/createAddress.js'),
     setAddress: require('root/data/setAddress.js'),
     setUser: require('root/data/setUser.js'),
+    productFilter: require('root/data/productFilter.js'),
 };
 
 /* form style, from->container.js */

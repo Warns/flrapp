@@ -49,10 +49,10 @@ class Form extends Component {
                         cityId: { error: false, errorMsg: null },
                         districtId: { error: false, errorMsg: null }
                     }
-                else{
+                else {
                     itm['error'] = false;
                     itm['errorMsg'] = null;
-                }  
+                }
             });
         });
     }
@@ -218,7 +218,9 @@ class Form extends Component {
     }
 
     _send = (obj) => {
-        const _self = this;
+        const _self = this,
+            { callback } = _self.props,
+            { sendAjx = true } = _self.props.data;
 
         /* objeye fix olarak eklenmek istenen alanlar varsa addfields bölümde tanımlanır. Tanımlanan key valuelar success objesine eklenir. */
         const { addFields = [], uri } = _self.props.data;
@@ -228,11 +230,15 @@ class Form extends Component {
             });
 
         console.log(JSON.stringify(obj));
-        _self.ajx({ uri: uri, data: obj }, function ({ type, d }) {
-            const { callback } = _self.props;
+        if (sendAjx)
+            _self.ajx({ uri: uri, data: obj }, function ({ type, d }) {
+                if (callback)
+                    callback({ type: type, data: d });
+            });
+        else {
             if (callback)
-                callback({ type: type, data: d });
-        });
+                callback({ data: obj });
+        }
     }
 
     addField = (obj) => {

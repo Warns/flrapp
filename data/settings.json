@@ -52,6 +52,11 @@
                 "itemType": "setUser"
             },
             {
+                "title": "FİLTRE",
+                "type": "form",
+                "itemType": "productFilter"
+            },
+            {
                 "title": "ADRES BİLGİLERİM",
                 "type": "listViewer",
                 "itemType": "address",

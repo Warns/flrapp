@@ -40,9 +40,19 @@ class DefaultInput extends React.Component {
     _onPress = () => {
         this.props.callback(this.props.name);
     }
+
     render() {
+        const _self = this,
+            { defaultTitle = '' } = _self.props;
+        let view = null;
+        if (defaultTitle != '')
+            view = (
+                <Text numberOfLines={1} style={{ fontSize: 16, color: '#000000' }}>{defaultTitle}</Text>
+            );
+
         return (
             <TouchableOpacity activeOpacity={0.7} onPress={this._onPress}>
+                {view}
                 <Text numberOfLines={1} style={{ fontSize: 16, color: '#000000' }}>{this.props.value}</Text>
             </TouchableOpacity>
         );
@@ -132,7 +142,7 @@ class Minus99MultipleSelect extends React.Component {
 
         return (
             <View style={{ flex: 1 }}>
-                <DefaultInput name={title} value={selected} callback={this._openSelectionBox} />
+                <DefaultInput defaultTitle={this.props.defaultTitle} name={title} value={selected} callback={this._openSelectionBox} />
                 {selectionbox}
             </View>
         );
