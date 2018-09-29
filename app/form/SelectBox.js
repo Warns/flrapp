@@ -28,13 +28,24 @@ class SelectBox extends Component {
     }
 
     _getSelected = () => {
-        const { value, values = [] } = this.props.data;
+        const { value, values = [], multiple = false } = this.props.data;
         let selected = {};
-        for (let i = 0; i < values.length; ++i) {
-            if (values[i]['value'] == value) {
-                selected = values[i];
-                break;
+        if (!multiple)
+            for (let i = 0; i < values.length; ++i) {
+                if (values[i]['value'] == value) {
+                    selected = values[i];
+                    break;
+                }
             }
+        else {
+            /* çoklu seçimde */
+            const arr = [];
+            values.forEach((item, ind) => {
+                if (value != - 1 && value.includes(item['value']))
+                    arr.push(item['value']);
+            });
+            
+            selected['value'] = arr.join(',') || -1; 
         }
         return selected;
     }
@@ -50,8 +61,13 @@ class SelectBox extends Component {
         let arr = [];
         const { value, values = [], multiple = false } = this.props.data;
         values.forEach((item, ind) => {
-            if (value == item['value'])
-                arr.push(ind);
+            if (!multiple) {
+                if (value == item['value'])
+                    arr.push(ind);
+            } else {
+                if (value != - 1 && value.includes(item['value']))
+                    arr.push(ind);
+            }
         });
 
         /* tekli seçimde seçili kayıt bulamazsa ilkini seçili hale getirme */

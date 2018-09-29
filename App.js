@@ -29,7 +29,7 @@ const filters = [
     "filterName": "KREMSİ ",
     "filterType": "9",
     "filterClass": "",
-    "isSelected": false,
+    "isSelected": true,
     "count": 6,
     "filterUrl": "https://www.flormar.com.tr/ruj/?ps=50"
   },
@@ -39,7 +39,7 @@ const filters = [
     "filterName": "HAFİF RENK",
     "filterType": "9",
     "filterClass": "",
-    "isSelected": false,
+    "isSelected": true,
     "count": 15,
     "filterUrl": "https://www.flormar.com.tr/ruj/?ps=50"
   },
@@ -49,7 +49,7 @@ const filters = [
     "filterName": "ISLAK GÖRÜNÜM",
     "filterType": "9",
     "filterClass": "",
-    "isSelected": false,
+    "isSelected": true,
     "count": 24,
     "filterUrl": "https://www.flormar.com.tr/ruj/?ps=50"
   },
