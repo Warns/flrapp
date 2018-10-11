@@ -36,6 +36,7 @@ export const ITEMTYPE = {
     COUPON: 'coupon',
     FOLLOWLIST: 'followList',
     SERVICELIST: 'serviceList',
+    CARTLIST: 'cartList',
     CAMPAING: 'campaing',
     VIDEO: 'video',
     FEEDS: 'feeds',

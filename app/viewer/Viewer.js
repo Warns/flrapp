@@ -97,6 +97,89 @@ class BoxButton extends Component {
     }
 }
 
+
+class CartListItem extends Component {
+
+    /*
+    {
+        "cartItemId": 3281917,
+        "productId": 567060,
+        "productName": "SILK MATTE LIQUID LIPSTICK",
+        "brandId": 3064,
+        "brandName": "Flormar",
+        "shortName": null,
+        "shortCode": null,
+        "productCode": "0313062-002",
+        "productShortDesc": "Dudakları kurutmayan, ipeksi matlık sunan likit ruj.",
+        "productOption1": "",
+        "productOption2": "",
+        "quantity": 2,
+        "unitCode": "Adet",
+        "mediumImageUrl": "http://mcdn.flormar.com.tr/UPLOAD/Flormar/mobile_image_1/thumb/0313062-002.jpg",
+        "smallImageUrl": "http://mcdn.flormar.com.tr/UPLOAD/Flormar/mobile_image_1/thumb/0313062-002.jpg",
+        "firstPrice": 30,
+        "firstPriceTotal": 60,
+        "salePrice": 29.99,
+        "discountTotal": 0,
+        "brutTotal": 50.82,
+        "taxTotal": 9.15,
+        "total": 59.98,
+        "netTotal": 59.98,
+        "hasStock": true,
+        "isGiftPackage": false,
+        "giftPackageId": 0,
+        "mainCartItemId": 0,
+        "bundleId": 0,
+        "bundleSelectType": 0,
+        "isReadOnly": true,
+        "productTypes": [
+          {
+            "productTypeId": 76,
+            "productTypeName": "MAT ETKİ"
+          }
+        ]
+    }
+    */
+
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        const _self = this,
+            { shortName, productName, smallImageUrl, salePrice, quantity, unitCode } = _self.props.data;
+
+        console.log(Utils.getImage(smallImageUrl));
+
+        return (
+            <View style={{ flexDirection: 'row', paddingTop: 20, paddingBottom: 20, paddingRight: 20, paddingLeft: 10, borderBottomColor: '#dcdcdc', borderBottomWidth: 1, }}>
+                <View style={{ width: 60, justifyContent: 'center', }}>
+                    <Image
+                        style={{ height: 60 }}
+                        source={{ uri: Utils.getImage(smallImageUrl) }}
+                    />
+                </View>
+                <View style={{ flex: 1 }}>
+                    <View>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <Text numberOfLines={1} style={{ fontFamily: 'Medium', fontSize: 15 }}>{productName}</Text>
+                            <IconButton ico={'close'} callback={_self._onRemove} />
+                        </View>
+                        <Text numberOfLines={1} style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#555555' }}>{shortName}</Text>
+                    </View>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 21 }}>
+                        <View>
+                            <Text numberOfLines={1} style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#555555' }}>{quantity}</Text>
+                            <Text numberOfLines={1} style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#555555' }}>{unitCode}</Text>
+                        </View>
+                        <Text style={{ fontFamily: 'Bold', fontSize: 16 }}>{Utils.getPriceFormat(salePrice)}</Text>
+                    </View>
+                </View>
+            </View>
+        );
+    }
+}
+
+
 class AdressListItem extends Component {
     /*
         {
@@ -721,7 +804,7 @@ class Viewers extends Component {
             { navigation } = _self.props;
         if (navigation)
             _self._Listener.remove();
-        
+
         _self.setAjx({ uri: _self.getUri(), data: _self._getData() });
     }
 
@@ -879,6 +962,9 @@ class Viewers extends Component {
             { itemType } = _self.props.config;
 
         switch (itemType) {
+
+            case ITEMTYPE['CARTLIST']:
+                return <CartListItem callback={_self._callback} onRemove={_self._removeItem} data={item} />;
             case ITEMTYPE['ADDRESS']:
                 return <AdressListItem callback={_self._callback} onRemove={_self._removeItem} data={item} />;
             case ITEMTYPE['FAVORITE']:

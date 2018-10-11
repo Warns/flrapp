@@ -7,31 +7,40 @@ import {
   Easing,
   StyleSheet,
   Modal,
+  TouchableOpacity,
 } from 'react-native';
-import{ SecureStore } from 'expo';
+import { SecureStore } from 'expo';
 import { connect } from 'react-redux';
+import { NAVIGATE } from 'root/app/helper/Constant';
 
 globals = require('../globals.js');
 
-class Cart extends React.Component{
+class Cart extends React.Component {
 
   state = {
   }
 
-  componentDidMount(){
+  componentDidMount() {
   }
 
-  render(){
+  _onPress = () => {
+    this.props.dispatch({ type: NAVIGATE, value: { item: { navigation: "Cart" } } });
+  }
 
-    const bubble = this.props.cartProductsNumber > 0 ?
-                    <View style={styles.bubble}>
-                      <Text style={styles.bubbleText}>{this.props.cartProductsNumber}</Text>
-                    </View> 
-                  : null;
+  render() {
 
-    return(
+    const _self = this,
+      bubble = this.props.cartProductsNumber > 0 ?
+        <View style={styles.bubble}>
+          <Text style={styles.bubbleText}>{this.props.cartProductsNumber}</Text>
+        </View>
+        : null;
+
+    return (
       <View>
-        <Image style={{width:40, height:40, resizeMode:'contain'}} source={require('../../assets/images/icons/cart.png')} />
+        <TouchableOpacity activeOpacity={0.8} onPress={_self._onPress} >
+          <Image style={{ width: 40, height: 40, resizeMode: 'contain' }} source={require('../../assets/images/icons/cart.png')} />
+        </TouchableOpacity>
         {bubble}
       </View>
     )
@@ -39,27 +48,27 @@ class Cart extends React.Component{
 }
 
 const styles = StyleSheet.create({
-  bubble:{
-    backgroundColor:'#FE136F',
-    width:20,
-    height:20,
-    borderRadius:10,
+  bubble: {
+    backgroundColor: '#FE136F',
+    width: 20,
+    height: 20,
+    borderRadius: 10,
     position: 'absolute',
-    left:20,
-    top:20,
-    borderWidth:1,
+    left: 20,
+    top: 20,
+    borderWidth: 1,
     borderColor: '#ffffff',
-    justifyContent:'center',
-    alignItems:'center',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  bubbleText:{
-    color:'#ffff',
+  bubbleText: {
+    color: '#ffff',
     fontSize: 11,
   }
 });
 
 // filter state
-function mapStateToProps(state){
+function mapStateToProps(state) {
   return state.cart;
 }
 

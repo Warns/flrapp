@@ -10,6 +10,7 @@ import { createStackNavigator, createMaterialTopTabNavigator } from 'react-navig
 import SplashPage from '../app/views/Splash';
 import CategoryPage from '../app/views/Category';
 import StoreNavigation from './StoreNavigation';
+import CartNavigation from './CartNavigation';
 import ExtraNavigation from './ExtraNavigation';
 import HomeTabNavigator from './HomeTabNavigation';
 
@@ -55,7 +56,7 @@ const RootStackNavigator = createStackNavigator(
     },
 
     Cart: {
-      screen: CartPage,
+      screen: props => <CartNavigation />
     },
 
     Store: {

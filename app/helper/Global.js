@@ -5,6 +5,7 @@ const Translation = require('root/app/helper/Translation.js');
 module.exports = {
     mapApiKey: 'AIzaSyAvSoqfCr4I9Vb11HtQ6cDEAMki6THBgrQ',
     prefix: 'https://www.flormar.com.tr',
+    imagePrefix: 'flormar.com.tr',
     URLs: {
         style: {
             main: '/styles/mobiApp.css'
@@ -60,6 +61,9 @@ module.exports = {
         content: {
             getContent: '/webapi/v3/Content/getContent',
             getDataByUrl: '/webapi/v3/Content/getDataByUrl',
+        },
+        cart: {
+            getCart: '/webapi/v3/Cart/getCart',
         }
     },
     customURLs: {
@@ -180,7 +184,7 @@ module.exports = {
     getImage: function (k) {
         const _t = this;
         /* favori ürünlerde resmin tam yolu gelmiyor o durumu çözmek için kullanılacak */
-        if (k.indexOf(_t.prefix) == -1)
+        if (k.indexOf(_t.imagePrefix) == -1)
             k = _t.prefix + k;
         return k;
     },
