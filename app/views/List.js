@@ -15,6 +15,9 @@ import {
 } from 'react-native';
 import { TabNavigator, TabBarBottom } from 'react-navigation';
 
+import { ICONS, SET_TEXTURE_DISPLAY } from 'root/app/helper/Constant';
+import { store } from '../../app/store';
+
 var RCTUIManager = require('NativeModules').UIManager;
 
 import ProductView from './Product';
@@ -41,11 +44,17 @@ export default class List extends React.Component{
   state = {
     fadeAnim: new Animated.Value(0),
     items: [],
+    itemsAll: [],
+    sliceNumber: 0,
+    sliceSize: 4,
     animatingUri: null,
     imageAnim: new Animated.Value(0),
     measurements: {},
     selectedDetail: null,
     detailIsVisible: false,
+    filters: [],
+    totalProductCount: null,
+    textureDisplay: false,
   }
 
   _animateImage = () => {
@@ -105,28 +114,49 @@ export default class List extends React.Component{
       "https://www.flormar.com.tr/webapi/v3/Product/getProductList",
       JSON.stringify({
         "page": 1,
-        "pageSize": 20,
+        "pageSize": 100,
         "catId": this.props.category.id,
       }),
       this._listResultHandler
     );
-
   }
 
   _listResultHandler = ( answer ) => {
 
-    //console.log(answer.data.products);
-    this.setState(
-      {items: answer.data.products }
-    );
+    console.log(answer.data);
 
+    this.setState({
+      itemsAll: answer.data.products,
+      filters: answer.data.filters,
+      totalProductCount: answer.data.totalProductCount,
+    });
+    this._updateItems();
+  }
+
+  _updateItems = () => {
+    let {sliceNumber, sliceSize, itemsAll, items} = this.state;
+    this.setState({
+      items: itemsAll,
+      //items: [...items, ...itemsAll.slice(sliceNumber, sliceNumber+sliceSize)],
+      //sliceNumber: sliceNumber+sliceSize,
+    })
+
+    //console.log(items.length, sliceNumber);
+  }
+
+  _handleOnEndReached = () => {
+    this._updateItems();
+  }
+
+  _onDisplayChange = ( bool ) => {
+    this.setState({textureDisplay: bool});
   }
 
   _keyExtractor = (item, index) => index;
 
   _renderItem = ({item, index}) => {
     return(
-      <ListItem item={item} index={index} onPressItem={this._onPressItem} onSwiping={this._onSwiping} />
+      <ListItem item={item} index={index} onPressItem={this._onPressItem} onSwiping={this._onSwiping} textureDisplay={this.state.textureDisplay} />
     )
   }
 
@@ -179,7 +209,7 @@ export default class List extends React.Component{
 
   render(){
 
-    let { animatingUri, imageAnim, measurements } = this.state;
+    let { animatingUri, imageAnim, measurements, totalProductCount, filters } = this.state;
 
     const _width = imageAnim.interpolate({
       inputRange: [0, 1],
@@ -209,7 +239,7 @@ export default class List extends React.Component{
 
     return(
       <View style={{flex:1, backgroundColor:'#ffffff'}}>
-        <ListHeader />
+        <ListHeader totalProductCount={totalProductCount} filters={filters} onDisplayChange={this._onDisplayChange} textureDisplay={this.state.textureDisplay} />
         <FlatList
           style={{flex:1, flexDirection:'column'}}
           scrollEnabled={true}
@@ -219,6 +249,7 @@ export default class List extends React.Component{
           renderItem={this._renderItem}
           refreshing={false}
           onRefresh={this._onRefresh}
+          onEndReached={this._handleOnEndReached}
         />
         {vail}
         {animatingImage}
@@ -236,7 +267,29 @@ export default class List extends React.Component{
 }
 
 class ListHeader extends React.Component{
+
+  _onProductDisplay = () => {
+    this.props.onDisplayChange( false );
+  };
+
+  _onTextureDisplay = () => {
+    this.props.onDisplayChange( true );
+  }
+
   render(){
+
+    let { totalProductCount, textureDisplay } = this.props;
+
+    if( textureDisplay ){
+      productOpacity = .2;
+      textureOpacity = 1;
+    }
+    else
+    {
+      productOpacity = 1;
+      textureOpacity = .2;
+    }
+
     return(
       <View style={{flex:1, maxHeight:50, flexDirection:'row', backgroundColor:'#ffffff', shadowColor: '#000',
       shadowOffset: { width: 0, height: 0 },
@@ -244,7 +297,20 @@ class ListHeader extends React.Component{
       shadowRadius: 3,
       zIndex:2,
       elevation: 1, justifyContent:'center', alignItems:'center'}}>
-        <Text>Filtreler</Text>
+        <View style={{width:100}}>
+          <Text>Filters</Text>
+        </View>
+        <View style={{flex:1, justifyContent:"center", alignItems:"center"}}>
+          <Text style={{color:"#afafaf", fontSize:16}}>{totalProductCount} ürün</Text>
+        </View>
+        <View style={{flexDirection:"row", width:100,}}>
+          <TouchableOpacity activeOpacity={0.8} onPress={this._onProductDisplay} style={{marginRight:10}}>
+            <Image source={ICONS['listProduct']} style={{ width: 40, height: 40, opacity:productOpacity }} />
+          </TouchableOpacity>
+          <TouchableOpacity activeOpacity={0.8} onPress={this._onTextureDisplay}>
+            <Image source={ICONS['listTexture']} style={{ width: 40, height: 40, opacity:textureOpacity }} />
+          </TouchableOpacity>
+        </View>
       </View>
     )
   }
@@ -258,7 +324,8 @@ class ListItem extends React.Component {
 
   render(){
 
-    const { item, index } = this.props;
+    const { item, index, textureDisplay } = this.props;
+
 
     let _width = Math.floor( SCREEN_DIMENSIONS.width *.5 );
     let _height = Math.floor( _width * 5/4 );
@@ -273,7 +340,7 @@ class ListItem extends React.Component {
 
     let trigger = item.isCampaignFl == true ? item.stockStatus : null;
 
-    let thumbnail = item.mediumImageUrl;//.replace('mobile_image_1', 'mobile_image_2');
+    let thumbnail = textureDisplay ? item.mediumImageUrl.replace('mobile_image_1', 'mobile_image_2') : item.mediumImageUrl;
 
 
     return(
@@ -290,6 +357,7 @@ class ListItem extends React.Component {
           <Image
             style={{width: _width, height: _height, resizeMode:'contain'}}
             source={{uri: thumbnail }}
+            onError={() => { this.props.source = item.mediumImageUrl }}
           />
           {newFlag}
           
