@@ -10,6 +10,7 @@ export * from './Buttons/MoreButton';
 export * from './Buttons/LoadingButton';
 export * from './Buttons/RatingButton';
 export * from './Buttons/DoubleClickButton';
+export * from './Buttons/IconButton';
 
 // Other
 export * from './Item';

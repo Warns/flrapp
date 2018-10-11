@@ -29,7 +29,7 @@ import {
 import {
     ElevatedView,
 } from 'root/app/components';
-import { RatingButton, DoubleClickButton } from 'root/app/UI';
+import { RatingButton, DoubleClickButton, IconButton } from 'root/app/UI';
 import { CountryPicker } from 'root/app/form';
 import { connect } from 'react-redux';
 
@@ -67,40 +67,6 @@ const config = {
     }
 };
 */
-
-class IconButton extends Component {
-    constructor(props) {
-        super(props);
-    }
-
-    _onPressButton = () => {
-        const { callback, item = {}, sequence = 0 } = this.props;
-        if (callback)
-            callback({ item, sequence });
-    }
-
-    _measureDimensions = (e) => {
-        const { onDimensions, sequence = 0 } = this.props;
-        if (onDimensions)
-            onDimensions({ layout: e.nativeEvent.layout, sequence });
-    }
-
-    render() {
-        const _self = this,
-            { ico, icoStyle = {}, style = {} } = _self.props;
-
-        return (
-            <TouchableOpacity activeOpacity={0.8} onPress={_self._onPressButton} onLayout={e => _self._measureDimensions(e)}>
-                <View style={[{ width: 12, height: 12, justifyContent: 'center', alignItems: 'center' }, style]}>
-                    <Image
-                        style={[{ width: 12, height: 12 }, icoStyle]}
-                        source={ICONS[ico]}
-                    />
-                </View>
-            </TouchableOpacity>
-        );
-    }
-}
 
 class BoxButton extends Component {
     constructor(props) {
@@ -542,6 +508,21 @@ class VideoListItem extends Component {
     }
 }
 
+class CampaingItem extends Component {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        const { image, utpCode } = this.props.data;
+        return (
+            <Image
+                style={{ height: 300 }}
+                source={{ uri: Utils.getImage(image) }}
+            />
+        )
+    }
+}
+
 /*
     Segmentify feeds
     
@@ -740,7 +721,7 @@ class Viewers extends Component {
             { navigation } = _self.props;
         if (navigation)
             _self._Listener.remove();
-
+        
         _self.setAjx({ uri: _self.getUri(), data: _self._getData() });
     }
 
@@ -788,10 +769,39 @@ class Viewers extends Component {
 
     _addStyle = ({ customClass, data }) => {
         const uri = Utils.getURL({ key: 'style', subKey: 'main' }) + '?' + parseInt(Math.random() * new Date()),
+            opened = '<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"></head><body>',
+            closed = '</body></html>',
             css = '<link href="' + uri + '" rel="stylesheet" type="text/css" />',
-            htm = '<div class="ems-mobi-app-container ' + customClass + '">' + (css + data) + '</div>';
+            htm = opened + '<div class="ems-mobi-app-container ' + customClass + '">' + (css + data) + '</div>' + closed;
 
         return htm;
+    }
+
+    /* özel durumlarda datayı manipule etmek için kullanacağız. Örneğin kampanya sayfası için dönen datayı */
+    _customFunc = (data) => {
+        const _self = this,
+            { customFunc = '' } = _self.props.config;
+
+        if (customFunc == 'campaing') {
+            const arr = [];
+            Object
+                .entries(data)
+                .forEach(([ind, item]) => {
+                    const obj = {};
+                    Object
+                        .entries(item['parameters'])
+                        .forEach(([childInd, child]) => {
+                            obj['id'] = ind;
+                            if (child['parameterKey'] == 'prmCamImgMobile')
+                                obj['image'] = child['parameterValue'];
+                            else if (child['parameterKey'] == 'prmCamID')
+                                obj['utpCode'] = child['parameterValue'];
+                        })
+                    arr.push(obj);
+                });
+            data = arr;
+        }
+        return data;
     }
 
     setAjx = ({ uri, data = {} }, callback) => {
@@ -800,11 +810,15 @@ class Viewers extends Component {
 
         AJX({ _self: _self, uri: uri, data: data }, function (res) {
 
-            const { keys, customClass = '' } = _self.props.config,
+            const { keys, customClass = '', customFunc = '' } = _self.props.config,
                 keyArr = keys['arr'] || '',
                 keyTotal = keys['total'] || '';
 
             let data = res.data[keyArr];
+
+            if (customFunc != '')
+                data = _self._customFunc(data);
+
             if (type == VIEWERTYPE['HTMLTOJSON'])
                 data = JSON.parse(data)[keys['obj']][keys['objArr']];
 
@@ -881,6 +895,8 @@ class Viewers extends Component {
                 return <VideoListItem onPress={this._onGotoDetail} data={item} />;
             case ITEMTYPE['FEEDS']:
                 return <FeedsItem data={item} />;
+            case ITEMTYPE['CAMPAING']:
+                return <CampaingItem data={item} />;
             default:
                 return null;
         }
@@ -905,7 +921,7 @@ class Viewers extends Component {
                 .entries(multiValue)
                 .forEach(([ind, item]) => {
                     const { key, value } = item;
-                    if (value != -1 && value != Translation['dropdown']['choose'] && keys.includes(key))
+                    if (value != -1 && (value != '' && value != Translation['dropdown']['choose'] && value != Translation['dropdown']['countryChoose'] && value != Translation['dropdown']['cityChoose'] && value != Translation['dropdown']['districtChoose']) && keys.includes(key))
                         data[key] = value;
                 });
 
@@ -930,7 +946,7 @@ class Viewers extends Component {
                             paddingLeft: 20,
                             paddingRight: 20,
                             paddingBottom: 12,
-                            paddingTop: 12,
+                            paddingTop: 0,
                         }}>
                         <CountryPicker
                             selectionValue={true}
@@ -941,11 +957,14 @@ class Viewers extends Component {
                             data={filterData}
                             style={{ flexDirection: 'row', justifyContent: 'space-between', }}
                             countryContainerStyle={{ width: '50%', paddingRight: 5, marginBottom: 0 }}
-                            countryTitleShow={true}
+                            countryHeaderShow={false}
                             cityContainerStyle={{ width: '50%', paddingLeft: 5, marginBottom: 0 }}
-                            cityTitleShow={true}
-                            districtContainerStyle={{ width: 0, height: 0, marginBottom: 0 }}
-                            districtTitleShow={true}
+                            cityHeaderShow={false}
+                            districtContainerStyle={{ width: 0, height: 0, marginBottom: 0, opacity: 0 }}
+                            districtHeaderShow={false}
+                            countryChoose={Translation['dropdown']['countryChoose']}
+                            cityChoose={Translation['dropdown']['cityChoose']}
+                            districtChoose={Translation['dropdown']['districtChoose']}
                         />
                     </ElevatedView>
                 )
@@ -989,7 +1008,6 @@ class Viewers extends Component {
         if (type == VIEWERTYPE['LIST'] || type == VIEWERTYPE['HTMLTOJSON'])
             view = (
                 <FlatList
-                    style={[{ paddingLeft: 10, paddingRight: 10 }, { ..._self.props.style }]}
                     data={_self.state.data}
                     keyExtractor={_self._keyExtractor}
                     renderItem={_self._renderItem}
@@ -1007,7 +1025,7 @@ class Viewers extends Component {
             );
         else if (type == VIEWERTYPE['WEBVIEW'])
             view = (
-                <View style={[{ paddingLeft: 10, paddingRight: 10, flex: 1 }, { ..._self.props.style }]}>
+                <View style={{ flex: 1, }}>
                     <WebView
                         scalesPageToFit={false}
                         automaticallyAdjustContentInsets={false}
@@ -1023,10 +1041,12 @@ class Viewers extends Component {
     render() {
         const _self = this;
         return (
-            <View style={{ flex: 1 }}>
+            <View style={{ flex: 1, }}>
                 {_self._getFilter()}
-                {_self._getViewer()}
-            </View>
+                <View style={[{ flex: 1, paddingLeft: 10, paddingRight: 10 }, { ..._self.props.style }]}>
+                    {_self._getViewer()}
+                </View>
+            </View >
 
         )
     }

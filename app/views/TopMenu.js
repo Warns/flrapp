@@ -11,7 +11,27 @@ import { SafeAreaView } from 'react-navigation';
 import { connect } from 'react-redux';
 import { LineButton } from 'root/app/UI';
 import { GestureRecognizer } from 'root/app/helper';
-import { NAVIGATE, HIDE_MENU } from 'root/app/helper/Constant';
+import { NAVIGATE, HIDE_MENU, ITEMTYPE, REMOVE_USER } from 'root/app/helper/Constant';
+
+const Utils = require('root/app/helper/Global.js');
+const Globals = require('root/app/globals.js');
+const AJX = async ({ _self, uri, data = {} }, callback) => {
+    _self.setState({ loading: true });
+    Globals.fetch(uri, JSON.stringify(data), (answer) => {
+        if (_self._isMounted) {
+            if (answer === 'error') {
+                console.log('fatalllll error: could not get access token');
+            } else {
+                if (answer.status == 200) {
+                    if (typeof callback !== 'undefined')
+                        callback(answer);
+                }
+            }
+            _self.setState({ loading: false, refreshing: false });
+        }
+    });
+}
+
 
 class CustomModal extends Component {
     constructor(props) {
@@ -195,6 +215,19 @@ class Menu extends Component {
 class TopMenu extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+
+        };
+    }
+
+    componentDidMount() {
+        const _self = this;
+        _self._isMounted = true;
+    }
+
+    componentWillUnmount() {
+        const _self = this;
+        _self._isMounted = false;
     }
 
     _onClose = () => {
@@ -202,9 +235,22 @@ class TopMenu extends Component {
     }
 
     _onMenuClicked = (obj) => {
-        const _self = this;
-        _self.props.dispatch({ type: HIDE_MENU });
-        _self.props.dispatch({ type: NAVIGATE, value: obj });
+        const _self = this,
+            { type, uri = {}, itemType } = obj['item'] || {};
+        _self.props.dispatch({ type: HIDE_MENU });/* modal komple kapatıyor */
+
+        /* setting.json ile oluşturulan button tipine göre işlem yapmak */
+        if (type == ITEMTYPE['TRIGGERBUTTON'])
+            AJX({ _self: _self, uri: Utils.getURL(uri) }, (res) => {
+                const { status } = res;
+                if (status == 200){
+                    /* ÇIKIŞ BUTONUNA ÖZEL İŞLEM */
+                    if( ITEMTYPE['EXITBUTTON'] == itemType )
+                        _self.props.dispatch({ type: REMOVE_USER });
+                }
+            });
+        else
+            _self.props.dispatch({ type: NAVIGATE, value: obj });
     }
 
     render() {

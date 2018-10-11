@@ -13,7 +13,12 @@ import { SplashHeader } from '../components';
 import { DefaultButton, DefaultInput, LoadingButton } from '../UI';
 
 import { Form } from 'root/app/form';
-import { FORMDATA, SET_NAVIGATION, SET_SCREEN_DIMENSIONS } from 'root/app/helper/Constant';
+import {
+  FORMDATA,
+  SET_USER,
+  SET_NAVIGATION,
+  SET_SCREEN_DIMENSIONS
+} from 'root/app/helper/Constant';
 
 styles = require('../styles.js');
 globals = require('../globals.js');
@@ -192,8 +197,6 @@ class Splash extends React.Component {
 
   _onCloseLogin = () => {
 
-    console.log('ccljdsljfds');
-
     this.setState({
       loginIsVisible: false,
     });
@@ -207,15 +210,18 @@ class Splash extends React.Component {
     ).start();
   }
 
-  _onLoginStatus = ({ type, data }) => {
+  _onLoginStatus = ({ type, data = {} }) => {
     /* login durumu dönecek */
-    const { status, message } = data;
-    if (type == 'success')
-      alert('tebrikler');
-    else
+    const _self = this,
+      { status, message } = data;
+    if (type == 'success') {
+      _self.props.dispatch({ type: SET_USER, value: data['data'] || {} });
+      setTimeout(() => {
+        _self._onCloseLogin();
+        _self.props.navigation.navigate('Home');
+      }, 10);
+    } else
       alert(message);
-
-    console.log('_onLoginStatus', data);
   }
 
   render() {

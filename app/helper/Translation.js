@@ -11,10 +11,14 @@ module.exports = {
         choose: 'Seçiniz',
         countryChoose: 'Ülke Seçiniz',
         cityChoose: 'İl Seçiniz',
+        districtChoose: 'İlçe Seçiniz'
     },
     address: {
         remove: 'Sil',
         edit: 'Düzenle'
+    },
+    store: {
+        headerTitle: 'YAKIN MAĞAZALAR'
     },
     orders: {
         orderNo: 'Sipariş Numarası',

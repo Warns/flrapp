@@ -4,8 +4,10 @@ import {
     Text,
     Animated,
     Image,
+    Platform,
 } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
+import { StoreHeader, } from 'root/app/components/';
 import { LocationService, } from 'root/app/helper/';
 import { Viewer } from 'root/app/viewer/';
 import {
@@ -102,10 +104,12 @@ class Detail extends React.Component {
     constructor(props) {
         super(props);
         const _self = this,
-            { activeItem = null, data = {}, location, permission } = _self.props.navigation.state.params;
+            { navigation = {} } = _self.props,
+            { activeItem = null, data = {}, location, permission } = navigation.state.params;
+
         _self.Map = null;
         _self.state = {
-            markers: data['data'], // all data
+            markers: data['data'] || [], // all data
             showDetail: activeItem ? true : false, // address detail show, hide
             detail: activeItem || {}, // address detail data
             location: location,
@@ -155,6 +159,14 @@ class Detail extends React.Component {
                         if (showDetail && serviceId != detail['serviceId'])
                             op = 0.5;
 
+                        let img = null;
+                        if (Platform.OS === 'ios')
+                            img = (
+                                <View>
+                                    <Image source={ICONS['storeLocation']} style={{ width: 40, height: 40 }} />
+                                </View>
+                            );
+
                         return (
                             <Marker
                                 key={index}
@@ -162,9 +174,7 @@ class Detail extends React.Component {
                                 onPress={e => { e.stopPropagation(); _self._onMarkerClicked(e.nativeEvent, index) }}
                                 style={{ opacity: op }}
                             >
-                                <View>
-                                    <Image source={ICONS['storeLocation']} style={{ width: 40, height: 40 }} />
-                                </View>
+                                {img}
                             </Marker>
                         );
                     }
@@ -198,6 +208,7 @@ class Detail extends React.Component {
 }
 
 class Main extends Component {
+
     constructor(props) {
         super(props);
         this.state = {
@@ -228,20 +239,34 @@ class Main extends Component {
         if (permission === true) {
             const { latitude = '', longitude = '' } = location['coords'] || {};
 
-            DATA['data'] = {
-                latitude: latitude,
-                longitude: longitude
-            };
+            if (filtered) {
 
-            DATA['filterData'] = {
-                filtered: filtered,
-                id: 'country',
-                value: {
-                    country: 1,
-                    city: 0,
-                    district: 0,
-                }
-            };
+                /* 
+                    not: iilk açılışta tüm data gelsin denilirse data kısmından countryId silinmeli
+                */
+                const defCountry = 1;
+
+                DATA['data'] = {
+                    countryId: defCountry,
+                };
+
+                DATA['filterData'] = {
+                    filtered: filtered,
+                    id: 'country',
+                    value: {
+                        country: defCountry,
+                        city: 0,
+                        district: 0,
+                    },
+                    services: true
+                };
+            } else {
+                DATA['data'] = {
+                    latitude: latitude,
+                    longitude: longitude,
+                    distance: 3,
+                };
+            }
 
             view = <Viewer config={DATA} callback={_self._callback} />;
         } else if (permission === false)
@@ -261,6 +286,9 @@ const StoreNavigator = createStackNavigator(
     {
         Main: {
             screen: props => <Main filtered={true} {...props} />,
+            navigationOptions: {
+                header: (props) => <StoreHeader {...props} />,
+            }
         },
         Search: {
             screen: props => <Main filtered={true} {...props} />,

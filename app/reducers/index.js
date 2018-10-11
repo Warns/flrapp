@@ -7,6 +7,7 @@ import settings from './settings';
 import menu from './menu';
 import rootNavigation from './rootNavigation';
 import location from './location';
+import offlineNotice from './offlineNotice';
 
 export default combineReducers({
   general,
@@ -16,4 +17,5 @@ export default combineReducers({
   menu,
   rootNavigation,
   location,
+  offlineNotice,
 });

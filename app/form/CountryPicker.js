@@ -24,6 +24,20 @@ class CountryPicker extends Component {
         }
     }
 
+    _addServices = ({ type, obj }) => {
+        const _self = this,
+            { services = false } = _self.props.data;
+        if (services) {
+            if (type == 'country')
+                obj['countryOfServiceFl'] = true;
+            else if (type == 'city')
+                obj['cityOfServiceFl'] = true;
+            else if (type == 'district')
+                obj['districtOfServiceFl'] = true;
+        }
+        return obj;
+    }
+
     _getDefValue = (key) => {
         const _self = this,
             { value = {} } = _self.props.data || {},
@@ -41,7 +55,8 @@ class CountryPicker extends Component {
                 name: 'countryName'
             },
             name: '',
-            value: this._getDefValue('country')
+            value: this._getDefValue('country'),
+            drpChoose: this.props.countryChoose || Translation['dropdown']['choose']
         },
         city: {
             uri: Utils.getURL({ key: 'address', subKey: 'city' }),
@@ -52,7 +67,8 @@ class CountryPicker extends Component {
                 name: 'cityName'
             },
             name: '',
-            value: this._getDefValue('city')
+            value: this._getDefValue('city'),
+            drpChoose: this.props.cityChoose || Translation['dropdown']['choose']
         },
         district: {
             uri: Utils.getURL({ key: 'address', subKey: 'district' }),
@@ -62,7 +78,8 @@ class CountryPicker extends Component {
                 name: 'districtName'
             },
             name: '',
-            value: this._getDefValue('district')
+            value: this._getDefValue('district'),
+            drpChoose: this.props.districtChoose || Translation['dropdown']['choose']
         },
     }
 
@@ -78,9 +95,9 @@ class CountryPicker extends Component {
             cityId = _self.config['city']['value'];
 
         _self._isMounted = true;
-        _self.setAjx({ key: 'country', data: { countryId: 0 } });
-        _self.setAjx({ key: 'city', data: { countryId: countryId } });
-        _self.setAjx({ key: 'district', data: { countryId: countryId, cityId: cityId } });
+        _self.setAjx({ key: 'country', data: _self._addServices({ type: 'country', obj: { countryId: 0 } }) });
+        _self.setAjx({ key: 'city', data: _self._addServices({ type: 'city', obj: { countryId: countryId } }) });
+        _self.setAjx({ key: 'district', data: _self._addServices({ type: 'district', obj: { countryId: countryId, cityId: cityId } }) });
     }
 
     /* https://medium.com/@TaylorBriggs/your-react-component-can-t-promise-to-stay-mounted-e5d6eb10cbb */
@@ -91,10 +108,10 @@ class CountryPicker extends Component {
     _unshift = ({ key, data = [] }) => {
         /* dönen arrayın ilk elemanına seçiniz eklemek için */
         const _self = this,
-            { keys } = _self.config[key] || {},
+            { keys, drpChoose } = _self.config[key] || {},
             obj = {};
         obj[keys['id']] = -1;
-        obj[keys['name']] = Translation['dropdown']['choose'] || 'Seçiniz';
+        obj[keys['name']] = drpChoose;
         data = [obj, ...data];
 
         return data;
@@ -183,12 +200,12 @@ class CountryPicker extends Component {
         if (key == 'country') {
             _self.config['city']['value'] = -1;
             _self.config['district']['value'] = -1;
-            _self.setAjx({ key: 'city', data: { countryId: id } }, function () {
+            _self.setAjx({ key: 'city', data: _self._addServices({ type: 'city', obj: { countryId: id } }) }, function () {
                 _self.setState({ district: _self._unshift({ key: 'district' }) })
             });
         } else if (key == 'city') {
             _self.config['district']['value'] = -1;
-            _self.setAjx({ key: 'district', data: { countryId: countryId, cityId: cityId } });
+            _self.setAjx({ key: 'district', data: _self._addServices({ type: 'district', obj: { countryId: countryId, cityId: cityId } }) });
         } else if (key == 'district') {
 
         }
@@ -228,9 +245,9 @@ class CountryPicker extends Component {
         const _self = this,
             { errorState = {} } = _self.props.data,
             { countryId = {}, cityId = {}, districtId = {} } = errorState,
-            { control = false, countryTitleShow = true, cityTitleShow = true, districtTitleShow = true, } = _self.props,
+            { control = false, countryHeaderShow = true, cityHeaderShow = true, districtHeaderShow = true, } = _self.props,
             ico = <Image source={ICONS['drpIco']} style={{ width: 12, height: 8 }} />;
-            
+
         if (control)
             _self._callback();
 
@@ -239,7 +256,7 @@ class CountryPicker extends Component {
                 <Container
                     containerStyle={{ ..._self.props.countryContainerStyle }}
                     wrapperStyle={{ ..._self.props.countryWrapperStyle }}
-                    titleShow={countryTitleShow}
+                    showHeader={countryHeaderShow}
                     title={'Ülke'}
                     error={countryId['error'] || false}
                     errorMsg={countryId['errorMsg'] || null}
@@ -257,7 +274,7 @@ class CountryPicker extends Component {
                 <Container
                     containerStyle={{ ..._self.props.cityContainerStyle }}
                     wrapperStyle={{ ..._self.props.cityWrapperStyle }}
-                    titleShow={cityTitleShow}
+                    showHeader={cityHeaderShow}
                     title={'İl'}
                     error={cityId['error'] || false}
                     errorMsg={cityId['errorMsg'] || null}
@@ -275,7 +292,7 @@ class CountryPicker extends Component {
                 <Container
                     containerStyle={{ ..._self.props.districtContainerStyle }}
                     wrapperStyle={{ ..._self.props.districtWrapperStyle }}
-                    titleShow={districtTitleShow}
+                    showHeader={districtHeaderShow}
                     title={'İlçe'}
                     error={districtId['error'] || false}
                     errorMsg={districtId['errorMsg'] || null}

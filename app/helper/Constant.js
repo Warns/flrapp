@@ -10,8 +10,13 @@ export const ICONS = {
     unLike: require('root/assets/icons/heartOutline.png'),
     close: require('root/assets/icons/close.png'),
     drpIco: require('root/assets/icons/drpIco.png'),
+
     listProduct: require('root/assets/icons/list_product.png'),
     listTexture: require('root/assets/icons/list_texture.png'),
+
+    list: require('root/assets/icons/list.png'),
+    map: require('root/assets/icons/map.png'),
+    back: require('root/assets/images/icons/back.png')
 };
 
 /* VIEWER SAYFA TİPLERİ */
@@ -31,8 +36,11 @@ export const ITEMTYPE = {
     COUPON: 'coupon',
     FOLLOWLIST: 'followList',
     SERVICELIST: 'serviceList',
+    CAMPAING: 'campaing',
     VIDEO: 'video',
-    FEEDS: 'feeds'
+    FEEDS: 'feeds',
+    TRIGGERBUTTON: 'triggerButton',
+    EXITBUTTON: 'exitButton'
 };
 
 export const FEEDSTYPE = {
@@ -63,6 +71,7 @@ export const FORMDATA = {
     createAddress: require('root/data/createAddress.js'),
     setAddress: require('root/data/setAddress.js'),
     setUser: require('root/data/setUser.js'),
+    productFilter: require('root/data/productFilter.js'),
 };
 
 /* form style, from->container.js */
@@ -103,6 +112,8 @@ export const SET_TEXTURE_DISPLAY = 'SET_TEXTURE_DISPLAY';
 export const SET_SCREEN_DIMENSIONS = 'SET_SCREEN_DIMENSIONS';
 
 /* user */
+export const SET_USER = 'SET_USER';
+export const REMOVE_USER = 'REMOVE_USER';
 export const SET_CART_NUM = 'SET_CART_NUM';
 
 /* menu */
@@ -112,3 +123,5 @@ export const HIDE_MENU = 'HIDE_MENU';
 /* location */
 export const SET_LOCATION = 'SET_LOCATION';
 
+/* offline notice */
+export const SET_CONNECTION = 'SET_CONNECTION';

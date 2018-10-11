@@ -52,6 +52,11 @@
                 "itemType": "setUser"
             },
             {
+                "title": "FİLTRE",
+                "type": "form",
+                "itemType": "productFilter"
+            },
+            {
                 "title": "ADRES BİLGİLERİM",
                 "type": "listViewer",
                 "itemType": "address",
@@ -69,7 +74,8 @@
             },
             {
                 "title": "ÇIKIŞ",
-                "type": "trigger",
+                "type": "triggerButton",
+                "itemType": "exitButton",
                 "uri": {
                     "key": "user",
                     "subKey": "logout"
@@ -96,6 +102,24 @@
                 "data": {
                     "exportType": "mobiAppSegmentify"
                 }
+            },
+            {
+                "title": "KAMPANYALAR",
+                "type": "listViewer",
+                "itemType": "campaing",
+                "uri": {
+                    "key": "banner",
+                    "subKey": "getBannerList"
+                },
+                "siteURI": "/kampanyalar.html",
+                "keys": {
+                    "id": "id",
+                    "arr": "banners",
+                },
+                "data": {
+                    "bgrCode": "6764"
+                },
+                "customFunc": "campaing"
             },
             {
                 "title": "MAĞAZALAR",

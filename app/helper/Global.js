@@ -9,6 +9,9 @@ module.exports = {
         style: {
             main: '/styles/mobiApp.css'
         },
+        banner: {
+            getBannerList: '/webapi/v3/Banner/getBannerList'
+        },
         product: {
             getProductList: '/webapi/v3/Product/getProductList',
         },
@@ -18,6 +21,7 @@ module.exports = {
             setUser: '/webapi/v3/User/setUser',
             createUser: '/webapi/v3/User/createUser',
             login: '/webapi/v3/User/login',
+            logout: '/webapi/v3/User/logout',
             recoverPassword: '/webapi/v3/User/recoverPassword',
             changePassword: '/webapi/v3/User/changePassword',
             getFavoriteProductList: '/webapi/v3/User/getFavoriteProductList',
@@ -226,5 +230,36 @@ module.exports = {
                 cancelable: false
             }
         )
+    },
+    filterToSelectObject: function (filters) {
+        const obj = {}, filter = { sendAjx: false, fields: [] };
+
+        Object.entries(filters).forEach(([ind, value]) => {
+            const key = value['filterGroupName'] || '';
+            if (typeof obj[key] == 'undefined')
+                obj[key] = [];
+            obj[key].push(value)
+        });
+
+        Object.entries(obj).forEach(([key, value]) => {
+            const k = { items: [] },
+                sel = [],
+                values = value.map((val, ind) => {
+                    if (val['isSelected'])
+                        sel.push(val['filterId']);
+
+                    return { key: val['filterName'], value: val['filterId'] };
+                }),
+                o = { id: key, defaultTitle: key, multiple: true, type: 'select', values: values, value: sel.length > 0 ? sel : -1 };
+
+
+            k['items'].push(o);
+
+            filter['fields'].push(k);
+        });
+        
+        console.log(JSON.stringify(filter))
+
+        return filter;
     }
 };
