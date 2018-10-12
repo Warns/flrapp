@@ -25,6 +25,7 @@ import {
     CLICK,
     DOUBLE_CLICK,
     SET_FORM,
+    UPDATE_CART,
 } from 'root/app/helper/Constant';
 import {
     ElevatedView,
@@ -144,11 +145,29 @@ class CartListItem extends Component {
     constructor(props) {
         super(props);
     }
+
+    _callback = (obj) => {
+        const _self = this,
+            { callback } = _self.props;
+
+        if (callback)
+            callback(obj);
+    }
+
+    _onUpdate = () => {
+        const _self = this,
+            { data, onUpdateItem } = _self.props,
+            { cartItemId } = data;
+        AJX({ _self: _self, uri: Utils.getURL({ key: 'cart', subKey: 'updateCartLine' }), data: { cartItemId: cartItemId, quantity: 3 } }, (res) => {
+            const { status, message } = res; console.log(res);
+            if (status == 200 && onUpdateItem)
+                onUpdateItem({ type: UPDATE_CART, data: res })
+        });
+    }
+
     render() {
         const _self = this,
-            { shortName, productName, smallImageUrl, salePrice, quantity, unitCode } = _self.props.data;
-
-        console.log(Utils.getImage(smallImageUrl));
+            { shortName, productName, smallImageUrl, total, quantity, unitCode } = _self.props.data;
 
         return (
             <View style={{ flexDirection: 'row', paddingTop: 20, paddingBottom: 20, paddingRight: 20, paddingLeft: 10, borderBottomColor: '#dcdcdc', borderBottomWidth: 1, }}>
@@ -167,11 +186,13 @@ class CartListItem extends Component {
                         <Text numberOfLines={1} style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#555555' }}>{shortName}</Text>
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 21 }}>
-                        <View>
-                            <Text numberOfLines={1} style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#555555' }}>{quantity}</Text>
-                            <Text numberOfLines={1} style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#555555' }}>{unitCode}</Text>
-                        </View>
-                        <Text style={{ fontFamily: 'Bold', fontSize: 16 }}>{Utils.getPriceFormat(salePrice)}</Text>
+                        <TouchableOpacity activeOpacity={0.8} onPress={_self._onUpdate}>
+                            <View>
+                                <Text numberOfLines={1} style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#555555' }}>{quantity}</Text>
+                                <Text numberOfLines={1} style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#555555' }}>{unitCode}</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <Text style={{ fontFamily: 'Bold', fontSize: 16 }}>{Utils.getPriceFormat(total)}</Text>
                     </View>
                 </View>
             </View>
@@ -914,6 +935,10 @@ class Viewers extends Component {
 
             _self._callback({ type: DATA_LOADED, data: data });
 
+            /* sepet için gerekti */
+            if (_self.props.response)
+                _self.props.response({ type: DATA_LOADED, data: res.data });
+
             if (typeof callback !== 'undefined')
                 callback();
         });
@@ -937,6 +962,12 @@ class Viewers extends Component {
                 return item[key] != value;
             });
         _self.setState({ data: arr });
+    }
+    /* tüm listeyi güncelle */
+    _onUpdateItem = () => {
+        const _self = this;
+        console.log('_onUpdateItem');
+        _self.onDidFocus();
     }
 
     /* Viewer genel callback */
@@ -964,7 +995,7 @@ class Viewers extends Component {
         switch (itemType) {
 
             case ITEMTYPE['CARTLIST']:
-                return <CartListItem callback={_self._callback} onRemove={_self._removeItem} data={item} />;
+                return <CartListItem callback={_self._callback} onUpdateItem={_self._onUpdateItem} onRemove={_self._removeItem} data={item} />;
             case ITEMTYPE['ADDRESS']:
                 return <AdressListItem callback={_self._callback} onRemove={_self._removeItem} data={item} />;
             case ITEMTYPE['FAVORITE']:

@@ -62,6 +62,7 @@ export const ORDER_LIST_CLICKED = 'ORDER_LIST_CLICKED';
 export const ADDRESS_LIST_CLICKED = 'ADDRESS_LIST_CLICKED';
 export const LOCATION_SERVICE = 'LOCATION_SERVICE';
 export const SET_FORM = 'SET_FORM';
+export const UPDATE_CART = 'UPDATE_CART';
 
 /* form */
 export const FORMDATA = {
@@ -103,6 +104,7 @@ export const SET_NAVIGATION = 'SET_NAVIGATION';
 export const NAVIGATE = 'NAVIGATE';
 
 /* cart */
+export const SET_CART_INFO = 'SET_CART_INFO';
 export const SET_CART_ITEMS = 'SET_CART_ITEMS';
 export const ADD_CART_ITEM = 'ADD_CART_ITEM';
 

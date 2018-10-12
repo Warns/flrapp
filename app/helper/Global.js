@@ -64,6 +64,7 @@ module.exports = {
         },
         cart: {
             getCart: '/webapi/v3/Cart/getCart',
+            updateCartLine: '/webapi/v3/Cart/updateCartLine',
         }
     },
     customURLs: {
