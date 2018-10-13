@@ -21,6 +21,7 @@ export const ICONS = {
 
 /* VIEWER SAYFA TİPLERİ */
 export const VIEWERTYPE = {
+    SCROLLVIEW: 'scrollView',
     LIST: 'listViewer',
     HTML: 'htmlViewer',
     HTMLTOJSON: 'htmlToJSON',
@@ -63,6 +64,7 @@ export const ADDRESS_LIST_CLICKED = 'ADDRESS_LIST_CLICKED';
 export const LOCATION_SERVICE = 'LOCATION_SERVICE';
 export const SET_FORM = 'SET_FORM';
 export const UPDATE_CART = 'UPDATE_CART';
+export const REMOVE_CART = 'REMOVE_CART';
 
 /* form */
 export const FORMDATA = {

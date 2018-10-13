@@ -220,7 +220,6 @@ class SelectionBox extends React.Component {
     _keyExtractor = (item, index) => 'item-' + index;
 
     _renderItem = ({ item, index }) => {
-
         var arr = this.state.selectedItems;
         var selected = arr.includes(item.order) ? true : false;
         return (

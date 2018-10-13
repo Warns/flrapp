@@ -12,13 +12,14 @@ import { connect } from 'react-redux';
 import Footer from './Footer';
 
 const DATA = {
+    type: 'scrollView',
     itemType: 'cartList',
     uri: { key: 'cart', subKey: 'getCart' },
     keys: {
         id: 'cartItemId',
         arr: 'products',
     },
-    refreshing: false
+    refreshing: false,
 };
 
 const Cart = class Main extends Component {
@@ -43,7 +44,7 @@ const Cart = class Main extends Component {
         const _self = this;
         return (
             <View style={{ flex: 1 }}>
-                <Viewer {..._self.props} style={{ paddingLeft: 10, paddingRight: 10 }} config={DATA} response={this._response} callback={this._callback} />
+                <Viewer {..._self.props} style={{ paddingLeft: 10, paddingRight: 10, paddingBottom: 125 }} config={DATA} response={this._response} callback={this._callback} />
                 <Footer />
             </View>
         )

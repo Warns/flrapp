@@ -44,8 +44,8 @@ class SelectBox extends Component {
                 if (value != - 1 && value.includes(item['value']))
                     arr.push(item['value']);
             });
-            
-            selected['value'] = arr.join(',') || -1; 
+
+            selected['value'] = arr.join(',') || -1;
         }
         return selected;
     }
@@ -78,7 +78,9 @@ class SelectBox extends Component {
     }
 
     _closed = (obj) => {
-        const { multiple = false } = this.props.data;
+        const _self = this,
+            { closed = false } = _self.props, /* closed true gönderildiğinde her kapanışta callback tetiklenecek */
+            { multiple = false } = this.props.data;
 
         if (!multiple) {
             /* tekli seçim */
@@ -88,6 +90,11 @@ class SelectBox extends Component {
             const value = obj['selected'].map((val, ind) => { return val['id'] }).join(',');
             this.setState({ value: value, title: obj['key'] || '' });
         }
+
+        setTimeout(() => {
+            if (closed)
+                _self._callback();
+        }, 5);
     }
 
     render() {

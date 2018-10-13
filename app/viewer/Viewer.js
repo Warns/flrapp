@@ -26,12 +26,13 @@ import {
     DOUBLE_CLICK,
     SET_FORM,
     UPDATE_CART,
+    REMOVE_CART,
 } from 'root/app/helper/Constant';
 import {
     ElevatedView,
 } from 'root/app/components';
 import { RatingButton, DoubleClickButton, IconButton } from 'root/app/UI';
-import { CountryPicker } from 'root/app/form';
+import { CountryPicker, SelectBox } from 'root/app/form';
 import { connect } from 'react-redux';
 
 const Translation = require('root/app/helper/Translation.js');
@@ -146,6 +147,16 @@ class CartListItem extends Component {
         super(props);
     }
 
+    componentDidMount() {
+        const _self = this;
+        _self._isMounted = true;
+    }
+
+    componentWillUnmount() {
+        const _self = this;
+        _self._isMounted = false;
+    }
+
     _callback = (obj) => {
         const _self = this,
             { callback } = _self.props;
@@ -154,20 +165,55 @@ class CartListItem extends Component {
             callback(obj);
     }
 
-    _onUpdate = () => {
+    _onChange = ({ value = 1 }) => {
         const _self = this,
-            { data, onUpdateItem } = _self.props,
+            { data = {}, onUpdateItem } = _self.props,
             { cartItemId } = data;
-        AJX({ _self: _self, uri: Utils.getURL({ key: 'cart', subKey: 'updateCartLine' }), data: { cartItemId: cartItemId, quantity: 3 } }, (res) => {
-            const { status, message } = res; console.log(res);
+        AJX({ _self: _self, uri: Utils.getURL({ key: 'cart', subKey: 'updateCartLine' }), data: { cartItemId: cartItemId, quantity: value } }, (res) => {
+            const { status, message } = res;
             if (status == 200 && onUpdateItem)
-                onUpdateItem({ type: UPDATE_CART, data: res })
+                onUpdateItem({ type: UPDATE_CART, data: res });
         });
+    }
+
+    _onRemove = () => {
+        const _self = this,
+            { data = {}, onUpdateItem } = _self.props,
+            { cartItemId } = data;
+        AJX({ _self: _self, uri: Utils.getURL({ key: 'cart', subKey: 'deleteCartLine' }), data: { cartItemId: [cartItemId] } }, (res) => {
+            const { status, message } = res;
+            if (status == 200 && onUpdateItem)
+                onUpdateItem({ type: REMOVE_CART, data: res });
+        });
+    }
+
+    getSelectValue = () => {
+        const _self = this,
+            { data = {} } = _self.props,
+            { quantity } = data,
+            values = [],
+            arr = [15, 20, 30, 40];
+
+        for (var i = 1; i <= 100; ++i)
+            arr.push(i);
+
+        if (!arr.includes(quantity))
+            arr.push(quantity);
+
+        arr.sort((a, b) => a - b);
+
+        for (var i = 0; i < arr.length; ++i) {
+            const k = arr[i];
+            values.push({ key: k + ' Adet', value: k });
+        }
+
+        return { title: 'saadssadasdasdasdasd', values: values, value: quantity };
     }
 
     render() {
         const _self = this,
-            { shortName, productName, smallImageUrl, total, quantity, unitCode } = _self.props.data;
+            { data = {} } = _self.props,
+            { shortName, productName = '', smallImageUrl, total, quantity, unitCode } = data;
 
         return (
             <View style={{ flexDirection: 'row', paddingTop: 20, paddingBottom: 20, paddingRight: 20, paddingLeft: 10, borderBottomColor: '#dcdcdc', borderBottomWidth: 1, }}>
@@ -186,12 +232,9 @@ class CartListItem extends Component {
                         <Text numberOfLines={1} style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#555555' }}>{shortName}</Text>
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 21 }}>
-                        <TouchableOpacity activeOpacity={0.8} onPress={_self._onUpdate}>
-                            <View>
-                                <Text numberOfLines={1} style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#555555' }}>{quantity}</Text>
-                                <Text numberOfLines={1} style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#555555' }}>{unitCode}</Text>
-                            </View>
-                        </TouchableOpacity>
+
+                        <SelectBox closed={true} callback={_self._onChange} data={_self.getSelectValue()} />
+
                         <Text style={{ fontFamily: 'Bold', fontSize: 16 }}>{Utils.getPriceFormat(total)}</Text>
                     </View>
                 </View>
@@ -926,7 +969,7 @@ class Viewers extends Component {
             if (type == VIEWERTYPE['HTMLTOJSON'])
                 data = JSON.parse(data)[keys['obj']][keys['objArr']];
 
-            if (type == VIEWERTYPE['LIST'] || type == VIEWERTYPE['HTMLTOJSON'])
+            if (type == VIEWERTYPE['LIST'] || type == VIEWERTYPE['HTMLTOJSON'] || VIEWERTYPE['SCROLLVIEW'])
                 _self.setState({ data: data, total: res.data[keyTotal] || 0 });
             else if (type == VIEWERTYPE['WEBVIEW'])
                 _self.setState({ html: _self._addStyle({ customClass: customClass, data: data }) });
@@ -963,10 +1006,10 @@ class Viewers extends Component {
             });
         _self.setState({ data: arr });
     }
+
     /* tüm listeyi güncelle */
     _onUpdateItem = () => {
         const _self = this;
-        console.log('_onUpdateItem');
         _self.onDidFocus();
     }
 
@@ -988,14 +1031,14 @@ class Viewers extends Component {
         _self.onDidFocus();
     }
 
-    _renderItem = ({ item }) => {
+    _renderItem = ({ item, key }) => {
         const _self = this,
             { itemType } = _self.props.config;
 
         switch (itemType) {
 
             case ITEMTYPE['CARTLIST']:
-                return <CartListItem callback={_self._callback} onUpdateItem={_self._onUpdateItem} onRemove={_self._removeItem} data={item} />;
+                return <CartListItem key={key} callback={_self._callback} onUpdateItem={_self._onUpdateItem} onRemove={_self._removeItem} data={item} />;
             case ITEMTYPE['ADDRESS']:
                 return <AdressListItem callback={_self._callback} onRemove={_self._removeItem} data={item} />;
             case ITEMTYPE['FAVORITE']:
@@ -1017,6 +1060,19 @@ class Viewers extends Component {
             default:
                 return null;
         }
+    }
+
+    _getItem = () => {
+        const _self = this,
+            { data = [] } = _self.state,
+            arr = [];
+
+        if (data.length > 0)
+            data.map((item, ind) => {
+                arr.push(_self._renderItem({ item: item, key: _self._keyExtractor(item, ind) }));
+            });
+
+        return arr;
     }
 
     _getHeader = () => {
@@ -1149,6 +1205,13 @@ class Viewers extends Component {
                         source={{ html: _self.state.html }}
                     />
                 </View>
+
+            );
+        else if (type == VIEWERTYPE['SCROLLVIEW'])
+            view = (
+                <ScrollView style={{ flex: 1 }}>
+                    {_self._getItem()}
+                </ScrollView>
 
             );
 
