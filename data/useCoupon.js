@@ -14,8 +14,7 @@ module.exports = {
                     title: 'Promosyon Kodum',
                     type: 'text',
                     value: '',
-                    validation: [{ key: 'isEmpty' }],
-                  
+                    validation: [{ key: 'isEmpty' }],               
                 },
             ]
         }
