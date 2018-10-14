@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import {
     View,
+    TouchableOpacity,
+    Text
 } from 'react-native';
 import { Viewer } from 'root/app/viewer/';
 import {
@@ -40,11 +42,17 @@ const Cart = class Main extends Component {
             _self.props.dispatch({ type: SET_CART_INFO, value: data });
     }
 
+    _onUpdate = () => {
+        const _self = this;
+        _self.child._onUpdateItem();
+    }
+
     render() {
         const _self = this;
         return (
             <View style={{ flex: 1 }}>
-                <Viewer {..._self.props} style={{ paddingLeft: 10, paddingRight: 10, paddingBottom: 125 }} config={DATA} response={this._response} callback={this._callback} />
+                <Viewer onRef={ref => (_self.child = ref)} {..._self.props} style={{ paddingLeft: 10, paddingRight: 10, paddingBottom: 125 }} config={DATA} response={this._response} callback={this._callback} />
+
                 <Footer />
             </View>
         )

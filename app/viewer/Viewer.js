@@ -194,7 +194,7 @@ class CartListItem extends Component {
             values = [],
             arr = [15, 20, 30, 40];
 
-        for (var i = 1; i <= 100; ++i)
+        for (var i = 1; i <= 10; ++i)
             arr.push(i);
 
         if (!arr.includes(quantity))
@@ -874,21 +874,27 @@ class Viewers extends Component {
 
     componentDidMount() {
         const _self = this,
-            { navigation } = _self.props;
+            { navigation, onRef } = _self.props;
         _self._isMounted = true;
         if (navigation)
             _self._Listener = navigation.addListener('didFocus', _self.onDidFocus);
         else
             _self.onDidFocus();
+
+        if (onRef)
+            onRef(this);
     }
 
     /* https://medium.com/@TaylorBriggs/your-react-component-can-t-promise-to-stay-mounted-e5d6eb10cbb */
     componentWillUnmount() {
         const _self = this,
-            { navigation } = _self.props;
+            { navigation, onRef } = _self.props;
         _self._isMounted = false;
         if (navigation)
             _self._Listener.remove();
+
+        if (onRef)
+            onRef(null);
     }
 
     getUri = () => {
