@@ -6,12 +6,14 @@ module.exports = {
 
     successMessage: '',
 
+    buttonText: 'Kullan',
+
     fields: [
         {
             items: [
                 {
                     id: 'couponCode',
-                    title: 'Promosyon Kodum',
+                    //title: 'Promosyon Kodum',
                     type: 'text',
                     value: '',
                     validation: [{ key: 'isEmpty' }],               

@@ -1,11 +1,23 @@
 import React, {Component} from 'react';
 import { createStackNavigator } from 'react-navigation';
-import { CartPage } from 'root/app/viewer/';
+import { CartPage, AddressPage } from 'root/app/viewer/';
+
+class Main extends Component {
+    constructor(props){
+        super(props)
+    }
+    render(){
+        return null;
+    }
+}
 
 const CartNavigation = createStackNavigator(
     {
         Cart: {
             screen: props => <CartPage {...props} />,
+        },
+        Address: {
+            screen: props => <AddressPage {...props} />,
         }
     },
     {

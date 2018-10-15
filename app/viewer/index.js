@@ -6,3 +6,4 @@ export * from './ExtraPageDetail';
 
 /* sepet */
 export * from './cart/CartPage';
+export * from './cart/AddressPage';

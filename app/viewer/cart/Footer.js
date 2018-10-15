@@ -6,9 +6,11 @@ import {
 import { connect } from 'react-redux';
 import { ElevatedView } from 'root/app/components/';
 import { Form } from 'root/app/form';
+import { LoadingButton } from 'root/app/UI';
 import {
     FORMDATA,
 } from 'root/app/helper/Constant';
+const Utils = require('root/app/helper/Global.js');
 
 class Main extends Component {
     constructor(props) {
@@ -16,31 +18,59 @@ class Main extends Component {
         this.state = {};
     }
 
-    _onCallback = ({ type, data = {} }) => {
+    _onFormCallback = ({ type, data = {} }) => {
         console.log(type, data);
+    }
+
+    _onPress = () => {
+        const _self = this,
+            { onPress } = _self.props;
+        if (onPress)
+            onPress();
+    }
+
+    _getForm = () => {
+        const _self = this,
+            { coupon = false } = _self.props.data;
+        let view = null;
+        if (coupon)
+            view = (
+                <Form scrollEnabled={false} style={{ paddingLeft: 0, paddingRight: 0 }} data={FORMDATA['useCoupon']} callback={this._onFormCallback} />
+            );
+        return view;
     }
 
     render() {
         const _self = this,
+            { buttonText = '', coupon = false } = _self.props.data,
             { cartInfo = {} } = _self.props.cart,
-            { total, subTotal, discountTotal } = cartInfo;
-
+            { total = 0, subTotal = 0, discountTotal = 0 } = cartInfo,
+            form = _self._getForm();
+        
         return (
             <ElevatedView
                 elevation={4}
                 style={{
-                    backgroundColor: '#FFFFFF',
                     position: 'absolute',
-                    height: 125,
                     width: '100%',
                     left: 0,
                     bottom: 0
                 }}>
-                <Form scrollEnabled={false} style={{ paddingLeft: 0, paddingRight: 0 }} data={FORMDATA['useCoupon']} callback={this._onCallback} />
-                <View style={{ backgroundColor: '#FFFFFF' }}>
-                    <Text>ARA TOPLAM: {subTotal}</Text>
-                    <Text>İNDİRİM: {discountTotal}</Text>
-                    <Text>TOPLAM: {total}</Text>
+
+                <View style={{ backgroundColor: '#FFFFFF', width: '100%', paddingLeft: 20, paddingRight: 20, paddingBottom: 7 }}>
+                    <View style={{ flexDirection: 'row', width: '100%', paddingTop: 10, paddingBottom: 10 }}>
+                        <View style={{ width: '50%' }}>{form}</View>
+                        <View style={{ width: '50%', alignItems: 'flex-end' }}>
+                            <Text style={{ fontFamily: 'Bold', fontSize: 15 }}>TOPLAM: {Utils.getPriceFormat(total)}</Text>
+                            <View style={{ flexDirection: 'row' }}>
+                                <Text style={{ fontFamily: 'RegularTyp2', fontSize: 13 }}>İNDİRİM: {Utils.getPriceFormat(discountTotal)}, </Text>
+                                <Text style={{ fontFamily: 'RegularTyp2', fontSize: 13 }}>ARA TOPLAM: {Utils.getPriceFormat(subTotal)}</Text>
+                            </View>
+                        </View>
+                    </View>
+                    <View>
+                        <LoadingButton onPress={_self._onPress}>{buttonText}</LoadingButton>
+                    </View>
                 </View>
             </ElevatedView>
         );

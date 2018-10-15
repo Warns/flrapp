@@ -24,6 +24,12 @@ const DATA = {
     refreshing: false,
 };
 
+/* footer config */
+const CONFIG = {
+    buttonText: 'ALIŞVERİŞİ TAMAMLA',
+    coupon: false
+};
+
 const Cart = class Main extends Component {
     constructor(props) {
         super(props);
@@ -47,13 +53,20 @@ const Cart = class Main extends Component {
         _self.child._onUpdateItem();
     }
 
+    _onPress = () => {
+        const _self = this,
+            { navigation } = _self.props;
+
+        if (navigation)
+            navigation.navigate('Address', {});
+    }
+
     render() {
         const _self = this;
         return (
             <View style={{ flex: 1 }}>
                 <Viewer onRef={ref => (_self.child = ref)} {..._self.props} style={{ paddingLeft: 10, paddingRight: 10, paddingBottom: 125 }} config={DATA} response={this._response} callback={this._callback} />
-
-                <Footer />
+                <Footer onPress={_self._onPress} data={CONFIG} />
             </View>
         )
     }
