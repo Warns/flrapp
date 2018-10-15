@@ -38,8 +38,8 @@ const Cart = class Main extends Component {
 
     _callback = ({ type, data }) => {
         const _self = this;
-        if (type === UPDATE_CART)
-            console.log(data);
+        /*if (type === UPDATE_CART)
+            console.log(data);*/
     }
 
     _response = ({ type, data }) => {

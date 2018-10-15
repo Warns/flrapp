@@ -107,6 +107,7 @@ export const SET_NAVIGATION = 'SET_NAVIGATION';
 export const NAVIGATE = 'NAVIGATE';
 
 /* cart */
+export const SET_CART_ADDRESS = 'SET_CART_ADDRESS';
 export const SET_CART_INFO = 'SET_CART_INFO';
 export const SET_CART_ITEMS = 'SET_CART_ITEMS';
 export const ADD_CART_ITEM = 'ADD_CART_ITEM';

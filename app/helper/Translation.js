@@ -15,7 +15,9 @@ module.exports = {
     },
     address: {
         remove: 'Sil',
-        edit: 'Düzenle'
+        edit: 'Düzenle',
+        select: 'SEÇ',
+        selected: 'SEÇİLDİ'
     },
     store: {
         headerTitle: 'YAKIN MAĞAZALAR'

@@ -27,6 +27,7 @@ import {
     SET_FORM,
     UPDATE_CART,
     REMOVE_CART,
+    SET_CART_ADDRESS,
 } from 'root/app/helper/Constant';
 import {
     ElevatedView,
@@ -91,8 +92,8 @@ class BoxButton extends Component {
         const _self = this;
         return (
             <TouchableOpacity activeOpacity={0.8} onPress={_self._onPressButton} onLayout={e => _self._measureDimensions(e)}>
-                <View style={{ alignItems: "center", justifyContent: "center", borderColor: '#666666', borderWidth: 1, backgroundColor: "#FFFFFF", borderRadius: 3, height: 36, paddingLeft: 30, paddingRight: 30 }}>
-                    <Text style={{ fontFamily: 'Bold', fontSize: 14 }}>{_self.props.children}</Text>
+                <View style={[{ alignItems: "center", justifyContent: "center", borderColor: '#666666', borderWidth: 1, backgroundColor: "#FFFFFF", borderRadius: 3, height: 36, paddingLeft: 30, paddingRight: 30 }, { ..._self.props.wrapperStyle }]}>
+                    <Text style={[{ fontFamily: 'Bold', fontSize: 14 }, { ..._self.props.textStyle }]}>{_self.props.children}</Text>
                 </View>
             </TouchableOpacity>
         )
@@ -318,25 +319,91 @@ class AdressListItem extends Component {
         });
     }
 
-    render() {
+    _onSelect = () => {
         const _self = this,
-            { addressName, address } = _self.props.data,
-            { remove, edit } = Translation['address'] || {};
-        return (
+            { addressId } = _self.props.data;
+        
+        _self.props.rdx.dispatch({ type: SET_CART_ADDRESS, value: { addressId: addressId, addressType: 'shipAddress' } });
+    }
 
-            <View style={{ flexDirection: 'column', paddingTop: 20, paddingBottom: 20, paddingRight: 20, paddingLeft: 10, borderBottomColor: '#dcdcdc', borderBottomWidth: 1, }}>
-                <View>
-                    <Text style={{ fontFamily: 'Medium', fontSize: 15 }}>{addressName}</Text>
-                    <Text style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#555555' }}>{address}</Text>
-                </View>
+    _onBillAddressSelected = () => {
+        const _self = this,
+            { addressId } = _self.props.data;
+
+        _self.props.dispatch({ type: SHOW_MENU, value: { addressId: addressId, addressType: 'billAddress' } });
+    }
+
+    _getButton = () => {
+        const _self = this,
+            { rdx = {}, data = {} } = _self.props,
+            { addressId } = data,
+            { selectedAddress = {} } = rdx.cart,
+            { shipAddress } = selectedAddress,
+            { select, selected } = Translation['address'] || {};
+console.log(selectedAddress);
+        let view = null;
+        if (addressId == shipAddress)
+            view = (
+                <BoxButton
+                    wrapperStyle={{ backgroundColor: '#000000' }}
+                    textStyle={{ color: '#FFFFFF' }}
+                    callback={_self._onSelect}>
+                    {selected}
+                </BoxButton>
+            );
+        else
+            view = (
+                <BoxButton
+                    callback={_self._onSelect}>
+                    {select}
+                </BoxButton>
+            );
+
+        return view;
+    }
+
+    _getItemType = () => {
+        const _self = this,
+            { itemButtonType = 'default' } = _self.props.config,
+            { remove, edit, select, selected } = Translation['address'] || {};
+
+        /* adres düzenleme ve sepet adımlarındaki seçimlerde ayrım yapmak için kullanırız. */
+        let view = null;
+        if (itemButtonType == 'default')
+            view = (
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 21 }}>
                     <TouchableOpacity activeOpacity={0.8} onPress={_self._onRemove}>
                         <Text style={{ fontFamily: 'RegularTyp2', fontSize: 15 }}>{remove}</Text>
                     </TouchableOpacity>
                     <BoxButton callback={_self._onPress}>{edit}</BoxButton>
                 </View>
-            </View>
+            );
+        else if (itemButtonType == 'cart')
+            view = (
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 21 }}>
+                    <TouchableOpacity activeOpacity={0.8} onPress={_self._onPress}>
+                        <Text style={{ fontFamily: 'RegularTyp2', fontSize: 15 }}>{edit}</Text>
+                    </TouchableOpacity>
+                    {_self._getButton()}
+                </View>
+            );
 
+        return view;
+    }
+
+    render() {
+        const _self = this,
+            { addressName, address } = _self.props.data,
+            itemButtonType = _self._getItemType();
+
+        return (
+            <View style={{ flexDirection: 'column', paddingTop: 20, paddingBottom: 20, paddingRight: 20, paddingLeft: 10, borderBottomColor: '#dcdcdc', borderBottomWidth: 1, }}>
+                <View>
+                    <Text style={{ fontFamily: 'Medium', fontSize: 15 }}>{addressName}</Text>
+                    <Text style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#555555' }}>{address}</Text>
+                </View>
+                {itemButtonType}
+            </View>
         )
     }
 }
@@ -1046,7 +1113,7 @@ class Viewers extends Component {
             case ITEMTYPE['CARTLIST']:
                 return <CartListItem key={key} callback={_self._callback} onUpdateItem={_self._onUpdateItem} onRemove={_self._removeItem} data={item} />;
             case ITEMTYPE['ADDRESS']:
-                return <AdressListItem callback={_self._callback} onRemove={_self._removeItem} data={item} />;
+                return <AdressListItem config={_self.props.config} callback={_self._callback} onRemove={_self._removeItem} rdx={_self.props} data={item} />;
             case ITEMTYPE['FAVORITE']:
                 return <FavoriteListItem onRemove={_self._removeItem} data={item} />;
             case ITEMTYPE['ORDER']:

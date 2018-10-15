@@ -36,6 +36,7 @@ const AJX = async ({ _self, uri, data = {} }, callback) => {
 const DATA = {
     type: 'listViewer',
     itemType: 'address',
+    itemButtonType: 'cart',
     uri: {
         key: 'address',
         subKey: 'getAddress'
@@ -69,7 +70,9 @@ const Address = class Main extends Component {
         _self._isMounted = true;
         _self.setAjx({ uri: Utils.getURL({ key: 'cart', subKey: 'getCart' }), data: { cartLocation: 'delivery' } }, (res) => {
             _self.props.dispatch({ type: SET_CART_INFO, value: res.data });
-            _self.setState({ loaded: true });
+            setTimeout(() => {
+                _self.setState({ loaded: true });    
+            }, 10); 
         });
     }
 
@@ -89,8 +92,8 @@ const Address = class Main extends Component {
 
     _callback = ({ type, data }) => {
         const _self = this;
-        if (type === UPDATE_CART)
-            console.log(data);
+        /*if (type === UPDATE_CART)
+            console.log(data);*/
     }
 
     _response = ({ type, data }) => {
@@ -117,7 +120,7 @@ const Address = class Main extends Component {
             { loaded = false } = _self.state;
 
         let view = null;
-        if (loaded)
+        //if (loaded)
             view = (
                 <View style={{ flex: 1 }}>
                     <Viewer onRef={ref => (_self.child = ref)} {..._self.props} style={{ paddingLeft: 10, paddingRight: 10, paddingBottom: 125 }} config={DATA} response={this._response} callback={this._callback} />
