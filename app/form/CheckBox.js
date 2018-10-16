@@ -17,9 +17,18 @@ class CheckBox extends Component {
     }
 
     _onPress = () => {
-        this.setState((prevState) => ({
+        const _self = this,
+            { closed = false } = _self.props;
+
+        _self.setState((prevState) => ({
             value: !prevState.value
         }));
+
+        setTimeout(() => {
+            /* closed değeri true dönünce her bir tıklamada callback çalışsın */
+            if (closed)
+                _self._callback();
+        }, 10);
     }
 
     _callback = () => {

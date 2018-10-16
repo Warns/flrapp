@@ -47,8 +47,8 @@ export const ITEMTYPE = {
 
 export const FEEDSTYPE = {
     INSTAGRAM: 'instagram',
-	VIDEO: 'video',
-	CAMPAING: 'campaing',
+    VIDEO: 'video',
+    CAMPAING: 'campaing',
     PRODUCT: 'product',
     BLOGPOST: 'blog_post',
     COLLECTION: 'collection'
@@ -63,6 +63,7 @@ export const ORDER_LIST_CLICKED = 'ORDER_LIST_CLICKED';
 export const ADDRESS_LIST_CLICKED = 'ADDRESS_LIST_CLICKED';
 export const LOCATION_SERVICE = 'LOCATION_SERVICE';
 export const SET_FORM = 'SET_FORM';
+export const SET_ADDRESS_ITEM = 'SET_ADDRESS_ITEM';
 export const UPDATE_CART = 'UPDATE_CART';
 export const REMOVE_CART = 'REMOVE_CART';
 
@@ -76,7 +77,7 @@ export const FORMDATA = {
     setAddress: require('root/data/setAddress.js'),
     setUser: require('root/data/setUser.js'),
     productFilter: require('root/data/productFilter.js'),
-    useCoupon: require('root/data/useCoupon.js')    
+    useCoupon: require('root/data/useCoupon.js')
 };
 
 /* form style, from->container.js */
@@ -108,6 +109,7 @@ export const NAVIGATE = 'NAVIGATE';
 
 /* cart */
 export const SET_CART_ADDRESS = 'SET_CART_ADDRESS';
+export const SET_DIFFERENT_ADDRESS = 'SET_DIFFERENT_ADDRESS';
 export const SET_CART_INFO = 'SET_CART_INFO';
 export const SET_CART_ITEMS = 'SET_CART_ITEMS';
 export const ADD_CART_ITEM = 'ADD_CART_ITEM';

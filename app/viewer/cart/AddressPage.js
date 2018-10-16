@@ -8,9 +8,12 @@ import { Viewer } from 'root/app/viewer/';
 import {
     UPDATE_CART,
     SET_CART_INFO,
+    SET_DIFFERENT_ADDRESS,
+    SET_ADDRESS_ITEM,
     DATA_LOADED,
 } from 'root/app/helper/Constant';
 import { connect } from 'react-redux';
+import { CheckBox } from 'root/app/form';
 import Footer from './Footer';
 
 const Utils = require('root/app/helper/Global.js');
@@ -71,8 +74,8 @@ const Address = class Main extends Component {
         _self.setAjx({ uri: Utils.getURL({ key: 'cart', subKey: 'getCart' }), data: { cartLocation: 'delivery' } }, (res) => {
             _self.props.dispatch({ type: SET_CART_INFO, value: res.data });
             setTimeout(() => {
-                _self.setState({ loaded: true });    
-            }, 10); 
+                _self.setState({ loaded: true });
+            }, 10);
         });
     }
 
@@ -90,16 +93,33 @@ const Address = class Main extends Component {
         });
     }
 
+    /*
+        her bir adres ve fatura seçiminde önce kargoya istek yapılır ardından ilk seçenekten cargo idsi alınıp setcart istek yapılır.
+    */
     _callback = ({ type, data }) => {
-        const _self = this;
-        /*if (type === UPDATE_CART)
-            console.log(data);*/
-    }
-
-    _response = ({ type, data }) => {
-        const _self = this;
-        /*if (type === DATA_LOADED)
-            _self.props.dispatch({ type: SET_CART_INFO, value: data });*/
+        const _self = this,
+            { selectedAddress = {} } = _self.props.cart,
+            { shipAddress = 0, billAddress = 0 } = selectedAddress;
+        console.log('SET_ADDRESS_ITEM', shipAddress);
+        if (type == SET_ADDRESS_ITEM)
+            _self.setAjx({ uri: Utils.getURL({ key: 'cart', subKey: 'getCargo' }), data: { shipAddressId: shipAddress } }, (res) => {
+                console.log(res);
+                const { status, data = {} } = res,
+                    { cargoes = [] } = data;
+                if (status == '200' && cargoes.length > 0) {
+                    const { cargoId = 0 } = cargoes[0],
+                        obj = {
+                            'shipAddressId': shipAddress,
+                            'billAddressId': billAddress,
+                            'cargoId': cargoId,
+                            'cartLocation': 'delivery'
+                        };
+                    alert(shipAddress + ' ' + billAddress);
+                    _self.setAjx({ uri: Utils.getURL({ key: 'cart', subKey: 'setCart' }), data: obj }, (res) => {
+                        console.log(res);
+                    });
+                }
+            });
     }
 
     _onUpdate = () => {
@@ -115,18 +135,33 @@ const Address = class Main extends Component {
             navigation.navigate('Address', {});
     }
 
+    _onCheckBoxChange = ({ value = false }) => {
+        /* fatura farklı adres */
+        const _self = this;
+        _self.props.dispatch({ type: SET_DIFFERENT_ADDRESS, value: value });
+    }
+
     _getView = () => {
         const _self = this,
-            { loaded = false } = _self.state;
+            { loaded = false } = _self.state,
+            { selectedAddress = {} } = _self.props.cart,
+            { differentAddress = false } = selectedAddress,
+            checkboxConfig = {
+                desc: 'Faturayı başka adrese gönder.',
+                value: differentAddress
+            };
 
         let view = null;
         //if (loaded)
-            view = (
-                <View style={{ flex: 1 }}>
-                    <Viewer onRef={ref => (_self.child = ref)} {..._self.props} style={{ paddingLeft: 10, paddingRight: 10, paddingBottom: 125 }} config={DATA} response={this._response} callback={this._callback} />
-                    <Footer onPress={_self._onPress} data={CONFIG} />
-                </View>
-            );
+        view = (
+            <View style={{ flex: 1 }}>
+                <CheckBox closed={true} callback={_self._onCheckBoxChange} data={checkboxConfig} />
+
+                <Viewer onRef={ref => (_self.child = ref)} style={{ paddingLeft: 10, paddingRight: 10, paddingBottom: 125 }} config={DATA} callback={this._callback} />
+
+                <Footer onPress={_self._onPress} data={CONFIG} />
+            </View>
+        );
         return view;
     }
 

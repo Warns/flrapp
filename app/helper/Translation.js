@@ -17,7 +17,11 @@ module.exports = {
         remove: 'Sil',
         edit: 'Düzenle',
         select: 'SEÇ',
-        selected: 'SEÇİLDİ'
+        selected: 'SEÇİLDİ',
+        selectShipAddress: 'ADRESİ SEÇ',
+        selectedShipAddress: 'SEÇİLİ ADRES',
+        selectBillAddress: 'FATURA ADRESİ',
+        selectedBillAddress: 'FATURA ADRESİ SEÇİLDİ',
     },
     store: {
         headerTitle: 'YAKIN MAĞAZALAR'

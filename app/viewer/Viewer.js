@@ -35,6 +35,7 @@ import {
 import { RatingButton, DoubleClickButton, IconButton } from 'root/app/UI';
 import { CountryPicker, SelectBox } from 'root/app/form';
 import { connect } from 'react-redux';
+import { AddressListItem } from './';
 
 const Translation = require('root/app/helper/Translation.js');
 const Utils = require('root/app/helper/Global.js');
@@ -241,170 +242,6 @@ class CartListItem extends Component {
                 </View>
             </View>
         );
-    }
-}
-
-
-class AdressListItem extends Component {
-    /*
-        {
-            "address": "DAVUTPAŞA DAVUTPAŞA DAVUTPAŞA DAVUTPAŞA DAVUTPAŞA DAVUTPAŞA DAVUTPAŞA DAVUTPAŞA DAVUTPAŞA DAVUTPAŞA DAVUTPAŞA DAVUTPAŞA",
-            "addressId": 473044,
-            "addressName": "TEST P",
-            "cityId": 1,
-            "cityName": "İstanbul",
-            "companyName": "",
-            "corprateFl": false,
-            "countryId": 1,
-            "countryName": "Türkiye",
-            "districtId": 980,
-            "districtName": "ESENLER",
-            "fullName": "Proj-E Proj-E",
-            "mobilePhone": "900(555) 5555555",
-            "phone": "",
-            "readOnly": false,
-            "taxNumber": "",
-            "taxOffice": "",
-            "tckn": "26072013304",
-            "zipCode": "34080",
-        }
-    */
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            loading: false
-        }
-    }
-
-    componentDidMount() {
-        const _self = this;
-        _self._isMounted = true;
-    }
-
-    componentWillUnmount() {
-        const _self = this;
-        _self._isMounted = false;
-    }
-
-    _onPress = () => {
-        const _self = this,
-            { callback, data = {} } = _self.props;
-        if (callback)
-            callback({
-                type: SET_FORM,
-                data: {
-                    itemType: 'setAddress',
-                    postData: { addressId: data['addressId'] || '' }
-                }
-            });
-    }
-
-    _onRemove = () => {
-        const _self = this,
-            { data, onRemove } = _self.props;
-        Utils.confirm({ message: Translation['confirm']['removeMessage'] }, ({ type }) => {
-            if (type == 'ok') {
-                const { addressId } = data;
-                AJX({ _self: _self, uri: Utils.getURL({ key: 'address', subKey: 'deleteAddress' }), data: { addressId: addressId } }, (res) => {
-                    const { status, message } = res;
-                    if (onRemove && status == 200)
-                        setTimeout(() => {
-                            onRemove({ key: 'addressId', value: addressId });
-                        }, 100);
-
-                })
-
-            }
-        });
-    }
-
-    _onSelect = () => {
-        const _self = this,
-            { addressId } = _self.props.data;
-        
-        _self.props.rdx.dispatch({ type: SET_CART_ADDRESS, value: { addressId: addressId, addressType: 'shipAddress' } });
-    }
-
-    _onBillAddressSelected = () => {
-        const _self = this,
-            { addressId } = _self.props.data;
-
-        _self.props.dispatch({ type: SHOW_MENU, value: { addressId: addressId, addressType: 'billAddress' } });
-    }
-
-    _getButton = () => {
-        const _self = this,
-            { rdx = {}, data = {} } = _self.props,
-            { addressId } = data,
-            { selectedAddress = {} } = rdx.cart,
-            { shipAddress } = selectedAddress,
-            { select, selected } = Translation['address'] || {};
-console.log(selectedAddress);
-        let view = null;
-        if (addressId == shipAddress)
-            view = (
-                <BoxButton
-                    wrapperStyle={{ backgroundColor: '#000000' }}
-                    textStyle={{ color: '#FFFFFF' }}
-                    callback={_self._onSelect}>
-                    {selected}
-                </BoxButton>
-            );
-        else
-            view = (
-                <BoxButton
-                    callback={_self._onSelect}>
-                    {select}
-                </BoxButton>
-            );
-
-        return view;
-    }
-
-    _getItemType = () => {
-        const _self = this,
-            { itemButtonType = 'default' } = _self.props.config,
-            { remove, edit, select, selected } = Translation['address'] || {};
-
-        /* adres düzenleme ve sepet adımlarındaki seçimlerde ayrım yapmak için kullanırız. */
-        let view = null;
-        if (itemButtonType == 'default')
-            view = (
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 21 }}>
-                    <TouchableOpacity activeOpacity={0.8} onPress={_self._onRemove}>
-                        <Text style={{ fontFamily: 'RegularTyp2', fontSize: 15 }}>{remove}</Text>
-                    </TouchableOpacity>
-                    <BoxButton callback={_self._onPress}>{edit}</BoxButton>
-                </View>
-            );
-        else if (itemButtonType == 'cart')
-            view = (
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 21 }}>
-                    <TouchableOpacity activeOpacity={0.8} onPress={_self._onPress}>
-                        <Text style={{ fontFamily: 'RegularTyp2', fontSize: 15 }}>{edit}</Text>
-                    </TouchableOpacity>
-                    {_self._getButton()}
-                </View>
-            );
-
-        return view;
-    }
-
-    render() {
-        const _self = this,
-            { addressName, address } = _self.props.data,
-            itemButtonType = _self._getItemType();
-
-        return (
-            <View style={{ flexDirection: 'column', paddingTop: 20, paddingBottom: 20, paddingRight: 20, paddingLeft: 10, borderBottomColor: '#dcdcdc', borderBottomWidth: 1, }}>
-                <View>
-                    <Text style={{ fontFamily: 'Medium', fontSize: 15 }}>{addressName}</Text>
-                    <Text style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#555555' }}>{address}</Text>
-                </View>
-                {itemButtonType}
-            </View>
-        )
     }
 }
 
@@ -1104,6 +941,12 @@ class Viewers extends Component {
         _self.onDidFocus();
     }
 
+    /* update redux */
+    updateRedux = (obj) => {
+        const _self = this;
+        _self.props.dispatch(obj);
+    }
+
     _renderItem = ({ item, key }) => {
         const _self = this,
             { itemType } = _self.props.config;
@@ -1113,7 +956,7 @@ class Viewers extends Component {
             case ITEMTYPE['CARTLIST']:
                 return <CartListItem key={key} callback={_self._callback} onUpdateItem={_self._onUpdateItem} onRemove={_self._removeItem} data={item} />;
             case ITEMTYPE['ADDRESS']:
-                return <AdressListItem config={_self.props.config} callback={_self._callback} onRemove={_self._removeItem} rdx={_self.props} data={item} />;
+                return <AddressListItem config={_self.props.config} callback={_self._callback} onRemove={_self._removeItem} data={item} />;
             case ITEMTYPE['FAVORITE']:
                 return <FavoriteListItem onRemove={_self._removeItem} data={item} />;
             case ITEMTYPE['ORDER']:

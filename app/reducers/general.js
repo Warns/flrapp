@@ -12,9 +12,7 @@ const generalInitialState = {
     textureDisplay: false,
   }
 
-export default function cart( state = generalInitialState, action ){
-
-    console.log(action.type, state.textureDisplay);
+export default function general( state = generalInitialState, action ){
 
     switch ( action.type ) {
         case SET_CATEGORIES: return {

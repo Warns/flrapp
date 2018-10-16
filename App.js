@@ -31,7 +31,7 @@ export default class App extends React.Component {
   };
 
   componentDidMount(){
-    fetch('https://dcetr9.segmentify.com/add/events/v1.json?apiKey=61c97507-5c1f-46c6-9b50-2aa9d1d73316', {
+    /*fetch('https://dcetr9.segmentify.com/add/events/v1.json?apiKey=61c97507-5c1f-46c6-9b50-2aa9d1d73316', {
     method: 'POST',
     headers: HEADERS,
     body: JSON.stringify({ "name": "PAGE_VIEW", "userId": "XXXXXXXXXXXXXXXXX", "sessionId": "YYYYYYYYYYYYYYYY", "device": "IOS", "pageUrl": "https://flormar.com.tr","category": "Home Page"}),
@@ -43,7 +43,7 @@ export default class App extends React.Component {
     .then(function (json) {
         console.log(json);
     })
-    .catch(error => console.log('error', error));
+    .catch(error => console.log('error', error));*/
   }
 
   _filterCallback = (o) => {
