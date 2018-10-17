@@ -1091,12 +1091,14 @@ class Viewers extends Component {
 
     _getViewer = () => {
         const _self = this,
+            { scrollEnabled = true } = _self.props,
             { type = VIEWERTYPE['LIST'] } = _self.props.config;
 
         let view = null;
         if (type == VIEWERTYPE['LIST'] || type == VIEWERTYPE['HTMLTOJSON'])
             view = (
                 <FlatList
+                    scrollEnabled={scrollEnabled}
                     data={_self.state.data}
                     keyExtractor={_self._keyExtractor}
                     renderItem={_self._renderItem}
@@ -1125,7 +1127,10 @@ class Viewers extends Component {
             );
         else if (type == VIEWERTYPE['SCROLLVIEW'])
             view = (
-                <ScrollView style={{ flex: 1 }}>
+                <ScrollView
+                    scrollEnabled={scrollEnabled}
+                    style={{ flex: 1 }}
+                >
                     {_self._getItem()}
                 </ScrollView>
 

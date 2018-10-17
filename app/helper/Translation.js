@@ -22,6 +22,8 @@ module.exports = {
         selectedShipAddress: 'SEÇİLİ ADRES',
         selectBillAddress: 'FATURA ADRESİ',
         selectedBillAddress: 'FATURA ADRESİ SEÇİLDİ',
+        errorShipAddress: 'Teslimat ve fatura adresi seçmelisiniz.',
+        errorBillAddress: 'Fatura adresi seçmelisiniz.',
     },
     store: {
         headerTitle: 'YAKIN MAĞAZALAR'

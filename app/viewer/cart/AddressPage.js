@@ -1,21 +1,20 @@
 import React, { Component } from 'react';
 import {
+    ScrollView,
     View,
-    TouchableOpacity,
-    Text
+    Alert
 } from 'react-native';
 import { Viewer } from 'root/app/viewer/';
 import {
-    UPDATE_CART,
     SET_CART_INFO,
     SET_DIFFERENT_ADDRESS,
     SET_ADDRESS_ITEM,
-    DATA_LOADED,
 } from 'root/app/helper/Constant';
 import { connect } from 'react-redux';
 import { CheckBox } from 'root/app/form';
 import Footer from './Footer';
 
+const Translation = require('root/app/helper/Translation.js');
 const Utils = require('root/app/helper/Global.js');
 const Globals = require('root/app/globals.js');
 const AJX = async ({ _self, uri, data = {} }, callback) => {
@@ -129,10 +128,21 @@ const Address = class Main extends Component {
 
     _onPress = () => {
         const _self = this,
-            { navigation } = _self.props;
+            { navigation, cart = {} } = _self.props,
+            { selectedAddress = {} } = cart,
+            { shipAddress = 0, billAddress = 0, differentAddress = false } = selectedAddress,
+            { errorShipAddress, errorBillAddress } = Translation['address'] || {};
+
+        if (!differentAddress && shipAddress == 0) {
+            Alert.alert(errorShipAddress);
+            return false;
+        } else if (differentAddress && billAddress == 0) {
+            Alert.alert(errorBillAddress);
+            return false;
+        }
 
         if (navigation)
-            navigation.navigate('Address', {});
+            navigation.navigate('Payment', {});
     }
 
     _onCheckBoxChange = ({ value = false }) => {
@@ -155,10 +165,10 @@ const Address = class Main extends Component {
         //if (loaded)
         view = (
             <View style={{ flex: 1 }}>
-                <CheckBox closed={true} callback={_self._onCheckBoxChange} data={checkboxConfig} />
-
-                <Viewer onRef={ref => (_self.child = ref)} style={{ paddingLeft: 10, paddingRight: 10, paddingBottom: 125 }} config={DATA} callback={this._callback} />
-
+                <ScrollView style={{ flex: 1, marginBottom: 125, }}>
+                    <Viewer scrollEnabled={false} onRef={ref => (_self.child = ref)} style={{ paddingLeft: 10, paddingRight: 10, }} config={DATA} callback={this._callback} />
+                    <CheckBox closed={true} callback={_self._onCheckBoxChange} data={checkboxConfig} />
+                </ScrollView>
                 <Footer onPress={_self._onPress} data={CONFIG} />
             </View>
         );

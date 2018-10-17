@@ -49,7 +49,7 @@ class Main extends Component {
         
         return (
             <ElevatedView
-                elevation={4}
+                elevation={5}
                 style={{
                     position: 'absolute',
                     width: '100%',

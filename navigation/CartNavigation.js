@@ -18,6 +18,9 @@ const CartNavigation = createStackNavigator(
         },
         Address: {
             screen: props => <AddressPage {...props} />,
+        },
+        Payment: {
+            screen: props => <Main {...props} />,
         }
     },
     {
