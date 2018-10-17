@@ -69,6 +69,7 @@ module.exports = {
             deleteCartLine: '/webapi/v3/Cart/deleteCartLine',
             useCoupon: '/webapi/v3/Cart/useCoupon',
             getCargo: '/webapi/v3/Cart/getCargo',
+            getPayment: '/webapi/v3/Cart/getPayment'
         }
     },
     customURLs: {

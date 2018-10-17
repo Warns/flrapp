@@ -871,13 +871,13 @@ class Viewers extends Component {
                 keyArr = keys['arr'] || '',
                 keyTotal = keys['total'] || '';
 
-            let data = res.data[keyArr];
+            let data = res.data[keyArr] || [];
 
             if (customFunc != '')
                 data = _self._customFunc(data);
 
             if (type == VIEWERTYPE['HTMLTOJSON'])
-                data = JSON.parse(data)[keys['obj']][keys['objArr']];
+                data = JSON.parse(data)[keys['obj']][keys['objArr']] || [];
 
             if (type == VIEWERTYPE['LIST'] || type == VIEWERTYPE['HTMLTOJSON'] || VIEWERTYPE['SCROLLVIEW'])
                 _self.setState({ data: data, total: res.data[keyTotal] || 0 });

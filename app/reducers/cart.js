@@ -1,4 +1,11 @@
-import { SET_CART_ITEMS, ADD_CART_ITEM, SET_CART_INFO, SET_CART_ADDRESS, SET_DIFFERENT_ADDRESS } from 'root/app/helper/Constant';
+import {
+    SET_CART_ITEMS,
+    ADD_CART_ITEM,
+    SET_CART_INFO,
+    SET_CART_ADDRESS,
+    SET_DIFFERENT_ADDRESS,
+    SET_CART_CARGO
+} from 'root/app/helper/Constant';
 
 const cartInitialState = {
     name: 'Cart',
@@ -8,8 +15,23 @@ const cartInitialState = {
         shipAddress: 0, /* teslimat adresi */
         billAddress: 0, /* fatura adresi */
         differentAddress: false /* farklı adrese gönder; false = teslimat, fatura aynı / true = farklı */
+    },
+    /* setCart yaptığımız zaman tüm seçimleri göndermemiz gerekiyor */
+    postData: {
+        shipAddressId: 0,
+        billAddressId: 0,
+        customerNote: '',
+        paymentId: 0,
+        cargoId: 0,
+        bankId: 0,
+        installmentId: 0,
+        usePoint: 0,
+        //useBankPoint: true,
+        //cartLocation: '',
+        paymentNote: '',
+        serviceId: 0
     }
-}
+};
 
 export default function cart(state = cartInitialState, action) {
 
@@ -30,22 +52,25 @@ export default function cart(state = cartInitialState, action) {
             const { selectedAddress = {} } = state,
                 { differentAddress = false } = selectedAddress,
                 { addressId, addressType = 'shipAddress' } = action.value;
-            console.log('SET_CART_ADDRESS', addressId);
+
             if (!differentAddress)
                 return {
                     ...state,
-                    selectedAddress: { ...state.selectedAddress, shipAddress: addressId, billAddress: addressId }
+                    selectedAddress: { ...state.selectedAddress, shipAddress: addressId, billAddress: addressId },
+                    postData: { ...state.postData, shipAddressId: addressId, billAddressId: addressId }
                 }
             else {
                 if (addressType == 'shipAddress')
                     return {
                         ...state,
-                        selectedAddress: { ...state.selectedAddress, shipAddress: addressId }
+                        selectedAddress: { ...state.selectedAddress, shipAddress: addressId },
+                        postData: { ...state.postData, shipAddressId: addressId }
                     }
                 else if (addressType == 'billAddress')
                     return {
                         ...state,
-                        selectedAddress: { ...state.selectedAddress, billAddress: addressId }
+                        selectedAddress: { ...state.selectedAddress, billAddress: addressId },
+                        postData: { ...state.postData, billAddressId: addressId }
                     }
             }
         };
@@ -57,13 +82,21 @@ export default function cart(state = cartInitialState, action) {
             if (b)
                 return {
                     ...state,
-                    selectedAddress: { ...state.selectedAddress, differentAddress: b, billAddress: 0 }
+                    selectedAddress: { ...state.selectedAddress, differentAddress: b, billAddress: 0 },
+                    postData: { ...state.postData, billAddressId: 0 }
                 }
             else
                 return {
                     ...state,
-                    selectedAddress: { ...state.selectedAddress, differentAddress: b, billAddress: shipAddress }
+                    selectedAddress: { ...state.selectedAddress, differentAddress: b, billAddress: shipAddress },
+                    postData: { ...state.postData, billAddressId: shipAddress }
                 }
+        };
+        case SET_CART_CARGO: {
+            return {
+                ...state,
+                postData: { ...state.postData, cargoId: action.value }
+            }
         };
         default:
             return state;

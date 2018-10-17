@@ -8,7 +8,8 @@ import { Viewer } from 'root/app/viewer/';
 import {
     SET_CART_INFO,
     SET_DIFFERENT_ADDRESS,
-    SET_ADDRESS_ITEM,
+    SET_ADDRESS_ITEM_CLICK,
+    SET_CART_CARGO,
 } from 'root/app/helper/Constant';
 import { connect } from 'react-redux';
 import { CheckBox } from 'root/app/form';
@@ -99,10 +100,10 @@ const Address = class Main extends Component {
         const _self = this,
             { selectedAddress = {} } = _self.props.cart,
             { shipAddress = 0, billAddress = 0 } = selectedAddress;
-        console.log('SET_ADDRESS_ITEM', shipAddress);
-        if (type == SET_ADDRESS_ITEM)
+
+        if (type == SET_ADDRESS_ITEM_CLICK)
             _self.setAjx({ uri: Utils.getURL({ key: 'cart', subKey: 'getCargo' }), data: { shipAddressId: shipAddress } }, (res) => {
-                console.log(res);
+
                 const { status, data = {} } = res,
                     { cargoes = [] } = data;
                 if (status == '200' && cargoes.length > 0) {
@@ -111,11 +112,15 @@ const Address = class Main extends Component {
                             'shipAddressId': shipAddress,
                             'billAddressId': billAddress,
                             'cargoId': cargoId,
-                            'cartLocation': 'delivery'
+                            //'cartLocation': 'delivery'
                         };
-                    alert(shipAddress + ' ' + billAddress);
+                    
+                    _self.props.dispatch({ type: SET_CART_CARGO, value: cargoId });
+
                     _self.setAjx({ uri: Utils.getURL({ key: 'cart', subKey: 'setCart' }), data: obj }, (res) => {
-                        console.log(res);
+                        const { status } = res;
+                        if( status == 200 )
+                            console.log('BAŞARILI....');
                     });
                 }
             });

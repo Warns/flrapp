@@ -1,15 +1,6 @@
 import React, {Component} from 'react';
 import { createStackNavigator } from 'react-navigation';
-import { CartPage, AddressPage } from 'root/app/viewer/';
-
-class Main extends Component {
-    constructor(props){
-        super(props)
-    }
-    render(){
-        return null;
-    }
-}
+import { CartPage, AddressPage, PaymentPage } from 'root/app/viewer/';
 
 const CartNavigation = createStackNavigator(
     {
@@ -20,7 +11,7 @@ const CartNavigation = createStackNavigator(
             screen: props => <AddressPage {...props} />,
         },
         Payment: {
-            screen: props => <Main {...props} />,
+            screen: props => <PaymentPage {...props} />,
         }
     },
     {

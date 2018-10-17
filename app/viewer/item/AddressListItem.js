@@ -7,7 +7,7 @@ import {
 import {
     SET_FORM,
     SET_CART_ADDRESS,
-    SET_ADDRESS_ITEM,
+    SET_ADDRESS_ITEM_CLICK,
 } from 'root/app/helper/Constant';
 import { connect } from 'react-redux';
 
@@ -140,9 +140,8 @@ class AddressList extends Component {
 
         setTimeout(() => {
             if (callback) {
-                console.log('_onCallback');
                 callback({
-                    type: SET_ADDRESS_ITEM,
+                    type: SET_ADDRESS_ITEM_CLICK,
                     data: {}
                 });
             }
