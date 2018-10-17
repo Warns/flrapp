@@ -10,6 +10,7 @@ import {
     SET_DIFFERENT_ADDRESS,
     SET_ADDRESS_ITEM_CLICK,
     SET_CART_CARGO,
+    DATA_LOADED,
 } from 'root/app/helper/Constant';
 import { connect } from 'react-redux';
 import { CheckBox } from 'root/app/form';
@@ -96,34 +97,38 @@ const Address = class Main extends Component {
     /*
         her bir adres ve fatura seçiminde önce kargoya istek yapılır ardından ilk seçenekten cargo idsi alınıp setcart istek yapılır.
     */
-    _callback = ({ type, data }) => {
+    _callback = (obj) => {
         const _self = this,
+            { type, data } = obj,
             { selectedAddress = {} } = _self.props.cart,
             { shipAddress = 0, billAddress = 0 } = selectedAddress;
 
-        if (type == SET_ADDRESS_ITEM_CLICK)
+        if (type == DATA_LOADED) return false;
+        else if (type == SET_ADDRESS_ITEM_CLICK)
             _self.setAjx({ uri: Utils.getURL({ key: 'cart', subKey: 'getCargo' }), data: { shipAddressId: shipAddress } }, (res) => {
 
                 const { status, data = {} } = res,
                     { cargoes = [] } = data;
                 if (status == '200' && cargoes.length > 0) {
                     const { cargoId = 0 } = cargoes[0],
-                        obj = {
+                        k = {
                             'shipAddressId': shipAddress,
                             'billAddressId': billAddress,
                             'cargoId': cargoId,
                             //'cartLocation': 'delivery'
                         };
-                    
+
                     _self.props.dispatch({ type: SET_CART_CARGO, value: cargoId });
 
-                    _self.setAjx({ uri: Utils.getURL({ key: 'cart', subKey: 'setCart' }), data: obj }, (res) => {
+                    _self.setAjx({ uri: Utils.getURL({ key: 'cart', subKey: 'setCart' }), data: k }, (res) => {
                         const { status } = res;
-                        if( status == 200 )
+                        if (status == 200)
                             console.log('BAŞARILI....');
                     });
                 }
             });
+        else
+            _self.props.navigation.navigate('Detail', data);
     }
 
     _onUpdate = () => {
@@ -171,7 +176,14 @@ const Address = class Main extends Component {
         view = (
             <View style={{ flex: 1 }}>
                 <ScrollView style={{ flex: 1, marginBottom: 125, }}>
-                    <Viewer scrollEnabled={false} onRef={ref => (_self.child = ref)} style={{ paddingLeft: 10, paddingRight: 10, }} config={DATA} callback={this._callback} />
+                    <Viewer
+                        scrollEnabled={false}
+                        onRef={ref => (_self.child = ref)}
+                        style={{ paddingLeft: 10, paddingRight: 10, }}
+                        config={DATA}
+                        callback={this._callback}
+                        refreshing={true}
+                    />
                     <CheckBox closed={true} callback={_self._onCheckBoxChange} data={checkboxConfig} />
                 </ScrollView>
                 <Footer onPress={_self._onPress} data={CONFIG} />

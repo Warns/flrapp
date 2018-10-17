@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { createStackNavigator } from 'react-navigation';
-import { CartPage, AddressPage, PaymentPage } from 'root/app/viewer/';
+import { CartPage, AddressPage, PaymentPage, ExtraPageDetail } from 'root/app/viewer/';
 
 const CartNavigation = createStackNavigator(
     {
@@ -12,7 +12,10 @@ const CartNavigation = createStackNavigator(
         },
         Payment: {
             screen: props => <PaymentPage {...props} />,
-        }
+        },
+        Detail: {
+            screen: props => <ExtraPageDetail {...props} />,
+        },
     },
     {
         navigationOptions: {

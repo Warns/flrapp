@@ -10,6 +10,7 @@ import {
 import {
     SET_CART_INFO,
     ICONS,
+    SET_VIEWER,
 } from 'root/app/helper/Constant';
 import { connect } from 'react-redux';
 import Footer from './Footer';
@@ -41,17 +42,54 @@ const CONFIG = {
     coupon: false
 };
 
+
+const popup = [
+
+    {
+        "title": "MESAFELİ SATIŞ SÖZLEŞMESİ",
+        "type": "webViewer",
+        "uri": {
+            "key": "cart",
+            "subKey": "getAgreement"
+        },
+        "keys": {
+            "arr": "agreement1Html"
+        },
+        "data": {}
+    },
+
+    {
+        "title": "ÖN BİLGİLENDİRME FORMU",
+        "type": "webViewer",
+        "uri": {
+            "key": "cart",
+            "subKey": "getAgreement"
+        },
+        "keys": {
+            "arr": "agreement2Html"
+        },
+        "data": {}
+    }
+];
+
 class Foot extends Component {
     constructor(props) {
         super(props);
     }
+
+    _onPress = () => {
+        const _self = this;
+        alert( JSON.stringify({ type: SET_VIEWER, data: popup[0] }) )
+        _self.props.navigation.navigate('Detail', { });
+    }
+
     render() {
         const _self = this;
 
         return (
             <View style={{ flex: 1, paddingLeft: 20, paddingRight: 20 }}>
                 <View style={{ borderBottomColor: '#d8d8d8', borderBottomWidth: 1 }}>
-                    <TouchableOpacity activeOpacity={.8} onPress={this._openModal}>
+                    <TouchableOpacity activeOpacity={.8} onPress={_self._onPress}>
                         <View style={{ flexDirection: 'row', alignItems: 'center', height: 60, justifyContent: 'space-between' }}>
                             <Text style={{ fontFamily: 'Bold', fontSize: 16 }}>{'Sepet özetini göster'}</Text>
                             <Image
@@ -63,7 +101,7 @@ class Foot extends Component {
                 </View>
 
                 <View style={{ borderBottomColor: '#d8d8d8', borderBottomWidth: 1 }}>
-                    <TouchableOpacity activeOpacity={.8} onPress={this._openModal}>
+                    <TouchableOpacity activeOpacity={.8} onPress={_self._onPress}>
                         <View style={{ flexDirection: 'row', alignItems: 'center', height: 60, justifyContent: 'space-between' }}>
                             <Text style={{ fontFamily: 'Bold', fontSize: 16 }}>{'Üyelik sözleşmesi'}</Text>
                             <Image
@@ -78,7 +116,7 @@ class Foot extends Component {
                 </View>
 
                 <View style={{ borderBottomColor: '#d8d8d8', borderBottomWidth: 1 }}>
-                    <TouchableOpacity activeOpacity={.8} onPress={this._openModal}>
+                    <TouchableOpacity activeOpacity={.8} onPress={_self._onPress}>
                         <View style={{ flexDirection: 'row', alignItems: 'center', height: 60, justifyContent: 'space-between' }}>
                             <Text style={{ fontFamily: 'Bold', fontSize: 16 }}>{'Mesafeli satış sözleşmesi'}</Text>
                             <Image
@@ -147,7 +185,7 @@ const Payment = class Main extends Component {
         view = (
             <View style={{ flex: 1 }}>
                 <ScrollView style={{ flex: 1, marginBottom: 125, }}>
-                    <Foot />
+                    <Foot {..._self.props} />
                 </ScrollView>
                 <Footer onPress={_self._onPress} data={CONFIG} />
             </View>
