@@ -14,10 +14,10 @@ module.exports = {
 
     /* post için oluşturulan nesneye sabit bir alan eklenecekse bu kısma */
     addFields: [
-        {
+        /*{
             id: 'isGuest',
             value: true
-        },
+        },*/
     ],
 
     fields: [

@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import {
     ScrollView,
     View,
-    Alert
+    Alert,
+    TouchableOpacity,
+    Text,
 } from 'react-native';
 import { Viewer } from 'root/app/viewer/';
 import {
@@ -11,6 +13,7 @@ import {
     SET_ADDRESS_ITEM_CLICK,
     SET_CART_CARGO,
     DATA_LOADED,
+    SET_FORM,
 } from 'root/app/helper/Constant';
 import { connect } from 'react-redux';
 import { CheckBox } from 'root/app/form';
@@ -161,6 +164,20 @@ const Address = class Main extends Component {
         _self.props.dispatch({ type: SET_DIFFERENT_ADDRESS, value: value });
     }
 
+    /* YENI ADRESS EKLEMEK */
+    _onNewAddress = () => {
+        const _self = this,
+            obj = {
+                type: SET_FORM,
+                data: {
+                    itemType: 'createAddress'
+                },
+                refreshing: _self._onUpdate
+            };
+
+        _self.props.navigation.navigate('Detail', obj);
+    }
+
     _getView = () => {
         const _self = this,
             { loaded = false } = _self.state,
@@ -176,6 +193,11 @@ const Address = class Main extends Component {
         view = (
             <View style={{ flex: 1 }}>
                 <ScrollView style={{ flex: 1, marginBottom: 125, }}>
+
+                    <TouchableOpacity onPress={_self._onNewAddress}>
+                        <Text>YENİ ADRES EKLE +</Text>
+                    </TouchableOpacity>
+
                     <Viewer
                         scrollEnabled={false}
                         onRef={ref => (_self.child = ref)}
