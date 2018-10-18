@@ -12,7 +12,6 @@ module.exports = {
     // Here we store all session data.
     // .Auth {}
     // .Login {}
-
   },
 
   // FUNCTIONS

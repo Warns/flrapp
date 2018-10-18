@@ -128,7 +128,7 @@ const Address = class Main extends Component {
                 }
             });
         else
-            _self.props.navigation.navigate('Detail', data);
+            _self.props.navigation.navigate('Detail', obj);
     }
 
     _onUpdate = () => {

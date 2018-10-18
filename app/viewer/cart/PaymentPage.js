@@ -43,9 +43,18 @@ const CONFIG = {
 };
 
 
-const popup = [
-
-    {
+const CONFIG_POPUP = {
+    "cart": {
+        "type": "scrollView",
+        "itemType": "cartList",
+        "uri": { "key": "cart", "subKey": "getCart" },
+        "keys": {
+            "id": "cartItemId",
+            "arr": "products"
+        },
+        "refreshing": false,
+    },
+    "agreement1Html": {
         "title": "MESAFELİ SATIŞ SÖZLEŞMESİ",
         "type": "webViewer",
         "uri": {
@@ -54,11 +63,9 @@ const popup = [
         },
         "keys": {
             "arr": "agreement1Html"
-        },
-        "data": {}
+        }
     },
-
-    {
+    "agreement2Html": {
         "title": "ÖN BİLGİLENDİRME FORMU",
         "type": "webViewer",
         "uri": {
@@ -67,20 +74,18 @@ const popup = [
         },
         "keys": {
             "arr": "agreement2Html"
-        },
-        "data": {}
+        }
     }
-];
+};
 
 class Foot extends Component {
     constructor(props) {
         super(props);
     }
 
-    _onPress = () => {
+    _onPress = ( k ) => {
         const _self = this;
-        alert( JSON.stringify({ type: SET_VIEWER, data: popup[0] }) )
-        _self.props.navigation.navigate('Detail', { });
+        _self.props.navigation.navigate('Detail', { type: SET_VIEWER, data: CONFIG_POPUP[ k ] || {} });
     }
 
     render() {
@@ -89,7 +94,7 @@ class Foot extends Component {
         return (
             <View style={{ flex: 1, paddingLeft: 20, paddingRight: 20 }}>
                 <View style={{ borderBottomColor: '#d8d8d8', borderBottomWidth: 1 }}>
-                    <TouchableOpacity activeOpacity={.8} onPress={_self._onPress}>
+                    <TouchableOpacity activeOpacity={.8} onPress={_self._onPress.bind(this, 'cart')}>
                         <View style={{ flexDirection: 'row', alignItems: 'center', height: 60, justifyContent: 'space-between' }}>
                             <Text style={{ fontFamily: 'Bold', fontSize: 16 }}>{'Sepet özetini göster'}</Text>
                             <Image
@@ -101,7 +106,7 @@ class Foot extends Component {
                 </View>
 
                 <View style={{ borderBottomColor: '#d8d8d8', borderBottomWidth: 1 }}>
-                    <TouchableOpacity activeOpacity={.8} onPress={_self._onPress}>
+                    <TouchableOpacity activeOpacity={.8} onPress={_self._onPress.bind(this, 'agreement2Html')}>
                         <View style={{ flexDirection: 'row', alignItems: 'center', height: 60, justifyContent: 'space-between' }}>
                             <Text style={{ fontFamily: 'Bold', fontSize: 16 }}>{'Üyelik sözleşmesi'}</Text>
                             <Image
@@ -116,7 +121,7 @@ class Foot extends Component {
                 </View>
 
                 <View style={{ borderBottomColor: '#d8d8d8', borderBottomWidth: 1 }}>
-                    <TouchableOpacity activeOpacity={.8} onPress={_self._onPress}>
+                    <TouchableOpacity activeOpacity={.8} onPress={_self._onPress.bind(this, 'agreement1Html')}>
                         <View style={{ flexDirection: 'row', alignItems: 'center', height: 60, justifyContent: 'space-between' }}>
                             <Text style={{ fontFamily: 'Bold', fontSize: 16 }}>{'Mesafeli satış sözleşmesi'}</Text>
                             <Image

@@ -879,7 +879,7 @@ class Viewers extends Component {
             if (type == VIEWERTYPE['HTMLTOJSON'])
                 data = JSON.parse(data)[keys['obj']][keys['objArr']] || [];
 
-            if (type == VIEWERTYPE['LIST'] || type == VIEWERTYPE['HTMLTOJSON'] || VIEWERTYPE['SCROLLVIEW'])
+            if (type == VIEWERTYPE['LIST'] || type == VIEWERTYPE['HTMLTOJSON'] || type == VIEWERTYPE['SCROLLVIEW'])
                 _self.setState({ data: data, total: res.data[keyTotal] || 0 });
             else if (type == VIEWERTYPE['WEBVIEW'])
                 _self.setState({ html: _self._addStyle({ customClass: customClass, data: data }) });
@@ -949,7 +949,7 @@ class Viewers extends Component {
 
     _renderItem = ({ item, key }) => {
         const _self = this,
-            { itemType } = _self.props.config;
+            { itemType = '' } = _self.props.config;
 
         switch (itemType) {
 
