@@ -11,10 +11,11 @@ import {
     SET_CART_INFO,
     ICONS,
     SET_VIEWER,
+    FORMDATA,
 } from 'root/app/helper/Constant';
 import { connect } from 'react-redux';
 import Footer from './Footer';
-import { CheckBox } from 'root/app/form';
+import { CheckBox, Form } from 'root/app/form';
 
 const Translation = require('root/app/helper/Translation.js');
 const Utils = require('root/app/helper/Global.js');
@@ -67,9 +68,9 @@ class Foot extends Component {
         super(props);
     }
 
-    _onPress = ( k ) => {
+    _onPress = (k) => {
         const _self = this;
-        _self.props.navigation.navigate('Detail', { type: SET_VIEWER, data: CONFIG_POPUP[ k ] || {} });
+        _self.props.navigation.navigate('Detail', { type: SET_VIEWER, data: CONFIG_POPUP[k] || {} });
     }
 
     render() {
@@ -118,6 +119,25 @@ class Foot extends Component {
                 </View>
             </View>
         );
+    }
+}
+
+class CrediCart extends Component {
+    constructor(props) {
+        super(props);
+    }
+
+    _callback = () => {
+
+    }
+
+    _onChangeText = (obj) => {
+        console.log(obj);
+    }
+
+    render() {
+        const _self = this;
+        return <Form onChangeText={_self._onChangeText} callback={_self._callback} data={FORMDATA['creditCart']} />;
     }
 }
 
@@ -174,6 +194,7 @@ const Payment = class Main extends Component {
         view = (
             <View style={{ flex: 1 }}>
                 <ScrollView style={{ flex: 1, marginBottom: 125, }}>
+                    <CrediCart />
                     <Foot {..._self.props} />
                 </ScrollView>
                 <Footer onPress={_self._onPress} data={CONFIG} />

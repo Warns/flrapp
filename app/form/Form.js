@@ -241,6 +241,14 @@ class Form extends Component {
         }
     }
 
+    /* anlık form callback */
+    _onChangeText = (obj) => {
+        const _self = this,
+            { onChangeText } = _self.props;
+        if (onChangeText)
+            onChangeText(obj);
+    }
+
     addField = (obj) => {
         const _self = this,
             { id, type } = obj,
@@ -249,6 +257,8 @@ class Form extends Component {
             _callback = this._callback;
 
         switch (type) {
+            case 'creditCart':
+                return <FormInput onChangeText={_self._onChangeText} creditCart={true} theme={theme} callback={_callback} control={validation} key={id} data={obj} />;
             case 'text':
                 return <FormInput theme={theme} callback={_callback} control={validation} key={id} data={obj} />;
             case 'select':

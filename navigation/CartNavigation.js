@@ -4,15 +4,17 @@ import { CartPage, AddressPage, PaymentPage, ExtraPageDetail } from 'root/app/vi
 
 const CartNavigation = createStackNavigator(
     {
+        Payment: {
+            screen: props => <PaymentPage {...props} />,
+        },
+        
         Cart: {
             screen: props => <CartPage {...props} />,
         },
         Address: {
             screen: props => <AddressPage {...props} />,
         },
-        Payment: {
-            screen: props => <PaymentPage {...props} />,
-        },
+        
         Detail: {
             screen: props => <ExtraPageDetail {...props} />,
         },

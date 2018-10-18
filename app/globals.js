@@ -169,11 +169,15 @@ module.exports = {
     _t.fetch(uri, JSON.stringify(data), (answer) => {
       if (_self._isMounted) {
         if (answer === 'error') {
-          console.log('fatalllll error: could not get access token');
+          if (typeof callback !== 'undefined')
+            callback('error');
         } else {
           if (answer.status == 200) {
             if (typeof callback !== 'undefined')
               callback(answer);
+          } else {
+            if (typeof callback !== 'undefined')
+              callback('error');
           }
         }
         _self.setState({ loading: false, refreshing: false });

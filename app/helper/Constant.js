@@ -78,7 +78,8 @@ export const FORMDATA = {
     setAddress: require('root/data/setAddress.js'),
     setUser: require('root/data/setUser.js'),
     productFilter: require('root/data/productFilter.js'),
-    useCoupon: require('root/data/useCoupon.js')
+    useCoupon: require('root/data/useCoupon.js'),
+    creditCart: require('root/data/creditCart.js'), 
 };
 
 /* form style, from->container.js */

@@ -73,8 +73,8 @@ class FormInput extends Component {
     }
     _onChangeText = (value) => {
 
-        const { regex = '' } = this.props.data;
-        const { onChangeText, id = '', } = this.props;
+        const { regex = '', id = '' } = this.props.data;
+        const { onChangeText } = this.props;
 
         const _self = this;
         _self.setState({ value: value, });
@@ -119,7 +119,8 @@ class FormInput extends Component {
             } = _self.props.data,
             {
                 control = false,
-                theme
+                theme,
+                creditCart = false
             } = _self.props,
             { TITLE_COLOR = '#9b9b9b' } = FORMSTYLE[theme],
             {
@@ -129,7 +130,33 @@ class FormInput extends Component {
 
         let input = null;
 
-        if (mask)
+        if (creditCart)
+            input = (
+                <TextInputMask
+
+                    ref={element => {
+                        this.input = element
+                    }}
+                    autoCorrect={autoCorrect}
+                    maxLength={19}
+                    multiline={multiline}
+                    underlineColorAndroid={'transparent'}
+                    style={inputSty}
+                    placeholder={placeholder}
+                    value={this.state.value}
+                    secureTextEntry={secureTextEntry}
+                    keyboardType={keyboardType}
+                    placeholderTextColor={TITLE_COLOR}
+                    onFocus={this._onFocus}
+                    onBlur={this._onBlur}
+                    onChangeText={this._onChangeText}
+                    type={'credit-card'}
+                    options={{
+                        obfuscated: false
+                    }}
+                />
+            );
+        else if (mask)
             input = (
                 <TextInputMask
 
