@@ -40,22 +40,6 @@ import { AddressListItem } from './';
 const Translation = require('root/app/helper/Translation.js');
 const Utils = require('root/app/helper/Global.js');
 const Globals = require('root/app/globals.js');
-const AJX = async ({ _self, uri, data = {} }, callback) => {
-    _self.setState({ loading: true });
-    Globals.fetch(uri, JSON.stringify(data), (answer) => {
-        if (_self._isMounted) {
-            if (answer === 'error') {
-                console.log('fatalllll error: could not get access token');
-            } else {
-                if (answer.status == 200) {
-                    if (typeof callback !== 'undefined')
-                        callback(answer);
-                }
-            }
-            _self.setState({ loading: false, refreshing: false });
-        }
-    });
-}
 
 /*
 const config = {
@@ -171,7 +155,7 @@ class CartListItem extends Component {
         const _self = this,
             { data = {}, onUpdateItem } = _self.props,
             { cartItemId } = data;
-        AJX({ _self: _self, uri: Utils.getURL({ key: 'cart', subKey: 'updateCartLine' }), data: { cartItemId: cartItemId, quantity: value } }, (res) => {
+        Globals.AJX({ _self: _self, uri: Utils.getURL({ key: 'cart', subKey: 'updateCartLine' }), data: { cartItemId: cartItemId, quantity: value } }, (res) => {
             const { status, message } = res;
             if (status == 200 && onUpdateItem)
                 onUpdateItem({ type: UPDATE_CART, data: res });
@@ -182,7 +166,7 @@ class CartListItem extends Component {
         const _self = this,
             { data = {}, onUpdateItem } = _self.props,
             { cartItemId } = data;
-        AJX({ _self: _self, uri: Utils.getURL({ key: 'cart', subKey: 'deleteCartLine' }), data: { cartItemId: [cartItemId] } }, (res) => {
+        Globals.AJX({ _self: _self, uri: Utils.getURL({ key: 'cart', subKey: 'deleteCartLine' }), data: { cartItemId: [cartItemId] } }, (res) => {
             const { status, message } = res;
             if (status == 200 && onUpdateItem)
                 onUpdateItem({ type: REMOVE_CART, data: res });
@@ -287,7 +271,7 @@ class FavoriteListItem extends Component {
         Utils.confirm({ message: Translation['confirm']['removeMessage'] }, ({ type }) => {
             if (type == 'ok') {
                 const { productId } = data;
-                AJX({ _self: _self, uri: Utils.getURL({ key: 'user', subKey: 'deleteFavoriteProduct' }), data: { productId: productId } }, (res) => {
+                Globals.AJX({ _self: _self, uri: Utils.getURL({ key: 'user', subKey: 'deleteFavoriteProduct' }), data: { productId: productId } }, (res) => {
                     const { status, message } = res;
                     if (onRemove && status == 200)
                         setTimeout(() => {
@@ -865,7 +849,7 @@ class Viewers extends Component {
         const _self = this,
             { type = VIEWERTYPE['LIST'] } = _self.props.config;
 
-        AJX({ _self: _self, uri: uri, data: data }, function (res) {
+        Globals.AJX({ _self: _self, uri: uri, data: data }, function (res) {
 
             const { keys, customClass = '', customFunc = '' } = _self.props.config,
                 keyArr = keys['arr'] || '',

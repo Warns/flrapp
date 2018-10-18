@@ -163,4 +163,22 @@ module.exports = {
     }
   },
 
+  AJX: async function ({ _self, uri, data = {} }, callback) {
+    const _t = this;
+    _self.setState({ loading: true });
+    _t.fetch(uri, JSON.stringify(data), (answer) => {
+      if (_self._isMounted) {
+        if (answer === 'error') {
+          console.log('fatalllll error: could not get access token');
+        } else {
+          if (answer.status == 200) {
+            if (typeof callback !== 'undefined')
+              callback(answer);
+          }
+        }
+        _self.setState({ loading: false, refreshing: false });
+      }
+    });
+  }
+
 };

@@ -117,30 +117,10 @@ class CountryPicker extends Component {
         return data;
     }
 
-    ajx = ({ uri, data = {} }, callback) => {
-        const _self = this;
-        _self.setState({ loading: true });
-        Globals.fetch(uri, JSON.stringify(data), (answer) => {
-            if (_self._isMounted) {
-                if (answer === 'error') {
-                    console.log('fatalllll error: could not get access token');
-                } else {
-                    if (answer.status == 200) {
-                        if (typeof callback !== 'undefined')
-                            callback(answer);
-                    } else {
-
-                    }
-                }
-                _self.setState({ loading: false });
-            }
-        });
-    }
-
     setAjx = ({ key, data = {} }, callback) => {
         const _self = this,
             { uri, rel, keys } = _self.config[key] || {};
-        _self.ajx({ uri: uri, data: data }, function (d) {
+        Globals.AJX({ _self: _self, uri: uri, data: data }, function (d) {
             let obj = {},
                 arr = d['data'][keys['arr']];
 

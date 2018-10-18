@@ -60,30 +60,10 @@ class OrderViewer extends Component {
         return Utils.getURL({ key: 'order', subKey: 'getOrderDetail' });
     }
 
-    ajx = ({ uri, data = {} }, callback) => {
-        const _self = this;
-        _self.setState({ loading: true });
-        Globals.fetch(uri, JSON.stringify(data), (answer) => {
-            if (_self._isMounted) {
-                if (answer === 'error') {
-                    console.log('fatalllll error: could not get access token');
-                } else {
-                    if (answer.status == 200) {
-                        if (typeof callback !== 'undefined')
-                            callback(answer);
-                    } else {
-
-                    }
-                }
-                _self.setState({ loading: false, });
-            }
-        });
-    }
-
     setAjx = ({ uri, data = {} }, callback) => {
         const _self = this;
 
-        _self.ajx({ uri: uri, data: data }, function (res) {
+        Globals.AJX({ _self: _self, uri: uri, data: data }, function (res) {
 
             //console.log(res);
 

@@ -22,22 +22,6 @@ import Footer from './Footer';
 const Translation = require('root/app/helper/Translation.js');
 const Utils = require('root/app/helper/Global.js');
 const Globals = require('root/app/globals.js');
-const AJX = async ({ _self, uri, data = {} }, callback) => {
-    _self.setState({ loading: true });
-    Globals.fetch(uri, JSON.stringify(data), (answer) => {
-        if (_self._isMounted) {
-            if (answer === 'error') {
-                console.log('fatalllll error: could not get access token');
-            } else {
-                if (answer.status == 200) {
-                    if (typeof callback !== 'undefined')
-                        callback(answer);
-                }
-            }
-            _self.setState({ loading: false, refreshing: false });
-        }
-    });
-}
 
 /* address list config */
 const DATA = {
@@ -90,7 +74,7 @@ const Address = class Main extends Component {
 
     setAjx = ({ uri, data }, callback) => {
         const _self = this;
-        AJX({ _self: _self, uri: uri, data: data }, (res) => {
+        Globals.AJX({ _self: _self, uri: uri, data: data }, (res) => {
             const { status, message } = res;
             if (status == 200 && typeof callback !== 'undefined')
                 callback(res);
