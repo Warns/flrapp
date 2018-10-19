@@ -5,6 +5,7 @@ import {
     Alert,
     TouchableOpacity,
     Text,
+    Image
 } from 'react-native';
 import { Viewer } from 'root/app/viewer/';
 import {
@@ -48,19 +49,61 @@ const CONFIG = {
     coupon: false
 };
 
+
+class CargoItem extends Component {
+    /*
+        {
+            " isPaymentAtDoor": false,
+            "cargoIcon": "http://mcdn.flormar.com.tr/images/nakLogo/nakImg170.jpg",
+            "cargoId": 170,
+            "cargoName": "Yurt İçi Kargo",
+            "isDefault": true,
+            "price": 0,
+        }
+
+    */
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        const _self = this,
+            { price, cargoIcon, cargoName, isDefault = false } = _self.props.data,
+            borderColor = isDefault ? '#000000' : '#D1D1D1';
+
+
+
+        return (
+            <View style={{ borderColor: borderColor, width: 60, borderWidth: 1, justifyContent: 'center' }}>
+                <Image
+                    style={{ resizeMode: 'contain', width: 50, height: 50, }}
+                    source={{ uri: Utils.getImage(cargoIcon) }}
+                />
+                <Text>{cargoName}</Text>
+                <Text>{price}</Text>
+            </View>
+        );
+    }
+}
+
 const Address = class Main extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            loaded: false
+            loaded: false,
+            cargoes: []
         };
     }
 
     componentDidMount() {
         const _self = this;
         _self._isMounted = true;
+
         _self.setAjx({ uri: Utils.getURL({ key: 'cart', subKey: 'getCart' }), data: { cartLocation: 'delivery' } }, (res) => {
+
+            _self._getCargoAjx();
+
             _self.props.dispatch({ type: SET_CART_INFO, value: res.data });
+
             setTimeout(() => {
                 _self.setState({ loaded: true });
             }, 10);
@@ -81,39 +124,49 @@ const Address = class Main extends Component {
         });
     }
 
-    /*
-        her bir adres ve fatura seçiminde önce kargoya istek yapılır ardından ilk seçenekten cargo idsi alınıp setcart istek yapılır.
-    */
-    _callback = (obj) => {
+    _getCargoAjx = (callback) => {
         const _self = this,
-            { type, data } = obj,
             { selectedAddress = {} } = _self.props.cart,
             { shipAddress = 0, billAddress = 0 } = selectedAddress;
 
+        _self.setAjx({ uri: Utils.getURL({ key: 'cart', subKey: 'getCargo' }), data: { shipAddressId: shipAddress } }, (res) => {
+            console.log(res);
+            const { status, data = {} } = res,
+                { cargoes = [] } = data;
+
+            _self.setState({ cargoes: cargoes });
+
+            if (status == '200' && cargoes.length > 0) {
+                const { cargoId = 0 } = cargoes[0],
+                    k = {
+                        'shipAddressId': shipAddress,
+                        'billAddressId': billAddress,
+                        'cargoId': cargoId,
+                        'cartLocation': 'delivery'
+                    };
+
+                _self.props.dispatch({ type: SET_CART_CARGO, value: cargoId });
+
+                _self.setAjx({ uri: Utils.getURL({ key: 'cart', subKey: 'setCart' }), data: k }, (res) => {
+                    const { status } = res;
+                    if (status == 200)
+                        console.log('BAŞARILI....');
+
+
+                    if (typeof callback !== 'undefined')
+                        callback();
+                });
+            }
+        });
+    }
+
+    _callback = (obj) => {
+        const _self = this,
+            { type } = obj;
+
         if (type == DATA_LOADED) return false;
         else if (type == SET_ADDRESS_ITEM_CLICK)
-            _self.setAjx({ uri: Utils.getURL({ key: 'cart', subKey: 'getCargo' }), data: { shipAddressId: shipAddress } }, (res) => {
-
-                const { status, data = {} } = res,
-                    { cargoes = [] } = data;
-                if (status == '200' && cargoes.length > 0) {
-                    const { cargoId = 0 } = cargoes[0],
-                        k = {
-                            'shipAddressId': shipAddress,
-                            'billAddressId': billAddress,
-                            'cargoId': cargoId,
-                            //'cartLocation': 'delivery'
-                        };
-
-                    _self.props.dispatch({ type: SET_CART_CARGO, value: cargoId });
-
-                    _self.setAjx({ uri: Utils.getURL({ key: 'cart', subKey: 'setCart' }), data: k }, (res) => {
-                        const { status } = res;
-                        if (status == 200)
-                            console.log('BAŞARILI....');
-                    });
-                }
-            });
+            _self._getCargoAjx();
         else
             _self.props.navigation.navigate('Detail', obj);
     }
@@ -162,6 +215,15 @@ const Address = class Main extends Component {
         _self.props.navigation.navigate('Detail', obj);
     }
 
+    _getCargoItems = () => {
+        const _self = this,
+            { cargoes = [] } = _self.state;
+
+        return cargoes.map((item, order) => {
+            return <CargoItem key={order} data={item} />;
+        });
+    }
+
     _getView = () => {
         const _self = this,
             { loaded = false } = _self.state,
@@ -177,6 +239,8 @@ const Address = class Main extends Component {
         view = (
             <View style={{ flex: 1 }}>
                 <ScrollView style={{ flex: 1, marginBottom: 125, }}>
+
+                    {_self._getCargoItems()}
 
                     <TouchableOpacity onPress={_self._onNewAddress}>
                         <Text>YENİ ADRES EKLE +</Text>

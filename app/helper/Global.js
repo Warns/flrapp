@@ -6,6 +6,8 @@ module.exports = {
     mapApiKey: 'AIzaSyAvSoqfCr4I9Vb11HtQ6cDEAMki6THBgrQ',
     prefix: 'https://www.flormar.com.tr',
     imagePrefix: 'flormar.com.tr',
+    /*prefix: 'https://tr.uspoloassn.com',
+    imagePrefix: 'uspoloassn.com',*/
     URLs: {
         style: {
             main: '/styles/mobiApp.css'
@@ -71,6 +73,7 @@ module.exports = {
             getCargo: '/webapi/v3/Cart/getCargo',
             getPayment: '/webapi/v3/Cart/getPayment',
             getAgreement: '/webapi/v3/Cart/getAgreement',
+            getInstallment: '/webapi/v3/Cart/getInstallment'
         }
     },
     customURLs: {

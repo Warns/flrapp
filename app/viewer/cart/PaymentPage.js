@@ -125,14 +125,57 @@ class Foot extends Component {
 class CrediCart extends Component {
     constructor(props) {
         super(props);
+        const _self = this;
+        _self.state = {};
+        _self.cartControl = true;
+    }
+
+    componentDidMount() {
+        const _self = this;
+        _self._isMounted = true;
+    }
+
+    componentWillUnmount() {
+        const _self = this;
+        _self._isMounted = false;
     }
 
     _callback = () => {
 
     }
 
+    _getInstallment = (val) => {
+        const _self = this;
+        _self.setAjx({ uri: Utils.getURL({ key: 'cart', subKey: 'getInstallment' }), data: { bin: val } }, (res) => {
+            console.log('_getInstallment', res);
+        });
+    }
+
+    setAjx = ({ uri, data }, callback) => {
+        const _self = this;
+        Globals.AJX({ _self: _self, uri: uri, data: data }, (res) => {
+            const { status, message } = res;
+            if (status == 200 && typeof callback !== 'undefined')
+                callback(res);
+        });
+    }
+
     _onChangeText = (obj) => {
-        console.log(obj);
+        const _self = this,
+            { key = '', value = '' } = obj;
+
+        if (key == 'creditCardNo') {
+            const val = Utils.cleanText(value),
+                count = val.length,
+                num = 6;
+
+            if (count == num && _self.cartControl) {
+                _self._getInstallment(val);
+            } else if (count > num)
+                _self.cartControl = false;
+            else if (count < num)
+                _self.cartControl = true;
+        }
     }
 
     render() {
@@ -172,7 +215,7 @@ const Payment = class Main extends Component {
             { cargoId = 0 } = cart.postData;
 
         _self.setAjx({ uri: Utils.getURL({ key: 'cart', subKey: 'getPayment' }), data: { cargoId: cargoId } }, (res) => {
-            console.log(res);
+            console.log('getPayment', res);
         });
     }
 
