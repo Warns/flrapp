@@ -16,6 +16,7 @@ import {
 import { connect } from 'react-redux';
 import Footer from './Footer';
 import { CheckBox, Form } from 'root/app/form';
+import creditCardType, { getTypeInfo, types as CardType } from 'credit-card-type';
 
 const Translation = require('root/app/helper/Translation.js');
 const Utils = require('root/app/helper/Global.js');
@@ -147,7 +148,7 @@ class CrediCart extends Component {
     _getInstallment = (val) => {
         const _self = this;
         _self.setAjx({ uri: Utils.getURL({ key: 'cart', subKey: 'getInstallment' }), data: { bin: val } }, (res) => {
-            console.log('_getInstallment', res);
+            alert('_getInstallment' + JSON.stringify(res));
         });
     }
 
@@ -202,6 +203,26 @@ const Payment = class Main extends Component {
                 _self._getPayment();
             }, 10);
         });
+
+
+        /*
+        https://github.com/braintree/credit-card-type
+        https://github.com/kevva/credit-card-regex
+        https://github.com/sbycrosz/react-native-credit-card-input
+        
+
+        let visaCards = creditCardType('3588228280601429');
+        console.log(JSON.stringify(visaCards));
+
+        visaCards = creditCardType('38790546741937');
+        console.log(JSON.stringify(visaCards));
+
+        visaCards = creditCardType('370218180742397');
+        console.log(JSON.stringify(visaCards));
+        
+        visaCards = creditCardType('5536838507150030');
+        console.log(JSON.stringify(visaCards));
+        */
     }
 
     componentWillUnmount() {
@@ -215,7 +236,7 @@ const Payment = class Main extends Component {
             { cargoId = 0 } = cart.postData;
 
         _self.setAjx({ uri: Utils.getURL({ key: 'cart', subKey: 'getPayment' }), data: { cargoId: cargoId } }, (res) => {
-            console.log('getPayment', res);
+            alert('getPayment' + JSON.stringify(res));
         });
     }
 

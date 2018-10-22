@@ -19,6 +19,22 @@ export const ICONS = {
     back: require('root/assets/images/icons/back.png')
 };
 
+
+export const CARDS = {
+    'american-express': require('root/assets/icons/cards/americanexpress.png'),
+    'amex': require('root/assets/icons/cards/amex.png'),
+    'american-express': require('root/assets/icons/cards/dankort.png'),
+    'american-express': require('root/assets/icons/cards/dinersclub.png'),
+    'american-express': require('root/assets/icons/cards/discover.png'),
+    'american-express': require('root/assets/icons/cards/forbrugsforeningen.png'),
+    'american-express': require('root/assets/icons/cards/jcb.png'),
+    'american-express': require('root/assets/icons/cards/maestro.png'),
+    'american-express': require('root/assets/icons/cards/mastercard.png'),
+    'american-express': require('root/assets/icons/cards/troy.png'),
+    'american-express': require('root/assets/icons/cards/visa.png'),
+    'american-express': require('root/assets/icons/cards/visaelectron.png'),
+};
+
 /* VIEWER SAYFA TİPLERİ */
 export const VIEWERTYPE = {
     SCROLLVIEW: 'scrollView',

@@ -13,7 +13,7 @@ module.exports = {
                     title: 'E-mail',
                     type: 'text',
                     placeholder: '',
-                    value: 'burakkarakaya1984@gmail.com',
+                    value: '',
                     validation: [{ key: 'isEmpty' }, { key: 'isMail', }],
                     keyboardType: 'email-address',
                 },
