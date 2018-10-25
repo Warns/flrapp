@@ -341,7 +341,7 @@ class Form extends Component {
 
     render() {
         const _self = this,
-            { theme = 'DARK', buttonText = 'GİRİŞ YAP' } = _self.props.data,
+            { theme = 'DARK', buttonText = 'GİRİŞ YAP', buttonStyle = {}, buttonFontStyle = {} } = _self.props.data,
             { scrollEnabled = true } = _self.props;
 
         return (
@@ -350,7 +350,7 @@ class Form extends Component {
                     <View style={[{ flex: 1, paddingLeft: 40, paddingRight: 40, paddingBottom: 40 }, { ..._self.props.style }]}>
                         {_self._getAllErrMsg()}
                         {_self.add()}
-                        <LoadingButton theme={theme} onPress={_self._onPress.bind(_self)}>{buttonText}</LoadingButton>
+                        <LoadingButton fontStyle={{...buttonFontStyle}} style={{...buttonStyle}} theme={theme} onPress={_self._onPress.bind(_self)}>{buttonText}</LoadingButton>
                     </View>
                 </CustomKeyboard >
             </ScrollView>

@@ -18,8 +18,11 @@ class Main extends Component {
         this.state = {};
     }
 
-    _onFormCallback = ({ type, data = {} }) => {
-        console.log(type, data);
+    _onFormCallback = (obj) => {
+        const _self = this,
+            { onCouponCallback } = _self.props;
+        if (onCouponCallback)
+            onCouponCallback(obj);
     }
 
     _onPress = () => {
@@ -35,7 +38,7 @@ class Main extends Component {
         let view = null;
         if (coupon)
             view = (
-                <Form scrollEnabled={false} style={{ paddingLeft: 0, paddingRight: 0 }} data={FORMDATA['useCoupon']} callback={this._onFormCallback} />
+                <Form scrollEnabled={false} style={{ paddingLeft: 0, paddingRight: 0, paddingBottom: 0, flexDirection: 'row', }} data={FORMDATA['useCoupon']} callback={this._onFormCallback} />
             );
         return view;
     }
@@ -44,12 +47,12 @@ class Main extends Component {
         const _self = this,
             { buttonText = '', coupon = false } = _self.props.data,
             { cartInfo = {} } = _self.props.cart,
-            { total = 0, subTotal = 0, discountTotal = 0 } = cartInfo,
+            { total = 0, subTotal = 0, discountTotal = 0, netTotal = 0 } = cartInfo,
             form = _self._getForm();
-        
+
         return (
             <ElevatedView
-                elevation={5}
+                elevation={4}
                 style={{
                     position: 'absolute',
                     width: '100%',
@@ -58,10 +61,11 @@ class Main extends Component {
                 }}>
 
                 <View style={{ backgroundColor: '#FFFFFF', width: '100%', paddingLeft: 20, paddingRight: 20, paddingBottom: 7 }}>
+                    <View style={{ width: '100%' }}>{form}</View>
                     <View style={{ flexDirection: 'row', width: '100%', paddingTop: 10, paddingBottom: 10 }}>
-                        <View style={{ width: '50%' }}>{form}</View>
+                        <View style={{ width: '50%' }}></View>
                         <View style={{ width: '50%', alignItems: 'flex-end' }}>
-                            <Text style={{ fontFamily: 'Bold', fontSize: 15 }}>TOPLAM: {Utils.getPriceFormat(total)}</Text>
+                            <Text style={{ fontFamily: 'Bold', fontSize: 15 }}>TOPLAM: {Utils.getPriceFormat(netTotal)}</Text>
                             <View style={{ flexDirection: 'row' }}>
                                 <Text style={{ fontFamily: 'RegularTyp2', fontSize: 13 }}>İNDİRİM: {Utils.getPriceFormat(discountTotal)}, </Text>
                                 <Text style={{ fontFamily: 'RegularTyp2', fontSize: 13 }}>ARA TOPLAM: {Utils.getPriceFormat(subTotal)}</Text>

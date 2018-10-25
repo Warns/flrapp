@@ -19,20 +19,20 @@ export const ICONS = {
     back: require('root/assets/images/icons/back.png')
 };
 
-
+/* CARDS ICON */
 export const CARDS = {
     'american-express': require('root/assets/icons/cards/americanexpress.png'),
     'amex': require('root/assets/icons/cards/amex.png'),
-    'american-express': require('root/assets/icons/cards/dankort.png'),
-    'american-express': require('root/assets/icons/cards/dinersclub.png'),
-    'american-express': require('root/assets/icons/cards/discover.png'),
-    'american-express': require('root/assets/icons/cards/forbrugsforeningen.png'),
-    'american-express': require('root/assets/icons/cards/jcb.png'),
-    'american-express': require('root/assets/icons/cards/maestro.png'),
-    'american-express': require('root/assets/icons/cards/mastercard.png'),
-    'american-express': require('root/assets/icons/cards/troy.png'),
-    'american-express': require('root/assets/icons/cards/visa.png'),
-    'american-express': require('root/assets/icons/cards/visaelectron.png'),
+    'dankort': require('root/assets/icons/cards/dankort.png'),
+    'dinersclub': require('root/assets/icons/cards/dinersclub.png'),
+    'discover': require('root/assets/icons/cards/discover.png'),
+    'forbrugsforeningen': require('root/assets/icons/cards/forbrugsforeningen.png'),
+    'jcb': require('root/assets/icons/cards/jcb.png'),
+    'maestro': require('root/assets/icons/cards/maestro.png'),
+    'mastercard': require('root/assets/icons/cards/mastercard.png'),
+    'troy': require('root/assets/icons/cards/troy.png'),
+    'visa': require('root/assets/icons/cards/visa.png'),
+    'visaelectron': require('root/assets/icons/cards/visaelectron.png'),
 };
 
 /* VIEWER SAYFA TİPLERİ */

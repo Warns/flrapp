@@ -191,6 +191,7 @@ class FormInput extends Component {
                     ref={element => {
                         this.input = element
                     }}
+                    autoCapitalize={'none'}
                     autoCorrect={autoCorrect}
                     maxLength={maxLength}
                     multiline={multiline}

@@ -7,9 +7,15 @@ module.exports = {
     successMessage: '',
 
     buttonText: 'Kullan',
+    buttonStyle: {
+        width: 60
+    },
 
     fields: [
         {
+            wrapperStyle: {
+                
+            },
             items: [
                 {
                     id: 'couponCode',
