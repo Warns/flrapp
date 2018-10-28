@@ -84,7 +84,7 @@
             }
         ],
         "extra": [
-            {
+            /*{
                 "title": "FEEDS",
                 "type": "htmlToJSON",
                 "itemType": "feeds",
@@ -102,6 +102,15 @@
                 "data": {
                     "exportType": "mobiAppSegmentify"
                 }
+            },*/
+            {
+                "title": "FEEDS",
+                "type": "segmentify",
+                "itemType": "feeds",
+                "keys": {
+                    "id": "productId",
+                    "arr": "seg",
+                },
             },
             {
                 "title": "KAMPANYALAR",

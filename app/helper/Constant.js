@@ -37,6 +37,7 @@ export const CARDS = {
 
 /* VIEWER SAYFA TİPLERİ */
 export const VIEWERTYPE = {
+    SEG: 'segmentify',
     SCROLLVIEW: 'scrollView',
     LIST: 'listViewer',
     HTML: 'htmlViewer',

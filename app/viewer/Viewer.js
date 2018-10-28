@@ -708,7 +708,7 @@ class FeedsItem extends Component {
 
     render() {
         const _self = this;
-
+console.log('asdasd', _self.props.data)
         return (
             <View style={{ marginBottom: 20 }}>
                 <View style={{ position: 'relative' }}>
@@ -753,11 +753,42 @@ class Viewers extends Component {
 
     onDidFocus = () => {
         const _self = this,
-            { navigation } = _self.props;
+            { navigation, config } = _self.props,
+            { type = VIEWERTYPE['LIST'] } = config;
+
         if (navigation)
             _self._Listener.remove();
 
-        _self.setAjx({ uri: _self.getUri(), data: _self._getData() });
+        if (type == VIEWERTYPE['SEG'])
+            Utils.seg({
+                data: {
+                    "name": "PAGE_VIEW",
+                    "userId": "XXXXXXXXXXXXXXXXX",
+                    "sessionId": "YYYYYYYYYYYYYYYY",
+                    "device": "IOS",
+                    "pageUrl": "https://flormar.com.tr",
+                    "category": "Home Page"
+                }
+            }, function (res) {
+                if (res['type'] == 'success') {
+                    const { responses = [] } = res.data,
+                        key = Utils.getSegKey(responses),
+                        { params = {} } = responses[0][0],
+                        data = params['recommendedProducts'][key] || {};
+
+                    _self.setState({ data: data, total: Object.keys(data).length || 0 });
+
+                    if (_self._callback)
+                        _self._callback({ type: DATA_LOADED, data: data });
+
+                    /* sepet için gerekti */
+                    if (_self.props.response)
+                        _self.props.response({ type: DATA_LOADED, data: res.data });
+                }
+
+            });
+        else
+            _self.setAjx({ uri: _self.getUri(), data: _self._getData() });
     }
 
     componentDidMount() {
@@ -1079,7 +1110,7 @@ class Viewers extends Component {
             { type = VIEWERTYPE['LIST'] } = _self.props.config;
 
         let view = null;
-        if (type == VIEWERTYPE['LIST'] || type == VIEWERTYPE['HTMLTOJSON'])
+        if (type == VIEWERTYPE['SEG'] || type == VIEWERTYPE['LIST'] || type == VIEWERTYPE['HTMLTOJSON'])
             view = (
                 <FlatList
                     scrollEnabled={scrollEnabled}

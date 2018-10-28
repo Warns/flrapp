@@ -19,27 +19,13 @@ import { store } from './app/store.js';
 
 import Assistant from './app/components/Assistant';
 
-const Utils = require('root/app/helper/Global.js');
-
 export default class App extends React.Component {
   state = {
     isLoadingComplete: false,
   };
   f
   componentDidMount() {
-    
-    Utils.seg({
-      data: {
-        "name": "PAGE_VIEW",
-        "userId": "XXXXXXXXXXXXXXXXX",
-        "sessionId": "YYYYYYYYYYYYYYYY",
-        "device": "IOS",
-        "pageUrl": "https://flormar.com.tr",
-        "category": "Home Page"
-      }
-    }, function (res) {
-      console.log(JSON.stringify(res));
-    });
+
   }
 
   _filterCallback = (o) => {
