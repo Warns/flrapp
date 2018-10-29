@@ -59,6 +59,14 @@ module.exports = {
         isTwo: '{{title}} bölümü en az iki kelime halinde doldurulmalıdır.',
         isEqual: '{{title}} alanı ile {{value}} eşit olmalıdır.',
     },
+    feeds: {
+        instagram: 'Keşfet',
+        video: 'Video\'yu izle',
+        promo: 'Alışverişe Başla',
+        product: 'Satın al',
+        blog: 'İletiyi incele',
+        collection: 'Koleksiyonu keşfet'
+    },
     getErrorMsg: function ({ key = '', title = '', value = '' }) {
         const _t = this;
         return _t['errorMessage'][key].replace(/{{title}}/g, title).replace(/{{value}}/g, value);

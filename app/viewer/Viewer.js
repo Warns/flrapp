@@ -598,9 +598,27 @@ class FeedsItem extends Component {
         });
     }
 
+    _basket = ( b ) => {
+        const _self = this,
+            { productId, currency, price } = _self.props.data,
+            data = {
+                "name": "BASKET_OPERATIONS",
+                "step": b ? "add" : "remove",
+                "productId": productId,
+                "price": price,
+                "currency": currency,
+                "quantity": 1
+            };
+
+        Globals.seg({ data: data }, (res) => {
+            console.log(res);
+        });
+    }
+
     _onRatingClicked = ({ id, userLike }) => {
         const _self = this;
         _self.setState({ userLike: userLike });
+        _self._basket(userLike);
     }
 
     _getLike = () => {
@@ -612,7 +630,8 @@ class FeedsItem extends Component {
 
     _getIcon = () => {
         const _self = this,
-            { type } = _self.props.data;
+            { labels = [] } = _self.props.data,
+            type = labels[0];
 
         let source = null;
 
@@ -645,6 +664,29 @@ class FeedsItem extends Component {
         }
 
     };
+
+    _getProduct = () => {
+        const _self = this,
+            { image = '', name, price } = _self.props.data;
+
+
+        return (
+            <View style={{ flexDirection: 'row', borderWidth: 1, borderColor: '#dcdcdc' }}>
+                <View style={{ width: '50%' }}>
+                    <Image
+                        style={{ height: 218, resizeMode: 'contain' }}
+                        source={{ uri: image }}
+                    />
+                </View>
+                <View style={{ width: '50%', paddingTop: 30 }}>
+                    <Text style={{ fontFamily: 'Bold', fontSize: 22, marginBottom: 10 }}>{Utils.getPriceFormat(price)}</Text>
+                    <Text style={{ fontFamily: 'Medium', fontSize: 16 }}>{name}</Text>
+                    <Text style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#9b9b9b', marginBottom: 10 }}>{'21 Renk'}</Text>
+                    <Text style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#be1066' }}>{'Hızla tükeniyor'}</Text>
+                </View>
+            </View>
+        );
+    }
 
     _getImage = () => {
         const _self = this,
@@ -689,7 +731,9 @@ class FeedsItem extends Component {
         let view = null;
 
         const _self = this,
-            { desc = '' } = _self.props.data;
+            { labels = [] } = _self.props.data,
+            type = labels[0],
+            desc = Translation['feeds'][type] || '';
 
         if (desc != '')
             view = (
@@ -706,13 +750,22 @@ class FeedsItem extends Component {
         return view;
     }
 
+    _getFeed = () => {
+        const _self = this,
+            { labels = [] } = _self.props.data;
+
+        if (FEEDSTYPE['PRODUCT'] == labels[0])
+            return _self._getProduct();
+        else
+            return _self._getImage();
+    }
+
     render() {
         const _self = this;
-console.log('asdasd', _self.props.data)
         return (
             <View style={{ marginBottom: 20 }}>
                 <View style={{ position: 'relative' }}>
-                    {_self._getImage()}
+                    {_self._getFeed()}
                     {_self._getLike()}
                     {_self._getIcon()}
                 </View>
@@ -760,33 +813,7 @@ class Viewers extends Component {
             _self._Listener.remove();
 
         if (type == VIEWERTYPE['SEG'])
-            Utils.seg({
-                data: {
-                    "name": "PAGE_VIEW",
-                    "userId": "XXXXXXXXXXXXXXXXX",
-                    "sessionId": "YYYYYYYYYYYYYYYY",
-                    "device": "IOS",
-                    "pageUrl": "https://flormar.com.tr",
-                    "category": "Home Page"
-                }
-            }, function (res) {
-                if (res['type'] == 'success') {
-                    const { responses = [] } = res.data,
-                        key = Utils.getSegKey(responses),
-                        { params = {} } = responses[0][0],
-                        data = params['recommendedProducts'][key] || {};
-
-                    _self.setState({ data: data, total: Object.keys(data).length || 0 });
-
-                    if (_self._callback)
-                        _self._callback({ type: DATA_LOADED, data: data });
-
-                    /* sepet için gerekti */
-                    if (_self.props.response)
-                        _self.props.response({ type: DATA_LOADED, data: res.data });
-                }
-
-            });
+            Globals.seg({ data: config.data }, _self._setSeg);
         else
             _self.setAjx({ uri: _self.getUri(), data: _self._getData() });
     }
@@ -876,6 +903,27 @@ class Viewers extends Component {
         return data;
     }
 
+    /* segmentify özel */
+    _setSeg = (res) => {
+        const _self = this;
+        if (res['type'] == 'success') {
+            const { responses = [] } = res.data,
+                key = Globals.getSegKey(responses),
+                { params = {} } = responses[0][0],
+                data = params['recommendedProducts'][key] || {};
+
+            _self.setState({ data: data, total: Object.keys(data).length || 0 });
+
+            if (_self._callback)
+                _self._callback({ type: DATA_LOADED, data: data });
+
+            /* sepet için gerekti */
+            if (_self.props.response)
+                _self.props.response({ type: DATA_LOADED, data: res.data });
+        }
+    }
+
+    /* */
     setAjx = ({ uri, data = {} }, callback) => {
         const _self = this,
             { type = VIEWERTYPE['LIST'] } = _self.props.config;

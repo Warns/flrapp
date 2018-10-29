@@ -65,9 +65,9 @@ export const ITEMTYPE = {
 export const FEEDSTYPE = {
     INSTAGRAM: 'instagram',
     VIDEO: 'video',
-    CAMPAING: 'campaing',
+    CAMPAING: 'promo',
     PRODUCT: 'product',
-    BLOGPOST: 'blog_post',
+    BLOGPOST: 'blog',
     COLLECTION: 'collection'
 };
 

@@ -111,6 +111,10 @@
                     "id": "productId",
                     "arr": "seg",
                 },
+                "data": {
+                    "name": "PAGE_VIEW",
+                    "category": "Home Page"
+                }
             },
             {
                 "title": "KAMPANYALAR",

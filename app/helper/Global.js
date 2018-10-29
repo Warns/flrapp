@@ -275,36 +275,5 @@ module.exports = {
         console.log(JSON.stringify(filter))
 
         return filter;
-    },
-    getSegKey: function (responses) {
-        const { params = {} } = responses[0][0],
-            { dynamicItems = '[]' } = params,
-            items = JSON.parse(dynamicItems)[0],
-            key = items['recommendationSource'] + '|' + items['timeFrame'] + '|' + items['score'];
-
-        return key || 'RECOMMENDATION_SMART_OFFERS|THIS_WEEK|NONE';
-    },
-    seg: function ({ data }, callback) {
-        const uri = 'https://dcetr9.segmentify.com/add/events/v1.json?apiKey=61c97507-5c1f-46c6-9b50-2aa9d1d73316';
-        fetch(uri, {
-            method: 'POST',
-            headers: {
-                'origin': 'https://flormar.com.tr',
-                'accept': 'application/json',
-                'content-type': 'application/json'
-            },
-            body: JSON.stringify(data),
-        })
-            .then((response) => {
-                return response.json();
-            })
-            .then(function (res) {
-                if (typeof callback !== 'undefined')
-                    callback({ type: 'success', data: res });
-            })
-            .catch((res) => {
-                if (typeof callback !== 'undefined')
-                    callback({ type: 'error', data: res });
-            });
     }
 };
