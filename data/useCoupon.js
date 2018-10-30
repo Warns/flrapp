@@ -14,7 +14,7 @@ module.exports = {
     fields: [
         {
             wrapperStyle: {
-                
+                flex: 1
             },
             items: [
                 {

@@ -28,6 +28,7 @@ import {
     UPDATE_CART,
     REMOVE_CART,
     SET_CART_ADDRESS,
+    SET_SEGMENTIFY_INSTANCEID,
 } from 'root/app/helper/Constant';
 import {
     ElevatedView,
@@ -193,7 +194,7 @@ class CartListItem extends Component {
             values.push({ key: k + ' Adet', value: k });
         }
 
-        return { title: 'saadssadasdasdasdasd', values: values, value: quantity };
+        return { values: values, value: quantity };
     }
 
     render() {
@@ -219,7 +220,7 @@ class CartListItem extends Component {
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 21 }}>
 
-                        <SelectBox closed={true} callback={_self._onChange} data={_self.getSelectValue()} />
+                        <SelectBox containerStyle={{ width: 100 }} closed={true} callback={_self._onChange} data={_self.getSelectValue()} />
 
                         <Text style={{ fontFamily: 'Bold', fontSize: 16 }}>{Utils.getPriceFormat(total)}</Text>
                     </View>
@@ -618,9 +619,12 @@ class FeedsItem extends Component {
     _onPress = () => {
         const _self = this,
             { productId } = _self.props.data,
+            { instanceID } = _self.props.rdx,
             data = {
-                "name": "PRODUCT_VIEW",
-                "productId": productId,
+                "name": "INTERACTION",
+                "type": "click",
+                "instanceId": instanceID,
+                "interactionId": productId
             };
 
         Globals.seg({ data: data }, (res) => {
@@ -923,16 +927,30 @@ class Viewers extends Component {
             const { responses = [] } = res.data,
                 key = Globals.getSegKey(responses),
                 { params = {} } = responses[0][0],
-                data = params['recommendedProducts'][key] || {};
+                data = params['recommendedProducts'][key] || {},
+                instanceId = params['instanceId'] || '',
+                obj = {
+                    "name": "INTERACTION",
+                    "type": "impression",
+                    "instanceId": instanceId,
+                    "interactionId": instanceId
+                };
 
-            _self.setState({ data: data, total: Object.keys(data).length || 0 });
+            _self.props.dispatch({ type: SET_SEGMENTIFY_INSTANCEID, value: instanceId });
 
-            if (_self._callback)
-                _self._callback({ type: DATA_LOADED, data: data });
+            /* feeds ilk yüklendiğinde 1 defa impresionlar tetiklenecek  */
+            Globals.seg({ data: obj }, (response) => {
 
-            /* sepet için gerekti */
-            if (_self.props.response)
-                _self.props.response({ type: DATA_LOADED, data: res.data });
+                _self.setState({ data: data, total: Object.keys(data).length || 0 });
+
+                if (_self._callback)
+                    _self._callback({ type: DATA_LOADED, data: data });
+
+                /* sepet için gerekti */
+                if (_self.props.response)
+                    _self.props.response({ type: DATA_LOADED, data: res.data });
+
+            });
         }
     }
 
@@ -1046,7 +1064,7 @@ class Viewers extends Component {
             case ITEMTYPE['VIDEO']:
                 return <VideoListItem onPress={this._onGotoDetail} data={item} />;
             case ITEMTYPE['FEEDS']:
-                return <FeedsItem data={item} />;
+                return <FeedsItem data={item} rdx={_self.props.segmentify} />;
             case ITEMTYPE['CAMPAING']:
                 return <CampaingItem data={item} />;
             default:
@@ -1151,15 +1169,12 @@ class Viewers extends Component {
     _setSegView = (item) => {
         const _self = this,
             { productId } = item,
+            { segmentify } = _self.props,
             data = {
-                "name": "CHECKOUT",
-                "step": "basket",
-                "productList": [
-                    {
-                        "productId": productId,
-                        "quantity": 1
-                    }
-                ]
+                "name": "INTERACTION",
+                "type": "widget-view",
+                "instanceId": segmentify['instanceID'] || '',
+                "interactionId": productId
             };
 
         Globals.seg({ data: data }, (res) => {
@@ -1172,7 +1187,9 @@ class Viewers extends Component {
             { onViewableItemsChanged } = _self.props;
         if (!_self._viewable.includes(index)) {
             _self._viewable.push(index);
-            /*_self._setSegView(item);*/
+
+            _self._setSegView(item);
+
             if (onViewableItemsChanged)
                 onViewableItemsChanged(item);
         }

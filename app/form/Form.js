@@ -315,17 +315,18 @@ class Form extends Component {
 
         if (show)
             return data['fields'].map((item, ind) => {
-                const items = item['items'].map((itm) => {
+                const { wrapperStyle = {} } = item,
+                    items = item['items'].map((itm) => {
 
-                    /* default değer varsa atanması için gönderilir */
-                    if ((data['defValue'] || '') != '')
-                        itm = _self._setDefault(itm);
+                        /* default değer varsa atanması için gönderilir */
+                        if ((data['defValue'] || '') != '')
+                            itm = _self._setDefault(itm);
 
-                    _self.totalCount = _self.totalCount + 1;
-                    return _self.addField(itm);
-                }),
+                        _self.totalCount = _self.totalCount + 1;
+                        return _self.addField(itm);
+                    }),
                     css = item['items'].length > 1 ? styles.row : styles.field;
-                return <View key={ind} style={css}>{items}</View>;
+                return <View key={ind} style={[css, { ...wrapperStyle }]}>{items}</View>;
             });
         else
             return null;
@@ -350,7 +351,7 @@ class Form extends Component {
                     <View style={[{ flex: 1, paddingLeft: 40, paddingRight: 40, paddingBottom: 40 }, { ..._self.props.style }]}>
                         {_self._getAllErrMsg()}
                         {_self.add()}
-                        <LoadingButton fontStyle={{...buttonFontStyle}} style={{...buttonStyle}} theme={theme} onPress={_self._onPress.bind(_self)}>{buttonText}</LoadingButton>
+                        <LoadingButton fontStyle={{ ...buttonFontStyle }} style={{ ...buttonStyle }} theme={theme} onPress={_self._onPress.bind(_self)}>{buttonText}</LoadingButton>
                     </View>
                 </CustomKeyboard >
             </ScrollView>

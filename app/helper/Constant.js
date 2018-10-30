@@ -154,3 +154,7 @@ export const SET_LOCATION = 'SET_LOCATION';
 
 /* offline notice */
 export const SET_CONNECTION = 'SET_CONNECTION';
+
+/* segmentify */
+export const SET_SEGMENTIFY_USER_SESSION = 'SET_SEGMENTIFY_USER_SESSION';
+export const SET_SEGMENTIFY_INSTANCEID = 'SET_SEGMENTIFY_INSTANCEID';

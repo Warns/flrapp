@@ -6,8 +6,6 @@ module.exports = {
     mapApiKey: 'AIzaSyAvSoqfCr4I9Vb11HtQ6cDEAMki6THBgrQ',
     prefix: 'https://www.flormar.com.tr',
     imagePrefix: 'flormar.com.tr',
-    /*prefix: 'https://tr.uspoloassn.com',
-    imagePrefix: 'uspoloassn.com',*/
     URLs: {
         style: {
             main: '/styles/mobiApp.css'

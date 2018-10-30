@@ -198,10 +198,10 @@ module.exports = {
   seg: function ({ data }, callback) {
     const _self = this,
       uri = 'https://dcetr9.segmentify.com/add/events/v1.json?apiKey=61c97507-5c1f-46c6-9b50-2aa9d1d73316',
-      { user = {} } = store.getState(),
+      { user = {}, segmentify = {} } = store.getState(),
       obj = {
-        "userId": user.userId || "XXXXXXXXXXXXXXXXX",
-        "sessionId": _self.CLIENT.Auth.session || "YYYYYYYYYYYYYYYY",
+        "userId": user.userId || segmentify['userID'] || "XXXXXXXXXXXXXXXXX",
+        "sessionId": _self.CLIENT.Auth.session || segmentify['sessionID'] || "YYYYYYYYYYYYYYYY",
         "device": Platform.OS === 'ios' ? "IOS" : "ANDROID",
         "pageUrl": "https://flormar.com.tr",
       };
@@ -210,7 +210,7 @@ module.exports = {
       obj[key] = data[key];
     });
 
-    console.log(obj)
+    console.log(JSON.stringify(obj));
 
     fetch(uri, {
       method: 'POST',
@@ -225,6 +225,7 @@ module.exports = {
         return response.json();
       })
       .then(function (res) {
+        console.log('segmentify result:', res);
         if (typeof callback !== 'undefined')
           callback({ type: 'success', data: res });
       })
