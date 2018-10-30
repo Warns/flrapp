@@ -598,16 +598,29 @@ class FeedsItem extends Component {
         });
     }
 
-    _basket = ( b ) => {
+    /* feeds item like, unlike */
+    _basket = (b) => {
         const _self = this,
-            { productId, currency, price } = _self.props.data,
+            { productId } = _self.props.data,
             data = {
                 "name": "BASKET_OPERATIONS",
                 "step": b ? "add" : "remove",
                 "productId": productId,
-                "price": price,
-                "currency": currency,
                 "quantity": 1
+            };
+
+        Globals.seg({ data: data }, (res) => {
+            console.log(res);
+        });
+    }
+
+    /* feeds item tıklamada */
+    _onPress = () => {
+        const _self = this,
+            { productId } = _self.props.data,
+            data = {
+                "name": "PRODUCT_VIEW",
+                "productId": productId,
             };
 
         Globals.seg({ data: data }, (res) => {
@@ -1134,11 +1147,32 @@ class Viewers extends Component {
 
     _viewable = [];
 
+
+    _setSegView = (item) => {
+        const _self = this,
+            { productId } = item,
+            data = {
+                "name": "CHECKOUT",
+                "step": "basket",
+                "productList": [
+                    {
+                        "productId": productId,
+                        "quantity": 1
+                    }
+                ]
+            };
+
+        Globals.seg({ data: data }, (res) => {
+
+        });
+    }
+
     _onViewableItemChanged = ({ index, item }) => {
         const _self = this,
             { onViewableItemsChanged } = _self.props;
         if (!_self._viewable.includes(index)) {
             _self._viewable.push(index);
+            /*_self._setSegView(item);*/
             if (onViewableItemsChanged)
                 onViewableItemsChanged(item);
         }
@@ -1150,6 +1184,22 @@ class Viewers extends Component {
         viewableItems.map((item) => {
             _self._onViewableItemChanged(item)
         });
+
+        /*
+            multiple item döndürür
+        const _self = this,
+            arr = [];
+        viewableItems.map((k) => {
+            const index = k['index'],
+                item = k['item']
+            if (!_self._viewable.includes(index)) {
+                _self._viewable.push(index);
+                arr.push(k);
+            }
+        });
+        if (arr.length > 0)
+            _self._setSegView(arr);
+        */
     }
 
     _getViewer = () => {
