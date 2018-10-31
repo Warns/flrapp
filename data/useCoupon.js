@@ -20,9 +20,16 @@ module.exports = {
                 {
                     id: 'couponCode',
                     //title: 'Promosyon Kodum',
+                    showHeader: false,    
                     type: 'text',
                     value: '',
-                    validation: [{ key: 'isEmpty' }],               
+                    validation: [{ key: 'isEmpty' }],
+                    css: {
+                        containerStyle: { 
+                            marginBottom: 0,
+                            marginRight: 10, 
+                        }
+                    },           
                 },
             ]
         }

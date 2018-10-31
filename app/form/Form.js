@@ -251,24 +251,25 @@ class Form extends Component {
 
     addField = (obj) => {
         const _self = this,
-            { id, type } = obj,
+            { id, type, css = {} } = obj,
+            { containerStyle = {}, wrapperStyle = {} } = css,
             { theme = 'DARK' } = _self.props.data,
             validation = this.state.validation,
             _callback = this._callback;
 
         switch (type) {
             case 'creditCart':
-                return <FormInput onChangeText={_self._onChangeText} creditCart={true} theme={theme} callback={_callback} control={validation} key={id} data={obj} />;
+                return <FormInput containerStyle={{ ...containerStyle }} wrapperStyle={{ ...wrapperStyle }} onChangeText={_self._onChangeText} creditCart={true} theme={theme} callback={_callback} control={validation} key={id} data={obj} />;
             case 'text':
-                return <FormInput theme={theme} callback={_callback} control={validation} key={id} data={obj} />;
+                return <FormInput containerStyle={{ ...containerStyle }} wrapperStyle={{ ...wrapperStyle }} theme={theme} callback={_callback} control={validation} key={id} data={obj} />;
             case 'select':
-                return <SelectBox theme={theme} callback={_callback} control={validation} key={id} data={obj} />;
+                return <SelectBox containerStyle={{ ...containerStyle }} wrapperStyle={{ ...wrapperStyle }} theme={theme} callback={_callback} control={validation} key={id} data={obj} />;
             case 'chekbox':
-                return <CheckBox theme={theme} callback={_callback} control={validation} key={id} data={obj} />;
+                return <CheckBox containerStyle={{ ...containerStyle }} wrapperStyle={{ ...wrapperStyle }} theme={theme} callback={_callback} control={validation} key={id} data={obj} />;
             case 'radio':
-                return <RadioGroup theme={theme} callback={_callback} control={validation} key={id} data={obj} />;
+                return <RadioGroup containerStyle={{ ...containerStyle }} wrapperStyle={{ ...wrapperStyle }} theme={theme} callback={_callback} control={validation} key={id} data={obj} />;
             case 'dataTimePicker':
-                return <DateTimePicker theme={theme} callback={_callback} control={validation} key={id} data={obj} />;
+                return <DateTimePicker containerStyle={{ ...containerStyle }} wrapperStyle={{ ...wrapperStyle }} theme={theme} callback={_callback} control={validation} key={id} data={obj} />;
             case 'countryPicker':
                 return <CountryPicker theme={theme} callback={_callback} control={validation} key={id} data={obj} />;
             case 'hiddenObject':

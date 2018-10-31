@@ -115,12 +115,15 @@ class FormInput extends Component {
                 error = false,
                 errorMsg = null,
                 autoCorrect = false,
-                mask = null
+                mask = null,
+                showHeader = true
             } = _self.props.data,
             {
                 control = false,
                 theme,
-                creditCart = false
+                creditCart = false,
+                containerStyle = {},
+                wrapperStyle = {}
             } = _self.props,
             { TITLE_COLOR = '#9b9b9b' } = FORMSTYLE[theme],
             {
@@ -213,7 +216,16 @@ class FormInput extends Component {
 
         return (
             <TouchableOpacity activeOpacity={0.7} onPress={this._onPress.bind(this)}>
-                <Container titleShow={titleShow} theme={theme} title={title} error={error} errorMsg={errorMsg}>
+                <Container
+                    containerStyle={{ ...containerStyle }}
+                    wrapperStyle={{ ...wrapperStyle }}
+                    showHeader={showHeader}
+                    titleShow={titleShow}
+                    theme={theme}
+                    title={title}
+                    error={error}
+                    errorMsg={errorMsg}
+                >
                     {input}
                 </Container>
             </TouchableOpacity>
