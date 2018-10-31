@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/bin/node /usr/local/Cellar/yarn/1.7.0/libexec/bin/yarn.js add credit-card-type
+  /usr/local/bin/node /usr/local/Cellar/yarn/1.7.0/libexec/bin/yarn.js add rn-placeholder
 
 PATH: 
   /Users/proje/Library/Android/sdk/platform-tools:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
@@ -23,9 +23,11 @@ npm manifest:
     "main": "node_modules/expo/AppEntry.js",
     "private": true,
     "dependencies": {
+      "@mapbox/geo-viewport": "0.4.0",
       "babel-preset-expo": "^4.0.0",
       "expo": "^28.0.0",
       "react": "16.3.1",
+      "react-content-loader": "^3.2.0",
       "react-native": "https://github.com/expo/react-native/archive/sdk-28.0.0.tar.gz",
       "react-native-credit-card-input": "^0.4.1",
       "react-native-datepicker": "^1.7.2",
@@ -39,7 +41,6 @@ npm manifest:
       "react-navigation": "^2.5.2",
       "react-redux": "^5.0.7",
       "redux": "^4.0.0",
-      "@mapbox/geo-viewport": "0.4.0",
       "supercluster": "4.1.1"
     }
   }
@@ -3616,6 +3617,10 @@ Lockfile:
   react-clone-referenced-element@^1.0.1:
     version "1.0.1"
     resolved "https://registry.yarnpkg.com/react-clone-referenced-element/-/react-clone-referenced-element-1.0.1.tgz#2bba8c69404c5e4a944398600bcc4c941f860682"
+  
+  react-content-loader@^3.2.0:
+    version "3.2.0"
+    resolved "https://registry.yarnpkg.com/react-content-loader/-/react-content-loader-3.2.0.tgz#39a6a035a5dddc2270432c1df7950e37f179dcf2"
   
   react-deep-force-update@^1.0.0:
     version "1.1.1"

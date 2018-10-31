@@ -239,9 +239,6 @@ const Address = class Main extends Component {
         view = (
             <View style={{ flex: 1 }}>
                 <ScrollView style={{ flex: 1, marginBottom: 125, }}>
-
-                    {_self._getCargoItems()}
-
                     <TouchableOpacity onPress={_self._onNewAddress}>
                         <Text>YENİ ADRES EKLE +</Text>
                     </TouchableOpacity>
@@ -255,6 +252,9 @@ const Address = class Main extends Component {
                         refreshing={true}
                     />
                     <CheckBox closed={true} callback={_self._onCheckBoxChange} data={checkboxConfig} />
+
+                    {_self._getCargoItems()}
+                    
                 </ScrollView>
                 <Footer onPress={_self._onPress} data={CONFIG} />
             </View>

@@ -177,7 +177,7 @@ class CartListItem extends Component {
     getSelectValue = () => {
         const _self = this,
             { data = {} } = _self.props,
-            { quantity } = data,
+            { quantity, unitCode = 'Adet' } = data,
             values = [],
             arr = [15, 20, 30, 40];
 
@@ -191,7 +191,7 @@ class CartListItem extends Component {
 
         for (var i = 0; i < arr.length; ++i) {
             const k = arr[i];
-            values.push({ key: k + ' Adet', value: k });
+            values.push({ key: k + ' ' + unitCode, value: k });
         }
 
         return { values: values, value: quantity };
@@ -794,6 +794,20 @@ class FeedsItem extends Component {
     }
 }
 
+class AppShell extends Component {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        return (
+            <View style={{ marginBottom: 20, backgroundColor: '#d1d1d1', height: 50 }}>
+                
+            </View>
+        );
+    }
+}
+
+
 const HTML_DEFAULT_PROPS = {
     tagsStyles: { h1: { color: 'red' } },
     classesStyles: { 'blue': { color: 'blue', fontWeight: '800' } },
@@ -808,10 +822,11 @@ class Viewers extends Component {
         super(props);
         this.state = {
             html: '<b></b>',
-            data: [],
+            data: [{}, {}, {}],
             total: 0,
             refreshing: false,
             loading: false,
+            loaded: false
         }
     }
 
@@ -941,7 +956,7 @@ class Viewers extends Component {
             /* feeds ilk yüklendiğinde 1 defa impresionlar tetiklenecek  */
             Globals.seg({ data: obj }, (response) => {
 
-                _self.setState({ data: data, total: Object.keys(data).length || 0 });
+                _self.setState({ data: data, total: Object.keys(data).length || 0, loaded: true });
 
                 if (_self._callback)
                     _self._callback({ type: DATA_LOADED, data: data });
@@ -974,11 +989,11 @@ class Viewers extends Component {
                 data = JSON.parse(data)[keys['obj']][keys['objArr']] || [];
 
             if (type == VIEWERTYPE['LIST'] || type == VIEWERTYPE['HTMLTOJSON'] || type == VIEWERTYPE['SCROLLVIEW'])
-                _self.setState({ data: data, total: res.data[keyTotal] || 0 });
+                _self.setState({ data: data, total: res.data[keyTotal] || 0, loaded: true });
             else if (type == VIEWERTYPE['WEBVIEW'])
-                _self.setState({ html: _self._addStyle({ customClass: customClass, data: data }) });
+                _self.setState({ html: _self._addStyle({ customClass: customClass, data: data }), loaded: true });
             else
-                _self.setState({ html: _self._clearTag(data) });
+                _self.setState({ html: _self._clearTag(data), loaded: true });
 
             _self._callback({ type: DATA_LOADED, data: data });
 
@@ -1043,7 +1058,12 @@ class Viewers extends Component {
 
     _renderItem = ({ item, key }) => {
         const _self = this,
-            { itemType = '' } = _self.props.config;
+            { itemType = '' } = _self.props.config,
+            { loaded } = _self.state;
+
+        if (!loaded)
+            return <AppShell key={key} type={itemType} />;
+
 
         switch (itemType) {
 
