@@ -19,10 +19,7 @@ import { Provider } from 'react-redux';
 import { store } from './app/store.js';
 
 import Assistant from './app/components/Assistant';
-<<<<<<< HEAD
 import ProductView from './app/views/Product';
-=======
->>>>>>> 947f2ca06069358790bd0612b9ba339e91b9a65f
 
 export default class App extends React.Component {
   state = {
