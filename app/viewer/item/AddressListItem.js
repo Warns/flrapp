@@ -7,29 +7,13 @@ import {
 import {
     SET_FORM,
     SET_CART_ADDRESS,
-    SET_ADDRESS_ITEM,
+    SET_ADDRESS_ITEM_CLICK,
 } from 'root/app/helper/Constant';
 import { connect } from 'react-redux';
 
 const Translation = require('root/app/helper/Translation.js');
 const Utils = require('root/app/helper/Global.js');
 const Globals = require('root/app/globals.js');
-const AJX = async ({ _self, uri, data = {} }, callback) => {
-    _self.setState({ loading: true });
-    Globals.fetch(uri, JSON.stringify(data), (answer) => {
-        if (_self._isMounted) {
-            if (answer === 'error') {
-                console.log('fatalllll error: could not get access token');
-            } else {
-                if (answer.status == 200) {
-                    if (typeof callback !== 'undefined')
-                        callback(answer);
-                }
-            }
-            _self.setState({ loading: false, refreshing: false });
-        }
-    });
-}
 
 class BoxButton extends Component {
     constructor(props) {
@@ -121,7 +105,7 @@ class AddressList extends Component {
         Utils.confirm({ message: Translation['confirm']['removeMessage'] }, ({ type }) => {
             if (type == 'ok') {
                 const { addressId } = data;
-                AJX({ _self: _self, uri: Utils.getURL({ key: 'address', subKey: 'deleteAddress' }), data: { addressId: addressId } }, (res) => {
+                Globals.AJX({ _self: _self, uri: Utils.getURL({ key: 'address', subKey: 'deleteAddress' }), data: { addressId: addressId } }, (res) => {
                     const { status, message } = res;
                     if (onRemove && status == 200)
                         setTimeout(() => {
@@ -140,9 +124,8 @@ class AddressList extends Component {
 
         setTimeout(() => {
             if (callback) {
-                console.log('_onCallback');
                 callback({
-                    type: SET_ADDRESS_ITEM,
+                    type: SET_ADDRESS_ITEM_CLICK,
                     data: {}
                 });
             }

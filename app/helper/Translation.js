@@ -22,6 +22,8 @@ module.exports = {
         selectedShipAddress: 'SEÇİLİ ADRES',
         selectBillAddress: 'FATURA ADRESİ',
         selectedBillAddress: 'FATURA ADRESİ SEÇİLDİ',
+        errorShipAddress: 'Teslimat ve fatura adresi seçmelisiniz.',
+        errorBillAddress: 'Fatura adresi seçmelisiniz.',
     },
     store: {
         headerTitle: 'YAKIN MAĞAZALAR'
@@ -56,6 +58,14 @@ module.exports = {
         isPassword: 'Lütfen {{title}} alanınının formatını doğru giriniz.',
         isTwo: '{{title}} bölümü en az iki kelime halinde doldurulmalıdır.',
         isEqual: '{{title}} alanı ile {{value}} eşit olmalıdır.',
+    },
+    feeds: {
+        instagram: 'Keşfet',
+        video: 'Video\'yu izle',
+        promo: 'Alışverişe Başla',
+        product: 'Satın al',
+        blog: 'İletiyi incele',
+        collection: 'Koleksiyonu keşfet'
     },
     getErrorMsg: function ({ key = '', title = '', value = '' }) {
         const _t = this;

@@ -11,6 +11,7 @@ export * from './common/Minus99HorizontalTabs';
 
 // Product
 export * from './Palette';
+export * from './HorizontalProducts';
 
 // Assistant
 export * from './Assistant';

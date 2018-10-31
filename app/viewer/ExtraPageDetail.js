@@ -5,7 +5,7 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import { Viewer, MapViewer, OrderViewer } from 'root/app/viewer';
-import { ORDER_LIST_CLICKED, SET_FORM, FORMDATA } from 'root/app/helper/Constant';
+import { ORDER_LIST_CLICKED, SET_FORM, FORMDATA, SET_VIEWER } from 'root/app/helper/Constant';
 import { Form } from 'root/app/form';
 
 class ExtraDetail extends Component {
@@ -44,13 +44,15 @@ class ExtraDetail extends Component {
         const _self = this,
             obj = _self._getParams(),
             { type, data = {} } = obj,
-            { itemType, postData } = data;
+            { itemType, postData = {} } = data;
 
         switch (type) {
             case ORDER_LIST_CLICKED:
                 return <OrderViewer data={obj} />;
             case SET_FORM:
                 return <Form callback={_self._callback} postData={postData} data={FORMDATA[itemType]} />;
+            case SET_VIEWER:
+                return <Viewer postData={postData} config={data} />;
             default:
                 return null;
         }

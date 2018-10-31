@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 import { TabNavigator, TabBarBottom } from 'react-navigation';
 
-import { ICONS, SET_TEXTURE_DISPLAY } from 'root/app/helper/Constant';
+import { ICONS, SET_TEXTURE_DISPLAY, OPEN_PRODUCT_DETAILS } from 'root/app/helper/Constant';
 import { store } from '../../app/store';
 
 var RCTUIManager = require('NativeModules').UIManager;
@@ -64,7 +64,7 @@ export default class List extends React.Component{
         toValue:1,
         duration: 300,
         easing: Easing.out(Easing.cubic),
-        onComplete: this._openDetail,
+        //onComplete: this._openDetail,
       }
     ).start();
 
@@ -110,12 +110,12 @@ export default class List extends React.Component{
   }
 */
   _updateList = () => {
+
+    console.log( this.props.category.id );
     globals.fetch(
       "https://www.flormar.com.tr/webapi/v3/Product/getProductList",
       JSON.stringify({
-        "page": 1,
-        "pageSize": 100,
-        "catId": this.props.category.id,
+        "catId": this.props.category.id, //18775
       }),
       this._listResultHandler
     );
@@ -123,7 +123,9 @@ export default class List extends React.Component{
 
   _listResultHandler = ( answer ) => {
 
-    console.log(answer.data);
+    //console.log('list loaded', answer);
+
+    //console.log(answer.data);
 
     this.setState({
       itemsAll: answer.data.products,
@@ -163,12 +165,20 @@ export default class List extends React.Component{
   _onPressItem = (index, measurements) => {
     //this.props.navigation.navigate('Details', {user: index});
 
+    /*
     this.setState({
-      selectedDetail: index,
-      animatingUri: this.state.items[index].mediumImageUrl,
+      selectedDetail: this.state.items[index].productId,
+      animatingUri: this.state.items[index].mediumImageUrl, // this is useless
       measurements: measurements,
     });
+*/
+    console.log('on pressss', this.state.items[index].productId);
+    
+    store.dispatch({type:OPEN_PRODUCT_DETAILS, value:{id:this.state.items[index].productId, measurements:measurements, animate:true, sequence: this.state.textureDisplay ? 1 : 0 }});
 
+    //this._openDetail();
+
+    /*
     globals.fetch(
       "https://www.flormar.com.tr/webapi/v3/Product/getProductDetail",
       JSON.stringify({
@@ -176,10 +186,14 @@ export default class List extends React.Component{
       }),
       this._detailResultHandler
     );
+    */
 
+   //this._animateImage();
   }
 
   _detailResultHandler = ( answer ) => {
+
+    //console.log( answer );
 
     this.setState({
       selectedDetail: answer.data,
@@ -207,23 +221,36 @@ export default class List extends React.Component{
     })
   }
 
+  //_flatList = null;
+
   render(){
 
-    let { animatingUri, imageAnim, measurements, totalProductCount, filters } = this.state;
+    let { animatingUri, imageAnim, measurements, totalProductCount, filters, textureDisplay } = this.state;
 
+    let {width, height, pageY, pageX} = measurements;
+
+    /*
+    const _width = measurements.width;
+    const _height = measurements.width * 1.25;
+    const _top = measurements.pageY - 64;
+    const _left = Math.ceil(measurements.x);
+
+    console.log(this._flatList);
+*/
+    
     const _width = imageAnim.interpolate({
       inputRange: [0, 1],
-      outputRange: [measurements.width, SCREEN_DIMENSIONS.width],
+      outputRange: [measurements.width, 270/*SCREEN_DIMENSIONS.width*/],
     });
 
     const _height = imageAnim.interpolate({
       inputRange: [0, 1],
-      outputRange: [measurements.height, SCREEN_DIMENSIONS.width * 5/4],
+      outputRange: [measurements.width * 1.25, 337/*SCREEN_DIMENSIONS.width * 5/4*/],
     });
 
     const _top = imageAnim.interpolate({
       inputRange: [0, 1],
-      outputRange: [measurements.pageY - HEADER_HEIGHT - 40, -90],
+      outputRange: [measurements.pageY - HEADER_HEIGHT - 40, 0],
     });
 
     const _left = imageAnim.interpolate({
@@ -231,11 +258,17 @@ export default class List extends React.Component{
       outputRange: [Math.ceil(measurements.pageX), 0],
     });
 
-    const animatingImage = animatingUri != null ? <Animated.Image style={{width: _width, height: _height, position:'absolute', top: _top, left:_left, resizeMode:'contain'}}
-                                  source={{uri: animatingUri }} /> : null;
-    const vail = animatingUri != null ? <Animated.View style={{flex:1, position:'absolute', top:0, left:0, bottom:0, right:0, backgroundColor:'#ffffff', opacity:imageAnim}} /> : null;
+    const _opacity = imageAnim.interpolate({
+      inputRange: [.5, 1],
+      outputRange: [0, 1],
+    })
+    
 
-    const detailContent = <ProductView screenDimensions={SCREEN_DIMENSIONS} item={this.state.selectedDetail} onClose={this._closeDetail} />;
+    const animatingImage = animatingUri != null ? <Animated.Image style={{width: _width, height: _height, position:'absolute', zIndex:10, top: _top, left:_left, resizeMode:'contain',}}
+                                  source={{uri: animatingUri }} /> : null;
+    const vail = animatingUri != null ? <Animated.View style={{flex:1, position:'absolute', top:0, left:0, bottom:0, right:0, zIndex:9, backgroundColor:'#ffffff', opacity:_opacity}} /> : null;
+
+    const detailContent = <ProductView imageMeasurements={{width:width, height:height, top:pageY, left:pageX, type: textureDisplay ? 1 : 0 }} screenDimensions={SCREEN_DIMENSIONS} item={this.state.selectedDetail} onClose={this._closeDetail} />;
 
     return(
       <View style={{flex:1, backgroundColor:'#ffffff'}}>
@@ -250,14 +283,15 @@ export default class List extends React.Component{
           refreshing={false}
           onRefresh={this._onRefresh}
           onEndReached={this._handleOnEndReached}
+          ref={(list) => this.myFlatList = list}
         />
         {vail}
         {animatingImage}
         <Modal
-          animationType="fade"
+          animationType="none"
           transparent={true}
           visible={this.state.detailIsVisible}
-          onRequestClose={() => {}}
+          onRequestClose={()=>{}}
         >
           {detailContent}
         </Modal>

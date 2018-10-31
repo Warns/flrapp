@@ -7,16 +7,29 @@ module.exports = {
     successMessage: '',
 
     buttonText: 'Kullan',
+    buttonStyle: {
+        width: 60
+    },
 
     fields: [
         {
+            wrapperStyle: {
+                flex: 1
+            },
             items: [
                 {
                     id: 'couponCode',
                     //title: 'Promosyon Kodum',
+                    showHeader: false,    
                     type: 'text',
                     value: '',
-                    validation: [{ key: 'isEmpty' }],               
+                    validation: [{ key: 'isEmpty' }],
+                    css: {
+                        containerStyle: { 
+                            marginBottom: 0,
+                            marginRight: 10, 
+                        }
+                    },           
                 },
             ]
         }

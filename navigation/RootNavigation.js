@@ -14,7 +14,9 @@ import CartNavigation from './CartNavigation';
 import ExtraNavigation from './ExtraNavigation';
 import HomeTabNavigator from './HomeTabNavigation';
 
-//import ProductPage from '../app/views/Product';
+// this is for dev reasons
+import ProductPage from '../app/views/Product';
+import ListPage from '../app/views/List';
 
 import { DefaultHeader } from '../app/components';
 

@@ -14,13 +14,15 @@ module.exports = {
     /* post için oluşturulan nesneye sabit bir alan eklenecekse bu kısma */
     addFields: [
         {
+            id: 'corprateFl',
+            value: false
+        },
+
+        /*{
             id: 'isGuest',
             value: true
         },
-        {
-            id: 'corprateFl',
-            value: true
-        },
+        
         {
             id: 'readOnly',
             value: true
@@ -44,7 +46,7 @@ module.exports = {
         {
             id: 'tckn',
             value: ''
-        },
+        },*/
     ],
 
     fields: [

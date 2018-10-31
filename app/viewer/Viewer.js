@@ -28,6 +28,7 @@ import {
     UPDATE_CART,
     REMOVE_CART,
     SET_CART_ADDRESS,
+    SET_SEGMENTIFY_INSTANCEID,
 } from 'root/app/helper/Constant';
 import {
     ElevatedView,
@@ -40,22 +41,6 @@ import { AddressListItem } from './';
 const Translation = require('root/app/helper/Translation.js');
 const Utils = require('root/app/helper/Global.js');
 const Globals = require('root/app/globals.js');
-const AJX = async ({ _self, uri, data = {} }, callback) => {
-    _self.setState({ loading: true });
-    Globals.fetch(uri, JSON.stringify(data), (answer) => {
-        if (_self._isMounted) {
-            if (answer === 'error') {
-                console.log('fatalllll error: could not get access token');
-            } else {
-                if (answer.status == 200) {
-                    if (typeof callback !== 'undefined')
-                        callback(answer);
-                }
-            }
-            _self.setState({ loading: false, refreshing: false });
-        }
-    });
-}
 
 /*
 const config = {
@@ -171,7 +156,7 @@ class CartListItem extends Component {
         const _self = this,
             { data = {}, onUpdateItem } = _self.props,
             { cartItemId } = data;
-        AJX({ _self: _self, uri: Utils.getURL({ key: 'cart', subKey: 'updateCartLine' }), data: { cartItemId: cartItemId, quantity: value } }, (res) => {
+        Globals.AJX({ _self: _self, uri: Utils.getURL({ key: 'cart', subKey: 'updateCartLine' }), data: { cartItemId: cartItemId, quantity: value } }, (res) => {
             const { status, message } = res;
             if (status == 200 && onUpdateItem)
                 onUpdateItem({ type: UPDATE_CART, data: res });
@@ -182,7 +167,7 @@ class CartListItem extends Component {
         const _self = this,
             { data = {}, onUpdateItem } = _self.props,
             { cartItemId } = data;
-        AJX({ _self: _self, uri: Utils.getURL({ key: 'cart', subKey: 'deleteCartLine' }), data: { cartItemId: [cartItemId] } }, (res) => {
+        Globals.AJX({ _self: _self, uri: Utils.getURL({ key: 'cart', subKey: 'deleteCartLine' }), data: { cartItemId: [cartItemId] } }, (res) => {
             const { status, message } = res;
             if (status == 200 && onUpdateItem)
                 onUpdateItem({ type: REMOVE_CART, data: res });
@@ -192,7 +177,7 @@ class CartListItem extends Component {
     getSelectValue = () => {
         const _self = this,
             { data = {} } = _self.props,
-            { quantity } = data,
+            { quantity, unitCode = 'Adet' } = data,
             values = [],
             arr = [15, 20, 30, 40];
 
@@ -206,10 +191,10 @@ class CartListItem extends Component {
 
         for (var i = 0; i < arr.length; ++i) {
             const k = arr[i];
-            values.push({ key: k + ' Adet', value: k });
+            values.push({ key: k + ' ' + unitCode, value: k });
         }
 
-        return { title: 'saadssadasdasdasdasd', values: values, value: quantity };
+        return { values: values, value: quantity };
     }
 
     render() {
@@ -235,7 +220,7 @@ class CartListItem extends Component {
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 21 }}>
 
-                        <SelectBox closed={true} callback={_self._onChange} data={_self.getSelectValue()} />
+                        <SelectBox containerStyle={{ width: 100 }} closed={true} callback={_self._onChange} data={_self.getSelectValue()} />
 
                         <Text style={{ fontFamily: 'Bold', fontSize: 16 }}>{Utils.getPriceFormat(total)}</Text>
                     </View>
@@ -287,7 +272,7 @@ class FavoriteListItem extends Component {
         Utils.confirm({ message: Translation['confirm']['removeMessage'] }, ({ type }) => {
             if (type == 'ok') {
                 const { productId } = data;
-                AJX({ _self: _self, uri: Utils.getURL({ key: 'user', subKey: 'deleteFavoriteProduct' }), data: { productId: productId } }, (res) => {
+                Globals.AJX({ _self: _self, uri: Utils.getURL({ key: 'user', subKey: 'deleteFavoriteProduct' }), data: { productId: productId } }, (res) => {
                     const { status, message } = res;
                     if (onRemove && status == 200)
                         setTimeout(() => {
@@ -614,9 +599,43 @@ class FeedsItem extends Component {
         });
     }
 
+    /* feeds item like, unlike */
+    _basket = (b) => {
+        const _self = this,
+            { productId } = _self.props.data,
+            data = {
+                "name": "BASKET_OPERATIONS",
+                "step": b ? "add" : "remove",
+                "productId": productId,
+                "quantity": 1
+            };
+
+        Globals.seg({ data: data }, (res) => {
+            console.log(res);
+        });
+    }
+
+    /* feeds item tıklamada */
+    _onPress = () => {
+        const _self = this,
+            { productId } = _self.props.data,
+            { instanceID } = _self.props.rdx,
+            data = {
+                "name": "INTERACTION",
+                "type": "click",
+                "instanceId": instanceID,
+                "interactionId": productId
+            };
+
+        Globals.seg({ data: data }, (res) => {
+            console.log(res);
+        });
+    }
+
     _onRatingClicked = ({ id, userLike }) => {
         const _self = this;
         _self.setState({ userLike: userLike });
+        _self._basket(userLike);
     }
 
     _getLike = () => {
@@ -628,7 +647,8 @@ class FeedsItem extends Component {
 
     _getIcon = () => {
         const _self = this,
-            { type } = _self.props.data;
+            { labels = [] } = _self.props.data,
+            type = labels[0];
 
         let source = null;
 
@@ -661,6 +681,29 @@ class FeedsItem extends Component {
         }
 
     };
+
+    _getProduct = () => {
+        const _self = this,
+            { image = '', name, price } = _self.props.data;
+
+
+        return (
+            <View style={{ flexDirection: 'row', borderWidth: 1, borderColor: '#dcdcdc' }}>
+                <View style={{ width: '50%' }}>
+                    <Image
+                        style={{ height: 218, resizeMode: 'contain' }}
+                        source={{ uri: image }}
+                    />
+                </View>
+                <View style={{ width: '50%', paddingTop: 30 }}>
+                    <Text style={{ fontFamily: 'Bold', fontSize: 22, marginBottom: 10 }}>{Utils.getPriceFormat(price)}</Text>
+                    <Text style={{ fontFamily: 'Medium', fontSize: 16 }}>{name}</Text>
+                    <Text style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#9b9b9b', marginBottom: 10 }}>{'21 Renk'}</Text>
+                    <Text style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#be1066' }}>{'Hızla tükeniyor'}</Text>
+                </View>
+            </View>
+        );
+    }
 
     _getImage = () => {
         const _self = this,
@@ -705,7 +748,9 @@ class FeedsItem extends Component {
         let view = null;
 
         const _self = this,
-            { desc = '' } = _self.props.data;
+            { labels = [] } = _self.props.data,
+            type = labels[0],
+            desc = Translation['feeds'][type] || '';
 
         if (desc != '')
             view = (
@@ -722,13 +767,22 @@ class FeedsItem extends Component {
         return view;
     }
 
+    _getFeed = () => {
+        const _self = this,
+            { labels = [] } = _self.props.data;
+
+        if (FEEDSTYPE['PRODUCT'] == labels[0])
+            return _self._getProduct();
+        else
+            return _self._getImage();
+    }
+
     render() {
         const _self = this;
-
         return (
             <View style={{ marginBottom: 20 }}>
                 <View style={{ position: 'relative' }}>
-                    {_self._getImage()}
+                    {_self._getFeed()}
                     {_self._getLike()}
                     {_self._getIcon()}
                 </View>
@@ -739,6 +793,20 @@ class FeedsItem extends Component {
         )
     }
 }
+
+class AppShell extends Component {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        return (
+            <View style={{ marginBottom: 20, backgroundColor: '#d1d1d1', height: 50 }}>
+                
+            </View>
+        );
+    }
+}
+
 
 const HTML_DEFAULT_PROPS = {
     tagsStyles: { h1: { color: 'red' } },
@@ -754,10 +822,11 @@ class Viewers extends Component {
         super(props);
         this.state = {
             html: '<b></b>',
-            data: [],
+            data: [{}, {}, {}],
             total: 0,
             refreshing: false,
             loading: false,
+            loaded: false
         }
     }
 
@@ -769,11 +838,16 @@ class Viewers extends Component {
 
     onDidFocus = () => {
         const _self = this,
-            { navigation } = _self.props;
+            { navigation, config } = _self.props,
+            { type = VIEWERTYPE['LIST'] } = config;
+
         if (navigation)
             _self._Listener.remove();
 
-        _self.setAjx({ uri: _self.getUri(), data: _self._getData() });
+        if (type == VIEWERTYPE['SEG'])
+            Globals.seg({ data: config.data }, _self._setSeg);
+        else
+            _self.setAjx({ uri: _self.getUri(), data: _self._getData() });
     }
 
     componentDidMount() {
@@ -861,30 +935,65 @@ class Viewers extends Component {
         return data;
     }
 
+    /* segmentify özel */
+    _setSeg = (res) => {
+        const _self = this;
+        if (res['type'] == 'success') {
+            const { responses = [] } = res.data,
+                key = Globals.getSegKey(responses),
+                { params = {} } = responses[0][0],
+                data = params['recommendedProducts'][key] || {},
+                instanceId = params['instanceId'] || '',
+                obj = {
+                    "name": "INTERACTION",
+                    "type": "impression",
+                    "instanceId": instanceId,
+                    "interactionId": instanceId
+                };
+
+            _self.props.dispatch({ type: SET_SEGMENTIFY_INSTANCEID, value: instanceId });
+
+            /* feeds ilk yüklendiğinde 1 defa impresionlar tetiklenecek  */
+            Globals.seg({ data: obj }, (response) => {
+
+                _self.setState({ data: data, total: Object.keys(data).length || 0, loaded: true });
+
+                if (_self._callback)
+                    _self._callback({ type: DATA_LOADED, data: data });
+
+                /* sepet için gerekti */
+                if (_self.props.response)
+                    _self.props.response({ type: DATA_LOADED, data: res.data });
+
+            });
+        }
+    }
+
+    /* */
     setAjx = ({ uri, data = {} }, callback) => {
         const _self = this,
             { type = VIEWERTYPE['LIST'] } = _self.props.config;
 
-        AJX({ _self: _self, uri: uri, data: data }, function (res) {
+        Globals.AJX({ _self: _self, uri: uri, data: data }, function (res) {
 
             const { keys, customClass = '', customFunc = '' } = _self.props.config,
                 keyArr = keys['arr'] || '',
                 keyTotal = keys['total'] || '';
 
-            let data = res.data[keyArr];
+            let data = res.data[keyArr] || [];
 
             if (customFunc != '')
                 data = _self._customFunc(data);
 
             if (type == VIEWERTYPE['HTMLTOJSON'])
-                data = JSON.parse(data)[keys['obj']][keys['objArr']];
+                data = JSON.parse(data)[keys['obj']][keys['objArr']] || [];
 
-            if (type == VIEWERTYPE['LIST'] || type == VIEWERTYPE['HTMLTOJSON'] || VIEWERTYPE['SCROLLVIEW'])
-                _self.setState({ data: data, total: res.data[keyTotal] || 0 });
+            if (type == VIEWERTYPE['LIST'] || type == VIEWERTYPE['HTMLTOJSON'] || type == VIEWERTYPE['SCROLLVIEW'])
+                _self.setState({ data: data, total: res.data[keyTotal] || 0, loaded: true });
             else if (type == VIEWERTYPE['WEBVIEW'])
-                _self.setState({ html: _self._addStyle({ customClass: customClass, data: data }) });
+                _self.setState({ html: _self._addStyle({ customClass: customClass, data: data }), loaded: true });
             else
-                _self.setState({ html: _self._clearTag(data) });
+                _self.setState({ html: _self._clearTag(data), loaded: true });
 
             _self._callback({ type: DATA_LOADED, data: data });
 
@@ -949,7 +1058,12 @@ class Viewers extends Component {
 
     _renderItem = ({ item, key }) => {
         const _self = this,
-            { itemType } = _self.props.config;
+            { itemType = '' } = _self.props.config,
+            { loaded } = _self.state;
+
+        if (!loaded)
+            return <AppShell key={key} type={itemType} />;
+
 
         switch (itemType) {
 
@@ -970,7 +1084,7 @@ class Viewers extends Component {
             case ITEMTYPE['VIDEO']:
                 return <VideoListItem onPress={this._onGotoDetail} data={item} />;
             case ITEMTYPE['FEEDS']:
-                return <FeedsItem data={item} />;
+                return <FeedsItem data={item} rdx={_self.props.segmentify} />;
             case ITEMTYPE['CAMPAING']:
                 return <CampaingItem data={item} />;
             default:
@@ -1071,11 +1185,31 @@ class Viewers extends Component {
 
     _viewable = [];
 
+
+    _setSegView = (item) => {
+        const _self = this,
+            { productId } = item,
+            { segmentify } = _self.props,
+            data = {
+                "name": "INTERACTION",
+                "type": "widget-view",
+                "instanceId": segmentify['instanceID'] || '',
+                "interactionId": productId
+            };
+
+        Globals.seg({ data: data }, (res) => {
+
+        });
+    }
+
     _onViewableItemChanged = ({ index, item }) => {
         const _self = this,
             { onViewableItemsChanged } = _self.props;
         if (!_self._viewable.includes(index)) {
             _self._viewable.push(index);
+
+            _self._setSegView(item);
+
             if (onViewableItemsChanged)
                 onViewableItemsChanged(item);
         }
@@ -1087,16 +1221,34 @@ class Viewers extends Component {
         viewableItems.map((item) => {
             _self._onViewableItemChanged(item)
         });
+
+        /*
+            multiple item döndürür
+        const _self = this,
+            arr = [];
+        viewableItems.map((k) => {
+            const index = k['index'],
+                item = k['item']
+            if (!_self._viewable.includes(index)) {
+                _self._viewable.push(index);
+                arr.push(k);
+            }
+        });
+        if (arr.length > 0)
+            _self._setSegView(arr);
+        */
     }
 
     _getViewer = () => {
         const _self = this,
+            { scrollEnabled = true } = _self.props,
             { type = VIEWERTYPE['LIST'] } = _self.props.config;
 
         let view = null;
-        if (type == VIEWERTYPE['LIST'] || type == VIEWERTYPE['HTMLTOJSON'])
+        if (type == VIEWERTYPE['SEG'] || type == VIEWERTYPE['LIST'] || type == VIEWERTYPE['HTMLTOJSON'])
             view = (
                 <FlatList
+                    scrollEnabled={scrollEnabled}
                     data={_self.state.data}
                     keyExtractor={_self._keyExtractor}
                     renderItem={_self._renderItem}
@@ -1125,7 +1277,10 @@ class Viewers extends Component {
             );
         else if (type == VIEWERTYPE['SCROLLVIEW'])
             view = (
-                <ScrollView style={{ flex: 1 }}>
+                <ScrollView
+                    scrollEnabled={scrollEnabled}
+                    style={{ flex: 1 }}
+                >
                     {_self._getItem()}
                 </ScrollView>
 

@@ -1,0 +1,45 @@
+
+{
+  "status": 200,
+  "data": {
+  "videos": [
+ 
+ 
+  {
+  "videoId": "V9SrL8xCc6E",
+  "provider": "youtube",
+  "thumbnail": "/UPLOAD/collection/Thumbnail_dudaklar_nasil_dolgunlaştir-1.jpg",
+  "text": "Makyajla dolgun dudaklar: Dudaklar nasıl dolgunlaştırılır?"
+  },
+ 
+ 
+ 
+  {
+  "videoId": "--JYJfkSGMg",
+  "provider": "youtube",
+  "thumbnail": "/UPLOAD/collection/Thumbnail_kirmizi_ruj_nasıl_surulur-1.jpg",
+  "text": "Kırmızı ruj nasıl sürülür?"
+  },
+ 
+ 
+ 
+  {
+  "videoId": "NpyMHKX4OXE",
+  "provider": "youtube",
+  "thumbnail": "/UPLOAD/collection/Thumbnail_kalici_ruj-1.jpg",
+  "text": "Ruj nasıl kalıcı hale getirilir?"
+  },
+ 
+ 
+ 
+  {
+  "videoId": "ZheAKG2dYhI",
+  "provider": "youtube",
+  "thumbnail": "/UPLOAD/collection/Thumbnail_temel_okula_fdonus_makyaj-1.jpg",
+  "text": "Okul Makyajı Nasıl Yapılır?"
+  },
+ 
+ 
+  ]
+  }
+ }

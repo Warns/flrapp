@@ -27,7 +27,7 @@ const DATA = {
 /* footer config */
 const CONFIG = {
     buttonText: 'ALIŞVERİŞİ TAMAMLA',
-    coupon: false
+    coupon: true
 };
 
 const Cart = class Main extends Component {
@@ -44,13 +44,17 @@ const Cart = class Main extends Component {
 
     _response = ({ type, data }) => {
         const _self = this;
-        if (type === DATA_LOADED)
+        if (type === DATA_LOADED){
+            console.log(JSON.stringify(data))
             _self.props.dispatch({ type: SET_CART_INFO, value: data });
+        }
+            
     }
 
     _onUpdate = () => {
         const _self = this;
         _self.child._onUpdateItem();
+        alert('update')
     }
 
     _onPress = () => {
@@ -61,12 +65,19 @@ const Cart = class Main extends Component {
             navigation.navigate('Address', {});
     }
 
+    _onCouponCallback = ({ type, data = {} }) => {
+        const _self = this,
+            { status } = data;
+        if (status == 200)
+            _self._onUpdate();
+    }
+
     render() {
         const _self = this;
         return (
             <View style={{ flex: 1 }}>
                 <Viewer onRef={ref => (_self.child = ref)} {..._self.props} style={{ paddingLeft: 10, paddingRight: 10, paddingBottom: 125 }} config={DATA} response={this._response} callback={this._callback} />
-                <Footer onPress={_self._onPress} data={CONFIG} />
+                <Footer onCouponCallback={_self._onCouponCallback} onPress={_self._onPress} data={CONFIG} />
             </View>
         )
     }

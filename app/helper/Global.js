@@ -15,6 +15,7 @@ module.exports = {
         },
         product: {
             getProductList: '/webapi/v3/Product/getProductList',
+            getProductVideos: 'https://www.flormar.com.tr/mobile-app-product-video-export.htm',
         },
         user: {
             getToken: '/webapi/v3/User/getToken',
@@ -69,6 +70,9 @@ module.exports = {
             deleteCartLine: '/webapi/v3/Cart/deleteCartLine',
             useCoupon: '/webapi/v3/Cart/useCoupon',
             getCargo: '/webapi/v3/Cart/getCargo',
+            getPayment: '/webapi/v3/Cart/getPayment',
+            getAgreement: '/webapi/v3/Cart/getAgreement',
+            getInstallment: '/webapi/v3/Cart/getInstallment'
         }
     },
     customURLs: {
@@ -266,7 +270,7 @@ module.exports = {
 
             filter['fields'].push(k);
         });
-        
+
         console.log(JSON.stringify(filter))
 
         return filter;

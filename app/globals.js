@@ -1,18 +1,20 @@
 /* STYLES */
 'use strict';
-var React = require('react-native');
+import { Platform } from 'react-native';
+import { store } from 'root/app/store';
 
 const Utils = require('root/app/helper/Global.js');
 
+
 module.exports = {
   // Constants
+  //API_KEY: '033a85ae-9662-ba87-296f-100ecfc50a66', // polo 
   API_KEY: '1b9b737f-5582-c8d7-f535-b9750bdeeb90',
   CLIENT: {
 
     // Here we store all session data.
     // .Auth {}
     // .Login {}
-
   },
 
   // FUNCTIONS
@@ -163,5 +165,74 @@ module.exports = {
       console.log(error + 'hola');
     }
   },
+
+  AJX: async function ({ _self, uri, data = {} }, callback) {
+    const _t = this;
+    _self.setState({ loading: true });
+    _t.fetch(uri, JSON.stringify(data), (answer) => {
+      if (_self._isMounted) {
+        if (answer === 'error') {
+          if (typeof callback !== 'undefined')
+            callback('error');
+        } else {
+          if (answer.status == 200) {
+            if (typeof callback !== 'undefined')
+              callback(answer);
+          } else {
+            if (typeof callback !== 'undefined')
+              callback('error');
+          }
+        }
+        _self.setState({ loading: false, refreshing: false });
+      }
+    });
+  },
+  getSegKey: function (responses) {
+    const { params = {} } = responses[0][0],
+      { dynamicItems = '[]' } = params,
+      items = JSON.parse(dynamicItems)[0],
+      key = items['recommendationSource'] + '|' + items['timeFrame'] + '|' + items['score'];
+
+    return key || 'RECOMMENDATION_SMART_OFFERS|THIS_WEEK|NONE';
+  },
+  seg: function ({ data }, callback) {
+    const _self = this,
+      uri = 'https://dcetr9.segmentify.com/add/events/v1.json?apiKey=61c97507-5c1f-46c6-9b50-2aa9d1d73316',
+      { user = {}, segmentify = {} } = store.getState(),
+      obj = {
+        "userId": user.userId || segmentify['userID'] || "XXXXXXXXXXXXXXXXX",
+        "sessionId": _self.CLIENT.Auth.session || segmentify['sessionID'] || "YYYYYYYYYYYYYYYY",
+        "device": Platform.OS === 'ios' ? "IOS" : "ANDROID",
+        "pageUrl": "https://flormar.com.tr",
+      };
+
+    Object.keys(data).map((key) => {
+      obj[key] = data[key];
+    });
+
+    console.log(JSON.stringify(obj));
+
+    fetch(uri, {
+      method: 'POST',
+      headers: {
+        'origin': 'https://flormar.com.tr',
+        'accept': 'application/json',
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify(obj),
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then(function (res) {
+        console.log('segmentify result:', res);
+        if (typeof callback !== 'undefined')
+          callback({ type: 'success', data: res });
+      })
+      .catch((res) => {
+        if (typeof callback !== 'undefined')
+          callback({ type: 'error', data: res });
+      });
+  }
 
 };

@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { AppLoading, Asset, Font } from 'expo';
 import { Settings, OfflineNotice } from 'root/app/helper/';
+import Preloader from 'root/app/helper/Preloader';
 import TopMenu from 'root/app/views/TopMenu';
 
 // navigation
@@ -18,32 +19,15 @@ import { Provider } from 'react-redux';
 import { store } from './app/store.js';
 
 import Assistant from './app/components/Assistant';
-
-var HEADERS = {
-  'origin': 'https://flormar.com.tr',
-  'accept': 'application/json',
-  'content-type': 'application/json'
-};
+import ProductView from './app/views/Product';
 
 export default class App extends React.Component {
   state = {
     isLoadingComplete: false,
   };
+  f
+  componentDidMount() {
 
-  componentDidMount(){
-    /*fetch('https://dcetr9.segmentify.com/add/events/v1.json?apiKey=61c97507-5c1f-46c6-9b50-2aa9d1d73316', {
-    method: 'POST',
-    headers: HEADERS,
-    body: JSON.stringify({ "name": "PAGE_VIEW", "userId": "XXXXXXXXXXXXXXXXX", "sessionId": "YYYYYYYYYYYYYYYY", "device": "IOS", "pageUrl": "https://flormar.com.tr","category": "Home Page"}),
-})
-    .then((response) => {
-        console.log(response)
-        return response.json();
-    })
-    .then(function (json) {
-        console.log(json);
-    })
-    .catch(error => console.log('error', error));*/
   }
 
   _filterCallback = (o) => {
@@ -70,7 +54,9 @@ export default class App extends React.Component {
             <TopMenu />
             <Settings />
             <RootNavigation />
+            <ProductView />
             <Assistant />
+            <Preloader />
           </View>
         </Provider>
       );

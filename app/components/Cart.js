@@ -49,7 +49,7 @@ class Cart extends React.Component {
 
 const styles = StyleSheet.create({
   bubble: {
-    backgroundColor: '#FE136F',
+    backgroundColor: '#ffffff',
     width: 20,
     height: 20,
     borderRadius: 10,
@@ -57,12 +57,12 @@ const styles = StyleSheet.create({
     left: 20,
     top: 20,
     borderWidth: 1,
-    borderColor: '#ffffff',
+    borderColor: '#FE136F',
     justifyContent: 'center',
     alignItems: 'center',
   },
   bubbleText: {
-    color: '#ffff',
+    color: '#FE136F',
     fontSize: 11,
   }
 });

@@ -8,6 +8,7 @@ import menu from './menu';
 import rootNavigation from './rootNavigation';
 import location from './location';
 import offlineNotice from './offlineNotice';
+import segmentify from './segmentify';
 
 export default combineReducers({
   general,
@@ -18,4 +19,5 @@ export default combineReducers({
   rootNavigation,
   location,
   offlineNotice,
+  segmentify,
 });

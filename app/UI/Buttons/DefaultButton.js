@@ -15,13 +15,14 @@ const DefaultButton = class DefaultButton extends React.Component{
   }
   render(){
 
-    const boxColorStyle = this.props.boxColor ? {backgroundColor: this.props.boxColor} : null;
-    const textColorStyle = this.props.textColor ? {color: this.props.textColor} : null;
+    const boxColorStyle = this.props.boxColor ? this.props.boxColor : '#FFFFFF';
+    const textColorStyle = this.props.textColor ? this.props.textColor : '#000000';
+    const borderColorStyle = this.props.borderColor ? this.props.borderColor : '#DDDDDD';
 
     return(
       <TouchableOpacity activeOpacity={0.9} onPress={this._onPress}>
-        <View style={{ alignItems:"center", justifyContent:"center", backgroundColor:"#FFFFFF", height:50 }}>
-          <Text style={[]}>{this.props.name}</Text>
+        <View style={{ alignItems:"center", justifyContent:"center", backgroundColor: boxColorStyle, borderWidth:1, borderColor:borderColorStyle, height:48, borderRadius:3 }}>
+          <Text style={{color:textColorStyle, fontSize:16, fontFamily:'Bold', fontWeight:'900'}}>{this.props.name}</Text>
         </View>
       </TouchableOpacity>
     );

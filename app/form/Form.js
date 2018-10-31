@@ -241,24 +241,35 @@ class Form extends Component {
         }
     }
 
+    /* anlık form callback */
+    _onChangeText = (obj) => {
+        const _self = this,
+            { onChangeText } = _self.props;
+        if (onChangeText)
+            onChangeText(obj);
+    }
+
     addField = (obj) => {
         const _self = this,
-            { id, type } = obj,
+            { id, type, css = {} } = obj,
+            { containerStyle = {}, wrapperStyle = {} } = css,
             { theme = 'DARK' } = _self.props.data,
             validation = this.state.validation,
             _callback = this._callback;
 
         switch (type) {
+            case 'creditCart':
+                return <FormInput containerStyle={{ ...containerStyle }} wrapperStyle={{ ...wrapperStyle }} onChangeText={_self._onChangeText} creditCart={true} theme={theme} callback={_callback} control={validation} key={id} data={obj} />;
             case 'text':
-                return <FormInput theme={theme} callback={_callback} control={validation} key={id} data={obj} />;
+                return <FormInput containerStyle={{ ...containerStyle }} wrapperStyle={{ ...wrapperStyle }} theme={theme} callback={_callback} control={validation} key={id} data={obj} />;
             case 'select':
-                return <SelectBox theme={theme} callback={_callback} control={validation} key={id} data={obj} />;
+                return <SelectBox containerStyle={{ ...containerStyle }} wrapperStyle={{ ...wrapperStyle }} theme={theme} callback={_callback} control={validation} key={id} data={obj} />;
             case 'chekbox':
-                return <CheckBox theme={theme} callback={_callback} control={validation} key={id} data={obj} />;
+                return <CheckBox containerStyle={{ ...containerStyle }} wrapperStyle={{ ...wrapperStyle }} theme={theme} callback={_callback} control={validation} key={id} data={obj} />;
             case 'radio':
-                return <RadioGroup theme={theme} callback={_callback} control={validation} key={id} data={obj} />;
+                return <RadioGroup containerStyle={{ ...containerStyle }} wrapperStyle={{ ...wrapperStyle }} theme={theme} callback={_callback} control={validation} key={id} data={obj} />;
             case 'dataTimePicker':
-                return <DateTimePicker theme={theme} callback={_callback} control={validation} key={id} data={obj} />;
+                return <DateTimePicker containerStyle={{ ...containerStyle }} wrapperStyle={{ ...wrapperStyle }} theme={theme} callback={_callback} control={validation} key={id} data={obj} />;
             case 'countryPicker':
                 return <CountryPicker theme={theme} callback={_callback} control={validation} key={id} data={obj} />;
             case 'hiddenObject':
@@ -305,17 +316,18 @@ class Form extends Component {
 
         if (show)
             return data['fields'].map((item, ind) => {
-                const items = item['items'].map((itm) => {
+                const { wrapperStyle = {} } = item,
+                    items = item['items'].map((itm) => {
 
-                    /* default değer varsa atanması için gönderilir */
-                    if ((data['defValue'] || '') != '')
-                        itm = _self._setDefault(itm);
+                        /* default değer varsa atanması için gönderilir */
+                        if ((data['defValue'] || '') != '')
+                            itm = _self._setDefault(itm);
 
-                    _self.totalCount = _self.totalCount + 1;
-                    return _self.addField(itm);
-                }),
+                        _self.totalCount = _self.totalCount + 1;
+                        return _self.addField(itm);
+                    }),
                     css = item['items'].length > 1 ? styles.row : styles.field;
-                return <View key={ind} style={css}>{items}</View>;
+                return <View key={ind} style={[css, { ...wrapperStyle }]}>{items}</View>;
             });
         else
             return null;
@@ -331,7 +343,7 @@ class Form extends Component {
 
     render() {
         const _self = this,
-            { theme = 'DARK', buttonText = 'GİRİŞ YAP' } = _self.props.data,
+            { theme = 'DARK', buttonText = 'GİRİŞ YAP', buttonStyle = {}, buttonFontStyle = {} } = _self.props.data,
             { scrollEnabled = true } = _self.props;
 
         return (
@@ -340,7 +352,7 @@ class Form extends Component {
                     <View style={[{ flex: 1, paddingLeft: 40, paddingRight: 40, paddingBottom: 40 }, { ..._self.props.style }]}>
                         {_self._getAllErrMsg()}
                         {_self.add()}
-                        <LoadingButton theme={theme} onPress={_self._onPress.bind(_self)}>{buttonText}</LoadingButton>
+                        <LoadingButton fontStyle={{ ...buttonFontStyle }} style={{ ...buttonStyle }} theme={theme} onPress={_self._onPress.bind(_self)}>{buttonText}</LoadingButton>
                     </View>
                 </CustomKeyboard >
             </ScrollView>

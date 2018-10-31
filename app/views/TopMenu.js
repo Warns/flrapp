@@ -15,22 +15,6 @@ import { NAVIGATE, HIDE_MENU, ITEMTYPE, REMOVE_USER } from 'root/app/helper/Cons
 
 const Utils = require('root/app/helper/Global.js');
 const Globals = require('root/app/globals.js');
-const AJX = async ({ _self, uri, data = {} }, callback) => {
-    _self.setState({ loading: true });
-    Globals.fetch(uri, JSON.stringify(data), (answer) => {
-        if (_self._isMounted) {
-            if (answer === 'error') {
-                console.log('fatalllll error: could not get access token');
-            } else {
-                if (answer.status == 200) {
-                    if (typeof callback !== 'undefined')
-                        callback(answer);
-                }
-            }
-            _self.setState({ loading: false, refreshing: false });
-        }
-    });
-}
 
 
 class CustomModal extends Component {
@@ -241,11 +225,11 @@ class TopMenu extends Component {
 
         /* setting.json ile oluşturulan button tipine göre işlem yapmak */
         if (type == ITEMTYPE['TRIGGERBUTTON'])
-            AJX({ _self: _self, uri: Utils.getURL(uri) }, (res) => {
+            Globals.AJX({ _self: _self, uri: Utils.getURL(uri) }, (res) => {
                 const { status } = res;
-                if (status == 200){
+                if (status == 200) {
                     /* ÇIKIŞ BUTONUNA ÖZEL İŞLEM */
-                    if( ITEMTYPE['EXITBUTTON'] == itemType )
+                    if (ITEMTYPE['EXITBUTTON'] == itemType)
                         _self.props.dispatch({ type: REMOVE_USER });
                 }
             });
