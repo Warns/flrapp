@@ -1,7 +1,10 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { SET_CART_ITEMS, ADD_CART_ITEM, SET_CART_INFO, SET_CART_ADDRESS, SET_DIFFERENT_ADDRESS } from 'root/app/helper/Constant';
 import { store } from 'root/app/store';
 =======
+=======
+>>>>>>> 947f2ca06069358790bd0612b9ba339e91b9a65f
 import {
     SET_CART_ITEMS,
     ADD_CART_ITEM,
@@ -10,6 +13,9 @@ import {
     SET_DIFFERENT_ADDRESS,
     SET_CART_CARGO
 } from 'root/app/helper/Constant';
+<<<<<<< HEAD
+>>>>>>> 947f2ca06069358790bd0612b9ba339e91b9a65f
+=======
 >>>>>>> 947f2ca06069358790bd0612b9ba339e91b9a65f
 
 const cartInitialState = {
