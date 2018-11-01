@@ -1,4 +1,10 @@
 {
+    "social": {
+        "facebook": "http://www.facebook.com/flormar",
+        "instagram": "https://www.instagram.com/flormarturkiye/",
+        "twitter": "https://twitter.com/flormarturkiye",
+        "youtube": "https://www.youtube.com/user/FlormarTurkiye",
+    },
     "menu": {
         "user": [
             {
@@ -51,11 +57,11 @@
                 "type": "form",
                 "itemType": "setUser"
             },
-            {
+            /*{
                 "title": "FİLTRE",
                 "type": "form",
                 "itemType": "productFilter"
-            },
+            },*/
             {
                 "title": "ADRES BİLGİLERİM",
                 "type": "listViewer",
@@ -102,7 +108,7 @@
                 "data": {
                     "exportType": "mobiAppSegmentify"
                 }
-            },*/
+            },
             {
                 "title": "FEEDS",
                 "type": "segmentify",
@@ -133,7 +139,7 @@
                     "bgrCode": "6764"
                 },
                 "customFunc": "campaing"
-            },
+            },*/
             {
                 "title": "MAĞAZALAR",
                 "type": "listViewer",

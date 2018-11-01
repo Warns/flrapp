@@ -17,7 +17,12 @@ export const ICONS = {
 
     list: require('root/assets/icons/list.png'),
     map: require('root/assets/icons/map.png'),
-    back: require('root/assets/images/icons/back.png')
+    back: require('root/assets/images/icons/back.png'),
+
+    facebook: require('root/assets/icons/facebook.png'),
+    instagram: require('root/assets/icons/instagram.png'),
+    twitter: require('root/assets/icons/twitter.png'),
+    youtube: require('root/assets/icons/youtube.png'),
 };
 
 /* CARDS ICON */

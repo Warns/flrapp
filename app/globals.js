@@ -210,7 +210,7 @@ module.exports = {
       obj[key] = data[key];
     });
 
-    console.log(JSON.stringify(obj));
+    console.log(obj);
 
     fetch(uri, {
       method: 'POST',
@@ -225,7 +225,6 @@ module.exports = {
         return response.json();
       })
       .then(function (res) {
-        console.log('segmentify result:', res);
         if (typeof callback !== 'undefined')
           callback({ type: 'success', data: res });
       })

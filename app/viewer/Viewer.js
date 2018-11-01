@@ -29,6 +29,7 @@ import {
     REMOVE_CART,
     SET_CART_ADDRESS,
     SET_SEGMENTIFY_INSTANCEID,
+    ADD_CART_ITEM
 } from 'root/app/helper/Constant';
 import {
     ElevatedView,
@@ -600,7 +601,7 @@ class FeedsItem extends Component {
     }
 
     /* feeds item like, unlike */
-    _basket = (b) => {
+    _segLike = (b) => {
         const _self = this,
             { productId } = _self.props.data,
             data = {
@@ -611,31 +612,38 @@ class FeedsItem extends Component {
             };
 
         Globals.seg({ data: data }, (res) => {
-            console.log(res);
+
         });
+    }
+
+    _segClick = () => {
+        const _self = this,
+            { productId } = _self.props.data,
+            { segmentify = {} } = _self.props.rdx,
+            { instanceID } = segmentify;
+        data = {
+            "name": "INTERACTION",
+            "type": "click",
+            "instanceId": instanceID,
+            "interactionId": productId
+        };
+
+        Globals.seg({ data: data }, (res) => { });
     }
 
     /* feeds item tıklamada */
     _onPress = () => {
         const _self = this,
-            { productId } = _self.props.data,
-            { instanceID } = _self.props.rdx,
-            data = {
-                "name": "INTERACTION",
-                "type": "click",
-                "instanceId": instanceID,
-                "interactionId": productId
-            };
+            { productId, labels = [] } = _self.props.data;
 
-        Globals.seg({ data: data }, (res) => {
-            console.log(res);
-        });
+        if (FEEDSTYPE['PRODUCT'] == labels[0])
+            _self.props.rdx.dispatch({ type: ADD_CART_ITEM, value: { id: productId, quantity: 1 } });
     }
 
     _onRatingClicked = ({ id, userLike }) => {
         const _self = this;
         _self.setState({ userLike: userLike });
-        _self._basket(userLike);
+        _self._segLike(userLike);
     }
 
     _getLike = () => {
@@ -670,8 +678,14 @@ class FeedsItem extends Component {
     }
 
     _callback = ({ type }) => {
-        const _self = this;
+        const _self = this,
+            { userLike } = _self.state;
         if (type == DOUBLE_CLICK) {
+
+            /* double click segmentify data yollanır */
+            if (!userLike)
+                _self._segClick();
+
             _self.setState({ userLike: true });
             _self._animate(true, () => {
                 setTimeout(() => {
@@ -682,26 +696,54 @@ class FeedsItem extends Component {
 
     };
 
+    _heartAnim = () => {
+        const _self = this;
+        return (
+            <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center' }}>
+                <Animated.Image
+                    style={[
+                        {
+                            width: 180,
+                            height: 180,
+                        },
+                        {
+                            opacity: _self.anim,
+                            transform: [{
+                                scale: _self.anim.interpolate({
+                                    inputRange: [0, 1],
+                                    outputRange: [0.6, 1]
+                                }),
+                            }]
+                        }
+                    ]}
+                    source={ICONS['like']}
+                />
+            </View>
+        )
+    }
+
     _getProduct = () => {
         const _self = this,
             { image = '', name, price } = _self.props.data;
 
-
         return (
-            <View style={{ flexDirection: 'row', borderWidth: 1, borderColor: '#dcdcdc' }}>
-                <View style={{ width: '50%' }}>
-                    <Image
-                        style={{ height: 218, resizeMode: 'contain' }}
-                        source={{ uri: image }}
-                    />
+            <DoubleClickButton callback={_self._callback}>
+                <View style={{ flexDirection: 'row', borderWidth: 1, borderColor: '#dcdcdc' }}>
+                    <View style={{ width: '50%' }}>
+                        <Image
+                            style={{ height: 218, resizeMode: 'contain' }}
+                            source={{ uri: image }}
+                        />
+                    </View>
+                    <View style={{ width: '50%', paddingTop: 30 }}>
+                        <Text style={{ fontFamily: 'Bold', fontSize: 22, marginBottom: 10 }}>{Utils.getPriceFormat(price)}</Text>
+                        <Text style={{ fontFamily: 'Medium', fontSize: 16 }}>{name}</Text>
+                        <Text style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#9b9b9b', marginBottom: 10 }}>{'21 Renk'}</Text>
+                        <Text style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#be1066' }}>{'Hızla tükeniyor'}</Text>
+                    </View>
                 </View>
-                <View style={{ width: '50%', paddingTop: 30 }}>
-                    <Text style={{ fontFamily: 'Bold', fontSize: 22, marginBottom: 10 }}>{Utils.getPriceFormat(price)}</Text>
-                    <Text style={{ fontFamily: 'Medium', fontSize: 16 }}>{name}</Text>
-                    <Text style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#9b9b9b', marginBottom: 10 }}>{'21 Renk'}</Text>
-                    <Text style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#be1066' }}>{'Hızla tükeniyor'}</Text>
-                </View>
-            </View>
+                {_self._heartAnim()}
+            </DoubleClickButton>
         );
     }
 
@@ -719,27 +761,7 @@ class FeedsItem extends Component {
                     style={{ height: h }}
                     source={{ uri: image }}
                 />
-                <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center' }}>
-                    <Animated.Image
-                        style={[
-                            {
-                                width: 180,
-                                height: 180,
-                            },
-                            {
-                                opacity: _self.anim,
-                                transform: [{
-                                    scale: _self.anim.interpolate({
-                                        inputRange: [0, 1],
-                                        outputRange: [0.6, 1]
-                                    }),
-                                }]
-                            }
-                        ]}
-                        source={ICONS['like']}
-                    />
-                </View>
-
+                {_self._heartAnim()}
             </DoubleClickButton>
         );
     }
@@ -801,7 +823,7 @@ class AppShell extends Component {
     render() {
         return (
             <View style={{ marginBottom: 20, backgroundColor: '#d1d1d1', height: 50 }}>
-                
+
             </View>
         );
     }
@@ -1084,7 +1106,7 @@ class Viewers extends Component {
             case ITEMTYPE['VIDEO']:
                 return <VideoListItem onPress={this._onGotoDetail} data={item} />;
             case ITEMTYPE['FEEDS']:
-                return <FeedsItem data={item} rdx={_self.props.segmentify} />;
+                return <FeedsItem data={item} rdx={_self.props} />;
             case ITEMTYPE['CAMPAING']:
                 return <CampaingItem data={item} />;
             default:
@@ -1185,11 +1207,10 @@ class Viewers extends Component {
 
     _viewable = [];
 
-
     _setSegView = (item) => {
         const _self = this,
-            { productId } = item,
-            { segmentify } = _self.props,
+            { productId = '' } = item,
+            { segmentify = {} } = _self.props,
             data = {
                 "name": "INTERACTION",
                 "type": "widget-view",
@@ -1204,11 +1225,16 @@ class Viewers extends Component {
 
     _onViewableItemChanged = ({ index, item }) => {
         const _self = this,
-            { onViewableItemsChanged } = _self.props;
-        if (!_self._viewable.includes(index)) {
+            { onViewableItemsChanged } = _self.props,
+            { loaded = false } = _self.state,
+            { type = VIEWERTYPE['LIST'] } = _self.props.config;
+
+        if (!_self._viewable.includes(index) && loaded) {
             _self._viewable.push(index);
 
-            _self._setSegView(item);
+            /* segmentify özel */
+            if (type == VIEWERTYPE['SEG'])
+                _self._setSegView(item);
 
             if (onViewableItemsChanged)
                 onViewableItemsChanged(item);
