@@ -29,7 +29,8 @@ import {
     REMOVE_CART,
     SET_CART_ADDRESS,
     SET_SEGMENTIFY_INSTANCEID,
-    ADD_CART_ITEM
+    ADD_CART_ITEM,
+    OPEN_PRODUCT_DETAILS
 } from 'root/app/helper/Constant';
 import {
     ElevatedView,
@@ -679,7 +680,9 @@ class FeedsItem extends Component {
 
     _callback = ({ type }) => {
         const _self = this,
+            { productId } = _self.props.data,
             { userLike } = _self.state;
+
         if (type == DOUBLE_CLICK) {
 
             /* double click segmentify data yollanır */
@@ -692,6 +695,8 @@ class FeedsItem extends Component {
                     _self._animate(false);
                 }, 100);
             });
+        } else {
+            //_self.props.rdx.dispatch({ type: OPEN_PRODUCT_DETAILS, value: { id: productId, measurements: {}, animate: false, sequence: 0 } });
         }
 
     };

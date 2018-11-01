@@ -23,6 +23,8 @@ export const ICONS = {
     instagram: require('root/assets/icons/instagram.png'),
     twitter: require('root/assets/icons/twitter.png'),
     youtube: require('root/assets/icons/youtube.png'),
+
+    noConnection: require('root/assets/icons/noConnection.png'),
 };
 
 /* CARDS ICON */
