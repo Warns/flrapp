@@ -15,11 +15,7 @@ export const ICONS = {
     drpIco: require('root/assets/icons/drpIco.png'),
     listProduct: require('root/assets/icons/list_product.png'),
     listTexture: require('root/assets/icons/list_texture.png'),
-<<<<<<< HEAD
     filters: require('root/assets/icons/filters.png'),
-
-=======
->>>>>>> 8f99ad88b39b414d26b2e750191eba048c8f3a82
     list: require('root/assets/icons/list.png'),
     map: require('root/assets/icons/map.png'),
     back: require('root/assets/images/icons/back.png'),

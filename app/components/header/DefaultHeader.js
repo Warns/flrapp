@@ -43,7 +43,7 @@ class DefaultHdr extends Component {
     const _self = this,
       { user = {} } = _self.props,
       { firstName = '', gender = 'E' } = user,
-      ico = gender == 'E' ? 'userWomen' : 'userMen';
+      ico = gender == 'E' ? 'userMen' : 'userWomen';
 
     if (firstName != '') {
 
