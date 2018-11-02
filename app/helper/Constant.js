@@ -14,6 +14,7 @@ export const ICONS = {
 
     listProduct: require('root/assets/icons/list_product.png'),
     listTexture: require('root/assets/icons/list_texture.png'),
+    filters: require('root/assets/icons/filters.png'),
 
     list: require('root/assets/icons/list.png'),
     map: require('root/assets/icons/map.png'),

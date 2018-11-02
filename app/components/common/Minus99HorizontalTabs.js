@@ -135,7 +135,7 @@ export { Minus99HorizontalTabs };
 const styles = StyleSheet.create({
 
   // HORIZONTAL tabs
-  horizontalTabsWrapper: { flex: 1, flexDirection: "row", maxHeight: 40, backgroundColor: "#ffffff", },
+  horizontalTabsWrapper: { flex: 1, flexDirection: "row", maxHeight: 40, backgroundColor: "#ffffff", borderBottomColor:'#dddddd', borderBottomWidth:1, },
   horizontalTab: { height: 40, justifyContent: "center", },
   borderBottom: { borderBottomColor: "#000000", borderBottomWidth: 3 },
 });

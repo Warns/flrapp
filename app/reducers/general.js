@@ -109,6 +109,29 @@ fetchProductDetails = ( id ) => {
                 colors.sort(function(a, b){return a.shortCode - b.shortCode });
 
                 store.dispatch({type:UPDATE_PRODUCT_DETAILS_ITEM, value: {product:answer.data.product, colors:colors} });
+
+                /*
+                fetch(
+                    'https://www.flormar.com.tr/mobile-app-product-video-export.html', 
+                    {
+                        method: 'POST',
+                        headers: {
+                            Accept: 'application/json',
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            urn: id,
+                        })
+                    })
+                .then((response) => response.json())
+                .then((responseJson) => {
+                 console.log(responseJson);
+                })
+                .catch((error) => {
+                console.error(error);
+                });
+                */
+
             }
             else{
             // handle error

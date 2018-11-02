@@ -103,7 +103,7 @@ class ListItem extends React.Component {
 
     const { index, item } = this.props;
     
-    product = item ? <ProductRender item={item} /> : <ProductSkeleton item={item} />;
+    product = <ProductSkeleton item={item} />//item ? <ProductRender item={item} /> : <ProductSkeleton item={item} />;
 
     leftSpace = index == 0 ? 20 : 0;
 

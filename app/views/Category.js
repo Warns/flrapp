@@ -15,10 +15,15 @@ import {
 } from 'react-native';
 import { TabNavigator, createMaterialTopTabNavigator } from 'react-navigation';
 
+import { 
+  SET_SELECTED_CATEGORY,
+  NAVIGATE,
+} from 'root/app/helper/Constant';
+import { store } from 'root/app/store';
+
 styles = require('../../app/styles.js');
 globals = require('../../app/globals.js');
 
-import { store } from '../../app/store';
 import { Minus99HorizontalTabs } from '../components';
 import { MinimalHeader } from '../components';
 import ListPage from './List';
@@ -55,20 +60,26 @@ function getTabForCategory( {category, props} ){
 
 export default class CategoryTabs extends React.Component{
 
+  _goBack = () => {
+    
+  }
+
+  _cats = store.getState().general.categories
+
   static navigationOptions = ({ navigation }) => {
     const {state, setParams} = navigation;
     return {
       title: 'hellow',
-      header: () => <MinimalHeader nav={navigation} title={ store.getState().general.selectedCategory } />,
+      header: () => <MinimalHeader onPress={()=> store.dispatch({type: NAVIGATE, value:{item:{navigation:"Home"}}}) } nav={navigation} title={ store.getState().general.selectedCategory } />,
       headerBackTitle: null,
       headerTintColor: "#7410E0",
     };
   };
 
   CategoriesNavigator = createMaterialTopTabNavigator(
-    tabs( store.getState().general.categories ),
+    tabs( this._cats ),
     {
-      tabBarComponent: CustomHorizontalTabs,
+      tabBarComponent: this._cats.length > 1 ? CustomHorizontalTabs : null,
       lazy: true,
       tabBarPosition: 'top',
       initialRouteName: store.getState().general.selectedCategory,
@@ -98,10 +109,12 @@ class CustomHorizontalTabs extends React.Component {
 
   render(){
 
-    //console.log(this.props.navigationState.routes );
+    //console.log('kkkkkkk', this.props.navigationState.routes[this.props.navigationState.index].key );
 
     const routes = this.props.navigationState.routes,
     i = this.props.navigationState.index;
+
+    store.dispatch({type:SET_SELECTED_CATEGORY, value:this.props.navigationState.routes[this.props.navigationState.index].key});
 
     return(
       <Minus99HorizontalTabs items={routes} selected={i} callback={this._onTabsPress} />

@@ -14,9 +14,11 @@ import {
   ScrollView,
 } from 'react-native';
 import { TabNavigator, TabBarBottom } from 'react-navigation';
+import { Form } from 'root/app/form';
 
 import { ICONS, SET_TEXTURE_DISPLAY, OPEN_PRODUCT_DETAILS } from 'root/app/helper/Constant';
 import { store } from '../../app/store';
+import { MinimalHeader } from 'root/app/components';
 
 var RCTUIManager = require('NativeModules').UIManager;
 
@@ -24,6 +26,7 @@ import ProductView from './Product';
 
 styles = require('../../app/styles.js');
 globals = require('../../app/globals.js');
+const Utils = require('root/app/helper/Global.js');
 
 const SCREEN_DIMENSIONS = {};
 const HEADER_HEIGHT = Platform.OS === 'android' ? 80 : 65;
@@ -89,6 +92,8 @@ export default class List extends React.Component{
           _self.onDidFocus();
 
           SCREEN_DIMENSIONS = Dimensions.get('screen');
+
+      console.log('))))))))', store.getState().general.selectedCategory );
   }
 
   /* https://medium.com/@TaylorBriggs/your-react-component-can-t-promise-to-stay-mounted-e5d6eb10cbb */
@@ -110,11 +115,11 @@ export default class List extends React.Component{
   }
 */
   _updateList = () => {
-
-    console.log( this.props.category.id );
     globals.fetch(
       "https://www.flormar.com.tr/webapi/v3/Product/getProductList",
       JSON.stringify({
+        "page": 1,
+        "pageSize": 10,
         "catId": this.props.category.id, //18775
       }),
       this._listResultHandler
@@ -272,6 +277,7 @@ export default class List extends React.Component{
 
     return(
       <View style={{flex:1, backgroundColor:'#ffffff'}}>
+
         <ListHeader totalProductCount={totalProductCount} filters={filters} onDisplayChange={this._onDisplayChange} textureDisplay={this.state.textureDisplay} />
         <FlatList
           style={{flex:1, flexDirection:'column'}}
@@ -302,12 +308,24 @@ export default class List extends React.Component{
 
 class ListHeader extends React.Component{
 
+  state = {
+    filterIsOpen: false,
+  }
+
   _onProductDisplay = () => {
     this.props.onDisplayChange( false );
   };
 
   _onTextureDisplay = () => {
     this.props.onDisplayChange( true );
+  }
+
+  _onFilterButton = () => {
+    this.setState({filterIsOpen: true});
+  }
+
+  _close = () => {
+    this.setState({filterIsOpen: false});
   }
 
   render(){
@@ -331,13 +349,18 @@ class ListHeader extends React.Component{
       shadowRadius: 3,
       zIndex:2,
       elevation: 1, justifyContent:'center', alignItems:'center'}}>
-        <View style={{width:100}}>
-          <Text>Filters</Text>
+        <View style={{width:120}}>
+          <TouchableOpacity activeOpacity={0.8} onPress={this._onFilterButton} style={{marginRight:10}}>
+            <View style={{flexDirection:'row', alignItems:'center', marginLeft:20}}>
+              <Text style={{fontSize:16}}>Filters</Text>
+              <Image source={ICONS['filters']} style={{ width: 40, height: 40 }} />
+            </View>
+          </TouchableOpacity>
         </View>
         <View style={{flex:1, justifyContent:"center", alignItems:"center"}}>
-          <Text style={{color:"#afafaf", fontSize:16}}>{totalProductCount} ürün</Text>
+          <Text style={{color:"#afafaf", fontSize:14}}>{totalProductCount} ürün</Text>
         </View>
-        <View style={{flexDirection:"row", width:100,}}>
+        <View style={{flexDirection:"row", width:120, justifyContent:'flex-end', marginRight:10,}}>
           <TouchableOpacity activeOpacity={0.8} onPress={this._onProductDisplay} style={{marginRight:10}}>
             <Image source={ICONS['listProduct']} style={{ width: 40, height: 40, opacity:productOpacity }} />
           </TouchableOpacity>
@@ -345,6 +368,16 @@ class ListHeader extends React.Component{
             <Image source={ICONS['listTexture']} style={{ width: 40, height: 40, opacity:textureOpacity }} />
           </TouchableOpacity>
         </View>
+
+        <Modal
+          visible={this.state.filterIsOpen}
+          animationType="slide"
+        >
+          <MinimalHeader onPress={this._close} title="KAPAT" right={<Text style={{color:"#afafaf", fontSize:14, marginRight:10}}>{totalProductCount} ürün</Text>} />
+          <Form callback={this._filterCallback} data={Utils.filterToSelectObject(this.props.filters)} />
+
+        </Modal>
+
       </View>
     )
   }
@@ -363,7 +396,7 @@ class ListItem extends React.Component {
 
     let _width = Math.floor( SCREEN_DIMENSIONS.width *.5 );
     let _height = Math.floor( _width * 5/4 );
-    let _boxHeight = _height + 105;
+    let _boxHeight = _height + 107;
 
     let borderStyle = index % 2 == 0 ? {} : {borderLeftWidth:1, borderLeftColor:'#dddddd'};
 

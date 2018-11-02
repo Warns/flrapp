@@ -14,6 +14,8 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import Carousel from 'react-native-snap-carousel';
+//import ViewOverflow from 'react-native-view-overflow';
+const Entities = require('html-entities').AllHtmlEntities;
 
 const SCREEN_DIMENSIONS = Dimensions.get('screen');
 
@@ -40,13 +42,15 @@ class ProductView extends React.Component {
     animationDone: false,
     detailIsOpen: false,
     videos: [1, 1],
+    canScroll: false,
+    animationType: 'none',
   };
 
   _animate = () => {
     Animated.timing(
       this.state.anim, {
         toValue:1,
-        duration: 300,
+        duration: 400,
         easing: Easing.out(Easing.cubic),
       }
     ).start();
@@ -54,9 +58,9 @@ class ProductView extends React.Component {
     Animated.timing(
       this.state.opacity, {
         toValue:1,
-        duration: 200,
+        duration: 300,
         easing: Easing.out(Easing.linear),
-        delay: 300,
+        delay: 400,
         onComplete: this._initDetails,
       }
     ).start();
@@ -65,26 +69,29 @@ class ProductView extends React.Component {
 
   _renderItem({item, index}){
     return(
-      <View style={{overflow:'visible'}}>
+      <View>
         <Image source={{uri:item.mediumImageUrl}} style={{left:-(SCREEN_DIMENSIONS.width - 270) * .5, width:270, height:337, resizeMode:'cover'}} />
       </View>
     );
   }
 
   _initDetails = ()=>{
-    this.setState({animationDone: true });
+    this.setState({animationDone: true, animationType:'slide' });
   }
 
   _close = () =>{
     //reset
-    this.setState({animationDone: false, anim: new Animated.Value(0), opacity: new Animated.Value(0), detailIsOpen:false});
     this.props.dispatch({type:CLOSE_PRODUCT_DETAILS, Value:{}});
+    setTimeout(() => {
+      this.setState({animationDone: false, animationType:'none', anim: new Animated.Value(0), opacity: new Animated.Value(0), detailIsOpen:false});
+    }, 111);
   }
 
   _showProductInfo = () => {
     this.setState({
       detailIsOpen:!this.state.detailIsOpen,
     })
+    this.productScrollView.scrollTo({y: 360});
   }
 
   _changeColor = ( id ) => {
@@ -95,6 +102,7 @@ class ProductView extends React.Component {
 
   _changeProduct = ( id ) => {
 
+    this.setState({canScroll: true});
     this.props.dispatch({type:OPEN_PRODUCT_DETAILS, value:{id:id, measurements:{}, animate:false, sequence: 0 }});
     console.log('p----->', id);
   }
@@ -105,12 +113,19 @@ class ProductView extends React.Component {
   }
 
   _renderProduct = () => {
-    let{ anim, detailIsOpen, opacity, videos } = this.state;
+    let{ anim, detailIsOpen, opacity, videos, canScroll } = this.state;
     let { item, sequence, measurements, animate, colors } = this.props.product;
     if( item ){
       let {width, height, pageY, pageX} = measurements;
       let animatedImage = null;
       let veil = null;
+
+      const images = [];
+      for( var k in item.productImages ){
+        if(item.productImages[k].imageUrl.indexOf('mobile_texture') < 0){
+          images.push(item.productImages[k]);
+        }
+      }
 
       const _width = anim.interpolate({
         inputRange: [0, 1],
@@ -145,7 +160,7 @@ class ProductView extends React.Component {
 
       let palette = colors.length > 1 ? <Palette width={SCREEN_DIMENSIONS.width} items={colors} selected={item.shortCode} onPress={this._changeColor} /> : null;
 
-      let videosButton = videos.length > 0 ? <ProductActionButton name="Videolar" count={videos.length} /> : null;
+      let videosButton = videos.length > 0 ? <ProductActionButton name="Videolar" count={videos.length} onPress={()=>{}} /> : null;
 
       let recommendations = item.productRecommends.length > 0 ? (
         <View style={{marginTop:35}}>
@@ -165,13 +180,15 @@ class ProductView extends React.Component {
           );
         }
 
+      const desc = Entities.decode( item.description.replace(/<[^>]*>/g, "") );
+
       let details = detailIsOpen ? (
           <View style={{borderBottomWidth:1, borderColor:'#D8D8D8', paddingBottom:50}}>
             <Text style={{fontSize:13, color:'#A9A9A9'}}>Bu ürün</Text>
             <View style={{flexDirection:'row', flexWrap: 'wrap', marginTop:10, marginBottom:20}}>
             {productTags}
             </View>
-            <Text style={styles.defautText}>{item.description}</Text>
+            <Text style={styles.defautText}>{desc}</Text>
             <Text style={[styles.defautText, { marginTop:15, fontSize:14}]}>Ürün kodu: {item.integrationId}</Text>
           </View>
         ) : null;
@@ -182,7 +199,10 @@ class ProductView extends React.Component {
           <ScrollView
             ref={ref => this.productScrollView = ref}
             onContentSizeChange={() => {
-              this.productScrollView.scrollTo({y: 0})
+              if( canScroll ){
+                this.productScrollView.scrollTo({y: 0});
+                this.setState({canScroll: false});
+              }
             }}
           >
           {animatedImage}
@@ -190,7 +210,7 @@ class ProductView extends React.Component {
             <View>
               <Carousel
                   ref={(c) => {this._carousel = c;}}
-                  data={item.productImages}
+                  data={images}
                   renderItem={this._renderItem}
                   sliderWidth={SCREEN_DIMENSIONS.width}
                   sliderHeight={337}
@@ -219,7 +239,7 @@ class ProductView extends React.Component {
                 </View>
                 <View style={{flex:1, marginLeft:5}}>
                 <DefaultButton
-                    callback={this._updateCart2}
+                    callback={()=>{}}
                     name="FAVORİME EKLE"
                     />
                 </View>
@@ -229,7 +249,7 @@ class ProductView extends React.Component {
                 <Text style={styles.defautText}>{item.shortDescription}</Text>
                 <ProductActionButton name="Ürün Detayı" expanded={detailIsOpen} onPress={this._showProductInfo} />
                 {details}
-                <ProductActionButton name="Yorumlar" count={34} />
+                <ProductActionButton name="Yorumlar" count={34} onPress={()=>{}} />
                 {videosButton}
               </View>
 
@@ -247,7 +267,7 @@ class ProductView extends React.Component {
 
     return(
       <Modal
-        animationType="none"
+        animationType={this.state.animationType}
         transparent={true}
         visible={this.props.product.visibility}
         onRequestClose={()=>{}}

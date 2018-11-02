@@ -45,11 +45,19 @@ class Navigation extends React.Component {
 
   _onPressButton = (o) => {
 
-      const { general } = store.getState();
-      store.dispatch( { type: SET_CATEGORIES, value: o.item.children } );
+      if( o.item.children.length == 1 ){
+
+        store.dispatch( { type: SET_CATEGORIES, value: o.item.children } );
+        store.dispatch( { type: SET_SELECTED_CATEGORY, value: o.item.children[0].title } );
+        store.dispatch({type: NAVIGATE, value:{item:{navigation:"Category"}}});
+        
+      }
+      else{
+        store.dispatch( { type: SET_CATEGORIES, value: o.item.children } );
+        this.setModalVisible(({ visible: true, data: o }));  
+      }
+
       this.setState({currentTitle: o.item.title });
-      
-      this.setModalVisible(({ visible: true, data: o }));
   }
 
   // Modal
@@ -336,7 +344,7 @@ class NavigationModal extends React.Component {
                         source={{ uri: Utils.getImage(obj.img) }}
                     />*/}
                     <View style={{paddingLeft: 20, paddingRight: 20}}>
-                        <LineButton item={{ id: obj.id }} key={'btn-000'} style={{ borderTopWidth: 0 }} onPress={this._onAllPrdPress}>TÜM {obj.title} ÜRÜNLERİ</LineButton>
+                        {/*<LineButton item={{ id: obj.id }} key={'btn-000'} style={{ borderTopWidth: 0 }} onPress={this._onAllPrdPress}>TÜM {obj.title} ÜRÜNLERİ</LineButton>*/}
                         {arr}
                     </View>
                 </ScrollView>

@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
+import { Minus99MultipleSelect } from 'root/app/form';
+
 class Palette extends React.Component{
 
   state = {
@@ -78,21 +80,29 @@ class Palette extends React.Component{
   };
 
   render(){
+
+    console.log('dfdff');
+
     return(
-      <View style={{flex:1, backgroundColor:'#ffffff', maxHeight:65,}}>
+      <View style={{flex:1, backgroundColor:'#ffffff', maxHeight:165, height:60, backgroundColor:'#dddddd'}}>
         <FlatList
           //style={{borderWidth:1, borderColor:'red'}}
           scrollEnabled={true}
           data={this.state.items}
           keyExtractor={this._keyExtractor}
           renderItem={this._renderItem}
-
-          onsco
-          
           horizontal={true}
           showsHorizontalScrollIndicator={false}
           
           ref='flatList'
+        />
+        <Minus99MultipleSelect
+        defaultTitle='country'
+        slug='country'
+        callback={this._closed}
+        selected='iraq'
+        multiple={false}
+        items={[{name:'libya', id:'01'}, {name:'iraq', id:'02'}, {name:'lebanon', id:'03'}]}
         />
       </View>
     )

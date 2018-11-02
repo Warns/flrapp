@@ -466,6 +466,10 @@
                         "img": "/UPLOAD/categories-images/yuz.jpg",
                         "children": [
                             {
+                                "title": "TÜM YÜZ ÜRÜNLERİ",
+                                "id": "18708",
+                            },
+                            {
                                 "title": "BB KREM",
                                 "id": "18713"
                             },
@@ -517,6 +521,10 @@
                         "img": "/UPLOAD/categories-images/goz.jpg",
                         "children": [
                             {
+                                "title": "TÜM GÖZ ÜRÜNLERİ",
+                                "id": "18709",
+                            },
+                            {
                                 "title": "GÖZ FARI",
                                 "id": "18741"
                             },
@@ -552,6 +560,10 @@
                         "img": "/UPLOAD/categories-images/dudak.jpg",
                         "children": [
                             {
+                                "title": "TÜM DUDAK ÜRÜNLERİ",
+                                "id": "18710",
+                            },
+                            {
                                 "title": "DUDAK BAKIMI",
                                 "id": "18773"
                             },
@@ -579,6 +591,10 @@
                         "img": "/UPLOAD/categories-images/tirnak.jpg",
                         "children": [
                             {
+                                "title": "TÜM TIRNAK ÜRÜNLERİ",
+                                "id": "18711",
+                            },
+                            {
                                 "title": "OJE",
                                 "id": "18789"
                             },
@@ -600,7 +616,12 @@
                         "title": "VÜCUT",
                         "id": "18712",
                         "img": "/UPLOAD/categories-images/vucut-bronsing.jpg",
-                        "children": []
+                        "children": [
+                            {
+                                "title": "TÜM VÜCUT ÜRÜNLERİ",
+                                "id": "18712",
+                            }
+                        ]
                     }
                 ]
             },
@@ -614,6 +635,10 @@
                         "id": "18826",
                         "img": "/UPLOAD/categories-images/cilt-vucut.jpg",
                         "children": [
+                            {
+                                "title": "TÜM YÜZ BAKIMI ÜRÜNLERİ",
+                                "id": "18658",
+                            },
                             {
                                 "title": "TEMİZLEYİCİLER",
                                 "id": "18827"
@@ -634,6 +659,10 @@
                         "img": "/UPLOAD/categories-images/cilt-vucut.jpg",
                         "children": [
                             {
+                                "title": "TÜM EL & VÜCUT ÜRÜNLERİ",
+                                "id": "18834",
+                            },
+                            {
                                 "title": "NEMLENDİRİCİ",
                                 "id": "18913"
                             },
@@ -648,6 +677,10 @@
                         "id": "18861",
                         "img": "/UPLOAD/categories-images/parfum.jpg",
                         "children": [
+                            {
+                                "title": "TÜM PARFÜMLER",
+                                "id": "18861",
+                            },
                             {
                                 "title": "VÜCUT SPREYLERİ",
                                 "id": "18915"
@@ -670,6 +703,10 @@
                         "id": "18835",
                         "img": "/UPLOAD/categories-images/aksesuar.jpg",
                         "children": [
+                            {
+                                "title": "TÜM YÜZ AKSESUARLARI",
+                                "id": "18821",
+                            },
                             {
                                 "title": "FIRÇA",
                                 "id": "18836"
@@ -694,6 +731,10 @@
                         "img": "/UPLOAD/categories-images/aksesuar.jpg",
                         "children": [
                             {
+                                "title": "TÜM GÖZ AKSESUARLARI",
+                                "id": "18838",
+                            },
+                            {
                                 "title": "FIRÇA",
                                 "id": "18839"
                             },
@@ -716,6 +757,10 @@
                         "id": "18843",
                         "img": "/UPLOAD/categories-images/aksesuar.jpg",
                         "children": [
+                            {
+                                "title": "TÜM TIRNAK AKSESUARLARI",
+                                "id": "18843",
+                            },
                             {
                                 "title": "MAKAS",
                                 "id": "18844"
@@ -742,7 +787,12 @@
                         "title": "DİĞER",
                         "id": "18850",
                         "img": "/UPLOAD/categories-images/aksesuar.jpg",
-                        "children": []
+                        "children": [
+                            {
+                                "title": "DİĞER ÜRÜNLER",
+                                "id": "18850",
+                            },
+                        ]
                     }
                 ]
             }
