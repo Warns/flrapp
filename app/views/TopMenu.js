@@ -1,21 +1,24 @@
 import React, { Component } from 'react';
 import {
+    ScrollView,
     View,
     Image,
     Modal,
     Animated,
     Easing,
     TouchableOpacity,
+    Linking,
+    Text,
 } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import { connect } from 'react-redux';
-import { LineButton } from 'root/app/UI';
+import { LineButton, IconButton } from 'root/app/UI';
 import { GestureRecognizer } from 'root/app/helper';
-import { NAVIGATE, HIDE_MENU, ITEMTYPE, REMOVE_USER } from 'root/app/helper/Constant';
+import { NAVIGATE, HIDE_MENU, ITEMTYPE, REMOVE_USER, ICONS } from 'root/app/helper/Constant';
+import { store } from 'root/app/store';
 
 const Utils = require('root/app/helper/Global.js');
 const Globals = require('root/app/globals.js');
-
 
 class CustomModal extends Component {
     constructor(props) {
@@ -40,6 +43,37 @@ class CustomModal extends Component {
     }
 }
 
+class ExtraButton extends Component {
+    constructor(props) {
+        super(props);
+    }
+    _onPress = () => {
+
+    }
+    render() {
+        const _self = this;
+        return (
+            <TouchableOpacity activeOpacity={1} onPress={_self._onPress}>
+                <View style={{ backgroundColor: '#2dccd3', height: 70, flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <Image
+                        style={{ width: 113, height: 70 }}
+                        source={ICONS['flormarExtra']}
+                    />
+                    <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                        <Text style={{ color: '#FFFFFF', fontFamily: 'RegularTyp2', fontSize: 16 }}>{Utils.getPriceFormat(12)}</Text>
+                        <Image
+                            style={{ width: 40, height: 40 }}
+                            source={ICONS['rightArrowWhite']}
+                        />
+                    </View>
+
+                </View>
+            </TouchableOpacity>
+        );
+    }
+}
+
+
 class Navigation extends Component {
     constructor(props) {
         super(props);
@@ -58,10 +92,13 @@ class Navigation extends Component {
             /*
             showMenu değerini settings json üzerinden alıyor. menude gözüküp, gözükmeme olayı
             */
-            const { fontStyle = {}, ico = '', showMenu = true } = item;
-            if (showMenu)
-                return <LineButton ico={ico} fontStyle={fontStyle} sequence={ind} item={item} key={'btn-' + ind} onPress={this._onPress}>{item.title}</LineButton>
-            else
+            const { fontStyle = {}, ico = '', showMenu = true, type } = item;
+            if (showMenu) {
+                if (type == 'flormarExtra')
+                    return <ExtraButton key={'btn-' + ind} />
+                else
+                    return <LineButton ico={ico} fontStyle={fontStyle} sequence={ind} item={item} key={'btn-' + ind} onPress={this._onPress}>{item.title}</LineButton>
+            } else
                 return null;
         });
     }
@@ -135,8 +172,36 @@ class Menu extends Component {
 
     }
 
+    _socialButtonClick = ({ item }) => {
+        const _self = this,
+            { settings = {} } = store.getState(),
+            { social = {} } = settings;
+        Linking.openURL(social[item['type'] || ''] || '');
+    }
+
+    _getSocialButton = () => {
+        const _self = this,
+            arr = ['facebook', 'instagram', 'youtube', 'twitter'],
+            btn = arr.map((k, ind) => {
+                const m = ind > 0 ? 20 : 0;
+                return <IconButton callback={_self._socialButtonClick} item={{ type: k }} key={k} ico={k} icoStyle={{ width: 40, height: 40 }} style={{ marginLeft: m, width: 40, height: 40 }} />;
+            });
+        return btn;
+    }
+
     _footer = () => {
-        return null;
+        const _self = this,
+            dir = _self.props.direction || 'left';
+
+        let view = null;
+        if (dir == 'right')
+            view = (
+                <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                    {_self._getSocialButton()}
+                </View>
+            );
+
+        return view;
     }
 
     /* Gesture */
@@ -170,28 +235,35 @@ class Menu extends Component {
             direction = dir == 'right' ? { right: pos } : { left: pos };
 
         return (
-            <GestureRecognizer
-                onSwipeLeft={() => _self._onSwipe('left')}
-                onSwipeRight={() => _self._onSwipe('right')}
-                config={config}
-                style={{
-                    flex: 1,
-                }}
-            >
-                <View style={{ flex: 1 }}>
-                    <Animated.View style={{ opacity: op, zIndex: 1, flex: 1, position: 'absolute', backgroundColor: '#000000', left: 0, right: 0, top: 0, bottom: 0, width: '100%', height: '100%' }}>
-                        <TouchableOpacity style={{ flex: 1 }} activeOpacity={1} onPress={this._onClose}></TouchableOpacity>
-                    </Animated.View>
 
-                    <View style={{ flex: 1, alignSelf: alignSelf, flexDirection: 'column', zIndex: 2, position: 'relative' }}>
-                        <Animated.View style={{ ...direction, zIndex: 2, width: 320, flex: 1, backgroundColor: '#FFFFFF', paddingLeft: 10, paddingRight: 10 }}>
-                            {header}
-                            <Navigation onMenuClicked={this._onMenuClicked} items={items} />
-                            {footer}
-                        </Animated.View>
-                    </View>
+            <View style={{ flex: 1 }}>
+                <Animated.View style={{ opacity: op, zIndex: 1, flex: 1, position: 'absolute', backgroundColor: '#000000', left: 0, right: 0, top: 0, bottom: 0, width: '100%', height: '100%' }}>
+                    <TouchableOpacity style={{ flex: 1 }} activeOpacity={1} onPress={this._onClose}></TouchableOpacity>
+                </Animated.View>
+
+                <View style={{ flex: 1, alignSelf: alignSelf, flexDirection: 'column', zIndex: 2, position: 'relative' }}>
+                    <Animated.View style={{ ...direction, zIndex: 2, width: 320, flex: 1, backgroundColor: '#FFFFFF', paddingLeft: 10, paddingRight: 10, paddingBottom: 56 }}>
+                        {header}
+                        <ScrollView style={{ flex: 1, }}>
+                            <GestureRecognizer
+                                onSwipeLeft={() => _self._onSwipe('left')}
+                                onSwipeRight={() => _self._onSwipe('right')}
+                                config={config}
+                                style={{
+                                    flex: 1,
+                                }}
+                            >
+                                <View style={{ flex: 1, }}>
+                                    <Navigation onMenuClicked={this._onMenuClicked} items={items} />
+                                </View>
+
+                            </GestureRecognizer>
+                        </ScrollView>
+                        {footer}
+                    </Animated.View>
                 </View>
-            </GestureRecognizer>
+            </View>
+
         )
     }
 }

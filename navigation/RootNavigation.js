@@ -77,7 +77,7 @@ const RootStackNavigator = createStackNavigator(
     }),
     cardStyle: {
       //paddingTop: Platform.OS === 'ios' ? 0 : StatusBar.currentHeight,
-      backgroundColor: '#F6F7F7',
+      backgroundColor: '#FFFFFF',
       elevation: 0,
     }
   }

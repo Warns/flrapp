@@ -1,6 +1,8 @@
 /* app için gerekli iconlar burdan tanımlanır */
 export const ICONS = {
     rightArrow: require('root/assets/icons/rightArrow.png'),
+    rightArrowGrey: require('root/assets/icons/rightArrowGrey.png'),
+    rightArrowWhite: require('root/assets/icons/rightArrowWhite.png'),
     downArrow: require('root/assets/icons/downArrow.png'),
     storeLocation: require('root/assets/icons/storeLocation.png'),
     location: require('root/assets/icons/location.png'),
@@ -11,14 +13,25 @@ export const ICONS = {
     unLike: require('root/assets/icons/heartOutline.png'),
     close: require('root/assets/icons/close.png'),
     drpIco: require('root/assets/icons/drpIco.png'),
-
     listProduct: require('root/assets/icons/list_product.png'),
     listTexture: require('root/assets/icons/list_texture.png'),
+<<<<<<< HEAD
     filters: require('root/assets/icons/filters.png'),
 
+=======
+>>>>>>> 8f99ad88b39b414d26b2e750191eba048c8f3a82
     list: require('root/assets/icons/list.png'),
     map: require('root/assets/icons/map.png'),
-    back: require('root/assets/images/icons/back.png')
+    back: require('root/assets/images/icons/back.png'),
+    facebook: require('root/assets/icons/facebook.png'),
+    instagram: require('root/assets/icons/instagram.png'),
+    twitter: require('root/assets/icons/twitter.png'),
+    youtube: require('root/assets/icons/youtube.png'),
+    noConnection: require('root/assets/icons/noConnection.png'),
+    plcFeeds: require('root/assets/icons/placeholder/feeds.png'),
+    flormarExtra: require('root/assets/icons/flormarExtra.png'),
+    userWomen: require('root/assets/icons/userWomen.png'),
+    userMen: require('root/assets/icons/userWomen.png'),
 };
 
 /* CARDS ICON */

@@ -7,11 +7,8 @@ import {
 import { createMaterialTopTabNavigator } from 'react-navigation';
 import { Minus99HorizontalTabs } from '../app/components';
 import DiscoverPage from '../app/views/Discover';
-import ShopMenuPage from '../app/views/ShopMenu';
-import OffersPage from '../app/views/Offers';
 import { MoreButton } from 'root/app/UI';
-
-
+import { Viewer } from 'root/app/viewer';
 
 class CustomHorizontalTabs extends React.Component {
 
@@ -39,16 +36,50 @@ class CustomHorizontalTabs extends React.Component {
   }
 }
 
+const CONFIG = {
+  feeds: {
+    "title": "FEEDS",
+    "type": "segmentify",
+    "itemType": "feeds",
+    "keys": {
+      "id": "productId",
+      "arr": "seg",
+    },
+    "data": {
+      "name": "PAGE_VIEW",
+      "category": "Home Page"
+    }
+  },
+  campaing: {
+    "title": "KAMPANYALAR",
+    "type": "listViewer",
+    "itemType": "campaing",
+    "uri": {
+      "key": "banner",
+      "subKey": "getBannerList"
+    },
+    "siteURI": "/kampanyalar.html",
+    "keys": {
+      "id": "id",
+      "arr": "banners",
+    },
+    "data": {
+      "bgrCode": "6764"
+    },
+    "customFunc": "campaing"
+  }
+};
+
 export default MainTabNavigator = createMaterialTopTabNavigator(
   {
     Discover: {
-      screen: DiscoverPage,
+      screen: props => <Viewer {...props} config={CONFIG['feeds']} refreshing={false} />
     },
     ShopMenu: {
-      screen: ShopMenuPage,
+      screen: DiscoverPage,
     },
     Offers: {
-      screen: OffersPage,
+      screen: props => <Viewer {...props} config={CONFIG['campaing']} refreshing={false} />
     },
   },
   {

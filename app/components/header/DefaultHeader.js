@@ -12,6 +12,9 @@ import {
   StyleSheet,
 } from 'react-native';
 import { connect } from 'react-redux';
+import {
+  ICONS,
+} from 'root/app/helper/Constant';
 
 import Cart from '../Cart';
 
@@ -39,14 +42,20 @@ class DefaultHdr extends Component {
   _getUserMenu = () => {
     const _self = this,
       { user = {} } = _self.props,
-      { firstName = '' } = user;
-    if (firstName != '')
+      { firstName = '', gender = 'E' } = user,
+      ico = gender == 'E' ? 'userWomen' : 'userMen';
+
+    if (firstName != '') {
+
       return (
         <TouchableOpacity style={{ padding: 5, paddingRight: 0 }} onPress={this._onUserMenuPress}>
-          <Text>{firstName}</Text>
+          <Image
+            style={{ width: 40, height: 40 }}
+            source={ICONS[ico]}
+          />
         </TouchableOpacity>
       );
-    else
+    } else
       return null;
   }
 
