@@ -39,6 +39,7 @@ import { RatingButton, DoubleClickButton, IconButton } from 'root/app/UI';
 import { CountryPicker, SelectBox } from 'root/app/form';
 import { connect } from 'react-redux';
 import { AddressListItem } from './';
+import Placeholder from 'rn-placeholder';
 
 const Translation = require('root/app/helper/Translation.js');
 const Utils = require('root/app/helper/Global.js');
@@ -262,10 +263,11 @@ class FavoriteListItem extends Component {
         _self._isMounted = false;
     }
 
-    _onPress = () => {
+    _onAddToCart = () => {
         const _self = this,
-            { data = {} } = _self.props;
-
+            { data = {}, rdx = {} } = _self.props,
+            { productId } = data;
+        rdx.dispatch({ type: ADD_CART_ITEM, value: { id: productId, quantity: 1 } });
     }
 
     _onRemove = () => {
@@ -312,7 +314,7 @@ class FavoriteListItem extends Component {
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 21 }}>
                         <Text style={{ fontFamily: 'Bold', fontSize: 16 }}>{Utils.getPriceFormat(salePrice)}</Text>
-                        <BoxButton callback={_self._onPress}>{addTo}</BoxButton>
+                        <BoxButton callback={_self._onAddToCart}>{addTo}</BoxButton>
                     </View>
                 </View>
             </View>
@@ -405,8 +407,19 @@ class FollowListItem extends Component {
     constructor(props) {
         super(props);
     }
+
+    _onAddToCart = () => {
+        const _self = this,
+            { data = {}, rdx = {} } = _self.props,
+            { productId } = data;
+        rdx.dispatch({ type: ADD_CART_ITEM, value: { id: productId, quantity: 1 } });
+    }
+
     render() {
-        const { shortName, productName, smallImageUrl, salePrice } = this.props.data;
+        const _self = this,
+            { shortName, productName, smallImageUrl, salePrice } = _self.props.data,
+            { addTo } = Translation['cart'] || {};
+
         return (
             <View style={{ flexDirection: 'row', paddingTop: 20, paddingBottom: 20, paddingRight: 20, paddingLeft: 10, borderBottomColor: '#dcdcdc', borderBottomWidth: 1, }}>
                 <View style={{ width: 60, justifyContent: 'center', }}>
@@ -422,7 +435,7 @@ class FollowListItem extends Component {
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 21 }}>
                         <Text style={{ fontFamily: 'Bold', fontSize: 16 }}>{Utils.getPriceFormat(salePrice)}</Text>
-                        <BoxButton>{'SEPETE AT'}</BoxButton>
+                        <BoxButton callback={_self._onAddToCart}>{addTo}</BoxButton>
                     </View>
                 </View>
             </View>
@@ -553,10 +566,12 @@ class CampaingItem extends Component {
     render() {
         const { image, utpCode } = this.props.data;
         return (
-            <Image
-                style={{ height: 300 }}
-                source={{ uri: Utils.getImage(image) }}
-            />
+            <View style={{ marginBottom: 20 }}>
+                <Image
+                    style={{ height: 300 }}
+                    source={{ uri: Utils.getImage(image) }}
+                />
+            </View>
         )
     }
 }
@@ -638,7 +653,7 @@ class FeedsItem extends Component {
             { productId, labels = [] } = _self.props.data;
 
         if (FEEDSTYPE['PRODUCT'] == labels[0])
-            _self.props.rdx.dispatch({ type: ADD_CART_ITEM, value: { id: productId, quantity: 1 } });
+            _self.props.rdx.dispatch({ type: OPEN_PRODUCT_DETAILS, value: { id: productId, measurements: {}, animate: false, sequence: 0 } });
     }
 
     _onRatingClicked = ({ id, userLike }) => {
@@ -680,11 +695,9 @@ class FeedsItem extends Component {
 
     _callback = ({ type }) => {
         const _self = this,
-            { productId } = _self.props.data,
             { userLike } = _self.state;
 
         if (type == DOUBLE_CLICK) {
-
             /* double click segmentify data yollanır */
             if (!userLike)
                 _self._segClick();
@@ -695,10 +708,7 @@ class FeedsItem extends Component {
                     _self._animate(false);
                 }, 100);
             });
-        } else {
-            //_self.props.rdx.dispatch({ type: OPEN_PRODUCT_DETAILS, value: { id: productId, measurements: {}, animate: false, sequence: 0 } });
         }
-
     };
 
     _heartAnim = () => {
@@ -822,15 +832,85 @@ class FeedsItem extends Component {
 }
 
 class AppShell extends Component {
+
     constructor(props) {
         super(props);
     }
-    render() {
-        return (
-            <View style={{ marginBottom: 20, backgroundColor: '#d1d1d1', height: 50 }}>
 
-            </View>
-        );
+    _getView = () => {
+        const _self = this,
+            { type } = _self.props;
+
+        let view = null;
+        if (type == ITEMTYPE['CAMPAING'] || type == ITEMTYPE['FEEDS'])
+            view = (
+                <View style={{ marginBottom: 20, }}>
+                    <View>
+                        <Image
+                            style={{
+                                width: 140,
+                                height: 140,
+                                zIndex: 2,
+                                marginLeft: -70,
+                                marginTop: -70,
+                                left: '50%',
+                                top: '50%',
+                                position: 'absolute',
+                            }}
+                            source={ICONS['plcFeeds']}
+                        />
+                        <Placeholder.Box
+                            height={300}
+                            width="100%"
+                            animate="fade"
+                        />
+                    </View>
+                    <View style={{
+                        height: 40,
+                        borderBottomColor: '#dcdcdc',
+                        borderBottomWidth: 1,
+                        flexDirection: 'row'
+                    }}>
+                        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', }}>
+                            <Placeholder.Line
+                                animate="fade"
+                                height={15}
+                                width={117}
+                            />
+                        </View>
+                        <Image
+                            style={{
+                                width: 40,
+                                height: 40,
+                                position: 'absolute',
+                                top: 0,
+                                right: 0
+                            }}
+                            source={ICONS['rightArrowGrey']}
+                        />
+                    </View>
+                </View>
+            );
+        else
+            view = (
+                <View style={{ marginBottom: 20, }}>
+                    <Placeholder.ImageContent
+                        size={60}
+                        animate="fade"
+                        lineNumber={4}
+                        lineSpacing={5}
+                        lastLineWidth="30%"
+                    />
+                </View>
+            );
+
+
+        return view;
+    }
+
+    render() {
+        const _self = this;
+        return _self._getView();
     }
 }
 
@@ -849,12 +929,23 @@ class Viewers extends Component {
         super(props);
         this.state = {
             html: '<b></b>',
-            data: [{}, {}, {}],
+            data: this._empty(),
             total: 0,
             refreshing: false,
             loading: false,
             loaded: false
         }
+    }
+
+    /* placeholder için boş data atıyor */
+    _empty = () => {
+        const _self = this,
+            arr = [],
+            { type } = _self.props.config,
+            total = (type == ITEMTYPE['CAMPAING'] || type == ITEMTYPE['FEEDS']) ? 2 : 10;
+        for (var i = 0; i < total; ++i)
+            arr.push({})
+        return arr;
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -1091,7 +1182,6 @@ class Viewers extends Component {
         if (!loaded)
             return <AppShell key={key} type={itemType} />;
 
-
         switch (itemType) {
 
             case ITEMTYPE['CARTLIST']:
@@ -1099,17 +1189,17 @@ class Viewers extends Component {
             case ITEMTYPE['ADDRESS']:
                 return <AddressListItem config={_self.props.config} callback={_self._callback} onRemove={_self._removeItem} data={item} />;
             case ITEMTYPE['FAVORITE']:
-                return <FavoriteListItem onRemove={_self._removeItem} data={item} />;
+                return <FavoriteListItem rdx={_self.props} onRemove={_self._removeItem} data={item} />;
             case ITEMTYPE['ORDER']:
                 return <OrderListItem callback={this._callback} data={item} />;
             case ITEMTYPE['COUPON']:
-                return <CouponListItem onPress={this._onGotoDetail} data={item} />;
+                return <CouponListItem data={item} />;
             case ITEMTYPE['FOLLOWLIST']:
-                return <FollowListItem onPress={this._onGotoDetail} data={item} />;
+                return <FollowListItem rdx={_self.props} data={item} />;
             case ITEMTYPE['SERVICELIST']:
                 return <ServiceListItem callback={_self._callback} rdx={_self.props.location} data={item} />;
             case ITEMTYPE['VIDEO']:
-                return <VideoListItem onPress={this._onGotoDetail} data={item} />;
+                return <VideoListItem data={item} />;
             case ITEMTYPE['FEEDS']:
                 return <FeedsItem data={item} rdx={_self.props} />;
             case ITEMTYPE['CAMPAING']:

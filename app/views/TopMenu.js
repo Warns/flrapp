@@ -8,12 +8,13 @@ import {
     Easing,
     TouchableOpacity,
     Linking,
+    Text,
 } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import { connect } from 'react-redux';
 import { LineButton, IconButton } from 'root/app/UI';
 import { GestureRecognizer } from 'root/app/helper';
-import { NAVIGATE, HIDE_MENU, ITEMTYPE, REMOVE_USER } from 'root/app/helper/Constant';
+import { NAVIGATE, HIDE_MENU, ITEMTYPE, REMOVE_USER, ICONS } from 'root/app/helper/Constant';
 import { store } from 'root/app/store';
 
 const Utils = require('root/app/helper/Global.js');
@@ -42,6 +43,37 @@ class CustomModal extends Component {
     }
 }
 
+class ExtraButton extends Component {
+    constructor(props) {
+        super(props);
+    }
+    _onPress = () => {
+
+    }
+    render() {
+        const _self = this;
+        return (
+            <TouchableOpacity activeOpacity={1} onPress={_self._onPress}>
+                <View style={{ backgroundColor: '#2dccd3', height: 70, flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <Image
+                        style={{ width: 113, height: 70 }}
+                        source={ICONS['flormarExtra']}
+                    />
+                    <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                        <Text style={{ color: '#FFFFFF', fontFamily: 'RegularTyp2', fontSize: 16 }}>{Utils.getPriceFormat(12)}</Text>
+                        <Image
+                            style={{ width: 40, height: 40 }}
+                            source={ICONS['rightArrowWhite']}
+                        />
+                    </View>
+
+                </View>
+            </TouchableOpacity>
+        );
+    }
+}
+
+
 class Navigation extends Component {
     constructor(props) {
         super(props);
@@ -60,10 +92,13 @@ class Navigation extends Component {
             /*
             showMenu değerini settings json üzerinden alıyor. menude gözüküp, gözükmeme olayı
             */
-            const { fontStyle = {}, ico = '', showMenu = true } = item;
-            if (showMenu)
-                return <LineButton ico={ico} fontStyle={fontStyle} sequence={ind} item={item} key={'btn-' + ind} onPress={this._onPress}>{item.title}</LineButton>
-            else
+            const { fontStyle = {}, ico = '', showMenu = true, type } = item;
+            if (showMenu) {
+                if (type == 'flormarExtra')
+                    return <ExtraButton key={'btn-' + ind} />
+                else
+                    return <LineButton ico={ico} fontStyle={fontStyle} sequence={ind} item={item} key={'btn-' + ind} onPress={this._onPress}>{item.title}</LineButton>
+            } else
                 return null;
         });
     }

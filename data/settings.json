@@ -8,6 +8,11 @@
     "menu": {
         "user": [
             {
+                "title": "FLORMAR EXTRA",
+                "type": "flormarExtra",
+                "showCategory": false
+            },
+            {
                 "title": "FAVORİLERİM",
                 "type": "listViewer",
                 "itemType": "favorite",

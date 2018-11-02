@@ -20,13 +20,15 @@ const { width } = Dimensions.get('window');
 
 function MiniOfflineSign() {
     return (
-        <View style={styles.offlineContainer}>
-            <Image
-                style={{ width: 50, height: 50, marginBottom: 10 }}
-                source={ICONS['noConnection']}
-            />
-            <Text style={styles.offlineTitle}>HOP!</Text>
-            <Text style={styles.offlineText}>İnternet bağlantısı koptu.</Text>
+        <View style={{ zIndex: 2, position: 'absolute', flex: 1, width: '100%', height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.5)', top: 0, left: 0 }}>
+            <View style={styles.offlineContainer}>
+                <Image
+                    style={{ width: 50, height: 50, marginBottom: 10 }}
+                    source={ICONS['noConnection']}
+                />
+                <Text style={styles.offlineTitle}>HOP!</Text>
+                <Text style={styles.offlineText}>İnternet bağlantısı koptu.</Text>
+            </View>
         </View>
     );
 }
@@ -47,9 +49,9 @@ class OfflineNotices extends PureComponent {
 
     render() {
         const _self = this;
-        if (!_self.props.offlineNotice.isConnected) {
+        if (!_self.props.offlineNotice.isConnected)
             return <MiniOfflineSign />;
-        }
+
         return null;
     }
 }
