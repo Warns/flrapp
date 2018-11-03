@@ -25,6 +25,7 @@ export const ICONS = {
     youtube: require('root/assets/icons/youtube.png'),
     noConnection: require('root/assets/icons/noConnection.png'),
     plcFeeds: require('root/assets/icons/placeholder/feeds.png'),
+    noResult: require('root/assets/icons/noConnection.png'),
     flormarExtra: require('root/assets/icons/flormarExtra.png'),
     userWomen: require('root/assets/icons/userWomen.png'),
     userMen: require('root/assets/icons/userWomen.png'),

@@ -933,7 +933,8 @@ class Viewers extends Component {
             total: 0,
             refreshing: false,
             loading: false,
-            loaded: false
+            loaded: false,
+            noResult: false
         }
     }
 
@@ -1060,7 +1061,7 @@ class Viewers extends Component {
             const { responses = [] } = res.data,
                 key = Globals.getSegKey(responses),
                 { params = {} } = responses[0][0],
-                data = params['recommendedProducts'][key] || {},
+                data = params['recommendedProducts'][key] || [],
                 instanceId = params['instanceId'] || '',
                 obj = {
                     "name": "INTERACTION",
@@ -1074,7 +1075,10 @@ class Viewers extends Component {
             /* feeds ilk yüklendiğinde 1 defa impresionlar tetiklenecek  */
             Globals.seg({ data: obj }, (response) => {
 
-                _self.setState({ data: data, total: Object.keys(data).length || 0, loaded: true });
+                if (data.length == 0)
+                    _self.setState({ data: [], total: 0, loaded: true, noResult: true });
+                else
+                    _self.setState({ data: data, total: Object.keys(data).length || 0, loaded: true });
 
                 if (_self._callback)
                     _self._callback({ type: DATA_LOADED, data: data });
@@ -1084,7 +1088,13 @@ class Viewers extends Component {
                     _self.props.response({ type: DATA_LOADED, data: res.data });
 
             });
+        } else {
+            _self.setState({ data: [], total: 0, loaded: true, noResult: true });
+            
+            if (_self.props.noResult)
+                _self.props.noResult();
         }
+
     }
 
     /* */
@@ -1096,9 +1106,10 @@ class Viewers extends Component {
 
             const { keys, customClass = '', customFunc = '' } = _self.props.config,
                 keyArr = keys['arr'] || '',
-                keyTotal = keys['total'] || '';
+                keyTotal = keys['total'] || '',
+                k = res.data || {};
 
-            let data = res.data[keyArr] || [];
+            let data = k[keyArr] || [];
 
             if (customFunc != '')
                 data = _self._customFunc(data);
@@ -1106,7 +1117,12 @@ class Viewers extends Component {
             if (type == VIEWERTYPE['HTMLTOJSON'])
                 data = JSON.parse(data)[keys['obj']][keys['objArr']] || [];
 
-            if (type == VIEWERTYPE['LIST'] || type == VIEWERTYPE['HTMLTOJSON'] || type == VIEWERTYPE['SCROLLVIEW'])
+            if (data.length == 0) {
+                _self.setState({ data: [], total: 0, loaded: true, noResult: true });
+                
+                if (_self.props.noResult)
+                    _self.props.noResult();
+            } else if (type == VIEWERTYPE['LIST'] || type == VIEWERTYPE['HTMLTOJSON'] || type == VIEWERTYPE['SCROLLVIEW'])
                 _self.setState({ data: data, total: res.data[keyTotal] || 0, loaded: true });
             else if (type == VIEWERTYPE['WEBVIEW'])
                 _self.setState({ html: _self._addStyle({ customClass: customClass, data: data }), loaded: true });
@@ -1360,13 +1376,44 @@ class Viewers extends Component {
         */
     }
 
+    _noResultView = () => {
+        const _self = this,
+            { itemType = '' } = _self.props.config;
+
+        let view = <Text>Sonuç bulunamadı...</Text>;
+
+        if (itemType == ITEMTYPE['CARTLIST'])
+            view = (
+                <View style={{ flex: 1, justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
+                    <View style={{ width: 275, alignItems: 'center', justifyContent: 'center' }}>
+                        <Image
+                            style={{
+                                width: 158,
+                                height: 158,
+                                resizeMode: 'contain',
+                                marginBottom: 20
+                            }}
+                            source={ICONS['noResult']}
+                        />
+                        <Text style={{ fontFamily: 'RegularTyp2', fontSize: 22, marginBottom: 34 }}>Sepetiniz Henüz Boş</Text>
+                        <BoxButton wrapperStyle={{ height: 50 }} callback={_self._onAddToCart}>ANASAYFAYA GİT</BoxButton>
+                    </View>
+                </View>
+            );
+
+        return view;
+    }
+
     _getViewer = () => {
         const _self = this,
             { scrollEnabled = true } = _self.props,
-            { type = VIEWERTYPE['LIST'] } = _self.props.config;
+            { type = VIEWERTYPE['LIST'] } = _self.props.config,
+            { noResult = false } = _self.state;
 
         let view = null;
-        if (type == VIEWERTYPE['SEG'] || type == VIEWERTYPE['LIST'] || type == VIEWERTYPE['HTMLTOJSON'])
+        if (noResult)
+            view = _self._noResultView();
+        else if (type == VIEWERTYPE['SEG'] || type == VIEWERTYPE['LIST'] || type == VIEWERTYPE['HTMLTOJSON'])
             view = (
                 <FlatList
                     scrollEnabled={scrollEnabled}

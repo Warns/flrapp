@@ -44,11 +44,11 @@ const Cart = class Main extends Component {
 
     _response = ({ type, data }) => {
         const _self = this;
-        if (type === DATA_LOADED){
+        if (type === DATA_LOADED) {
             console.log(JSON.stringify(data))
             _self.props.dispatch({ type: SET_CART_INFO, value: data });
         }
-            
+
     }
 
     _onUpdate = () => {
@@ -72,11 +72,15 @@ const Cart = class Main extends Component {
             _self._onUpdate();
     }
 
+    _noResult = () => {
+        //alert('kayıt bulunamadı')
+    }
+
     render() {
         const _self = this;
         return (
             <View style={{ flex: 1 }}>
-                <Viewer onRef={ref => (_self.child = ref)} {..._self.props} style={{ paddingLeft: 10, paddingRight: 10, paddingBottom: 125 }} config={DATA} response={this._response} callback={this._callback} />
+                <Viewer noResult={_self._noResult} onRef={ref => (_self.child = ref)} {..._self.props} style={{ paddingLeft: 10, paddingRight: 10, paddingBottom: 125 }} config={DATA} response={this._response} callback={this._callback} />
                 <Footer onCouponCallback={_self._onCouponCallback} onPress={_self._onPress} data={CONFIG} />
             </View>
         )
