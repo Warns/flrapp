@@ -9,6 +9,8 @@ import {
     UPDATE_CART,
     SET_CART_INFO,
     DATA_LOADED,
+    SET_CART_NO_RESULT,
+    RESET_CART,
 } from 'root/app/helper/Constant';
 import { connect } from 'react-redux';
 import Footer from './Footer';
@@ -34,6 +36,11 @@ const Cart = class Main extends Component {
     constructor(props) {
         super(props);
         this.state = {};
+    }
+
+    componentWillUnmount() {
+        const _self = this;
+        _self.props.dispatch({ type: RESET_CART });
     }
 
     _callback = ({ type, data }) => {
@@ -73,7 +80,8 @@ const Cart = class Main extends Component {
     }
 
     _noResult = () => {
-        //alert('kayıt bulunamadı')
+        const _self = this;
+        _self.props.dispatch({ type: SET_CART_NO_RESULT, value: true }); 
     }
 
     render() {

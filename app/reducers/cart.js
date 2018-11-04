@@ -5,7 +5,9 @@ import {
     SET_CART_INFO,
     SET_CART_ADDRESS,
     SET_DIFFERENT_ADDRESS,
-    SET_CART_CARGO
+    SET_CART_CARGO,
+    SET_CART_NO_RESULT,
+    RESET_CART
 } from 'root/app/helper/Constant';
 
 const cartInitialState = {
@@ -31,7 +33,8 @@ const cartInitialState = {
         //cartLocation: '',
         paymentNote: '',
         serviceId: 0
-    }
+    },
+    cartNoResult: false
 };
 
 export default function cart(state = cartInitialState, action) {
@@ -103,6 +106,23 @@ export default function cart(state = cartInitialState, action) {
             return {
                 ...state,
                 postData: { ...state.postData, cargoId: action.value }
+            }
+        };
+        case SET_CART_NO_RESULT: {
+            return {
+                ...state,
+                cartNoResult: action.value 
+            }
+        };
+        case RESET_CART: {
+            return {
+                ...state,
+                cartNoResult: false,
+                selectedAddress: {
+                    shipAddress: 0,
+                    billAddress: 0, 
+                    differentAddress: false
+                }, 
             }
         };
         default:

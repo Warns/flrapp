@@ -69,10 +69,11 @@ class Main extends Component {
     render() {
         const _self = this,
             { buttonText = '', coupon = false } = _self.props.data,
-            { cartInfo = {} } = _self.props.cart,
+            { cartInfo = {}, cartNoResult = false } = _self.props.cart,
             { total = 0, subTotal = 0, discountTotal = 0, netTotal = 0 } = cartInfo,
             form = _self._getForm(),
-            formButton = _self._getFormButton();
+            formButton = _self._getFormButton(),
+            buttonStyle = cartNoResult ? { backgroundColor: '#999999' } : { backgroundColor: '#000000' };
 
         return (
             <ElevatedView
@@ -99,7 +100,7 @@ class Main extends Component {
                         </View>
                     </View>
                     <View>
-                        <LoadingButton onPress={_self._onPress}>{buttonText}</LoadingButton>
+                        <LoadingButton style={buttonStyle} onPress={_self._onPress}>{buttonText}</LoadingButton>
                     </View>
                 </View>
             </ElevatedView>
