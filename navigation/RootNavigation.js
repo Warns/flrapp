@@ -18,7 +18,7 @@ import HomeTabNavigator from './HomeTabNavigation';
 import ProductPage from '../app/views/Product';
 import ListPage from '../app/views/List';
 
-import { DefaultHeader } from '../app/components';
+import { CartHeader, DefaultHeader } from 'root/app/components/';
 
 //import registerForPushNotificationsAsync from '../api/registerForPushNotificationsAsync';
 
@@ -58,7 +58,10 @@ const RootStackNavigator = createStackNavigator(
     },
 
     Cart: {
-      screen: props => <CartNavigation />
+      screen: props => <CartNavigation />,
+      navigationOptions: {
+        header: () => <CartHeader />,
+      }
     },
 
     Store: {

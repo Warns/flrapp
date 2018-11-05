@@ -25,6 +25,7 @@ export const ICONS = {
     youtube: require('root/assets/icons/youtube.png'),
     noConnection: require('root/assets/icons/noConnection.png'),
     plcFeeds: require('root/assets/icons/placeholder/feeds.png'),
+    noResult: require('root/assets/icons/noConnection.png'),
     flormarExtra: require('root/assets/icons/flormarExtra.png'),
     userWomen: require('root/assets/icons/userWoman.png'),
     userMen: require('root/assets/icons/userMan.png'),
@@ -144,6 +145,8 @@ export const SET_CART_INFO = 'SET_CART_INFO';
 export const SET_CART_CARGO = 'SET_CART_CARGO';
 export const SET_CART_ITEMS = 'SET_CART_ITEMS';
 export const ADD_CART_ITEM = 'ADD_CART_ITEM';
+export const SET_CART_NO_RESULT = 'SET_CART_NO_RESULT';
+export const RESET_CART = 'RESET_CART';
 
 /* general */
 export const SET_CATEGORIES = 'SET_CATEGORIES';

@@ -9,6 +9,8 @@ import {
     UPDATE_CART,
     SET_CART_INFO,
     DATA_LOADED,
+    SET_CART_NO_RESULT,
+    RESET_CART,
 } from 'root/app/helper/Constant';
 import { connect } from 'react-redux';
 import Footer from './Footer';
@@ -36,6 +38,11 @@ const Cart = class Main extends Component {
         this.state = {};
     }
 
+    componentWillUnmount() {
+        const _self = this;
+        _self.props.dispatch({ type: RESET_CART });
+    }
+
     _callback = ({ type, data }) => {
         const _self = this;
         /*if (type === UPDATE_CART)
@@ -44,11 +51,11 @@ const Cart = class Main extends Component {
 
     _response = ({ type, data }) => {
         const _self = this;
-        if (type === DATA_LOADED){
+        if (type === DATA_LOADED) {
             console.log(JSON.stringify(data))
             _self.props.dispatch({ type: SET_CART_INFO, value: data });
         }
-            
+
     }
 
     _onUpdate = () => {
@@ -72,11 +79,16 @@ const Cart = class Main extends Component {
             _self._onUpdate();
     }
 
+    _noResult = () => {
+        const _self = this;
+        _self.props.dispatch({ type: SET_CART_NO_RESULT, value: true }); 
+    }
+
     render() {
         const _self = this;
         return (
             <View style={{ flex: 1 }}>
-                <Viewer onRef={ref => (_self.child = ref)} {..._self.props} style={{ paddingLeft: 10, paddingRight: 10, paddingBottom: 125 }} config={DATA} response={this._response} callback={this._callback} />
+                <Viewer noResult={_self._noResult} onRef={ref => (_self.child = ref)} {..._self.props} style={{ paddingLeft: 10, paddingRight: 10, paddingBottom: 125 }} config={DATA} response={this._response} callback={this._callback} />
                 <Footer onCouponCallback={_self._onCouponCallback} onPress={_self._onPress} data={CONFIG} />
             </View>
         )
