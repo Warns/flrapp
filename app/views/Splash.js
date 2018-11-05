@@ -4,6 +4,7 @@ import {
   Easing,
   Image,
   KeyboardAvoidingView,
+  Platform,
   Modal,
   View,
   Dimensions,
@@ -11,6 +12,7 @@ import {
 import { connect } from 'react-redux';
 import { SplashHeader } from '../components';
 import { DefaultButton, DefaultInput, LoadingButton } from '../UI';
+import { Video, Constants } from 'expo';
 
 import { Form } from 'root/app/form';
 import {
@@ -22,6 +24,9 @@ import {
 
 styles = require('../styles.js');
 globals = require('../globals.js');
+
+const DIMENSIONS = Dimensions.get('window');
+const TOP_MARGIN = (Platform.OS === 'ios') ? ( DIMENSIONS.height == 812 || DIMENSIONS.height == 896 ) ? 30 : 20 : Expo.Constants.statusBarHeight;
 
 function mapStateToProps(state) {
   return state
@@ -43,8 +48,7 @@ class Splash extends React.Component {
 
   componentDidMount() {
 
-    const dimensions = Dimensions.get('screen');
-    this.props.dispatch({ type: SET_SCREEN_DIMENSIONS, value: dimensions });
+    this.props.dispatch({ type: SET_SCREEN_DIMENSIONS, value:{window: DIMENSIONS, topMargin:TOP_MARGIN, OS:Platform.OS, isX: TOP_MARGIN == 30 } });
 
     _loadInitialState(this._routeAccordingToAsyncStorage);
 
@@ -250,7 +254,7 @@ class Splash extends React.Component {
 
     return (
       <View style={{ backgroundColor: "#222222", flex: 1 }}>
-        {/*
+      {/*
       <Video
         source={require('../../assets/loop.mp4')}
         rate={1.0}
@@ -303,7 +307,6 @@ class Splash extends React.Component {
           animationType="none"
           transparent={true}
           visible={this.state.loginIsVisible}
-          onRequestClose={() => { }}
         >
           <SplashHeader onCloseLogin={this._onCloseLogin} />
           <Animated.View style={{ flex: 1, padding: 30, paddingTop: boxPadding, opacity: 1 /*fadeAnim*/ }}>

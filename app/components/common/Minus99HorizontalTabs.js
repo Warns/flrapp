@@ -25,6 +25,7 @@ const Minus99HorizontalTabs = class Minus99HorizontalTabs extends React.Componen
   _x = 0;
   arr = [];
   width = null;
+  itemsWidth = null;
 
   componentWillReceiveProps(nextProps) {
     const _self = this;
@@ -40,11 +41,14 @@ const Minus99HorizontalTabs = class Minus99HorizontalTabs extends React.Componen
   };
 
   _focused = (sequence) => {
-    const _self = this,
-      max = _self.state.offsets[_self.state.offsets.length - 1].x + _self.state.offsets[_self.state.offsets.length - 1].width - _self.width,
-      min = 0,
-      s = _self.state.offsets[sequence].x + (_self.state.offsets[sequence].width * .5) - (_self.width * .5);
-    _self.ScrollView.scrollTo({ x: s <= min ? min : s >= max ? max : s });
+    if( this.itemsWidth > this.width )
+    {
+      const _self = this,
+        max = _self.state.offsets[_self.state.offsets.length - 1].x + _self.state.offsets[_self.state.offsets.length - 1].width - _self.width,
+        min = 0,
+        s = _self.state.offsets[sequence].x + (_self.state.offsets[sequence].width * .5) - (_self.width * .5);
+      _self.ScrollView.scrollTo({ x: s <= min ? min : s >= max ? max : s });
+    }
   }
 
   _onDimensions = (layout, sequence) => {
@@ -64,6 +68,8 @@ const Minus99HorizontalTabs = class Minus99HorizontalTabs extends React.Componen
       this.arr[i].x = this._x;
       this._x += this.arr[i].width;
     }
+
+    this.itemsWidth = this._x + this.arr[this.arr.length-1].width;
 
     const _self = this;
     setTimeout(() => {
@@ -119,10 +125,19 @@ class TabItem extends React.Component {
 
     const item = this.props.item;
 
+    let title = item.key,
+        indicator = null;
+
+    if( item.params ){
+      title = item.params.title ? item.params.title : title;
+      indicator = item.params.indicator ? <View style={{width:6, height:6, backgroundColor:'#FF2B94', borderRadius:3, marginLeft:5}}></View> : null;
+    }
+
     return (
       <TouchableHighlight underlayColor="#ffffff" onPress={this._onPress}>
         <View onLayout={e => this._measureDimensions(e)} style={[{ paddingRight: 15, paddingLeft: 15, }, styles.horizontalTab, this.props.selected ? styles.borderBottom : null]}>
-          <Text style={[{ fontSize: 14, fontFamily: 'brandon', fontWeight: "bold", color: '#000000' }]}>{item.key.toUpperCase()}</Text>
+          <Text style={[{ fontSize: 14, fontFamily: 'brandon', fontWeight: "bold", color: '#000000' }]}>{title.toUpperCase()}</Text>
+          {indicator}
         </View>
       </TouchableHighlight>
     );
@@ -136,6 +151,6 @@ const styles = StyleSheet.create({
 
   // HORIZONTAL tabs
   horizontalTabsWrapper: { flex: 1, flexDirection: "row", maxHeight: 40, backgroundColor: "#ffffff", borderBottomColor:'#dddddd', borderBottomWidth:1, },
-  horizontalTab: { height: 40, justifyContent: "center", },
-  borderBottom: { borderBottomColor: "#000000", borderBottomWidth: 3 },
+  horizontalTab: { height: 40, alignItems: "center", flexDirection:'row', borderBottomWidth: 3, borderBottomColor:'rgba(0,0,0,0)' },
+  borderBottom: { borderBottomColor: "#000000" },
 });

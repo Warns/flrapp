@@ -1,9 +1,7 @@
 import React from 'react';
 import {
-  Platform,
   StatusBar,
   StyleSheet,
-  Dimensions,
   View
 } from 'react-native';
 import { AppLoading, Asset, Font } from 'expo';
@@ -27,7 +25,7 @@ export default class App extends React.Component {
   };
   f
   componentDidMount() {
-
+    
   }
 
   _filterCallback = (o) => {

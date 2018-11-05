@@ -573,26 +573,32 @@
                             {
                                 "title": "TÜM DUDAK ÜRÜNLERİ",
                                 "id": "18710",
+                                "img": "https://mcdn.flormar.com.tr/UPLOAD/categories-images/dudak.jpg"
                             },
                             {
                                 "title": "DUDAK BAKIMI",
-                                "id": "18773"
+                                "id": "18773",
+                                "img": "https://mcdn.flormar.com.tr/UPLOAD/categories-images/dudak.jpg"
                             },
                             {
                                 "title": "DUDAK PARLATICISI",
-                                "id": "18774"
+                                "id": "18774",
+                                "img": "https://mcdn.flormar.com.tr/UPLOAD/categories-images/dudak.jpg"
                             },
                             {
                                 "title": "RUJ",
-                                "id": "18775"
+                                "id": "18775",
+                                "img": "https://mcdn.flormar.com.tr/UPLOAD/categories-images/dudak.jpg"
                             },
                             {
                                 "title": "DUDAK KALEMİ",
-                                "id": "18776"
+                                "id": "18776",
+                                "img": "https://mcdn.flormar.com.tr/UPLOAD/categories-images/dudak.jpg"
                             },
                             {
                                 "title": "BAZ",
-                                "id": "18777"
+                                "id": "18777",
+                                "img": "https://mcdn.flormar.com.tr/UPLOAD/categories-images/dudak.jpg"
                             }
                         ]
                     },
@@ -631,6 +637,7 @@
                             {
                                 "title": "TÜM VÜCUT ÜRÜNLERİ",
                                 "id": "18712",
+                                "img": "https://mcdn.flormar.com.tr/UPLOAD/categories-images/cilt-vucut.jpg",
                             }
                         ]
                     }

@@ -11,12 +11,12 @@ import {
   Image,
   StyleSheet,
 } from 'react-native';
-
+import { connect } from 'react-redux';
 import Cart from '../Cart';
 
 // Let's go
 
-const MinimalHeader = class DefaultHeader extends React.Component{
+class MinimalHdr extends React.Component{
 
   constructor(props){
     super(props);
@@ -34,18 +34,24 @@ const MinimalHeader = class DefaultHeader extends React.Component{
 
     let right = this.props.right ? this.props.right : <Cart />;
 
+    let { topMargin } = this.props.general.SCREEN_DIMENSIONS;
+
+    console.log('oooooo', this.props.noMargin);
+
+    let _wrapperStyle = this.props.noMargin ? styles.wrapper : {height: 60 + topMargin, paddingTop:topMargin, backgroundColor:'#ffffff'};
+
     //console.log( this.props );
 
     return(
-        <View style={styles.wrapper}>
-          <View style={{flex:1, flexDirection:'row'}}>
-            <TouchableOpacity style={{padding:5, paddingRight:0}} onPress={this._onBackPress}>
+        <View style={_wrapperStyle}>
+          <View style={{flex:1, flexDirection:'row', alignItems:'center'}}>
+            <TouchableOpacity onPress={this._onBackPress}>
               <Image source={require('../../../assets/images/icons/back.png')} style={{width:40, height:40, resizeMode:'contain'}} />
             </TouchableOpacity>
-            <View style={{flex:1, justifyContent:'center'}}>
+            <View style={{flex:1, justifyContent:'center',}}>
               <Text style={styles.title}>{this.props.title.toUpperCase()}</Text>
             </View>
-            <View style={{padding:5, paddingRight:10, justifyContent:'center'}}>
+            <View style={{paddingRight:10, justifyContent:'center'}}>
               {right}
             </View>
           </View>
@@ -56,16 +62,18 @@ const MinimalHeader = class DefaultHeader extends React.Component{
 
 const styles = StyleSheet.create({
   wrapper:{
-    height: 70,
-    backgroundColor: '#FFFFFF',
-    paddingTop:20,
+    height: 60,
+    backgroundColor: '#ffffff',
   },
   title:{
     fontFamily:'brandon',
-    fontSize:16,
+    fontSize:15,
+    //lineHeight:17,
   }
 });
 
+function mapStateToProps(state) { return state }
+const MinimalHeader = connect(mapStateToProps)(MinimalHdr);
 export { MinimalHeader };
 
 /*

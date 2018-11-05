@@ -26,9 +26,9 @@ class CustomHorizontalTabs extends React.Component {
       i = this.props.navigationState.index;
 
     return (
-      <View style={{ flex: 1, maxHeight: 40, flexDirection: 'row', backgroundColor: '#ffffff', borderColor: '#D8D8D8', borderBottomWidth: 1 }}>
+      <View style={{ flex: 1, maxHeight: 40, flexDirection: 'row', backgroundColor: '#ffffff' }}>
         <Minus99HorizontalTabs items={routes} selected={i} callback={this._onTabsPress} />
-        <View style={{ flex: 1, maxWidth: 50, }}>
+        <View style={{ flex: 1, maxWidth: 50, borderBottomColor:'#dddddd', borderBottomWidth:1 }}>
           <MoreButton />
         </View>
       </View>
@@ -70,22 +70,39 @@ const CONFIG = {
   }
 };
 
+class Feeds extends React.Component{
+  componentWillMount(){ this.props.navigation.setParams({title: 'YENİLER'}); }
+  render(){
+    let props = this.props;
+    return <Viewer {...props} config={CONFIG['feeds']} refreshing={false} />
+  }
+};
+
+class Extra extends React.Component{
+  componentWillMount(){ this.props.navigation.setParams({title: 'EKTRA FIRSAT', indicator:true}); }
+  render(){
+    let props = this.props;
+    return <Viewer {...props} config={CONFIG['campaing']} refreshing={false} />
+  }
+};
+
 export default MainTabNavigator = createMaterialTopTabNavigator(
   {
-    Discover: {
-      screen: props => <Viewer {...props} config={CONFIG['feeds']} refreshing={false} />
+    Feeds: {
+      screen: Feeds
     },
-    ShopMenu: {
+    Categories: {
       screen: DiscoverPage,
     },
-    Offers: {
-      screen: props => <Viewer {...props} config={CONFIG['campaing']} refreshing={false} />
+    Extra: {
+      screen: Extra
     },
   },
   {
     tabBarComponent: CustomHorizontalTabs,
     lazy: true,
     tabBarPosition: 'top',
-    initialRouteName: 'Discover',
+    initialRouteName: 'Feeds',
   }
 );
+

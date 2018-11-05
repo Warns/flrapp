@@ -245,7 +245,7 @@ module.exports = {
         )
     },
     filterToSelectObject: function (filters) {
-        const obj = {}, filter = { sendAjx: false, fields: [] };
+        const obj = {}, filter = { sendAjx: false, buttonText:'UYGULA', fields: [] };
 
         Object.entries(filters).forEach(([ind, value]) => {
             const key = value['filterGroupName'] || '';

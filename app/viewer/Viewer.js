@@ -566,7 +566,7 @@ class CampaingItem extends Component {
     render() {
         const { image, utpCode } = this.props.data;
         return (
-            <View style={{ marginBottom: 20 }}>
+            <View style={{ margin:10, marginBottom: 20 }}>
                 <Image
                     style={{ height: 300 }}
                     source={{ uri: Utils.getImage(image) }}
@@ -744,13 +744,13 @@ class FeedsItem extends Component {
         return (
             <DoubleClickButton callback={_self._callback}>
                 <View style={{ flexDirection: 'row', borderWidth: 1, borderColor: '#dcdcdc' }}>
-                    <View style={{ width: '50%' }}>
+                    <View style={{ width: 175 }}>
                         <Image
                             style={{ height: 218, resizeMode: 'contain' }}
                             source={{ uri: image }}
                         />
                     </View>
-                    <View style={{ width: '50%', paddingTop: 30 }}>
+                    <View style={{ flex:1, paddingTop: 30 }}>
                         <Text style={{ fontFamily: 'Bold', fontSize: 22, marginBottom: 10 }}>{Utils.getPriceFormat(price)}</Text>
                         <Text style={{ fontFamily: 'Medium', fontSize: 16 }}>{name}</Text>
                         <Text style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#9b9b9b', marginBottom: 10 }}>{'21 Renk'}</Text>
@@ -817,7 +817,7 @@ class FeedsItem extends Component {
     render() {
         const _self = this;
         return (
-            <View style={{ marginBottom: 20 }}>
+            <View style={{ margin:10, marginBottom: 20 }}>
                 <View style={{ position: 'relative' }}>
                     {_self._getFeed()}
                     {_self._getLike()}
@@ -825,7 +825,6 @@ class FeedsItem extends Component {
                 </View>
                 {_self._getFooter()}
             </View>
-
 
         )
     }
@@ -844,7 +843,7 @@ class AppShell extends Component {
         let view = null;
         if (type == ITEMTYPE['CAMPAING'] || type == ITEMTYPE['FEEDS'])
             view = (
-                <View style={{ marginBottom: 20, }}>
+                <View style={{ margin:10, marginBottom: 20, }}>
                     <View>
                         <Image
                             style={{
@@ -1415,7 +1414,7 @@ class Viewers extends Component {
         return (
             <View style={{ flex: 1, }}>
                 {_self._getFilter()}
-                <View style={[{ flex: 1, paddingLeft: 10, paddingRight: 10 }, { ..._self.props.style }]}>
+                <View style={[{ flex: 1, padding: 0 }, { ..._self.props.style }]}>
                     {_self._getViewer()}
                 </View>
             </View >

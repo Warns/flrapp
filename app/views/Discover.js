@@ -190,6 +190,12 @@ class Navigation extends React.Component {
 
 export default class Discover extends React.Component{
 
+    static navigationOptions = {
+        title: 'Kategoriler',
+        /* No more header config here! */
+      };
+
+
   state = {
     enteries: [],
     dimensions: null,
@@ -199,12 +205,14 @@ export default class Discover extends React.Component{
 
   componentWillMount(){
 
+    this.props.navigation.setParams({title: 'KATEGORİLER'});
+
     const { settings } = store.getState();
     this.setState({enteries: settings['menu']['main'] });
 
 
     this.setState({
-      dimensions: store.getState().general.SCREEN_DIMENSIONS
+      dimensions: store.getState().general.SCREEN_DIMENSIONS.window
     });
 
     //width = store.getState().general.SCREEN_DIMENSIONS.width;
@@ -378,13 +386,12 @@ class NavigationModal extends React.Component {
                 animationType="slide"
                 transparent={false}
                 visible={visible}
-                onRequestClose={() => { }}
             >
                 <SafeAreaView style={{ flex: 1, }}>
                     <View style={{flex: 1, }}>
 
 
-                        <MinimalHeader onPress={this._onClose} title={mainTitle} />
+                        <MinimalHeader onPress={this._onClose} title={mainTitle} noMargin={true} />
 
                         {this._getContent()}
 

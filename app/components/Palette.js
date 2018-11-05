@@ -4,10 +4,11 @@ import {
   Image,
   Animated,
   FlatList,
+  Text,
   TouchableOpacity,
 } from 'react-native';
-
-import { Minus99MultipleSelect } from 'root/app/form';
+import { ICONS } from 'root/app/helper/Constant';
+import { Minus99MultipleSelect, SelectBox } from 'root/app/form';
 
 class Palette extends React.Component{
 
@@ -35,7 +36,7 @@ class Palette extends React.Component{
 
     this.setState({
       items: items,
-      selected: selected,
+      selected: [items.findIndex(obj => obj.shortCode == selected)],
       index: index,
     });
   }
@@ -54,6 +55,10 @@ class Palette extends React.Component{
   _onPressItem = (index, item) => {
 
     this.props.onPress(item.productId);
+
+    this.setState({
+      selected: [index],
+    })
 
     //this.refs.flatList.scrollToEnd();
 
@@ -81,10 +86,22 @@ class Palette extends React.Component{
 
   render(){
 
-    console.log('dfdff');
+    let {items} = this.state;
+    let colorsArray = [];
+
+    for( i in items ){
+      colorsArray.push({
+        name: items[i].shortCode + ' ' + items[i].name,
+        id: items[i].productId,
+        order: i,
+        icon: items[i].smallImageUrl.replace('mobile_image_1', 'mobile_texture').replace('http', 'https')
+      })
+    }
+
+    console.log('>>>..', this.state.selected);
 
     return(
-      <View style={{flex:1, backgroundColor:'#ffffff', maxHeight:165, height:60, backgroundColor:'#dddddd'}}>
+      <View style={{flex:1, backgroundColor:'#ffffff', maxHeight:165, height:120, backgroundColor:'#dddddd'}}>
         <FlatList
           //style={{borderWidth:1, borderColor:'red'}}
           scrollEnabled={true}
@@ -96,14 +113,24 @@ class Palette extends React.Component{
           
           ref='flatList'
         />
+        <View style={{backgroundColor:'#ffffff', height:60, flexDirection:'row', alignItems:'center', paddingLeft:20, paddingRight:20, }}>
+          <Text style={{fontSize:13, marginRight:5}}>RENK</Text>
+          <Text style={{color:'#6C6C6C', fontSize:13,}}>{ items[this.state.selected[0]].shortCode + ' ' + items[this.state.selected[0]].name }</Text>
+          <View style={{height:28, borderWidth:1, borderColor:'#979797', borderRadius:14, paddingLeft:10, paddingRight:3, right:20, position:'absolute', flexDirection:'row', alignItems:'center'}}>
+            <Text style={{fontSize:12}}>{items.length}</Text>
+            <Image source={(ICONS['downArrow'])} style={{width:28, height:28, resizeMode:'contain'}} />
+          </View>
+        </View>
+        { /*
         <Minus99MultipleSelect
-        defaultTitle='country'
-        slug='country'
+        defaultTitle='RENK'
+        slug='RENK'
         callback={this._closed}
-        selected='iraq'
+        selected={this.state.selected}
         multiple={false}
-        items={[{name:'libya', id:'01'}, {name:'iraq', id:'02'}, {name:'lebanon', id:'03'}]}
-        />
+        items={colorsArray}
+        /> */
+        }
       </View>
     )
   }

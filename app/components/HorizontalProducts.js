@@ -40,12 +40,14 @@ class HorizontalProducts extends React.Component{
       JSON.stringify({
         "productIds": Ids,
         "pageSize": 10,
+        "hasStock": true,
       }),
       this._handleFetchResults
     );
   }
 
   _handleFetchResults = ( answer ) =>{
+
     if( answer.status == 200)
     this.setState({
       items: answer.data.products,
@@ -61,6 +63,8 @@ class HorizontalProducts extends React.Component{
   }
 
   _onPressItem = ( item ) => {
+
+    console.log( item );
 
     this.props.onPress( item.productId );
 
@@ -103,7 +107,7 @@ class ListItem extends React.Component {
 
     const { index, item } = this.props;
     
-    product = <ProductSkeleton item={item} />//item ? <ProductRender item={item} /> : <ProductSkeleton item={item} />;
+    product = item ? <ProductRender item={item} /> : <ProductSkeleton item={item} />;
 
     leftSpace = index == 0 ? 20 : 0;
 

@@ -70,13 +70,13 @@ class ProductView extends React.Component {
   _renderItem({item, index}){
     return(
       <View>
-        <Image source={{uri:item.mediumImageUrl}} style={{left:-(SCREEN_DIMENSIONS.width - 270) * .5, width:270, height:337, resizeMode:'cover'}} />
+        <Image source={{uri:item.mediumImageUrl}} style={{width:270, height:337, resizeMode:'cover'}} />
       </View>
     );
   }
 
   _initDetails = ()=>{
-    this.setState({animationDone: true, animationType:'slide' });
+    this.setState({animationDone: true, animationType:'none' });
   }
 
   _close = () =>{
@@ -217,10 +217,11 @@ class ProductView extends React.Component {
                   itemWidth={270}
                   inactiveSlideScale={1}
                   inactiveSlideOpacity={1}
+                  activeSlideAlignment='start'
                   />
             </View>
             {palette}
-            <View style={{padding:20, paddingTop:0}}>
+            <View style={{padding:20, paddingTop:0, borderTopWidth:1, borderTopColor:'#d8d8d8'}}>
               <View style={{flexDirection:'row', height:55, alignItems:'center'}}>
                 <Text style={{ fontSize:18, fontFamily:'brandon', fontWeight:'bold'}}>₺{item.salePrice}</Text>
                 {listPrice}
@@ -270,7 +271,6 @@ class ProductView extends React.Component {
         animationType={this.state.animationType}
         transparent={true}
         visible={this.props.product.visibility}
-        onRequestClose={()=>{}}
       >
         {this._renderProduct()}
       </Modal>

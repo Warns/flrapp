@@ -201,6 +201,7 @@ module.exports = {
       { user = {}, segmentify = {} } = store.getState(),
       obj = {
         "userId": user.userId || segmentify['userID'] || "XXXXXXXXXXXXXXXXX",
+        // hic clinet olmayinca bu hata veriyor. bunu asagidaki ile degistirdim '_self.CLIENT.Auth.session'. ( _self.CLIENT.Auth ? _self.CLIENT.Auth.session : false )
         "sessionId": _self.CLIENT.Auth.session || segmentify['sessionID'] || "YYYYYYYYYYYYYYYY",
         "device": Platform.OS === 'ios' ? "IOS" : "ANDROID",
         "pageUrl": "https://flormar.com.tr",

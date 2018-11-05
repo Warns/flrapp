@@ -83,7 +83,7 @@ class Form extends Component {
         const _self = this;
         _self.setState({ loading: true });
         Globals.fetch(uri, JSON.stringify(data), (answer) => {
-            console.log(answer);
+            //console.log(answer);
             if (_self._isMounted) {
                 if (answer === 'error') {
                     console.log('fatalllll error: could not get access token');

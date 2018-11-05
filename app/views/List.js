@@ -40,7 +40,7 @@ export default class List extends React.Component{
     const { params } = navigation.state;
 
     return {
-      title: 'hellp',
+      title: 'Products List',
     };
   };
 
@@ -92,8 +92,6 @@ export default class List extends React.Component{
           _self.onDidFocus();
 
           SCREEN_DIMENSIONS = Dimensions.get('screen');
-
-      console.log('))))))))', store.getState().general.selectedCategory );
   }
 
   /* https://medium.com/@TaylorBriggs/your-react-component-can-t-promise-to-stay-mounted-e5d6eb10cbb */
@@ -114,12 +112,29 @@ export default class List extends React.Component{
     SCREEN_DIMENSIONS = Dimensions.get('screen');
   }
 */
-  _updateList = () => {
+
+  _onFiltersChange = ( obj )=> {
+    
+    let opfs = [];
+    for( i in obj.data ){
+      if( obj.data[i] != -1 )
+      opfs = [...opfs, obj.data[i] ];
+    }
+
+    this._updateList( opfs.toString() );
+  }
+
+  _updateList = ( filterValues ) => {
+
+    console.log(store.getState().general.selectedCategory, store.getState().general.categories, this.props.category);
+
+    filterValues = filterValues || '';
     globals.fetch(
       "https://www.flormar.com.tr/webapi/v3/Product/getProductList",
       JSON.stringify({
         "page": 1,
-        "pageSize": 10,
+        "pageSize": 100,
+        "filter": filterValues,
         "catId": this.props.category.id, //18775
       }),
       this._listResultHandler
@@ -127,6 +142,14 @@ export default class List extends React.Component{
   }
 
   _listResultHandler = ( answer ) => {
+
+    let _items = answer.data.products;
+
+    if( this.props.category.img && answer.data.filters.findIndex( obj => obj.isSelected == true ) == -1 ){
+      _items.splice(4, 0, 
+        {productType:'cover', side:'left', img: this.props.category.img },
+        {productType:'cover', side:'right', img: this.props.category.img });
+    }
 
     //console.log('list loaded', answer);
 
@@ -162,9 +185,19 @@ export default class List extends React.Component{
   _keyExtractor = (item, index) => index;
 
   _renderItem = ({item, index}) => {
-    return(
-      <ListItem item={item} index={index} onPressItem={this._onPressItem} onSwiping={this._onSwiping} textureDisplay={this.state.textureDisplay} />
-    )
+
+    if(item.productType == 'cover'){
+      return(
+        <View style={{height:200, width:Math.floor( SCREEN_DIMENSIONS.width *.5 ), overflow:'hidden'}}>
+          <Image source={{uri:item.img }} style={{height:200, width:SCREEN_DIMENSIONS.width, marginLeft: item.side == 'right'? '-100%' : 0, resizeMode:'cover',}} />
+        </View>
+      )
+    }
+    else{
+      return(
+        <ListItem item={item} index={index} onPressItem={this._onPressItem} onSwiping={this._onSwiping} textureDisplay={this.state.textureDisplay} />
+      )
+    }
   }
 
   _onPressItem = (index, measurements) => {
@@ -177,7 +210,7 @@ export default class List extends React.Component{
       measurements: measurements,
     });
 */
-    console.log('on pressss', this.state.items[index].productId);
+    //console.log('on pressss', this.state.items[index].productId);
     
     store.dispatch({type:OPEN_PRODUCT_DETAILS, value:{id:this.state.items[index].productId, measurements:measurements, animate:true, sequence: this.state.textureDisplay ? 1 : 0 }});
 
@@ -267,7 +300,6 @@ export default class List extends React.Component{
       inputRange: [.5, 1],
       outputRange: [0, 1],
     })
-    
 
     const animatingImage = animatingUri != null ? <Animated.Image style={{width: _width, height: _height, position:'absolute', zIndex:10, top: _top, left:_left, resizeMode:'contain',}}
                                   source={{uri: animatingUri }} /> : null;
@@ -278,7 +310,7 @@ export default class List extends React.Component{
     return(
       <View style={{flex:1, backgroundColor:'#ffffff'}}>
 
-        <ListHeader totalProductCount={totalProductCount} filters={filters} onDisplayChange={this._onDisplayChange} textureDisplay={this.state.textureDisplay} />
+        <ListHeader onFiltersChange={this._onFiltersChange} totalProductCount={totalProductCount} filters={filters} onDisplayChange={this._onDisplayChange} textureDisplay={this.state.textureDisplay} />
         <FlatList
           style={{flex:1, flexDirection:'column'}}
           scrollEnabled={true}
@@ -297,7 +329,6 @@ export default class List extends React.Component{
           animationType="none"
           transparent={true}
           visible={this.state.detailIsVisible}
-          onRequestClose={()=>{}}
         >
           {detailContent}
         </Modal>
@@ -328,9 +359,14 @@ class ListHeader extends React.Component{
     this.setState({filterIsOpen: false});
   }
 
+  _filterCallback = ( obj )=>{
+    this.setState({filterIsOpen: false});
+    this.props.onFiltersChange( obj );
+  }
+
   render(){
 
-    let { totalProductCount, textureDisplay } = this.props;
+    let { totalProductCount, textureDisplay, filters } = this.props;
 
     if( textureDisplay ){
       productOpacity = .2;
@@ -342,6 +378,8 @@ class ListHeader extends React.Component{
       textureOpacity = .2;
     }
 
+    let indicator = filters.findIndex( obj => obj.isSelected == true ) > -1  ? <View style={{width:6, height:6, backgroundColor:'#FF2B94', borderRadius:3, marginRight:5}}></View> : null;;
+
     return(
       <View style={{flex:1, maxHeight:50, flexDirection:'row', backgroundColor:'#ffffff', shadowColor: '#000',
       shadowOffset: { width: 0, height: 0 },
@@ -352,6 +390,7 @@ class ListHeader extends React.Component{
         <View style={{width:120}}>
           <TouchableOpacity activeOpacity={0.8} onPress={this._onFilterButton} style={{marginRight:10}}>
             <View style={{flexDirection:'row', alignItems:'center', marginLeft:20}}>
+              {indicator}
               <Text style={{fontSize:16}}>Filters</Text>
               <Image source={ICONS['filters']} style={{ width: 40, height: 40 }} />
             </View>
@@ -374,7 +413,7 @@ class ListHeader extends React.Component{
           animationType="slide"
         >
           <MinimalHeader onPress={this._close} title="KAPAT" right={<Text style={{color:"#afafaf", fontSize:14, marginRight:10}}>{totalProductCount} ürün</Text>} />
-          <Form callback={this._filterCallback} data={Utils.filterToSelectObject(this.props.filters)} />
+          <Form callback={this._filterCallback} data={Utils.filterToSelectObject(filters)} />
 
         </Modal>
 
@@ -398,7 +437,7 @@ class ListItem extends React.Component {
     let _height = Math.floor( _width * 5/4 );
     let _boxHeight = _height + 107;
 
-    let borderStyle = index % 2 == 0 ? {} : {borderLeftWidth:1, borderLeftColor:'#dddddd'};
+    let borderStyle = index % 2 == 0 ? {borderRightWidth:1, borderRightColor:'#dddddd'} : {};
 
     let numOfColors = item.productTypes.length;
 

@@ -8,6 +8,7 @@ import {
     CLOSE_PRODUCT_DETAILS,
 } from 'root/app/helper/Constant';
 import { store } from 'root/app/store';
+const Globals = require('root/app/globals.js');
 
 const generalInitialState = {
     categories: [
@@ -26,6 +27,12 @@ const generalInitialState = {
         item: null,
     },
     preloading: false,
+    
+    // Other
+    SCREEN_DIMENSIONS: {
+        topMargin:0,
+        window:null,
+    },
   }
 
 export default function general( state = generalInitialState, action ){
@@ -94,7 +101,9 @@ fetchProductDetails = ( id ) => {
             console.log('answer for detail', answer.status)
 
             if( answer.status == 200){
-                let colors = answer.data.product.productGroups;
+                let colors = [];
+                
+                if(answer.data.product.productGroups) colors = answer.data.product.productGroups;
                 
                 colors.push({
                     productId: answer.data.product.productId,
@@ -111,25 +120,12 @@ fetchProductDetails = ( id ) => {
                 store.dispatch({type:UPDATE_PRODUCT_DETAILS_ITEM, value: {product:answer.data.product, colors:colors} });
 
                 /*
-                fetch(
-                    'https://www.flormar.com.tr/mobile-app-product-video-export.html', 
-                    {
-                        method: 'POST',
-                        headers: {
-                            Accept: 'application/json',
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            urn: id,
-                        })
-                    })
-                .then((response) => response.json())
-                .then((responseJson) => {
-                 console.log(responseJson);
-                })
-                .catch((error) => {
-                console.error(error);
-                });
+                Globals.AJX({
+                    _self:{_isMounted:true}, 
+                    uri:'https://www.flormar.com.tr/mobile-app-product-video-export.html', 
+                    data:{urn: id }}, 
+                    (result) => { console.log('>>>>>>>>', result )}
+                );
                 */
 
             }

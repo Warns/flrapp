@@ -26,8 +26,8 @@ export const ICONS = {
     noConnection: require('root/assets/icons/noConnection.png'),
     plcFeeds: require('root/assets/icons/placeholder/feeds.png'),
     flormarExtra: require('root/assets/icons/flormarExtra.png'),
-    userWomen: require('root/assets/icons/userWomen.png'),
-    userMen: require('root/assets/icons/userWomen.png'),
+    userWomen: require('root/assets/icons/userWoman.png'),
+    userMen: require('root/assets/icons/userMan.png'),
 };
 
 /* CARDS ICON */

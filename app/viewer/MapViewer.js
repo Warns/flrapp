@@ -240,9 +240,7 @@ class MapViewer extends Component {
                     animationType="none"
                     transparent={false}
                     visible={_self.state.isVisible}
-                    onRequestClose={() => {
-                        alert('Modal has been closed.');
-                    }}>
+                    >
                     <View style={{ position: 'relative', flex: 1 }}>
                         {_self._addressDetail()}
                         {_self._getViewer()}

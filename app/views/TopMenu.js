@@ -32,7 +32,6 @@ class CustomModal extends Component {
                 animationType={animationType}
                 transparent={transparent}
                 visible={visible}
-                onRequestClose={() => { }}
             >
                 <SafeAreaView style={{ flex: 1 }}>
                     {_self.props.children}
@@ -234,9 +233,13 @@ class Menu extends Component {
             alignSelf = dir == 'left' ? 'flex-start' : 'flex-end',
             direction = dir == 'right' ? { right: pos } : { left: pos };
 
+            let{ isX, window, OS } = store.getState().general.SCREEN_DIMENSIONS;
+
+            let _top = OS == 'android' ? -28: isX ? -12 : 0;
+
         return (
 
-            <View style={{ flex: 1 }}>
+            <View style={{ flex: 1, top:_top, minHeight: window.height - 25 }}>
                 <Animated.View style={{ opacity: op, zIndex: 1, flex: 1, position: 'absolute', backgroundColor: '#000000', left: 0, right: 0, top: 0, bottom: 0, width: '100%', height: '100%' }}>
                     <TouchableOpacity style={{ flex: 1 }} activeOpacity={1} onPress={this._onClose}></TouchableOpacity>
                 </Animated.View>

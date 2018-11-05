@@ -81,7 +81,6 @@ class Assistant extends React.Component{
           animationType="none"
           transparent={true}
           visible={this.state.assistantIsVisible}
-          onRequestClose={() => {}}
         >
           <View style={{backgroundColor:'rgba(0,0,0,.4)', flex:1}}>
           <View style={{flex:1, maxHeight:vailHeight}}>
@@ -123,11 +122,11 @@ const styles = StyleSheet.create({
     }),
   },
   circle:{
-    width:50,
-    height:50,
-    borderColor:'rgba(0,0,0,.1)',
-    borderWidth:1,
-    borderRadius:25,
+    width:52,
+    height:52,
+    backgroundColor:'rgba(0,0,0,.1)',
+    borderRadius:26,
+    padding:1,
     overflow:'hidden',
     ...Platform.select({
       ios:{

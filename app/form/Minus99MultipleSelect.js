@@ -288,7 +288,6 @@ class SelectionBox extends React.Component {
                 animationType="slide"
                 transparent={false}
                 visible={this.props.visible}
-                onRequestClose={() => { }}
             >
 
                 <View style={{ flex: 1, paddingTop: 25 }}>

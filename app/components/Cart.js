@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { SecureStore } from 'expo';
 import { connect } from 'react-redux';
-import { NAVIGATE } from 'root/app/helper/Constant';
+import { NAVIGATE, CLOSE_PRODUCT_DETAILS } from 'root/app/helper/Constant';
 
 globals = require('../globals.js');
 
@@ -24,7 +24,10 @@ class Cart extends React.Component {
   }
 
   _onPress = () => {
+    
     this.props.dispatch({ type: NAVIGATE, value: { item: { navigation: "Cart" } } });
+    this.props.dispatch({type:CLOSE_PRODUCT_DETAILS, Value:{}});
+    
   }
 
   render() {
@@ -40,8 +43,8 @@ class Cart extends React.Component {
       <View>
         <TouchableOpacity activeOpacity={0.8} onPress={_self._onPress} >
           <Image style={{ width: 40, height: 40, resizeMode: 'contain' }} source={require('../../assets/images/icons/cart.png')} />
+          {bubble}
         </TouchableOpacity>
-        {bubble}
       </View>
     )
   }
