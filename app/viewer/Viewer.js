@@ -206,24 +206,24 @@ class CartListItem extends Component {
             { shortName, productName = '', smallImageUrl, total, quantity, unitCode } = data;
 
         return (
-            <View style={{ flexDirection: 'row', paddingTop: 20, paddingBottom: 20, paddingRight: 20, paddingLeft: 10, borderBottomColor: '#dcdcdc', borderBottomWidth: 1, }}>
+            <View style={{ flexDirection: 'row', paddingTop: 15, paddingBottom: 15, paddingRight: 20, paddingLeft: 10, borderBottomColor: '#dcdcdc', borderBottomWidth: 1, marginBottom: 10, marginLeft: 10, marginRight: 10 }}>
                 <View style={{ width: 60, justifyContent: 'center', }}>
                     <Image
-                        style={{ height: 60 }}
+                        style={{ width: 49, height: 60 }}
                         source={{ uri: Utils.getImage(smallImageUrl) }}
                     />
                 </View>
                 <View style={{ flex: 1 }}>
                     <View>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <Text numberOfLines={1} style={{ fontFamily: 'Medium', fontSize: 15 }}>{productName}</Text>
+                            <Text numberOfLines={1} style={{ fontFamily: 'Medium', fontSize: 15, width: '90%' }}>{productName}</Text>
                             <IconButton ico={'close'} callback={_self._onRemove} />
                         </View>
                         <Text numberOfLines={1} style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#555555' }}>{shortName}</Text>
                     </View>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 21 }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 16 }}>
 
-                        <SelectBox containerStyle={{ width: 100 }} closed={true} callback={_self._onChange} data={_self.getSelectValue()} />
+                        <SelectBox fontStyle={{ fontSize: 12, fontFamily: 'RegularTyp2', }} showHeader={false} wrapperStyle={{ width: 85, height: 30, borderRadius: 15 }} containerStyle={{ marginBottom: 0 }} closed={true} callback={_self._onChange} data={_self.getSelectValue()} />
 
                         <Text style={{ fontFamily: 'Bold', fontSize: 16 }}>{Utils.getPriceFormat(total)}</Text>
                     </View>
@@ -296,7 +296,7 @@ class FavoriteListItem extends Component {
             { addTo } = Translation['cart'] || {};
 
         return (
-            <View style={{ flexDirection: 'row', paddingTop: 20, paddingBottom: 20, paddingRight: 20, paddingLeft: 10, borderBottomColor: '#dcdcdc', borderBottomWidth: 1, }}>
+            <View style={{ flexDirection: 'row', paddingTop: 20, paddingBottom: 20, paddingRight: 20, paddingLeft: 10, borderBottomColor: '#dcdcdc', borderBottomWidth: 1, marginLeft: 10, marginRight: 10 }}>
                 <View style={{ width: 60, justifyContent: 'center', }}>
                     <Image
                         style={{ height: 60 }}
@@ -356,7 +356,7 @@ class OrderListItem extends Component {
             { orderNo, orderDate, status, totalPrice } = _self.props.data;
         return (
             <TouchableOpacity activeOpacity={0.8} onPress={_self._onPress}>
-                <View style={{ paddingTop: 20, paddingLeft: 20, paddingBottom: 10, borderBottomColor: '#dcdcdc', borderBottomWidth: 1 }}>
+                <View style={{ paddingTop: 20, paddingLeft: 20, paddingBottom: 10, borderBottomColor: '#dcdcdc', borderBottomWidth: 1, marginLeft: 10, marginRight: 10 }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center', }}>
                         <Text style={{ fontFamily: 'Medium', fontSize: 15, marginRight: 20 }}>{orderNo}</Text>
                         <Text style={{ fontFamily: 'RegularTyp2', fontSize: 13 }}>{Utils.getDateFormat(orderDate)}</Text>
@@ -421,7 +421,7 @@ class FollowListItem extends Component {
             { addTo } = Translation['cart'] || {};
 
         return (
-            <View style={{ flexDirection: 'row', paddingTop: 20, paddingBottom: 20, paddingRight: 20, paddingLeft: 10, borderBottomColor: '#dcdcdc', borderBottomWidth: 1, }}>
+            <View style={{ flexDirection: 'row', paddingTop: 20, paddingBottom: 20, paddingRight: 20, paddingLeft: 10, borderBottomColor: '#dcdcdc', borderBottomWidth: 1, marginLeft: 10, marginRight: 10 }}>
                 <View style={{ width: 60, justifyContent: 'center', }}>
                     <Image
                         style={{ height: 60 }}
@@ -537,7 +537,7 @@ class ServiceListItem extends Component {
 
         return (
             <TouchableOpacity activeOpacity={0.8} onPress={_self._onPress}>
-                <View style={{ paddingBottom: 20, paddingTop: 20, borderBottomColor: '#dcdcdc', borderBottomWidth: 1 }}>
+                <View style={{ paddingBottom: 20, paddingTop: 20, borderBottomColor: '#dcdcdc', borderBottomWidth: 1, marginLeft: 10, marginRight: 10 }}>
                     <Text style={{ fontFamily: 'Medium', fontSize: 16, marginBottom: 6 }}>{Utils.trimText(serviceName)}</Text>
                     <Text style={{ fontFamily: 'RegularTyp2', fontSize: 15, }}>{Utils.trimText(address)}</Text>
                     {_self._isLocation()}
@@ -566,7 +566,7 @@ class CampaingItem extends Component {
     render() {
         const { image, utpCode } = this.props.data;
         return (
-            <View style={{ margin:10, marginBottom: 20 }}>
+            <View style={{ margin: 10, marginBottom: 20 }}>
                 <Image
                     style={{ height: 300 }}
                     source={{ uri: Utils.getImage(image) }}
@@ -750,7 +750,7 @@ class FeedsItem extends Component {
                             source={{ uri: image }}
                         />
                     </View>
-                    <View style={{ flex:1, paddingTop: 30 }}>
+                    <View style={{ flex: 1, paddingTop: 30 }}>
                         <Text style={{ fontFamily: 'Bold', fontSize: 22, marginBottom: 10 }}>{Utils.getPriceFormat(price)}</Text>
                         <Text style={{ fontFamily: 'Medium', fontSize: 16 }}>{name}</Text>
                         <Text style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#9b9b9b', marginBottom: 10 }}>{'21 Renk'}</Text>
@@ -817,7 +817,7 @@ class FeedsItem extends Component {
     render() {
         const _self = this;
         return (
-            <View style={{ margin:10, marginBottom: 20 }}>
+            <View style={{ margin: 10, marginBottom: 20 }}>
                 <View style={{ position: 'relative' }}>
                     {_self._getFeed()}
                     {_self._getLike()}
@@ -843,7 +843,7 @@ class AppShell extends Component {
         let view = null;
         if (type == ITEMTYPE['CAMPAING'] || type == ITEMTYPE['FEEDS'])
             view = (
-                <View style={{ margin:10, marginBottom: 20, }}>
+                <View style={{ margin: 10, marginBottom: 20, }}>
                     <View>
                         <Image
                             style={{
@@ -892,7 +892,7 @@ class AppShell extends Component {
             );
         else
             view = (
-                <View style={{ marginBottom: 20, }}>
+                <View style={{ margin: 10, marginBottom: 20, }}>
                     <Placeholder.ImageContent
                         size={60}
                         animate="fade"
@@ -1055,6 +1055,7 @@ class Viewers extends Component {
 
     /* segmentify özel */
     _setSeg = (res) => {
+        console.log(res);
         const _self = this;
         if (res['type'] == 'success') {
             const { responses = [] } = res.data,
@@ -1089,7 +1090,7 @@ class Viewers extends Component {
             });
         } else {
             _self.setState({ data: [], total: 0, loaded: true, noResult: true });
-            
+
             if (_self.props.noResult)
                 _self.props.noResult();
         }
@@ -1118,7 +1119,7 @@ class Viewers extends Component {
 
             if (data.length == 0) {
                 _self.setState({ data: [], total: 0, loaded: true, noResult: true });
-                
+
                 if (_self.props.noResult)
                     _self.props.noResult();
             } else if (type == VIEWERTYPE['LIST'] || type == VIEWERTYPE['HTMLTOJSON'] || type == VIEWERTYPE['SCROLLVIEW'])

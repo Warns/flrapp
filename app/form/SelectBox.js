@@ -100,14 +100,14 @@ class SelectBox extends Component {
     render() {
         const _self = this,
             { title, error = false, errorMsg = null, multiple = false, defaultTitle = '' } = _self.props.data,
-            { control = false, containerStyle = {}, wrapperStyle = {} } = _self.props;
+            { control = false, containerStyle = {}, wrapperStyle = {}, showHeader = true, fontStyle = {} } = _self.props;
 
         if (control)
             _self._callback();
 
         return (
-            <Container containerStyle={{ ...containerStyle }} wrapperStyle={{ ...wrapperStyle }} titleShow={true} title={title} error={error} errorMsg={errorMsg}>
-                <Minus99MultipleSelect defaultTitle={defaultTitle} callback={_self._closed} selected={_self._getIndex()} multiple={multiple} items={_self._getItems()} />
+            <Container showHeader={showHeader} containerStyle={{ ...containerStyle }} wrapperStyle={{ ...wrapperStyle }} titleShow={true} title={title} error={error} errorMsg={errorMsg}>
+                <Minus99MultipleSelect fontStyle={fontStyle} defaultTitle={defaultTitle} callback={_self._closed} selected={_self._getIndex()} multiple={multiple} items={_self._getItems()} />
                 <Image source={ICONS['drpIco']} style={{ width: 12, height: 8 }} />
             </Container>
         );
