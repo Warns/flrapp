@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { createStackNavigator } from 'react-navigation';
 import { CartPage, AddressPage, PaymentPage, ExtraPageDetail } from 'root/app/viewer/';
 
 const CartNavigation = createStackNavigator(
-    {       
+    {
         Cart: {
             screen: props => <CartPage {...props} />,
         },
