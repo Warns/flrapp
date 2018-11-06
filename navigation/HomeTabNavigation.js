@@ -147,11 +147,7 @@ export default MainTabNavigator = createMaterialTopTabNavigator(
     Categories: {
       screen: DiscoverPage,
     },
-<<<<<<< HEAD
-    Promos: {
-=======
     Promo: {
->>>>>>> a656daf7d2c4ee9560fa67611f16b18bd42c0429
       screen: Extra
     },
   },
