@@ -151,6 +151,7 @@ export const SET_CART_ITEMS = 'SET_CART_ITEMS';
 export const ADD_CART_ITEM = 'ADD_CART_ITEM';
 export const SET_CART_NO_RESULT = 'SET_CART_NO_RESULT';
 export const RESET_CART = 'RESET_CART';
+export const SET_CART_PROGRESS = 'SET_CART_PROGRESS';
 
 /* general */
 export const SET_CATEGORIES = 'SET_CATEGORIES';

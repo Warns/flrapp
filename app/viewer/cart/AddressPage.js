@@ -15,6 +15,7 @@ import {
     SET_CART_CARGO,
     DATA_LOADED,
     SET_FORM,
+    SET_CART_PROGRESS,
 } from 'root/app/helper/Constant';
 import { connect } from 'react-redux';
 import { CheckBox } from 'root/app/form';
@@ -94,8 +95,19 @@ const Address = class Main extends Component {
         };
     }
 
-    componentDidMount() {
+
+    onWillFocus = () => {
         const _self = this;
+        _self.props.dispatch({ type: SET_CART_PROGRESS, value: "2/3" });
+    }
+
+    componentDidMount() {
+        const _self = this,
+            { navigation } = _self.props;
+
+        if (navigation)
+            _self._Listener = navigation.addListener('willFocus', _self.onWillFocus);
+
         _self._isMounted = true;
 
         _self.setAjx({ uri: Utils.getURL({ key: 'cart', subKey: 'getCart' }), data: { cartLocation: 'delivery' } }, (res) => {
@@ -111,8 +123,13 @@ const Address = class Main extends Component {
     }
 
     componentWillUnmount() {
-        const _self = this;
+        const _self = this,
+            { navigation } = _self.props;
+
         _self._isMounted = false;
+
+        if (navigation)
+            _self._Listener.remove();
     }
 
     setAjx = ({ uri, data }, callback) => {
@@ -254,7 +271,7 @@ const Address = class Main extends Component {
                     <CheckBox closed={true} callback={_self._onCheckBoxChange} data={checkboxConfig} />
 
                     {_self._getCargoItems()}
-                    
+
                 </ScrollView>
                 <Footer onPress={_self._onPress} data={CONFIG} />
             </View>

@@ -12,6 +12,7 @@ import {
     DATA_LOADED,
     SET_CART_NO_RESULT,
     RESET_CART,
+    SET_CART_PROGRESS
 } from 'root/app/helper/Constant';
 import { connect } from 'react-redux';
 import Footer from './Footer';
@@ -41,9 +42,27 @@ const Cart = class Main extends Component {
         };
     }
 
-    componentWillUnmount() {
+    onWillFocus = () => {
         const _self = this;
+        _self.props.dispatch({ type: SET_CART_PROGRESS, value: "1/3" });
+    }
+
+    componentDidMount() {
+        const _self = this,
+            { navigation } = _self.props;
+
+        if (navigation)
+            _self._Listener = navigation.addListener('willFocus', _self.onWillFocus);
+    }
+
+    componentWillUnmount() {
+        const _self = this,
+            { navigation } = _self.props;
+
         _self.props.dispatch({ type: RESET_CART });
+
+        if (navigation)
+            _self._Listener.remove();
     }
 
     _callback = ({ type, data }) => {
@@ -89,7 +108,7 @@ const Cart = class Main extends Component {
 
     _onExpand = (b) => {
         const _self = this,
-            paddingBottom = b ? 150 : 125;
+            paddingBottom = b ? 200 : 125;
 
         _self.setState({ paddingBottom: paddingBottom });
     }
@@ -99,9 +118,9 @@ const Cart = class Main extends Component {
             { paddingBottom } = _self.state;
         return (
             <View style={{ flex: 1 }}>
-
-                <Viewer noResult={_self._noResult} onRef={ref => (_self.child = ref)} {..._self.props} config={DATA} style={{ paddingBottom: paddingBottom }} response={this._response} callback={this._callback} />
-
+                <View style={{ flex: 1, marginBottom: paddingBottom, }}>
+                    <Viewer noResult={_self._noResult} onRef={ref => (_self.child = ref)} {..._self.props} config={DATA} response={this._response} callback={this._callback} />
+                </View>
                 <Footer expand={_self._onExpand} onCouponCallback={_self._onCouponCallback} onPress={_self._onPress} data={CONFIG} />
             </View>
         )

@@ -7,10 +7,12 @@ import {
     SET_DIFFERENT_ADDRESS,
     SET_CART_CARGO,
     SET_CART_NO_RESULT,
-    RESET_CART
+    RESET_CART,
+    SET_CART_PROGRESS
 } from 'root/app/helper/Constant';
 
 const cartInitialState = {
+    progress: '1/3',
     name: 'Cart',
     cartProductsNumber: 0,
     cartInfo: {},
@@ -125,6 +127,14 @@ export default function cart(state = cartInitialState, action) {
                 }, 
             }
         };
+        case SET_CART_PROGRESS: {
+            return {
+                ...state,
+                progress: action.value
+            }
+        };
+
+        
         default:
             return state;
     }

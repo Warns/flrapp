@@ -251,8 +251,8 @@ class Form extends Component {
 
     addField = (obj) => {
         const _self = this,
-            { id, type, css = {} } = obj,
-            { containerStyle = {}, wrapperStyle = {} } = css,
+            { id, type, css = {}, showHeader = true } = obj,
+            { containerStyle = {}, wrapperStyle = {}, fontStyle = {}, defaultTitleStyle = {} } = css,
             { theme = 'DARK' } = _self.props.data,
             validation = this.state.validation,
             _callback = this._callback;
@@ -263,7 +263,7 @@ class Form extends Component {
             case 'text':
                 return <FormInput containerStyle={{ ...containerStyle }} wrapperStyle={{ ...wrapperStyle }} theme={theme} callback={_callback} control={validation} key={id} data={obj} />;
             case 'select':
-                return <SelectBox containerStyle={{ ...containerStyle }} wrapperStyle={{ ...wrapperStyle }} theme={theme} callback={_callback} control={validation} key={id} data={obj} />;
+                return <SelectBox showHeader={showHeader} defaultTitleStyle={{ ...defaultTitleStyle }} fontStyle={{ ...fontStyle }} containerStyle={{ ...containerStyle }} wrapperStyle={{ ...wrapperStyle }} theme={theme} callback={_callback} control={validation} key={id} data={obj} />;
             case 'chekbox':
                 return <CheckBox containerStyle={{ ...containerStyle }} wrapperStyle={{ ...wrapperStyle }} theme={theme} callback={_callback} control={validation} key={id} data={obj} />;
             case 'radio':
@@ -343,8 +343,9 @@ class Form extends Component {
 
     render() {
         const _self = this,
-            { theme = 'DARK', buttonText = 'GİRİŞ YAP', buttonStyle = {}, buttonFontStyle = {} } = _self.props.data,
-            { scrollEnabled = true } = _self.props;
+            { theme = 'DARK', buttonText = 'GİRİŞ YAP', buttonStyle = {}, buttonFontStyle = {}, showButton = true } = _self.props.data,
+            { scrollEnabled = true } = _self.props,
+            button = showButton ? <LoadingButton fontStyle={{ ...buttonFontStyle }} style={{ ...buttonStyle }} theme={theme} onPress={_self._onPress.bind(_self)}>{buttonText}</LoadingButton> : null;
 
         return (
             <ScrollView scrollEnabled={scrollEnabled} style={[{ flex: 1 }]}>
@@ -352,7 +353,7 @@ class Form extends Component {
                     <View style={[{ flex: 1, paddingLeft: 40, paddingRight: 40, paddingBottom: 40 }, { ..._self.props.style }]}>
                         {_self._getAllErrMsg()}
                         {_self.add()}
-                        <LoadingButton fontStyle={{ ...buttonFontStyle }} style={{ ...buttonStyle }} theme={theme} onPress={_self._onPress.bind(_self)}>{buttonText}</LoadingButton>
+                        {button}
                     </View>
                 </CustomKeyboard >
             </ScrollView>
