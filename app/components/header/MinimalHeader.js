@@ -32,17 +32,23 @@ class MinimalHdr extends React.Component{
 
   render(){
 
-    let right = this.props.right ? this.props.right : <Cart />;
+    let{ progress, right } = this.props;
+    let { topMargin, window } = this.props.general.SCREEN_DIMENSIONS;
 
-    let { topMargin } = this.props.general.SCREEN_DIMENSIONS;
-
-    console.log('oooooo', this.props.noMargin);
-
+    let _right = right ? right : <Cart />;
     let _wrapperStyle = this.props.noMargin ? styles.wrapper : {height: 60 + topMargin, paddingTop:topMargin, backgroundColor:'#ffffff'};
 
-    //console.log( this.props );
+    let _progressBar = progress ? (
+      <View style={{height:5, backgroundColor:'#dcdcdc', position:'relative'}}>
+        <View style={{height:5, width: (window.width * eval(progress)), backgroundColor:'#FF2B94'}}></View>
+        <View style={{position:'absolute', left:'50%', top:-40, height:20, width:50, marginLeft:-25, justifyContent:'center', alignItems:'center' }}>
+          <Text style={{fontSize:15}}>{progress}</Text>
+        </View>
+      </View>
+    ): null;
 
     return(
+      <View>
         <View style={_wrapperStyle}>
           <View style={{flex:1, flexDirection:'row', alignItems:'center'}}>
             <TouchableOpacity onPress={this._onBackPress}>
@@ -52,9 +58,11 @@ class MinimalHdr extends React.Component{
               <Text style={styles.title}>{this.props.title.toUpperCase()}</Text>
             </View>
             <View style={{paddingRight:10, justifyContent:'center'}}>
-              {right}
+              {_right}
             </View>
           </View>
+        </View>
+        {_progressBar}
         </View>
     );
   }
