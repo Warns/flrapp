@@ -20,6 +20,22 @@ class SelectBox extends Component {
         }
     }
 
+    componentDidMount() {
+        const _self = this,
+            { onRef } = _self.props;
+
+        if (onRef)
+            onRef(this);
+    }
+
+    componentWillUnmount() {
+        const _self = this,
+            { onRef } = _self.props;
+
+        if (onRef)
+            onRef(null);
+    }
+
     _callback = () => {
         const { title, id, validation } = this.props.data;
         const { callback } = this.props;
@@ -97,6 +113,11 @@ class SelectBox extends Component {
         }, 5);
     }
 
+    _onReset = () => {
+        const _self = this;
+        _self.child._onReset();
+    }
+
     render() {
         const _self = this,
             { title, error = false, errorMsg = null, multiple = false, defaultTitle = '', ico = 'drpIco', icoStyle = { width: 12, height: 8 } } = _self.props.data,
@@ -107,8 +128,11 @@ class SelectBox extends Component {
 
         return (
             <Container showHeader={showHeader} containerStyle={{ ...containerStyle }} wrapperStyle={{ ...wrapperStyle }} titleShow={true} title={title} error={error} errorMsg={errorMsg}>
-                <Minus99MultipleSelect defaultTitleStyle={defaultTitleStyle} fontStyle={fontStyle} defaultTitle={defaultTitle} callback={_self._closed} selected={_self._getIndex()} multiple={multiple} items={_self._getItems()} />
+                
+                <Minus99MultipleSelect onRef={ref => (_self.child = ref)} defaultTitleStyle={defaultTitleStyle} fontStyle={fontStyle} defaultTitle={defaultTitle} callback={_self._closed} selected={_self._getIndex()} multiple={multiple} items={_self._getItems()} />
+                
                 <Image source={ICONS[ico]} style={icoStyle} />
+
             </Container>
         );
     }

@@ -27,15 +27,23 @@ class Form extends Component {
     }
 
     componentDidMount() {
-        const _self = this;
+        const _self = this,
+            { onRef } = _self.props;
+
         _self._isMounted = true;
         _self.setAjx();
+
+        if (onRef)
+            onRef(this);
     }
 
     componentWillUnmount() {
         const _self = this,
-            { data = {} } = _self.props;
+            { data = {}, onRef } = _self.props;
         _self._isMounted = false;
+
+        if (onRef)
+            onRef(null);
 
         /*  
             not: Form Modalda açıldığında hatalı giriş yapılmışsa ve modal kapatılıp tekrar açılmışsa hata mesajını resetlemek için kullanılır 
@@ -249,6 +257,8 @@ class Form extends Component {
             onChangeText(obj);
     }
 
+    _formElement = []; 
+
     addField = (obj) => {
         const _self = this,
             { id, type, css = {}, showHeader = true } = obj,
@@ -263,7 +273,7 @@ class Form extends Component {
             case 'text':
                 return <FormInput containerStyle={{ ...containerStyle }} wrapperStyle={{ ...wrapperStyle }} theme={theme} callback={_callback} control={validation} key={id} data={obj} />;
             case 'select':
-                return <SelectBox showHeader={showHeader} defaultTitleStyle={{ ...defaultTitleStyle }} fontStyle={{ ...fontStyle }} containerStyle={{ ...containerStyle }} wrapperStyle={{ ...wrapperStyle }} theme={theme} callback={_callback} control={validation} key={id} data={obj} />;
+                return <SelectBox onRef={ref => (_self._formElement.push(ref))} showHeader={showHeader} defaultTitleStyle={{ ...defaultTitleStyle }} fontStyle={{ ...fontStyle }} containerStyle={{ ...containerStyle }} wrapperStyle={{ ...wrapperStyle }} theme={theme} callback={_callback} control={validation} key={id} data={obj} />;
             case 'chekbox':
                 return <CheckBox containerStyle={{ ...containerStyle }} wrapperStyle={{ ...wrapperStyle }} theme={theme} callback={_callback} control={validation} key={id} data={obj} />;
             case 'radio':
@@ -339,6 +349,15 @@ class Form extends Component {
 
     _onPress = () => {
         this.setState({ validation: true });
+    }
+
+    _onResetForm = () => {
+        const _self = this,
+            arr = _self._formElement,
+            total = arr.length;
+        /* form elemanlarını onRef ile array kaydedip sonrasında component içerisindeki reset tetikliyoruz. */
+        for( var i = 0; i < total; ++i  )
+            arr[ i ]._onReset();       
     }
 
     render() {

@@ -365,8 +365,22 @@ class ListHeader extends React.Component {
     this.props.onFiltersChange(obj);
   }
 
-  render() {
+  _onFormApply = () => {
+    const _self = this;
+    /* formdaki public fonk. tetikleriz. */
+    if (_self.child)
+      _self.child._onPress();
+  }
 
+  _onFormReset = () => {
+    const _self = this;
+   
+    if (_self.child)
+      _self.child._onResetForm();
+  }
+
+  render() {
+    const _self = this;
     let { totalProductCount, textureDisplay, filters } = this.props;
 
     if (textureDisplay) {
@@ -417,12 +431,10 @@ class ListHeader extends React.Component {
           <MinimalHeader onPress={this._close} title="KAPAT" right={<Text style={{ color: "#afafaf", fontSize: 14, marginRight: 10 }}>{totalProductCount} ürün</Text>} noMargin={store.getState().general.SCREEN_DIMENSIONS.OS == 'android' ? true : false} />
 
           <View style={{ flex: 1, paddingLeft: 20, paddingRight: 20 }}>
-            <Form style={{ backgroundColor: 'red', flex: 1, paddingLeft: 0, paddingRight: 0, paddingBottom: 0 }} callback={this._filterCallback} data={Utils.filterToSelectObject(filters)} />
-            <View style={{ flexDirection: 'row' }}>
-
-              <LoadingButton>{'UYGULA'}</LoadingButton>
-              <LoadingButton>{'TEMİZLE'}</LoadingButton>
-
+            <Form onRef={ref => (_self.child = ref)} style={{ flex: 1, paddingLeft: 0, paddingRight: 0, paddingBottom: 0 }} callback={this._filterCallback} data={Utils.filterToSelectObject(filters)} />
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingBottom: 20, }}>
+              <LoadingButton style={{ borderWidth: 1, borderColor: '#000000' }}  fontStyle={{fontFamily: 'Bold', fontSize: 16 }} onPress={_self._onFormApply} contentStyle={{ flex: 1, marginRight: 5 }}>{'UYGULA'}</LoadingButton>
+              <LoadingButton style={{ backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#666666' }} fontStyle={{fontFamily: 'Bold', fontSize: 16, color: '#000000'}} onPress={_self._onFormReset} contentStyle={{ flex: 1, marginLeft: 5 }}>{'TEMİZLE'}</LoadingButton>
             </View>
           </View>
 

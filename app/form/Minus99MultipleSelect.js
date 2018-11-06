@@ -16,6 +16,7 @@ import {
 import IconButton from 'root/app/UI/IconButton';
 import BoxButton from 'root/app/UI/Buttons/BoxButton';
 import get from 'lodash/get';
+import { MinimalHeader } from 'root/app/components';
 
 const Utils = require('root/app/helper/Global.js');
 const styles = require('root/app/styles.js');
@@ -46,7 +47,7 @@ class DefaultInput extends React.Component {
             { defaultTitle = '', fontStyle = {}, defaultTitleStyle = {} } = _self.props;
         let view = null,
             sty = {};
-        if (defaultTitle != ''){
+        if (defaultTitle != '') {
             sty = { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' };
             view = (
                 <Text numberOfLines={1} style={[{ fontSize: 16, color: '#000000' }, fontStyle, defaultTitleStyle]}>{defaultTitle}</Text>
@@ -77,6 +78,23 @@ class Minus99MultipleSelect extends React.Component {
 
         }
     }
+
+    componentDidMount() {
+        const _self = this,
+            { onRef } = _self.props;
+
+        if (onRef)
+            onRef(this);
+    }
+
+    componentWillUnmount() {
+        const _self = this,
+            { onRef } = _self.props;
+
+        if (onRef)
+            onRef(null);
+    }
+
 
     onSelectedItemsChange = selectedItems => {
         this.setState({ selectedItems });
@@ -123,6 +141,12 @@ class Minus99MultipleSelect extends React.Component {
     }
 
     _multiSelect = null;
+
+
+    /* multiple select reset */
+    _onReset = () => {
+        this._closeSelectionBox([]);
+    }
 
     render() {
         const { multiple = true, selections = [], fontStyle = {}, defaultTitleStyle = {} } = this.props
@@ -277,16 +301,19 @@ class SelectionBox extends React.Component {
             }
 
         const header = short == true ?
-            <View style={{ paddingTop: 10 }}>
-                <Text style={[styles.mainColor, styles.normal, styles.bold]}>{name}</Text>
-            </View>
-            : <TextInput
-                style={styles.searchInput}
-                placeholder='Searcn'
-                onChangeText={searchTerm => this.setState({ searchTerm })}
-                underlineColorAndroid='transparent'
-                onFocus={this._onInputFocus}
-                onBlur={this._onInputBlur} />;
+            null
+            : (
+                <View style={{ marginLeft: 20, marginRight: 20, marginBottom: 10, height: 50, borderColor: '#cccccc', borderWidth: 1, borderRadius: 5 }}>
+                    <TextInput
+                        style={[styles.searchInput, { backgroundColor: '#FFFFFF' }]}
+                        placeholder='Search'
+                        onChangeText={searchTerm => this.setState({ searchTerm })}
+                        underlineColorAndroid='transparent'
+                        onFocus={this._onInputFocus}
+                        onBlur={this._onInputBlur} />
+                </View>
+            )
+
 
         return (
             <Modal
@@ -295,27 +322,25 @@ class SelectionBox extends React.Component {
                 visible={this.props.visible}
             >
 
-                <View style={{ flex: 1, paddingTop: 25 }}>
-                    <View style={{ flex: 1, flexDirection: "row", maxHeight: 45, borderBottomWidth: 5, borderBottomColor: "#ffffff" }}>
-                        <View style={{ width: 40 }}>
-                            <IconButton icon={<Image source={require("root/assets/icons/back.png")} style={styles.iconNormalSize} />} callback={this._onClose} />
+                <View style={{ flex: 1, }}>
+                    <MinimalHeader onPress={this._onClose} title="KAPAT" right={<View></View>} />
+                    {header}
+                    <View style={{ position: 'relative' }}>
+                        <View style={{ backgroundColor: "#ffffff", flexDirection: "row", flexWrap: "wrap", padding: 5, paddingTop: 0, marginRight: 40, marginLeft: 10, paddingLeft: 0 }}>
+                            {selection}
                         </View>
-                        <View style={{ flex: 1, marginRight: 10, marginLeft: 5 }}>
-                            {header}
-                        </View>
+                        <Animated.View style={{ position: "absolute", right: this.state.anim, top: 0 }}>
+                            <IconButton icon={<Image source={require("root/assets/icons/trash.png")} style={styles.iconNormalSize} />} callback={this._clearAll} />
+                        </Animated.View>
                     </View>
-                    <View style={{ backgroundColor: "#ffffff", flexDirection: "row", flexWrap: "wrap", padding: 5, paddingTop: 0, marginRight: 40 }}>
-                        {selection}
-                    </View>
-                    <Animated.View style={{ position: "absolute", right: this.state.anim, top: 70 }}>
-                        <IconButton icon={<Image source={require("root/assets/icons/trash.png")} style={styles.iconNormalSize} />} callback={this._clearAll} />
-                    </Animated.View>
-                    <FlatList style={{ backgroundColor: "#F4F6FB" }}
+                    <FlatList style={{ backgroundColor: "#FFFFFF", marginLeft: 20, marginRight: 20 }}
                         keyExtractor={this._keyExtractor}
                         renderItem={this._renderItem}
                         data={renderItems}
                     />
-                    <BoxButton name="OK" callback={this._onClose} />
+                    <View style={{ padding: 20 }}>
+                        <BoxButton boxColor="#000000" name="TAMAM" callback={this._onClose} />
+                    </View>
                 </View>
 
             </Modal>
@@ -335,11 +360,11 @@ class ListItem extends React.Component {
             <TouchableOpacity
                 activeOpacity={0.8}
                 onPress={this._onPress}>
-                <View style={{ flex: 1, flexDirection: "row", borderBottomColor: "#E7E9F1", borderBottomWidth: 1, alignItems: "center", height: 40, paddingRight: 15, paddingLeft: 15 }}>
+                <View style={{ flex: 1, flexDirection: "row", borderBottomColor: "#d8d8d8", borderBottomWidth: 1, alignItems: "center", height: 60, paddingRight: 10, paddingLeft: 10 }}>
                     <View style={{ flex: 1 }}>
-                        <Text numberOfLines={1} style={selected ? [styles.bold, styles.mainColor] : null}>{item.name}</Text>
+                        <Text numberOfLines={1} style={[styles.normal, styles.bold, { color: '#000000' }]}>{item.name}</Text>
                     </View>
-                    {selected ? <Image source={require("root/assets/icons/check.png")} style={[styles.iconNormalSize, { marginRight: 5, left: 10 }]} /> : null}
+                    {selected ? <Image source={require("root/assets/icons/check.png")} style={[{ width: 40, height: 40, marginRight: 5, left: 10, }]} /> : null}
                 </View>
             </TouchableOpacity>
         );
@@ -363,8 +388,8 @@ class TagButton extends React.Component {
     render() {
         return (
             <TouchableOpacity activeOpacity={0.9} onPress={this._onPress}>
-                <View style={{ flexDirection: "row", backgroundColor: "#5F00D8", height: 30, margin: 3, borderRadius: 5, alignItems: "center", paddingRight: 10, paddingLeft: 10 }}>
-                    <Text numberOfLines={1} style={[{ maxWidth: 100 }, styles.white, styles.bold, styles.tiny]}>{this.props.name}</Text>
+                <View style={{ flexDirection: "row", backgroundColor: "#eeeeee", height: 30, margin: 3, borderRadius: 5, alignItems: "center", paddingRight: 10, paddingLeft: 10 }}>
+                    <Text numberOfLines={1} style={[{ maxWidth: 100, color: '#4a4a4a' }, styles.bold, styles.tiny]}>{this.props.name}</Text>
                     <Image source={require("root/assets/icons/close.png")} style={[styles.iconTinySize, { marginLeft: 5 }]} />
                 </View>
             </TouchableOpacity>

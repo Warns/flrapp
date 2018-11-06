@@ -34,11 +34,11 @@ class LoadingButton extends Component {
 
     render() {
         const _self = this,
-            { theme = 'DARK' } = _self.props,
+            { theme = 'DARK', contentStyle = {} } = _self.props,
             { TEXT_COLOR, BACKGROUND_COLOR } = FORMSTYLE[theme],
             { wrapper, txt } = styles;
         return (
-            <TouchableOpacity onLayout={e => this._measureDimensions(e)} activeOpacity={0.8} onPress={this._onPressButton}>
+            <TouchableOpacity style={contentStyle} onLayout={e => this._measureDimensions(e)} activeOpacity={0.8} onPress={this._onPressButton}>
                 <View style={[wrapper, { backgroundColor: BACKGROUND_COLOR }, { ..._self.props.style }]}>
                     <Text style={[txt, { color: TEXT_COLOR }, { ..._self.props.fontStyle }]}>{this.props.children}</Text>
                 </View>
