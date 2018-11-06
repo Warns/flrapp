@@ -7,7 +7,9 @@ import {
     SET_DIFFERENT_ADDRESS,
     SET_CART_CARGO,
     SET_CART_NO_RESULT,
-    RESET_CART
+    RESET_CART,
+    ADD_TO_FAVORITES,
+    REMOVE_FROM_FAVORITES,
 } from 'root/app/helper/Constant';
 
 const cartInitialState = {
@@ -58,6 +60,16 @@ export default function cart(state = cartInitialState, action) {
                 cartProductsNumber: state.cartProductsNumber + action.value.quantity
             };
         };
+        case ADD_TO_FAVORITES: {
+            if( action.value.id ){
+                addFavoriteProduct( action.value );
+            }
+        };
+        case REMOVE_FROM_FAVORITES: {
+            if( action.value.id ){
+                deleteFavoriteProduct( action.value );
+            }
+        }
         case SET_CART_ADDRESS: {
             const { selectedAddress = {} } = state,
                 { differentAddress = false } = selectedAddress,
@@ -148,4 +160,24 @@ addCartLine = ( obj ) => {
             }
     });
 
+}
+
+addFavoriteProduct = ( obj ) => {
+    globals.fetch(
+        "https://www.flormar.com.tr/webapi/v3/User/addFavoriteProduct",
+        JSON.stringify({
+            "productId": obj.id,
+        }), ( answer ) => {
+            // do nothing
+    });
+}
+
+deleteFavoriteProduct = ( obj ) => {
+    globals.fetch(
+        "https://www.flormar.com.tr/webapi/v3/User/deleteFavoriteProduct",
+        JSON.stringify({
+            "productId": obj.id,
+        }), ( answer ) => {
+            // do nothing
+    });
 }

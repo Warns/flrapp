@@ -31,7 +31,7 @@ export const ICONS = {
     userMen: require('root/assets/icons/userMan.png'),
     campaingRectangle: require('root/assets/images/campaing-rectangle.png'),
     campaingTitle: require('root/assets/images/campaing-title.png'),
-    downArrow: require('root/assets/icons/bottomArrow.png'),
+    downArrow: require('root/assets/icons/downArrow.png'),
     upArrow: require('root/assets/icons/topArrow.png'),
 };
 
@@ -151,6 +151,8 @@ export const SET_CART_ITEMS = 'SET_CART_ITEMS';
 export const ADD_CART_ITEM = 'ADD_CART_ITEM';
 export const SET_CART_NO_RESULT = 'SET_CART_NO_RESULT';
 export const RESET_CART = 'RESET_CART';
+export const ADD_TO_FAVORITES = 'ADD_TO_FAVORITES';
+export const REMOVE_FROM_FAVORITES = 'REMOVE_FROM_FAVORITES';
 
 /* general */
 export const SET_CATEGORIES = 'SET_CATEGORIES';

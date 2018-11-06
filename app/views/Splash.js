@@ -7,12 +7,14 @@ import {
   Platform,
   Modal,
   View,
+  Text,
   Dimensions,
 } from 'react-native';
 import { connect } from 'react-redux';
 import { SplashHeader } from '../components';
 import { DefaultButton, DefaultInput, LoadingButton } from '../UI';
 import { Video, Constants } from 'expo';
+import Carousel, { ParallaxImage, Pagination } from 'react-native-snap-carousel';
 
 import { Form } from 'root/app/form';
 import {
@@ -21,9 +23,6 @@ import {
   SET_NAVIGATION,
   SET_SCREEN_DIMENSIONS
 } from 'root/app/helper/Constant';
-
-styles = require('../styles.js');
-globals = require('../globals.js');
 
 const DIMENSIONS = Dimensions.get('window');
 const TOP_MARGIN = (Platform.OS === 'ios') ? ( DIMENSIONS.height == 812 || DIMENSIONS.height == 896 ) ? 30 : 20 : Expo.Constants.statusBarHeight;
@@ -44,126 +43,35 @@ class Splash extends React.Component {
     loginIsVisible: false,
     videoIsPlaying: true,
     localStorage: {},
+    images:[
+      {thumb:"https://www.flormar.com.tr/UPLOAD/APP/assets/slider-1.png", title:'RENK DOLU DÜNYA', text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod.', video:false},
+      {thumb:"https://www.flormar.com.tr/UPLOAD/APP/assets/slider-2.png", title:'EKSTRA FIRSAT', text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod.'},
+      {thumb:"https://www.flormar.com.tr/UPLOAD/APP/assets/slider-3.png", title:'İLHAM VERİCİ', text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod.'}
+    ],
+    activeSlide: 0,
   }
 
   componentDidMount() {
 
     this.props.dispatch({ type: SET_SCREEN_DIMENSIONS, value:{window: DIMENSIONS, topMargin:TOP_MARGIN, OS:Platform.OS, isX: TOP_MARGIN == 30 } });
-
+    this.props.dispatch({ type: SET_NAVIGATION, value: this.props.navigation });
+  
     _loadInitialState(this._routeAccordingToAsyncStorage);
 
-    /* root navigation redux bağlamak için kullanırız */
-    this.props.dispatch({ type: SET_NAVIGATION, value: this.props.navigation });
   }
 
   _routeAccordingToAsyncStorage = () => {
 
-    console.log('rooting');
-
     if (globals.CLIENT.Login != null) {
-
-      //this._requestLogin();
-      this._requestLogin();
-
+      //auto login
     }
     else {
-
       console.log('there is no login info')
-
     }
-
   }
 
-  _requestLogin = () => {
-
-    globals.fetch(
-      "https://www.flormar.com.tr/webapi/v3/User/login",
-      JSON.stringify({
-        "email": globals.CLIENT.Login.email,
-        "password": "seventhy"
-      }),
-      this._loginResultHandler
-    );
-
-  }
-
-  _loginResultHandler = (answer) => {
-
-    globals.CLIENT.Login = answer;
-
-    //console.log( 'logged in: ', answer.data.firstName );
-
-    //console.log('rooting', globals.CLIENT );
-
-    globals.refreshSecureStorage();
-
-  }
-
-  _updateCart = () => {
-    let categories = [
-      {
-        selector: 'TÜMÜ',
-        id: 'tumu',
-      },
-      {
-        selector: 'YENİ',
-        id: 'yeni',
-      },
-      {
-        selector: 'GÖZ FARI',
-        id: 'goz-fari',
-      },
-    ];
-
-    this.props.dispatch({ type: 'SET_CATEGORIES', value: { categories: categories, selectedCategory: 'nails' } });
-    this.props.navigation.navigate("Category");
-  }
-
-  _updateCart2 = () => {
-
-    let categories = [
-      {
-        selector: 'TÜMÜ',
-        id: 'tumu',
-      },
-      {
-        selector: 'YENİ',
-        id: 'yeni',
-      },
-      {
-        selector: 'GÖZ FARI',
-        id: 'goz-fari',
-      },
-      {
-        selector: 'MASKARA',
-        id: 'maskara',
-      },
-      {
-        selector: 'KAŞ',
-        id: 'kas',
-      },
-      {
-        selector: 'GÖZ KALEMİ',
-        id: 'goz-kalemi',
-      },
-      {
-        selector: 'LİKİT EYELINER',
-        id: 'likit-eyeliner',
-      },
-      {
-        selector: 'GÖZ MAKYAJI TEMİZLEME',
-        id: 'goz-makyaj-temizleme',
-      },
-      {
-        selector: 'BAZ',
-        id: 'baz',
-      }
-    ];
-
-    //this.props.dispatch({type: 'SET_CATEGORIES', value: {categories: categories, selectedCategory: 'nails'}});
+  _continueToHome = () => {
     this.props.navigation.navigate("Home");
-
-    //this.props.dispatch({type: 'ADD_CART_ITEM', value: 1});
   }
 
   _openLoginForm = () => {
@@ -171,6 +79,7 @@ class Splash extends React.Component {
     this.setState({
       loginIsVisible: true,
       videoIsPlaying: false,
+      images: [1,1,1],
     });
 
     Animated.timing(
@@ -178,23 +87,6 @@ class Splash extends React.Component {
         toValue: 1,
         duration: 500,
         easing: Easing.out(Easing.cubic),
-      }
-    ).start();
-  };
-
-  _skipLogin = () => {
-
-    this.props.navigation.navigate("Category");
-
-    this.setState({
-      loginIsVisible: false,
-    });
-
-    Animated.timing(
-      this.state.fadeAnim, {
-        toValue: 0,
-        duration: 500,
-        easing: Easing.inOut(Easing.cubic),
       }
     ).start();
   };
@@ -228,9 +120,75 @@ class Splash extends React.Component {
       alert(message);
   }
 
+  _renderItem = ( obj, parallaxProps )=>{
+
+    console.log( obj.item );
+    
+    if(obj.item.video)
+    return(
+      <View style={{flex:1, width:DIMENSIONS.width, height:DIMENSIONS.height}}>
+        <Video
+          source={require('../../assets/loop.mp4')}
+          rate={1.0}
+          volume={1.0}
+          isMuted={true}
+          resizeMode="cover"
+          shouldPlay={this.state.videoIsPlaying}
+          isLooping
+          style={styles.backgroundImage}
+        />
+        <View style={{position:'absolute', bottom:160, left:DIMENSIONS.width*.1, alignItems:'center', width:DIMENSIONS.width*.8}}>
+            <Text style={{fontSize:20, fontFamily:'Bold', color:'#ffffff'}}>{obj.item.title}</Text>
+            <Text style={{color:'#ffffff', fontSize:15, textAlign: 'center',}}>{obj.item.text}</Text>
+          </View>
+      </View>
+    );
+    else
+    return( 
+      <View style={{flex:1, width:DIMENSIONS.width, height:DIMENSIONS.height}}>
+        <ParallaxImage
+          source={{uri: obj.item.thumb }}
+          parallaxFactor={0.3}
+          containerStyle={{flex:1}}
+          style={{resizeMode:'cover'}}
+          showSpinner={true}
+          {...parallaxProps}
+          >
+          </ParallaxImage>
+          <View style={{position:'absolute', bottom:190, left:DIMENSIONS.width*.1, alignItems:'center', width:DIMENSIONS.width*.8}}>
+            <Text style={{fontSize:20, fontFamily:'Bold', color:'#ffffff'}}>{obj.item.title}</Text>
+            <Text style={{color:'#ffffff', fontSize:15, textAlign: 'center'}}>{obj.item.text}</Text>
+          </View>
+      </View>
+    )
+  }
+
+  get pagination () {
+      const { images, activeSlide } = this.state;
+      return (
+          <Pagination
+            dotsLength={images.length}
+            activeDotIndex={activeSlide}
+            containerStyle={{ position:'absolute', width:'100%', bottom:130 }}
+            dotStyle={{
+                width: 10,
+                height: 10,
+                borderRadius: 5,
+                marginHorizontal: 3,
+                backgroundColor: 'rgba(255, 255, 255, 0.92)'
+            }}
+            inactiveDotStyle={{
+                // Define styles for inactive dots here
+            }}
+            inactiveDotOpacity={0.4}
+            inactiveDotScale={0.6}
+          />
+      );
+  }
+
   render() {
 
-    let { fadeAnim } = this.state;
+    let { fadeAnim, images } = this.state;
 
     const scale = fadeAnim.interpolate({
       inputRange: [0, 1],
@@ -253,48 +211,43 @@ class Splash extends React.Component {
     });
 
     return (
-      <View style={{ backgroundColor: "#222222", flex: 1 }}>
-      {/*
-      <Video
-        source={require('../../assets/loop.mp4')}
-        rate={1.0}
-        volume={1.0}
-        isMuted={true}
-        resizeMode="cover"
-        shouldPlay={this.state.videoIsPlaying}
-        isLooping
-        style={styles.backgroundImage}
-      />
-      */}
-        <Animated.Image
-          style={{resizeMode:'cover', width:DIMENSIONS.width, height:DIMENSIONS.height, position:'absolute', transform: [{ translateY: 0 }, { scale: scale }] }}
-          source={require('../../assets/images/welcome.png')}
-        />
-        <Animated.Image
-          style={[
-            styles.backgroundImage,
-            {
-              opacity: fadeAnim,
-              transform: [{ translateY: 0 }, { scale: scale }],
-            },
-          ]}
-          source={require('../../assets/images/welcome-blurred.png')}
-        />
-        <Image style={{ width: 180, position: 'absolute', top: 50, resizeMode: 'contain', alignSelf: 'center' }} source={require('../../assets/images/logo-w.png')} />
-        <Animated.View style={{ flex: 1, flexDirection: "column-reverse", padding: 30, opacity: reverseFadeAnim }}>
+      <View style={{ backgroundColor: "#000000", flex: 1 }}>
+        <Carousel
+                  ref={(c) => {this._carousel = c;}}
+                  data={images}
+                  onSnapToItem={(index) => this.setState({ activeSlide: index }) }
+                  renderItem={this._renderItem}
+                  sliderWidth={DIMENSIONS.width}
+                  sliderHeight={DIMENSIONS.height}
+                  itemWidth={DIMENSIONS.width}
+                  itemHeight={DIMENSIONS.height}
+                  inactiveSlideScale={1}
+                  inactiveSlideOpacity={.5}
+                  activeSlideAlignment='center'
+                  hasParallaxImages={true}
+                  layoutCardOffset={0}
+                  enableSnap={true}
+                  />
+                  {this.pagination}
+        <Image style={{ width: 180, position: 'absolute', top: 30, resizeMode: 'contain', alignSelf: 'center', zIndex:1 }} source={require('../../assets/images/logo-w.png')} />
+        
+        <Animated.View style={{ width:'100%', position:'absolute', bottom:0, flexDirection: "column-reverse", padding: 30, opacity: reverseFadeAnim }}>
           <DefaultButton
-            callback={this._updateCart2}
+            callback={this._continueToHome}
             name="ÜYELİKSİZ DEVAM ET"
             boxColor="transparent"
             textColor="#ffffff"
+            borderColor='rgba(0,0,0,0)'
+            
           />
-          <View style={{ flex: 1, maxHeight: 70, flexDirection: 'row' }}>
+          <View style={{ flex: 1, maxHeight: 70, flexDirection: 'row', marginBottom:5 }}>
             <View style={{ flex: 1, marginRight: 5 }}>
               <DefaultButton
-                callback={this._openLoginForm}
+                callback={()=>{}}
                 name="GİRİŞ YAP"
                 boxColor="#ffffff"
                 textColor="#000000"
+                borderColor="rgba(0,0,0,0)"
               />
             </View>
             <View style={{ flex: 1, marginLeft: 5 }}>
@@ -303,10 +256,12 @@ class Splash extends React.Component {
                 name="ÜYE OL"
                 boxColor="#ffffff"
                 textColor="#000000"
+                borderColor="rgba(0,0,0,0)"
               />
             </View>
           </View>
         </Animated.View>
+
         <Modal
           animationType="none"
           transparent={true}
@@ -324,7 +279,7 @@ class Splash extends React.Component {
 
 export default connect(mapStateToProps)(Splash);
 
-// check Async Local Secure Storage for user information.
+
 async function _loadInitialState(callback) {
   globals.getSecureStorage('__USER__', (answer) => {
     if (answer !== 'no')

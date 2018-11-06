@@ -22,7 +22,14 @@ const SCREEN_DIMENSIONS = Dimensions.get('screen');
 import { DefaultButton } from '../UI';
 import { MinimalHeader, Palette } from '../components';
 import { HorizontalProducts, VideosList } from '../components/';
-import { ICONS, CLOSE_PRODUCT_DETAILS, OPEN_PRODUCT_DETAILS, ADD_CART_ITEM } from 'root/app/helper/Constant';
+import { 
+  ICONS, 
+  CLOSE_PRODUCT_DETAILS, 
+  OPEN_PRODUCT_DETAILS, 
+  ADD_CART_ITEM, 
+  ADD_TO_FAVORITES, 
+  REMOVE_FROM_FAVORITES 
+} from 'root/app/helper/Constant';
 import { store } from '../../app/store';
 
 globals = require('root/app/globals.js');
@@ -44,6 +51,7 @@ class ProductView extends React.Component {
     videosIsOpen: false,
     canScroll: false,
     animationType: 'none',
+    favoriteButton:{status:false, a:'FAVORİME EKLE', b:'FAVORİME EKLENDİ'},
   };
 
   _animate = () => {
@@ -83,7 +91,15 @@ class ProductView extends React.Component {
     //reset
     this.props.dispatch({type:CLOSE_PRODUCT_DETAILS, Value:{}});
     setTimeout(() => {
-      this.setState({animationDone: false, animationType:'none', anim: new Animated.Value(0), opacity: new Animated.Value(0), detailIsOpen:false, videosIsOpen:false});
+      this.setState({
+        animationDone: false, 
+        animationType:'none', 
+        anim: new Animated.Value(0), 
+        opacity: new Animated.Value(0), 
+        detailIsOpen:false, 
+        videosIsOpen:false,
+        favoriteButton:{...this.state.favoriteButton, status:false},
+      });
     }, 111);
   }
 
@@ -118,8 +134,22 @@ class ProductView extends React.Component {
     console.log('add');
   }
 
+  _addToFavorites = () => {
+    this.setState({
+      favoriteButton:{...this.state.favoriteButton, status:!this.state.favoriteButton.status},
+    });
+
+    if(this.state.favoriteButton.status){
+      store.dispatch({type:ADD_TO_FAVORITES, value: {id: this.props.product.item.productId} });
+    }
+    else{
+      store.dispatch({type:REMOVE_FROM_FAVORITES, value: {id: this.props.product.item.productId} });
+    }
+
+  }
+
   _renderProduct = () => {
-    let{ anim, detailIsOpen, opacity, canScroll, videosIsOpen } = this.state;
+    let{ anim, detailIsOpen, opacity, canScroll, videosIsOpen, favoriteButton } = this.state;
     let { item, sequence, measurements, animate, colors, videos } = this.props.product;
     if( item ){
       let {width, height, pageY, pageX} = measurements;
@@ -201,6 +231,10 @@ class ProductView extends React.Component {
           </View>
         ) : null;
 
+      let _favoriteButton = favoriteButton.status ? 
+                            ( <DefaultButton callback={this._addToFavorites} name={favoriteButton.b} borderColor="#FF2B94" /> ):
+                            ( <DefaultButton callback={this._addToFavorites} name={favoriteButton.a} /> );
+
       return( 
         <View style={{flex:1, backgroundColor:'rgba(255,255,255,1)'}}>
           <MinimalHeader onPress={this._close} title={item.productName} noMargin={this.props.SCREEN_DIMENSIONS.OS == 'android' ? true : false } />
@@ -247,10 +281,7 @@ class ProductView extends React.Component {
                     />
                 </View>
                 <View style={{flex:1, marginLeft:5}}>
-                <DefaultButton
-                    callback={()=>{}}
-                    name="FAVORİME EKLE"
-                    />
+                {_favoriteButton}
                 </View>
               </View>
 
