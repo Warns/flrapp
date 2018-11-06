@@ -91,7 +91,7 @@ class Assistant extends React.Component{
             <Image source={require('../../assets/images/loader.gif')} style={{position:'absolute', alignSelf:'center', bottom:100, width:250, height:151, }} />
             {area}
             <WebView
-              source={{uri: 'https://www.minus99.com/lab/test/assistant.html'}}
+              source={{uri: 'https://www.minus99.com/lab/misc/flormar-assistant.html'}}
               style={{margin: 0, opacity:this.state.opacity}}
               onLoadEnd={()=>{ this.setState({opacity:1})}}
               onMessage={this._onMessage}
@@ -107,11 +107,15 @@ class Assistant extends React.Component{
 
 const styles = StyleSheet.create({
   wrapper:{
-    width: 50,
-    height: 50,
+    backgroundColor:'rgba(0,0,0,.1)',
+    width: 52,
+    height: 52,
     position: 'absolute',
+    overflow:'hidden',
     bottom: 15,
     right: 15,
+    borderRadius:26,
+    padding:1,
     ...Platform.select({
       ios:{
         zIndex: 9,
@@ -122,11 +126,10 @@ const styles = StyleSheet.create({
     }),
   },
   circle:{
-    width:52,
-    height:52,
-    backgroundColor:'rgba(0,0,0,.1)',
-    borderRadius:26,
-    padding:1,
+    backgroundColor:'#dddddd',
+    width:50,
+    height:50,
+    borderRadius:25,
     overflow:'hidden',
     ...Platform.select({
       ios:{

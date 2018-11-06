@@ -75,7 +75,7 @@ class HorizontalProducts extends React.Component{
    //console.log('render list');
 
     return(
-      <View style={{paddingBottom:50}}>
+      <View>
         <FlatList
           //style={{borderWidth:1, borderColor:'red'}}
           scrollEnabled={true}

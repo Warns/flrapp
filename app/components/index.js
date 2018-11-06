@@ -13,6 +13,7 @@ export * from './common/Minus99HorizontalTabs';
 // Product
 export * from './Palette';
 export * from './HorizontalProducts';
+export * from './VideosList';
 
 // Assistant
 export * from './Assistant';

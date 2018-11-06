@@ -146,7 +146,7 @@ export default class List extends React.Component{
     let _items = answer.data.products;
 
     if( this.props.category.img && answer.data.filters.findIndex( obj => obj.isSelected == true ) == -1 ){
-      _items.splice(4, 0, 
+      _items.splice(( answer.data.totalProductCount < 4 ? 0 : 4), 0, 
         {productType:'cover', side:'left', img: this.props.category.img },
         {productType:'cover', side:'right', img: this.props.category.img });
     }
@@ -412,7 +412,7 @@ class ListHeader extends React.Component{
           visible={this.state.filterIsOpen}
           animationType="slide"
         >
-          <MinimalHeader onPress={this._close} title="KAPAT" right={<Text style={{color:"#afafaf", fontSize:14, marginRight:10}}>{totalProductCount} ürün</Text>} />
+          <MinimalHeader onPress={this._close} title="KAPAT" right={<Text style={{color:"#afafaf", fontSize:14, marginRight:10}}>{totalProductCount} ürün</Text>} noMargin={store.getState().general.SCREEN_DIMENSIONS.OS == 'android' ? true : false } />
           <Form callback={this._filterCallback} data={Utils.filterToSelectObject(filters)} />
 
         </Modal>

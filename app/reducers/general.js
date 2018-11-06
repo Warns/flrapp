@@ -6,8 +6,11 @@ import {
     OPEN_PRODUCT_DETAILS,
     UPDATE_PRODUCT_DETAILS_ITEM,
     CLOSE_PRODUCT_DETAILS,
+    UPDATE_PRODUCT_VIDEOS,
 } from 'root/app/helper/Constant';
 import { store } from 'root/app/store';
+
+const Utils = require('root/app/helper/Global.js');
 const Globals = require('root/app/globals.js');
 
 const generalInitialState = {
@@ -25,6 +28,7 @@ const generalInitialState = {
         id: null,
         animate: false,
         item: null,
+        videos:[],
     },
     preloading: false,
     
@@ -81,9 +85,16 @@ export default function general( state = generalInitialState, action ){
                 ...state.product,
                 item: action.value.product,
                 colors: action.value.colors,
+                videos: [],
             },
             preloading: false,
-        }
+        };
+        case UPDATE_PRODUCT_VIDEOS: return {
+            ...state, product:{
+                ...state.product,
+                videos: action.value.videos,
+            }
+        };
         default:
             return state;
     }
@@ -119,14 +130,11 @@ fetchProductDetails = ( id ) => {
 
                 store.dispatch({type:UPDATE_PRODUCT_DETAILS_ITEM, value: {product:answer.data.product, colors:colors} });
 
-                /*
-                Globals.AJX({
-                    _self:{_isMounted:true}, 
-                    uri:'https://www.flormar.com.tr/mobile-app-product-video-export.html', 
-                    data:{urn: id }}, 
-                    (result) => { console.log('>>>>>>>>', result )}
-                );
-                */
+                // Fetch video
+                Utils.ajx({ uri: 'https://www.flormar.com.tr/mobile-app-product-video-export.html?urn=' + id }, (result) => {
+                    if (result['type'] == 'success')
+                        store.dispatch({type:UPDATE_PRODUCT_VIDEOS, value: {videos: result.data.data.videos} });
+                });
 
             }
             else{

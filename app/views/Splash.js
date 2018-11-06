@@ -249,7 +249,7 @@ class Splash extends React.Component {
 
     const boxPadding = fadeAnim.interpolate({
       inputRange: [0, 1],
-      outputRange: [210, 180],
+      outputRange: [150, 120],
     });
 
     return (
@@ -267,6 +267,10 @@ class Splash extends React.Component {
       />
       */}
         <Animated.Image
+          style={{resizeMode:'cover', width:DIMENSIONS.width, height:DIMENSIONS.height, position:'absolute', transform: [{ translateY: 0 }, { scale: scale }] }}
+          source={require('../../assets/images/welcome.png')}
+        />
+        <Animated.Image
           style={[
             styles.backgroundImage,
             {
@@ -279,7 +283,7 @@ class Splash extends React.Component {
         <Image style={{ width: 180, position: 'absolute', top: 50, resizeMode: 'contain', alignSelf: 'center' }} source={require('../../assets/images/logo-w.png')} />
         <Animated.View style={{ flex: 1, flexDirection: "column-reverse", padding: 30, opacity: reverseFadeAnim }}>
           <DefaultButton
-            callback={this._updateCart}
+            callback={this._updateCart2}
             name="ÜYELİKSİZ DEVAM ET"
             boxColor="transparent"
             textColor="#ffffff"
@@ -295,7 +299,7 @@ class Splash extends React.Component {
             </View>
             <View style={{ flex: 1, marginLeft: 5 }}>
               <DefaultButton
-                callback={this._updateCart2}
+                callback={()=>{}}
                 name="ÜYE OL"
                 boxColor="#ffffff"
                 textColor="#000000"

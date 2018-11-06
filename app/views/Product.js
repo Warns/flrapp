@@ -21,7 +21,7 @@ const SCREEN_DIMENSIONS = Dimensions.get('screen');
 
 import { DefaultButton } from '../UI';
 import { MinimalHeader, Palette } from '../components';
-import { HorizontalProducts } from '../components/';
+import { HorizontalProducts, VideosList } from '../components/';
 import { ICONS, CLOSE_PRODUCT_DETAILS, OPEN_PRODUCT_DETAILS, ADD_CART_ITEM } from 'root/app/helper/Constant';
 import { store } from '../../app/store';
 
@@ -41,7 +41,7 @@ class ProductView extends React.Component {
     opacity: new Animated.Value(0),
     animationDone: false,
     detailIsOpen: false,
-    videos: [1, 1],
+    videosIsOpen: false,
     canScroll: false,
     animationType: 'none',
   };
@@ -83,7 +83,7 @@ class ProductView extends React.Component {
     //reset
     this.props.dispatch({type:CLOSE_PRODUCT_DETAILS, Value:{}});
     setTimeout(() => {
-      this.setState({animationDone: false, animationType:'none', anim: new Animated.Value(0), opacity: new Animated.Value(0), detailIsOpen:false});
+      this.setState({animationDone: false, animationType:'none', anim: new Animated.Value(0), opacity: new Animated.Value(0), detailIsOpen:false, videosIsOpen:false});
     }, 111);
   }
 
@@ -92,6 +92,12 @@ class ProductView extends React.Component {
       detailIsOpen:!this.state.detailIsOpen,
     })
     this.productScrollView.scrollTo({y: 360});
+  }
+
+  _showVideos = ()=> {
+    this.setState({
+      videosIsOpen:!this.state.videosIsOpen,
+    })
   }
 
   _changeColor = ( id ) => {
@@ -113,8 +119,8 @@ class ProductView extends React.Component {
   }
 
   _renderProduct = () => {
-    let{ anim, detailIsOpen, opacity, videos, canScroll } = this.state;
-    let { item, sequence, measurements, animate, colors } = this.props.product;
+    let{ anim, detailIsOpen, opacity, canScroll, videosIsOpen } = this.state;
+    let { item, sequence, measurements, animate, colors, videos } = this.props.product;
     if( item ){
       let {width, height, pageY, pageX} = measurements;
       let animatedImage = null;
@@ -160,7 +166,9 @@ class ProductView extends React.Component {
 
       let palette = colors.length > 1 ? <Palette width={SCREEN_DIMENSIONS.width} items={colors} selected={item.shortCode} onPress={this._changeColor} /> : null;
 
-      let videosButton = videos.length > 0 ? <ProductActionButton name="Videolar" count={videos.length} onPress={()=>{}} /> : null;
+      let videosButton = videos.length > 0 ? <ProductActionButton name="Videolar" count={videos.length} expanded={videosIsOpen} onPress={this._showVideos} /> : null;
+
+      let _videos = videosIsOpen && videos.length > 0 ? <VideosList items={videos} /> : null;
 
       let recommendations = item.productRecommends.length > 0 ? (
         <View style={{marginTop:35}}>
@@ -195,7 +203,7 @@ class ProductView extends React.Component {
 
       return( 
         <View style={{flex:1, backgroundColor:'rgba(255,255,255,1)'}}>
-          <MinimalHeader onPress={this._close} title={item.productName} />
+          <MinimalHeader onPress={this._close} title={item.productName} noMargin={this.props.SCREEN_DIMENSIONS.OS == 'android' ? true : false } />
           <ScrollView
             ref={ref => this.productScrollView = ref}
             onContentSizeChange={() => {
@@ -221,7 +229,7 @@ class ProductView extends React.Component {
                   />
             </View>
             {palette}
-            <View style={{padding:20, paddingTop:0, borderTopWidth:1, borderTopColor:'#d8d8d8'}}>
+            <View style={{padding:20, paddingBottom:0, paddingTop:0, borderTopWidth:1, borderTopColor:'#d8d8d8'}}>
               <View style={{flexDirection:'row', height:55, alignItems:'center'}}>
                 <Text style={{ fontSize:18, fontFamily:'brandon', fontWeight:'bold'}}>₺{item.salePrice}</Text>
                 {listPrice}
@@ -255,7 +263,9 @@ class ProductView extends React.Component {
               </View>
 
             </View>
+            {_videos}
             {recommendations}
+            <View style={{height:60}} />
           </ScrollView>
         </View> 
       )
