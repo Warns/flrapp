@@ -27,7 +27,8 @@
                 },
                 "data": {
                     "productId": 0
-                }
+                },
+                "navigation": "ExtraUser"
             },
             {
                 "title": "TAKİP LİSTEM",
@@ -41,7 +42,8 @@
                     "id": "productId",
                     "arr": "products"
                 },
-                "data": {}
+                "data": {},
+                "navigation": "ExtraUser"
             },
             {
                 "title": "SİPARİŞLERİM",
@@ -55,12 +57,14 @@
                     "id": "orderId",
                     "arr": "orders"
                 },
-                "data": {}
+                "data": {},
+                "navigation": "ExtraUser"
             },
             {
                 "title": "KİŞİSEL BİLGİLERİM",
                 "type": "form",
-                "itemType": "setUser"
+                "itemType": "setUser",
+                "navigation": "ExtraUser"
             },
             /*{
                 "title": "FİLTRE",
@@ -81,7 +85,8 @@
                 },
                 "data": {
                     "addressId": 0
-                }
+                },
+                "navigation": "ExtraUser"
             },
             {
                 "title": "ÇIKIŞ",

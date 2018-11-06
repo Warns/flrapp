@@ -59,7 +59,7 @@ class ExtraButton extends Component {
                         source={ICONS['flormarExtra']}
                     />
                     <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                        <Text style={{ color: '#FFFFFF', fontFamily: 'RegularTyp2', fontSize: 16 }}>{Utils.getPriceFormat(12)}</Text>
+                        <Text style={{ color: '#FFFFFF', fontFamily: 'RegularTyp2', fontSize: 16 }}>{Utils.getPriceFormat(23)}</Text>
                         <Image
                             style={{ width: 40, height: 40 }}
                             source={ICONS['rightArrowWhite']}

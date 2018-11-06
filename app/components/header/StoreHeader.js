@@ -26,8 +26,8 @@ class StoreHeader extends Component {
         const _self = this,
             { navigation } = _self.props;
 
-        if (navigation)
-            navigation.navigate('Detail', {});
+        /*if (navigation)
+            navigation.navigate('Detail', {});*/
     }
 
     render() {

@@ -57,10 +57,17 @@ const RootStackNavigator = createStackNavigator(
       }
     },
 
+    ExtraUser: {
+      screen: ExtraNavigation,
+      navigationOptions: {
+        header: () => <DefaultHeader />,
+      }
+    },
+
     Cart: {
       screen: props => <CartNavigation />,
       navigationOptions: {
-        header: () => <CartHeader />,
+        header: () => <DefaultHeader />,
       }
     },
 

@@ -5,11 +5,13 @@ import {
     Animated,
     Image,
     Platform,
+    Linking,
 } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 import { StoreHeader, } from 'root/app/components/';
 import { LocationService, } from 'root/app/helper/';
 import { Viewer } from 'root/app/viewer/';
+import { LoadingButton } from 'root/app/UI';
 import {
     ICONS,
     SERVICE_LIST_CLICKED,
@@ -85,15 +87,40 @@ class AddressDetail extends Component {
         }
     }
 
+    _onPress = () => {
+        const _self = this,
+            { phoneNo = '' } = _self.props.data;
+
+        Linking.openURL('tel:' + phoneNo);
+    }
+
+    _getPhoneButton = () => {
+        const _self = this,
+            { phoneNo = '' } = _self.props.data;
+
+        let view = null;
+
+        if (phoneNo != '')
+            view = (
+                <View style={{ flex: 1, marginLeft: 15 }}>
+                    <LoadingButton onPress={_self._onPress}>{'MAĞAZAYI ARA'}</LoadingButton>
+                </View>
+            );
+
+        return view;
+    }
+
     render() {
         const _self = this,
-            { serviceName, address, phoneNo } = _self.props.data;
+            { serviceName, address, } = _self.props.data;
         return (
             <Animated.View style={{ position: 'absolute', bottom: 0, zIndex: 2, backgroundColor: '#FFFFFF', width: '100%', minHeight: 100, paddingLeft: 30, paddingBottom: 20, paddingTop: 30, paddingRight: 20 }}>
                 <Text style={{ fontFamily: 'Medium', fontSize: 16, marginBottom: 6 }}>{serviceName}</Text>
                 <Text style={{ fontFamily: 'RegularTyp2', fontSize: 15, marginBottom: 12 }}>{address}</Text>
-                <Text style={{ fontFamily: 'Regular', fontSize: 15, }}>{_self.state.distance}   {_self.state.duration}</Text>
-                <Text>{phoneNo}</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Text style={{ fontFamily: 'Regular', fontSize: 15, }}>{_self.state.distance}   {_self.state.duration}</Text>
+                    {_self._getPhoneButton()}
+                </View>
             </Animated.View>
         );
     }
@@ -185,7 +212,7 @@ class Detail extends React.Component {
                     onPress={() => _self._reset()}
                     ref={(ref) => { _self.Map = ref }}
                     onLayout={() => _self.Map.fitToCoordinates(coordsArr, { edgePadding: { top: 10, right: 10, bottom: 10, left: 10 }, animated: false })}
-                    maxZoomLevel={13}
+                    maxZoomLevel={10}
                     zoomControlEnabled={true}
                 >
                     {items}
@@ -244,10 +271,12 @@ class Main extends Component {
                 /* 
                     not: iilk açılışta tüm data gelsin denilirse data kısmından countryId silinmeli
                 */
-                const defCountry = 1;
+                const defCountry = 1,
+                    defCity = 1;
 
                 DATA['data'] = {
                     countryId: defCountry,
+                    cityId: defCity,
                 };
 
                 DATA['filterData'] = {
@@ -255,7 +284,7 @@ class Main extends Component {
                     id: 'country',
                     value: {
                         country: defCountry,
-                        city: 0,
+                        city: defCity,
                         district: 0,
                     },
                     services: true

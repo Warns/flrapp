@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {
+    ScrollView,
     View,
     TouchableOpacity,
     Text
@@ -35,7 +36,9 @@ const CONFIG = {
 const Cart = class Main extends Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            paddingBottom: 125
+        };
     }
 
     componentWillUnmount() {
@@ -68,8 +71,8 @@ const Cart = class Main extends Component {
         const _self = this,
             { navigation } = _self.props;
 
-        if (navigation)
-            navigation.navigate('Address', {});
+        /*if (navigation)
+            navigation.navigate('Address', {});*/
     }
 
     _onCouponCallback = ({ type, data = {} }) => {
@@ -81,15 +84,25 @@ const Cart = class Main extends Component {
 
     _noResult = () => {
         const _self = this;
-        _self.props.dispatch({ type: SET_CART_NO_RESULT, value: true }); 
+        _self.props.dispatch({ type: SET_CART_NO_RESULT, value: true });
+    }
+
+    _onExpand = (b) => {
+        const _self = this,
+            paddingBottom = b ? 150 : 125;
+
+        _self.setState({ paddingBottom: paddingBottom });
     }
 
     render() {
-        const _self = this;
+        const _self = this,
+            { paddingBottom } = _self.state;
         return (
             <View style={{ flex: 1 }}>
-                <Viewer noResult={_self._noResult} onRef={ref => (_self.child = ref)} {..._self.props} style={{ paddingLeft: 10, paddingRight: 10, paddingBottom: 125 }} config={DATA} response={this._response} callback={this._callback} />
-                <Footer onCouponCallback={_self._onCouponCallback} onPress={_self._onPress} data={CONFIG} />
+
+                <Viewer noResult={_self._noResult} onRef={ref => (_self.child = ref)} {..._self.props} config={DATA} style={{ paddingBottom: paddingBottom }} response={this._response} callback={this._callback} />
+
+                <Footer expand={_self._onExpand} onCouponCallback={_self._onCouponCallback} onPress={_self._onPress} data={CONFIG} />
             </View>
         )
     }

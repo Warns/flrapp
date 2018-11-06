@@ -25,10 +25,14 @@ export const ICONS = {
     youtube: require('root/assets/icons/youtube.png'),
     noConnection: require('root/assets/icons/noConnection.png'),
     plcFeeds: require('root/assets/icons/placeholder/feeds.png'),
-    noResult: require('root/assets/icons/noConnection.png'),
+    noResult: require('root/assets/icons/cartNoResult.png'),
     flormarExtra: require('root/assets/icons/flormarExtra.png'),
     userWomen: require('root/assets/icons/userWoman.png'),
     userMen: require('root/assets/icons/userMan.png'),
+    campaingRectangle: require('root/assets/images/campaing-rectangle.png'),
+    campaingTitle: require('root/assets/images/campaing-title.png'),
+    downArrow: require('root/assets/icons/bottomArrow.png'),
+    upArrow: require('root/assets/icons/topArrow.png'),
 };
 
 /* CARDS ICON */
