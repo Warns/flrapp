@@ -7,6 +7,8 @@ import {
 import { connect } from 'react-redux';
 import { createStackNavigator, createMaterialTopTabNavigator } from 'react-navigation';
 
+import { store } from 'root/app/store';
+
 import SplashPage from '../app/views/Splash';
 import CategoryPage from '../app/views/Category';
 import StoreNavigation from './StoreNavigation';
@@ -14,11 +16,12 @@ import CartNavigation from './CartNavigation';
 import ExtraNavigation from './ExtraNavigation';
 import HomeTabNavigator from './HomeTabNavigation';
 
+
 // this is for dev reasons
 import ProductPage from '../app/views/Product';
 import ListPage from '../app/views/List';
+import { CartHeader, DefaultHeader, MinimalHeader } from 'root/app/components/';
 
-import { CartHeader, DefaultHeader } from 'root/app/components/';
 
 //import registerForPushNotificationsAsync from '../api/registerForPushNotificationsAsync';
 
@@ -67,7 +70,12 @@ const RootStackNavigator = createStackNavigator(
     Cart: {
       screen: props => <CartNavigation />,
       navigationOptions: {
-        header: () => <DefaultHeader />,
+        header: (props) => {
+          const { cart } = store.getState(),
+            { progress = "1/3" } = cart;
+            
+          return <MinimalHeader title="Sepetim" progress={progress} />;
+        }
       }
     },
 

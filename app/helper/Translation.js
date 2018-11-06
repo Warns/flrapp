@@ -47,6 +47,7 @@ module.exports = {
         vat: 'Toplam KDV'
     },
     errorMessage: {
+        /*
         isEmpty: 'Lütfen {{title}} alanını doldurunuz.',
         isMin: '{{title}} alanı minimum {{value}} karekter olmalıdır.',
         isMax: '{{title}} alanı maximum {{value}} karekter olmalıdır.',
@@ -58,6 +59,19 @@ module.exports = {
         isPassword: 'Lütfen {{title}} alanınının formatını doğru giriniz.',
         isTwo: '{{title}} bölümü en az iki kelime halinde doldurulmalıdır.',
         isEqual: '{{title}} alanı ile {{value}} eşit olmalıdır.',
+        */
+
+       isEmpty: 'zorunlu alan',
+       isMin: 'min. karekter sayısı {{value}}',
+       isMax: 'maks. karekter sayısı {{value}}',
+       isSelection: 'seçim yap',
+       isChecked: 'seçim yap',
+       isMail: 'geçersiz format',
+       isDate: 'geçersiz format',
+       isPhone: 'eksik numara',
+       isPassword: 'zorunlu alan',
+       isTwo: 'en az iki kelime',
+       isEqual: '{{value}} ile eşit değil',
     },
     feeds: {
         instagram: 'Keşfet',

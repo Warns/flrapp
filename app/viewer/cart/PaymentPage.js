@@ -12,6 +12,7 @@ import {
     ICONS,
     SET_VIEWER,
     FORMDATA,
+    SET_CART_PROGRESS
 } from 'root/app/helper/Constant';
 import { connect } from 'react-redux';
 import Footer from './Footer';
@@ -194,8 +195,11 @@ const Payment = class Main extends Component {
     }
 
     componentDidMount() {
-        const _self = this;
+        const _self = this,
+            { navigation } = _self.props;
+
         _self._isMounted = true;
+        
         _self.setAjx({ uri: Utils.getURL({ key: 'cart', subKey: 'getCart' }), data: { cartLocation: 'payment' } }, (res) => {
             _self.props.dispatch({ type: SET_CART_INFO, value: res.data });
             setTimeout(() => {
@@ -204,6 +208,8 @@ const Payment = class Main extends Component {
             }, 10);
         });
 
+        if (navigation)
+            _self._Listener = navigation.addListener('willFocus', _self.onWillFocus);
 
         /*
         https://github.com/braintree/credit-card-type
@@ -225,9 +231,20 @@ const Payment = class Main extends Component {
         */
     }
 
-    componentWillUnmount() {
+    onWillFocus = () => {
         const _self = this;
+        _self.props.dispatch({ type: SET_CART_PROGRESS, value: "3/3" });
+    }
+
+
+    componentWillUnmount() {
+        const _self = this,
+            { navigation } = _self.props;
+
         _self._isMounted = false;
+
+        if (navigation)
+            _self._Listener.remove();
     }
 
     _getPayment = () => {

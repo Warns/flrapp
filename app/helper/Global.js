@@ -245,7 +245,7 @@ module.exports = {
         )
     },
     filterToSelectObject: function (filters) {
-        const obj = {}, filter = { sendAjx: false, buttonText:'UYGULA', fields: [] };
+        const obj = {}, filter = { sendAjx: false, buttonText: 'UYGULA', showButton: false, fields: [] };
 
         Object.entries(filters).forEach(([ind, value]) => {
             const key = value['filterGroupName'] || '';
@@ -263,7 +263,7 @@ module.exports = {
 
                     return { key: val['filterName'], value: val['filterId'] };
                 }),
-                o = { id: key, defaultTitle: key, multiple: true, type: 'select', values: values, value: sel.length > 0 ? sel : -1 };
+                o = { id: key, defaultTitle: key, multiple: true, type: 'select', showHeader: false, values: values, value: sel.length > 0 ? sel : -1, ico: 'rightArrow', icoStyle: { width: 40, height: 40 }, css: { defaultTitleStyle: { fontWeight: 'bold', fontSize: 16, color: '#000000' }, fontStyle: { fontSize: 12, color: "#afafaf", }, containerStyle: { marginBottom: 0 }, wrapperStyle: { borderRadius: 0, height: 60, borderLeftWidth: 0, borderTopWidth: 0, borderRightWidth: 0, paddingLeft: 10, paddingRight: 10, } } };
 
 
             k['items'].push(o);

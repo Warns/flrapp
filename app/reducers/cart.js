@@ -10,9 +10,11 @@ import {
     RESET_CART,
     ADD_TO_FAVORITES,
     REMOVE_FROM_FAVORITES,
+    SET_CART_PROGRESS
 } from 'root/app/helper/Constant';
 
 const cartInitialState = {
+    progress: '1/3',
     name: 'Cart',
     cartProductsNumber: 0,
     cartInfo: {},
@@ -137,6 +139,14 @@ export default function cart(state = cartInitialState, action) {
                 }, 
             }
         };
+        case SET_CART_PROGRESS: {
+            return {
+                ...state,
+                progress: action.value
+            }
+        };
+
+        
         default:
             return state;
     }

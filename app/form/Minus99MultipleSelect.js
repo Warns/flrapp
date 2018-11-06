@@ -43,17 +43,22 @@ class DefaultInput extends React.Component {
 
     render() {
         const _self = this,
-            { defaultTitle = '', fontStyle = {} } = _self.props;
-        let view = null;
-        if (defaultTitle != '')
+            { defaultTitle = '', fontStyle = {}, defaultTitleStyle = {} } = _self.props;
+        let view = null,
+            sty = {};
+        if (defaultTitle != ''){
+            sty = { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' };
             view = (
-                <Text numberOfLines={1} style={[{ fontSize: 16, color: '#000000' }, fontStyle]}>{defaultTitle}</Text>
+                <Text numberOfLines={1} style={[{ fontSize: 16, color: '#000000' }, fontStyle, defaultTitleStyle]}>{defaultTitle}</Text>
             );
+        }
 
         return (
             <TouchableOpacity activeOpacity={0.7} onPress={this._onPress}>
-                {view}
-                <Text numberOfLines={1} style={[{ fontSize: 16, color: '#000000' }, fontStyle]}>{this.props.value}</Text>
+                <View style={sty}>
+                    {view}
+                    <Text numberOfLines={1} style={[{ fontSize: 16, color: '#000000' }, fontStyle]}>{this.props.value}</Text>
+                </View>
             </TouchableOpacity>
         );
     }
@@ -120,7 +125,7 @@ class Minus99MultipleSelect extends React.Component {
     _multiSelect = null;
 
     render() {
-        const { multiple = true, selections = [], fontStyle = {} } = this.props
+        const { multiple = true, selections = [], fontStyle = {}, defaultTitleStyle = {} } = this.props
         const { selectedItems, items } = this.state;
 
         let selected = "";
@@ -142,7 +147,7 @@ class Minus99MultipleSelect extends React.Component {
 
         return (
             <View style={{ flex: 1 }}>
-                <DefaultInput fontStyle={fontStyle} defaultTitle={this.props.defaultTitle} name={title} value={selected} callback={this._openSelectionBox} />
+                <DefaultInput defaultTitleStyle={defaultTitleStyle} fontStyle={fontStyle} defaultTitle={this.props.defaultTitle} name={title} value={selected} callback={this._openSelectionBox} />
                 {selectionbox}
             </View>
         );
