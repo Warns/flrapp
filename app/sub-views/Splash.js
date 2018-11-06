@@ -74,56 +74,16 @@ class Splash extends React.Component {
     this.props.navigation.navigate("Home");
   }
 
-  _openLoginForm = () => {
-
-    this.setState({
-      loginIsVisible: true,
-      videoIsPlaying: false,
-      images: [1,1,1],
-    });
-
-    Animated.timing(
-      this.state.fadeAnim, {
-        toValue: 1,
-        duration: 500,
-        easing: Easing.out(Easing.cubic),
-      }
-    ).start();
+  _onLoginPressed = () => {
+    //this.props.navigation.navigate('Phone');
   };
 
-  _onCloseLogin = () => {
-
-    this.setState({
-      loginIsVisible: false,
-    });
-
-    Animated.timing(
-      this.state.fadeAnim, {
-        toValue: 0,
-        duration: 500,
-        easing: Easing.inOut(Easing.cubic),
-      }
-    ).start();
-  }
-
-  _onLoginStatus = ({ type, data = {} }) => {
-    /* login durumu dönecek */
-    const _self = this,
-      { status, message } = data;
-    if (type == 'success') {
-      _self.props.dispatch({ type: SET_USER, value: data['data'] || {} });
-      setTimeout(() => {
-        _self._onCloseLogin();
-        _self.props.navigation.navigate('Home');
-      }, 10);
-    } else
-      alert(message);
-  }
+  _onSignupPressed = () => {
+    //this.props.navigation.navigate('Signup');
+  };
 
   _renderItem = ( obj, parallaxProps )=>{
 
-    console.log( obj.item );
-    
     if(obj.item.video)
     return(
       <View style={{flex:1, width:DIMENSIONS.width, height:DIMENSIONS.height}}>
@@ -137,7 +97,7 @@ class Splash extends React.Component {
           isLooping
           style={styles.backgroundImage}
         />
-        <View style={{position:'absolute', bottom:160, left:DIMENSIONS.width*.1, alignItems:'center', width:DIMENSIONS.width*.8}}>
+        <View style={{position:'absolute', bottom:190, left:DIMENSIONS.width*.1, alignItems:'center', width:DIMENSIONS.width*.8}}>
             <Text style={{fontSize:20, fontFamily:'Bold', color:'#ffffff'}}>{obj.item.title}</Text>
             <Text style={{color:'#ffffff', fontSize:15, textAlign: 'center',}}>{obj.item.text}</Text>
           </View>
@@ -174,7 +134,7 @@ class Splash extends React.Component {
                 width: 10,
                 height: 10,
                 borderRadius: 5,
-                marginHorizontal: 3,
+                marginHorizontal: 0,
                 backgroundColor: 'rgba(255, 255, 255, 0.92)'
             }}
             inactiveDotStyle={{
@@ -211,7 +171,7 @@ class Splash extends React.Component {
     });
 
     return (
-      <View style={{ backgroundColor: "#000000", flex: 1 }}>
+      <View style={{ backgroundColor: "#FF2B94", flex: 1 }}>
         <Carousel
                   ref={(c) => {this._carousel = c;}}
                   data={images}
@@ -243,7 +203,7 @@ class Splash extends React.Component {
           <View style={{ flex: 1, maxHeight: 70, flexDirection: 'row', marginBottom:5 }}>
             <View style={{ flex: 1, marginRight: 5 }}>
               <DefaultButton
-                callback={()=>{}}
+                callback={this._onLoginPressed}
                 name="GİRİŞ YAP"
                 boxColor="#ffffff"
                 textColor="#000000"
@@ -252,7 +212,7 @@ class Splash extends React.Component {
             </View>
             <View style={{ flex: 1, marginLeft: 5 }}>
               <DefaultButton
-                callback={()=>{}}
+                callback={this._onSignupPressed}
                 name="ÜYE OL"
                 boxColor="#ffffff"
                 textColor="#000000"

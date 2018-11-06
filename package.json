@@ -2,6 +2,9 @@
   "name": "root",
   "main": "node_modules/expo/AppEntry.js",
   "private": true,
+  "splash": {
+    "backgroundColor": "#FF2B94"
+  },
   "dependencies": {
     "@mapbox/geo-viewport": "0.4.0",
     "babel-preset-expo": "^4.0.0",

@@ -9,12 +9,12 @@ import { createStackNavigator, createMaterialTopTabNavigator } from 'react-navig
 
 import { store } from 'root/app/store';
 
-import SplashPage from '../app/views/Splash';
 import CategoryPage from '../app/views/Category';
 import StoreNavigation from './StoreNavigation';
 import CartNavigation from './CartNavigation';
 import ExtraNavigation from './ExtraNavigation';
 import HomeTabNavigator from './HomeTabNavigation';
+import OptinNavigator from './OptinNavigator';
 
 
 // this is for dev reasons
@@ -38,8 +38,11 @@ class CartPage extends React.Component {
 
 const RootStackNavigator = createStackNavigator(
   {
-    Splash: {
-      screen: SplashPage,
+    Optin: {
+      screen: OptinNavigator,
+      navigationOptions: {
+        header: null
+      }
     },
 
     Home: {

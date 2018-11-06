@@ -76,7 +76,7 @@ class Assistant extends React.Component{
           <View style={styles.circle}>
             <Image source={require('../../assets/images/assistant.gif')} style={{resizeMode:'contain', width:50, height:50, borderRadius:25}} />
           </View>
-          </TouchableOpacity>
+        </TouchableOpacity>
         <Modal
           animationType="none"
           transparent={true}
