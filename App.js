@@ -18,6 +18,7 @@ import { store } from './app/store.js';
 
 import Assistant from './app/components/Assistant';
 import ProductView from './app/views/Product';
+import YoutubePlayer from 'root/app/sub-views/YoutubePlayer';
 
 export default class App extends React.Component {
   state = {
@@ -53,7 +54,9 @@ export default class App extends React.Component {
             <Settings />
             <RootNavigation />
             <ProductView />
-            {//<Assistant />
+            {
+              //<YoutubePlayer />
+              //<Assistant />
             }
             <Preloader />
           </View>

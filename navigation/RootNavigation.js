@@ -20,6 +20,7 @@ import OptinNavigator from './OptinNavigator';
 // this is for dev reasons
 import ProductPage from '../app/views/Product';
 import ListPage from '../app/views/List';
+import YoutubePlayer from 'root/app/sub-views/YoutubePlayer';
 import { CartHeader, DefaultHeader, MinimalHeader } from 'root/app/components/';
 
 

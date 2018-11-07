@@ -112,7 +112,14 @@ export const FORMDATA = {
     setUser: require('root/data/setUser.js'),
     productFilter: require('root/data/productFilter.js'),
     useCoupon: require('root/data/useCoupon.js'),
-    creditCart: require('root/data/creditCart.js'), 
+    creditCart: require('root/data/creditCart.js'),
+    //Opt-in
+    optin_phone: require('root/data/optin_phone.js'),
+    optin_phoneConfirmation: require('root/data/optin_phoneConfirmation.js'),
+    optin_email: require('root/data/optin_email.js'),
+    optin_password: require('root/data/optin_password.js'),
+    optin_signup: require('root/data/optin_signup.js'),
+    optin_resetpassword: require('root/data/optin_resetpassword.js'),
 };
 
 /* form style, from->container.js */

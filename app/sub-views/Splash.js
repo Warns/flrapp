@@ -75,7 +75,7 @@ class Splash extends React.Component {
   }
 
   _onLoginPressed = () => {
-    //this.props.navigation.navigate('Phone');
+    this.props.navigation.navigate('Phone');
   };
 
   _onSignupPressed = () => {
@@ -84,10 +84,8 @@ class Splash extends React.Component {
 
   _renderItem = ( obj, parallaxProps )=>{
 
-    if(obj.item.video)
-    return(
-      <View style={{flex:1, width:DIMENSIONS.width, height:DIMENSIONS.height}}>
-        <Video
+    let media = obj.item.video ? (
+      <Video
           source={require('../../assets/loop.mp4')}
           rate={1.0}
           volume={1.0}
@@ -97,30 +95,26 @@ class Splash extends React.Component {
           isLooping
           style={styles.backgroundImage}
         />
-        <View style={{position:'absolute', bottom:190, left:DIMENSIONS.width*.1, alignItems:'center', width:DIMENSIONS.width*.8}}>
-            <Text style={{fontSize:20, fontFamily:'Bold', color:'#ffffff'}}>{obj.item.title}</Text>
-            <Text style={{color:'#ffffff', fontSize:15, textAlign: 'center',}}>{obj.item.text}</Text>
-          </View>
-      </View>
-    );
-    else
-    return( 
-      <View style={{flex:1, width:DIMENSIONS.width, height:DIMENSIONS.height}}>
-        <ParallaxImage
+    ) : (
+      <ParallaxImage
           source={{uri: obj.item.thumb }}
           parallaxFactor={0.3}
           containerStyle={{flex:1}}
           style={{resizeMode:'cover'}}
           showSpinner={true}
           {...parallaxProps}
-          >
-          </ParallaxImage>
-          <View style={{position:'absolute', bottom:190, left:DIMENSIONS.width*.1, alignItems:'center', width:DIMENSIONS.width*.8}}>
+         />
+    );
+
+    return(
+      <View style={{flex:1, width:DIMENSIONS.width, height:DIMENSIONS.height}}>
+        {media}
+        <View style={{position:'absolute', bottom:220, left:DIMENSIONS.width*.1, alignItems:'center', width:DIMENSIONS.width*.8}}>
             <Text style={{fontSize:20, fontFamily:'Bold', color:'#ffffff'}}>{obj.item.title}</Text>
-            <Text style={{color:'#ffffff', fontSize:15, textAlign: 'center'}}>{obj.item.text}</Text>
+            <Text style={{color:'#ffffff', fontSize:15, textAlign: 'center',}}>{obj.item.text}</Text>
           </View>
       </View>
-    )
+    );
   }
 
   get pagination () {
@@ -129,7 +123,7 @@ class Splash extends React.Component {
           <Pagination
             dotsLength={images.length}
             activeDotIndex={activeSlide}
-            containerStyle={{ position:'absolute', width:'100%', bottom:130 }}
+            containerStyle={{ position:'absolute', width:'100%', bottom:160 }}
             dotStyle={{
                 width: 10,
                 height: 10,

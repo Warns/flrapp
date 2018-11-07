@@ -13,6 +13,10 @@ import { NAVIGATE } from 'root/app/helper/Constant';
 
 import LoadingPage from 'root/app/sub-views/Loading';
 import SplashPage from 'root/app/sub-views/Splash';
+import PhonePage from 'root/app/sub-views/Phone';
+import PhoneConfirmationPage from 'root/app/sub-views/PhoneConfirmation';
+
+import { CartHeader, DefaultHeader, MinimalHeader } from 'root/app/components/';
 
 
 class Loading extends React.Component{
@@ -24,20 +28,16 @@ class Splash extends React.Component{
 }
 
 class Phone extends React.Component{
-  render(){
-    return <View style={{flex:1, justifyContent:'center', alignItems:'center'}}><Text>Phone</Text></View>
-  }
+  render(){ return <PhonePage {...this.props} /> }
 }
 
 class PhoneConfirmation extends React.Component{
-  render(){
-    return <View style={{flex:1, justifyContent:'center', alignItems:'center'}}><Text>PHone Confirmation</Text></View>
-  }
+  render(){ return <PhoneConfirmationPage {...this.props} /> }
 }
 
 class Email extends React.Component{
   render(){
-    return <View style={{flex:1, justifyContent:'center', alignItems:'center'}}><Text>Email</Text></View>
+    return <View style={{flex:1, justifyContent:'center', alignItems:'center'}}><Text>Voila! Email</Text></View>
   }
 }
 
@@ -76,7 +76,11 @@ const OptinNavigator = createStackNavigator(
     initialRouteName:'Loading',
     headerMode: 'none',
     navigationOptions: {
-      gesturesEnabled: false
+      gesturesEnabled: false,
+    },
+    cardStyle:{
+      backgroundColor:'#ffffff',
+      elevation:0,
     }
   }
 );

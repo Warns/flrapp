@@ -27,7 +27,7 @@ export default class Loading extends React.Component{
 
     setTimeout(() => {
       this._getOut();
-    }, 2000);
+    }, 2500);
   }
 
   _getOut = ()=>{
