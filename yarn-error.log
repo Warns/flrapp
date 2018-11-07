@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/bin/node /usr/local/Cellar/yarn/1.7.0/libexec/bin/yarn.js add rn-placeholder
+  /usr/local/bin/node /usr/local/Cellar/yarn/1.7.0/libexec/bin/yarn.js add react-native-voice
 
 PATH: 
   /Users/proje/Library/Android/sdk/platform-tools:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
@@ -22,10 +22,15 @@ npm manifest:
     "name": "root",
     "main": "node_modules/expo/AppEntry.js",
     "private": true,
+    "splash": {
+      "backgroundColor": "#FF2B94"
+    },
     "dependencies": {
       "@mapbox/geo-viewport": "0.4.0",
       "babel-preset-expo": "^4.0.0",
+      "credit-card-type": "^8.0.0",
       "expo": "^28.0.0",
+      "html-entities": "^1.2.1",
       "react": "16.3.1",
       "react-content-loader": "^3.2.0",
       "react-native": "https://github.com/expo/react-native/archive/sdk-28.0.0.tar.gz",
@@ -33,14 +38,16 @@ npm manifest:
       "react-native-datepicker": "^1.7.2",
       "react-native-global-props": "^1.1.3",
       "react-native-map-clustering": "^1.3.0",
-      "react-native-masked-text": "^1.7.2",
+      "react-native-masked-text": "^1.9.2",
       "react-native-render-html": "^3.10.0",
       "react-native-safe-area-view": "^0.9.0",
       "react-native-sideswipe": "^1.4.2",
       "react-native-snap-carousel": "^3.7.2",
+      "react-native-view-overflow": "^0.0.3",
       "react-navigation": "^2.5.2",
       "react-redux": "^5.0.7",
       "redux": "^4.0.0",
+      "rn-placeholder": "^1.3.0",
       "supercluster": "4.1.1"
     }
   }
@@ -511,25 +518,6 @@ Lockfile:
   "@mapbox/sphericalmercator@~1.1.0":
     version "1.1.0"
     resolved "https://registry.yarnpkg.com/@mapbox/sphericalmercator/-/sphericalmercator-1.1.0.tgz#f3b1af042620716a1289fc41e1e97f610823aefe"
-  
-  "@types/prop-types@*":
-    version "15.5.5"
-    resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.5.5.tgz#17038dd322c2325f5da650a94d5f9974943625e3"
-    dependencies:
-      "@types/react" "*"
-  
-  "@types/react-native@*":
-    version "0.56.6"
-    resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.56.6.tgz#d9c60e1df95ec0402fa956225558c8a48f37f23f"
-    dependencies:
-      "@types/react" "*"
-  
-  "@types/react@*":
-    version "16.4.9"
-    resolved "https://registry.yarnpkg.com/@types/react/-/react-16.4.9.tgz#98b4dba5a0419dbd594f5dbbb2479e1e153431bb"
-    dependencies:
-      "@types/prop-types" "*"
-      csstype "^2.2.0"
   
   abbrev@1:
     version "1.1.1"
@@ -1715,6 +1703,10 @@ Lockfile:
     version "5.0.4"
     resolved "https://registry.yarnpkg.com/credit-card-type/-/credit-card-type-5.0.4.tgz#2dd9df280411ce2bb91ed95ac31e814605717aed"
   
+  credit-card-type@^8.0.0:
+    version "8.0.0"
+    resolved "https://registry.yarnpkg.com/credit-card-type/-/credit-card-type-8.0.0.tgz#e65347bcdb979b4deb3107cd43a1cd9da802cd50"
+  
   cross-spawn@^5.0.1, cross-spawn@^5.1.0:
     version "5.1.0"
     resolved "https://registry.yarnpkg.com/cross-spawn/-/cross-spawn-5.1.0.tgz#e8bd0efee58fcff6f8f94510a0a554bbfa235449"
@@ -1722,10 +1714,6 @@ Lockfile:
       lru-cache "^4.0.1"
       shebang-command "^1.2.0"
       which "^1.2.9"
-  
-  csstype@^2.2.0:
-    version "2.5.6"
-    resolved "https://registry.yarnpkg.com/csstype/-/csstype-2.5.6.tgz#2ae1db2319642d8b80a668d2d025c6196071e788"
   
   debug@2.6.9, debug@^2.1.2, debug@^2.2.0, debug@^2.3.3, debug@^2.6.8, debug@^2.6.9:
     version "2.6.9"
@@ -2343,7 +2331,7 @@ Lockfile:
     version "2.6.0"
     resolved "https://registry.yarnpkg.com/hosted-git-info/-/hosted-git-info-2.6.0.tgz#23235b29ab230c576aab0d4f13fc046b0b038222"
   
-  html-entities@^1.2.0:
+  html-entities@^1.2.0, html-entities@^1.2.1:
     version "1.2.1"
     resolved "https://registry.yarnpkg.com/html-entities/-/html-entities-1.2.1.tgz#0df29351f0721163515dfb9e5543e5f6eed5162f"
   
@@ -3571,7 +3559,7 @@ Lockfile:
     dependencies:
       asap "~2.0.3"
   
-  prop-types@^15.5.10, prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.1:
+  prop-types@15.6.2, prop-types@^15.5.10, prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.1:
     version "15.6.2"
     resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.6.2.tgz#05d5ca77b4453e985d60fc7ff8c859094a497102"
     dependencies:
@@ -3711,12 +3699,10 @@ Lockfile:
       babel-plugin-module-resolver "^2.3.0"
       babel-preset-react-native "1.9.0"
   
-  react-native-masked-text@^1.7.2:
-    version "1.7.2"
-    resolved "https://registry.yarnpkg.com/react-native-masked-text/-/react-native-masked-text-1.7.2.tgz#82dadbd19c856354a99bbac6e218b5e6a4365157"
+  react-native-masked-text@^1.9.2:
+    version "1.9.2"
+    resolved "https://registry.yarnpkg.com/react-native-masked-text/-/react-native-masked-text-1.9.2.tgz#184f661025a77608f30ebcda27f416be67968b27"
     dependencies:
-      "@types/react" "*"
-      "@types/react-native" "*"
       moment "2.19.3"
       tinymask "^1.0.2"
   
@@ -3796,6 +3782,10 @@ Lockfile:
       lodash "^4.0.0"
       prop-types "^15.5.10"
       yargs "^8.0.2"
+  
+  react-native-view-overflow@^0.0.3:
+    version "0.0.3"
+    resolved "https://registry.yarnpkg.com/react-native-view-overflow/-/react-native-view-overflow-0.0.3.tgz#d7b08e8c1e5047a2cf07f3ece82025899f930674"
   
   "react-native@https://github.com/expo/react-native/archive/sdk-28.0.0.tar.gz":
     version "0.55.4"
@@ -4078,6 +4068,12 @@ Lockfile:
   rimraf@~2.2.6:
     version "2.2.8"
     resolved "https://registry.yarnpkg.com/rimraf/-/rimraf-2.2.8.tgz#e439be2aaee327321952730f99a8929e4fc50582"
+  
+  rn-placeholder@^1.3.0:
+    version "1.3.0"
+    resolved "https://registry.yarnpkg.com/rn-placeholder/-/rn-placeholder-1.3.0.tgz#9ba19493e1a72098176d7f3b3bb60aa3775e913a"
+    dependencies:
+      prop-types "15.6.2"
   
   rsvp@^3.3.3:
     version "3.6.2"

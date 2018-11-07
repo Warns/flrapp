@@ -2,7 +2,8 @@ import React from 'react';
 import {
   StatusBar,
   StyleSheet,
-  View
+  View,
+  KeyboardAvoidingView
 } from 'react-native';
 import { AppLoading, Asset, Font } from 'expo';
 import { Settings, OfflineNotice } from 'root/app/helper/';
@@ -26,7 +27,7 @@ export default class App extends React.Component {
   };
   f
   componentDidMount() {
-    
+
   }
 
   _filterCallback = (o) => {
@@ -45,10 +46,18 @@ export default class App extends React.Component {
     } else {
       return (
         <Provider store={store}>
-          <View style={styles.container}>
-            {/*Platform.OS === 'ios' && <StatusBar barStyle="default" />*/}
-            {/*Platform.OS === 'android' && <View style={styles.statusBarUnderlay} />*/}
+          <KeyboardAvoidingView
+            behavior={"padding"}
+            pointerEvents="box-none"
+            style={{
+              flex: 1
+            }}
+          >
+            <View style={styles.container}>
+              {/*Platform.OS === 'ios' && <StatusBar barStyle="default" />*/}
+              {/*Platform.OS === 'android' && <View style={styles.statusBarUnderlay} />*/}
 
+<<<<<<< HEAD
             <OfflineNotice />
             <TopMenu />
             <Settings />
@@ -60,6 +69,18 @@ export default class App extends React.Component {
             }
             <Preloader />
           </View>
+=======
+              <OfflineNotice />
+              <TopMenu />
+              <Settings />
+              <RootNavigation />
+              <ProductView />
+              {<Assistant />
+              }
+              <Preloader />
+            </View>
+          </KeyboardAvoidingView>
+>>>>>>> 98a38e57b1b9af99844d2b513b4cc0cb101fd0ab
         </Provider>
       );
     }

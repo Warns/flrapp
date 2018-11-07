@@ -120,7 +120,7 @@ class SelectBox extends Component {
 
     render() {
         const _self = this,
-            { title, error = false, errorMsg = null, multiple = false, defaultTitle = '', ico = 'drpIco', icoStyle = { width: 12, height: 8 } } = _self.props.data,
+            { title, error = false, errorMsg = null, multiple = false, defaultTitle = '', ico = 'drpIco', icoStyle = { width: 12, height: 8 }, modalTitle = 'KAPAT' } = _self.props.data,
             { control = false, containerStyle = {}, wrapperStyle = {}, showHeader = true, fontStyle = {}, defaultTitleStyle = {}, } = _self.props;
 
         if (control)
@@ -129,7 +129,7 @@ class SelectBox extends Component {
         return (
             <Container showHeader={showHeader} containerStyle={{ ...containerStyle }} wrapperStyle={{ ...wrapperStyle }} titleShow={true} title={title} error={error} errorMsg={errorMsg}>
                 
-                <Minus99MultipleSelect onRef={ref => (_self.child = ref)} defaultTitleStyle={defaultTitleStyle} fontStyle={fontStyle} defaultTitle={defaultTitle} callback={_self._closed} selected={_self._getIndex()} multiple={multiple} items={_self._getItems()} />
+                <Minus99MultipleSelect name={modalTitle} onRef={ref => (_self.child = ref)} defaultTitleStyle={defaultTitleStyle} fontStyle={fontStyle} defaultTitle={defaultTitle} callback={_self._closed} selected={_self._getIndex()} multiple={multiple} items={_self._getItems()} />
                 
                 <Image source={ICONS[ico]} style={icoStyle} />
 

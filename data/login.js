@@ -15,7 +15,7 @@ module.exports = {
                     id: 'email',
                     title: 'Kullanıcı Adı',
                     type: 'text',
-                    value: 'info@proj-e.com',
+                    value: '',
                     validation: [{ key: 'isEmpty' }, { key: 'isMail', }],
                     keyboardType: 'email-address',
                 },
@@ -28,7 +28,7 @@ module.exports = {
                     title: 'Şifre',
                     type: 'text',
                     secureTextEntry: true,
-                    value: '111111',
+                    value: '',
                     validation: [{ key: 'isEmpty' }, { key: 'isMin', value: 6 }, { key: 'isPassword' },],
                 }
             ]

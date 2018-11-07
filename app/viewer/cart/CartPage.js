@@ -12,7 +12,8 @@ import {
     DATA_LOADED,
     SET_CART_NO_RESULT,
     RESET_CART,
-    SET_CART_PROGRESS
+    SET_CART_PROGRESS,
+    ASSISTANT_SHOW
 } from 'root/app/helper/Constant';
 import { connect } from 'react-redux';
 import Footer from './Footer';
@@ -53,6 +54,8 @@ const Cart = class Main extends Component {
 
         if (navigation)
             _self._Listener = navigation.addListener('willFocus', _self.onWillFocus);
+
+        _self.props.dispatch({ type: ASSISTANT_SHOW, value: false });
     }
 
     componentWillUnmount() {
@@ -63,6 +66,9 @@ const Cart = class Main extends Component {
 
         if (navigation)
             _self._Listener.remove();
+
+
+        _self.props.dispatch({ type: ASSISTANT_SHOW, value: true });
     }
 
     _callback = ({ type, data }) => {
