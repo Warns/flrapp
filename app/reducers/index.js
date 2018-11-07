@@ -9,6 +9,7 @@ import rootNavigation from './rootNavigation';
 import location from './location';
 import offlineNotice from './offlineNotice';
 import segmentify from './segmentify';
+import assistant from './assistant';
 
 export default combineReducers({
   general,
@@ -20,4 +21,5 @@ export default combineReducers({
   location,
   offlineNotice,
   segmentify,
+  assistant
 });

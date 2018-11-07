@@ -289,7 +289,7 @@ class SelectionBox extends React.Component {
 
     render() {
 
-        const { items, name } = this.props;
+        const { items, name = "KAPAT" } = this.props;
         const { searchTerm, selectedItems, short } = this.state;
         const renderItems = searchTerm ? this._filterItems(searchTerm.trim()) : items;
 
@@ -323,7 +323,7 @@ class SelectionBox extends React.Component {
             >
 
                 <View style={{ flex: 1, }}>
-                    <MinimalHeader onPress={this._onClose} title="KAPAT" right={<View></View>} />
+                    <MinimalHeader onPress={this._onClose} title={name} right={<View></View>} />
                     {header}
                     <View style={{ position: 'relative' }}>
                         <View style={{ backgroundColor: "#ffffff", flexDirection: "row", flexWrap: "wrap", padding: 5, paddingTop: 0, marginRight: 40, marginLeft: 10, paddingLeft: 0 }}>
@@ -333,7 +333,7 @@ class SelectionBox extends React.Component {
                             <IconButton icon={<Image source={require("root/assets/icons/trash.png")} style={styles.iconNormalSize} />} callback={this._clearAll} />
                         </Animated.View>
                     </View>
-                    <FlatList style={{ backgroundColor: "#FFFFFF", marginLeft: 20, marginRight: 20 }}
+                    <FlatList style={{ backgroundColor: "#FFFFFF" }}
                         keyExtractor={this._keyExtractor}
                         renderItem={this._renderItem}
                         data={renderItems}
@@ -360,7 +360,7 @@ class ListItem extends React.Component {
             <TouchableOpacity
                 activeOpacity={0.8}
                 onPress={this._onPress}>
-                <View style={{ flex: 1, flexDirection: "row", borderBottomColor: "#d8d8d8", borderBottomWidth: 1, alignItems: "center", height: 60, paddingRight: 10, paddingLeft: 10 }}>
+                <View style={{ flex: 1, flexDirection: "row", borderBottomColor: "#d8d8d8", borderBottomWidth: 1, alignItems: "center", height: 60, paddingRight: 10, paddingLeft: 10, marginLeft: 20, marginRight: 20 }}>
                     <View style={{ flex: 1 }}>
                         <Text numberOfLines={1} style={[styles.normal, styles.bold, { color: '#000000' }]}>{item.name}</Text>
                     </View>
