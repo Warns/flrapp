@@ -8,16 +8,18 @@ import {
     Linking,
 } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
-import { StoreHeader, } from 'root/app/components/';
+import { StoreHeader, MinimalHeader } from 'root/app/components/';
 import { LocationService, } from 'root/app/helper/';
 import { Viewer } from 'root/app/viewer/';
-import { LoadingButton } from 'root/app/UI';
+import { LoadingButton, IconButton } from 'root/app/UI';
 import {
     ICONS,
     SERVICE_LIST_CLICKED,
     DATA_LOADED,
-    LOCATION_SERVICE
+    LOCATION_SERVICE,
+    NAVIGATE
 } from 'root/app/helper/Constant';
+import { store } from 'root/app/store';
 import { MapView } from 'expo';
 const { Marker } = MapView;
 
@@ -171,16 +173,21 @@ class Detail extends React.Component {
 
     _getViewer = () => {
         const _self = this,
-            { markers, showDetail, detail = {} } = _self.state;
+            { markers, showDetail, detail = {} } = _self.state,
+            act = Object.entries(detail).length > 0 ? true : false;/* active item gonderilmişse ona odaklansın gönderilmemişse tüm gelen datanın ortalama corrdinatına odaklansın */
+
         let view = null;
 
         if (markers.length > 0) {
-            const coordsArr = [],
+
+            const coordsArr = act ? [{ latitude: parseFloat(detail['serviceLatitude'] || ''), longitude: parseFloat(detail['serviceLongitude'] || '') }] : [],
                 items = markers.map((item, index) => {
                     const { serviceId, serviceLatitude, serviceLongitude, serviceName, address } = item;
                     if (serviceLatitude != '' && serviceLongitude != '') {
                         const coords = { latitude: parseFloat(serviceLatitude), longitude: parseFloat(serviceLongitude) };
-                        coordsArr.push(coords);
+
+                        if (!act)
+                            coordsArr.push(coords);
 
                         let op = 1;
                         if (showDetail && serviceId != detail['serviceId'])
@@ -212,7 +219,7 @@ class Detail extends React.Component {
                     onPress={() => _self._reset()}
                     ref={(ref) => { _self.Map = ref }}
                     onLayout={() => _self.Map.fitToCoordinates(coordsArr, { edgePadding: { top: 10, right: 10, bottom: 10, left: 10 }, animated: false })}
-                    maxZoomLevel={10}
+                    maxZoomLevel={12}
                     zoomControlEnabled={true}
                 >
                     {items}
@@ -263,8 +270,8 @@ class Main extends Component {
             { filtered = false } = _self.props;
 
         let view = null;
-        if (permission === true) {
-            const { latitude = '', longitude = '' } = location['coords'] || {};
+        /*if (permission === true) {
+            const { latitude = '', longitude = '' } = location['coords'] || {};*/
 
             if (filtered) {
 
@@ -298,10 +305,10 @@ class Main extends Component {
             }
 
             view = <Viewer config={DATA} callback={_self._callback} />;
-        } else if (permission === false)
+        /*} else if (permission === false)
             view = <Warning />;
         else
-            view = <LocationService callback={_self._callback} />;
+            view = <LocationService callback={_self._callback} />;*/
 
         return (
             <View style={{ flex: 1 }}>
@@ -311,12 +318,33 @@ class Main extends Component {
     }
 }
 
+_getHeader = ({ props, root = false }) => {
+    const _onClose = () => {
+        const { navigation } = props;
+        if (root)
+            store.dispatch({ type: NAVIGATE, value: { item: { navigation: 'Home' } } });
+        else
+            navigation.goBack(null);
+    },
+        _onDetailClick = () => {
+            const { navigation } = props;
+            //navigation.navigate('Detail', {});
+        }
+
+    return <MinimalHeader
+        onPress={_onClose}
+        title={'YAKIN MAĞAZALAR'}
+        right={<IconButton callback={_onDetailClick} ico={'map'} icoStyle={{ width: 40, height: 40, resizeMode: 'contain' }} style={{ width: 40, height: 40 }} />}
+    />
+}
+
 const StoreNavigator = createStackNavigator(
     {
         Main: {
             screen: props => <Main filtered={true} {...props} />,
             navigationOptions: {
-                header: (props) => <StoreHeader {...props} />,
+                //header: (props) => <StoreHeader {...props} />,
+                header: (props) => _getHeader({ props: props, root: true })
             }
         },
         Search: {
@@ -324,6 +352,9 @@ const StoreNavigator = createStackNavigator(
         },
         Detail: {
             screen: props => <Detail {...props} />,
+            navigationOptions: {
+                header: (props) => _getHeader({ props: props })
+            }
         },
     },
     {

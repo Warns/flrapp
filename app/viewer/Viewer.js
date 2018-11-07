@@ -1313,7 +1313,9 @@ class Viewers extends Component {
         const _self = this,
             { refreshing = true } = _self.props.config;
         if (refreshing)
-            _self.setState({ refreshing: true }, () => { _self.setAjx({ uri: _self.getUri(), data: _self._getData() }); })
+            _self.setState({ refreshing: true }, () => { 
+                _self.setAjx({ uri: _self.getUri(), data: _self._getData() }); 
+            });
     }
 
     _viewable = [];
@@ -1422,7 +1424,7 @@ class Viewers extends Component {
                     renderItem={_self._renderItem}
                     ListHeaderComponent={_self._getHeader}
                     refreshing={_self.state.refreshing}
-                    onRefresh={_self._onRefresh}
+                    //onRefresh={_self._onRefresh}
                     onViewableItemsChanged={_self._onViewableItemsChanged}
                 />
             );
