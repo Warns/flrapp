@@ -55,6 +55,7 @@ class PhoneConfirmation extends React.Component{
   }
 
   _Continue = ()=>{
+    this.props.dispatch({type:'UPDATE_OPTIN', value:{phone_checked: true}});
     this.props.navigation.navigate('Email');
   }
 
@@ -70,14 +71,14 @@ class PhoneConfirmation extends React.Component{
     let seconds = time - minutes * 60;
     let countdown = 0 + minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
 
-    let error = message == '' ? null : <Text style={{color: '#FF2B94', marginTop:10}}>{message}</Text>;
+    let error = message == '' ? null : <Text style={{color: '#FF2B94', marginTop:10, fontSize:15}}>{message}</Text>;
 
     return(
       <SafeAreaView style={{flex:1}}>
         <MinimalHeader title="" right={<View />} onPress={this._onBackPress} />
         <KeyboardAvoidingView style={{flex:1}}>
           <View style={{padding:40, paddingBottom:10, paddingTop:20}}>
-          <Text style={{color: '#6c6c6c', lineHeight:18}}>Lütfen {phone} numarali cep telefonuna SMS ile gelen onay kodunu gir.</Text>
+          <Text style={{color: '#000000', lineHeight:18, fontSize:15}}>Lütfen {phone} numarali cep telefonuna SMS ile gelen onay kodunu gir.</Text>
           <Text style={{color: '#FF2B94', marginTop:10}}>{countdown}</Text>
           {error}
           </View>

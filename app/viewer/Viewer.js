@@ -1055,7 +1055,7 @@ class Viewers extends Component {
 
     /* segmentify özel */
     _setSeg = (res) => {
-        console.log(res);
+        //console.log(res);
         const _self = this;
         if (res['type'] == 'success') {
             const { responses = [] } = res.data,

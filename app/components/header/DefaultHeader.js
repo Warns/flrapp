@@ -44,8 +44,9 @@ class DefaultHdr extends Component {
   }
 
   _getUserMenu = () => {
+
     const _self = this,
-      { user = {} } = _self.props,
+      { user = {} } = _self.props.user,
       { firstName = '', gender = 'E' } = user,
       ico = gender == 'E' ? 'userMen' : 'userWomen';
 
@@ -65,11 +66,10 @@ class DefaultHdr extends Component {
 
   render() {
     const _self = this;
-    //console.log( this.props );
-
+    
     let { topMargin } = this.props.general.SCREEN_DIMENSIONS;
 
-    let _left = this.props.user.firstName ? _self._getUserMenu() : (
+    let _left = this.props.user.user.firstName ? _self._getUserMenu() : (
       <TouchableOpacity activeOpacity={.8} onPress={this._onLoginPress}>
         <View style={{backgroundColor:'#ffffff', borderColor:'#BBBBBB', borderWidth:1, borderRadius:5, height:36, minWidth:80, paddingLeft:9, paddingRight:9, justifyContent:'center', alignItems:'center'}}>
           <Text style={{fontSize:14, fontFamily:'Medium'}}>GİRİŞ YAP</Text>

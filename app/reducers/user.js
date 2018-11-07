@@ -9,12 +9,17 @@ const userInitialState = {
 
     optin:{
         phone: null,
+        phone_formatted: null,
         phone_verification: null,
         phone_checked: false,
         email: null,
-        time:180,
-    }
-  }
+        password: null,
+        emos: null,
+        cegid: null,
+    },
+
+    user:{},
+}
 
 export default function user( state = userInitialState, action ){
     
@@ -22,10 +27,10 @@ export default function user( state = userInitialState, action ){
         case SET_CART_NUM: return {
             ID: action.value
         };
-        case SET_USER: return {
+        case SET_USER:{ console.log('>>>>', action); return {
             ...state,
             ...action.value
-        };
+        }};
         case 'UPDATE_OPTIN': return {
             ...state,
             optin:{ ...state.optin,

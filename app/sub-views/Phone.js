@@ -16,7 +16,7 @@ class Phone extends React.Component{
 
   _onBackPress = ()=>{
     this.props.navigation.navigate('Splash');
-    this.props.dispatch({type:'UPDATE_OPTIN', value:{phone: null, formatted_phone: null, phone_verification: null}});
+    this.props.dispatch({type:'UPDATE_OPTIN', value:{phone: null, phone_formatted: null, phone_verification: null}});
   }
 
   _onSubmit = ( obj )=>{
@@ -43,7 +43,7 @@ class Phone extends React.Component{
 
     let { mobileNumber, formattedMobileNumber, verificationNumber } = this.state;
 
-    this.props.dispatch({type:'UPDATE_OPTIN', value:{phone: mobileNumber, formatted_phone: formattedMobileNumber, phone_verification: verificationNumber}});
+    this.props.dispatch({type:'UPDATE_OPTIN', value:{phone: mobileNumber, phone_formatted: formattedMobileNumber, phone_verification: verificationNumber}});
     this.props.navigation.navigate('PhoneConfirmation');
 
   }
@@ -51,7 +51,7 @@ class Phone extends React.Component{
   render(){
 
     let formData = FORMDATA['optin_phone'];
-        formData.fields[0].items[0].value = this.props.optin.formatted_phone;
+        formData.fields[0].items[0].value = this.props.optin.phone_formatted;
 
     return(
       <SafeAreaView style={{flex:1}}>
@@ -59,7 +59,7 @@ class Phone extends React.Component{
         <View style={{flex:1}}>
           <View style={{padding:40, paddingBottom:20, paddingTop:20}}>
           <Text style={{fontFamily:'Bold', fontSize:20}}>MERHABA</Text>
-          <Text style={{color: '#6c6c6c', lineHeight:18}}>Cep telefonunu gir, üyelik onay kodunu hemen gönderelim.</Text>
+          <Text style={{color: '#000000', lineHeight:18, fontSize:15}}>Cep telefonunu gir, üyelik onay kodunu hemen gönderelim.</Text>
           </View>
           <Form callback={this._onSubmit} data={formData} />
         </View>

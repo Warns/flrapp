@@ -79,11 +79,10 @@ class Splash extends React.Component {
   };
 
   _onSignupPressed = () => {
-    //this.props.navigation.navigate('Signup');
+    this.props.navigation.navigate('Signup');
   };
 
   _renderItem = ( obj, parallaxProps )=>{
-
     let media = obj.item.video ? (
       <Video
           source={require('../../assets/loop.mp4')}
@@ -92,7 +91,7 @@ class Splash extends React.Component {
           isMuted={true}
           resizeMode="cover"
           shouldPlay={this.state.videoIsPlaying}
-          isLooping
+          isLooping={this.state.videoIsPlaying}
           style={styles.backgroundImage}
         />
     ) : (
@@ -115,6 +114,13 @@ class Splash extends React.Component {
           </View>
       </View>
     );
+  }
+
+  _onCarouselSnap = ( index )=> {
+    this.setState({ 
+      activeSlide: index,
+      videoIsPlaying: this.state.images[index].video != true ? false : true,
+    });
   }
 
   get pagination () {
@@ -169,7 +175,7 @@ class Splash extends React.Component {
         <Carousel
                   ref={(c) => {this._carousel = c;}}
                   data={images}
-                  onSnapToItem={(index) => this.setState({ activeSlide: index }) }
+                  onSnapToItem={this._onCarouselSnap}
                   renderItem={this._renderItem}
                   sliderWidth={DIMENSIONS.width}
                   sliderHeight={DIMENSIONS.height}

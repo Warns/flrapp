@@ -15,6 +15,10 @@ import LoadingPage from 'root/app/sub-views/Loading';
 import SplashPage from 'root/app/sub-views/Splash';
 import PhonePage from 'root/app/sub-views/Phone';
 import PhoneConfirmationPage from 'root/app/sub-views/PhoneConfirmation';
+import EmailPage from 'root/app/sub-views/Email';
+import PasswordPage from 'root/app/sub-views/Password';
+import PasswordResetPage from 'root/app/sub-views/PasswordReset';
+import SignupPage from 'root/app/sub-views/Signup';
 
 import { CartHeader, DefaultHeader, MinimalHeader } from 'root/app/components/';
 
@@ -36,27 +40,19 @@ class PhoneConfirmation extends React.Component{
 }
 
 class Email extends React.Component{
-  render(){
-    return <View style={{flex:1, justifyContent:'center', alignItems:'center'}}><Text>Voila! Email</Text></View>
-  }
+  render(){ return <EmailPage {...this.props} /> }
 }
 
 class Password extends React.Component{
-  render(){
-    return <View style={{flex:1, justifyContent:'center', alignItems:'center'}}><Text>Password</Text></View>
-  }
+  render(){ return <PasswordPage {...this.props} /> }
 }
 
 class Signup extends React.Component{
-  render(){
-    return <View style={{flex:1, justifyContent:'center', alignItems:'center'}}><Text>Signup</Text></View>
-  }
+  render(){ return <SignupPage {...this.props} /> }
 }
 
 class PasswordReset extends React.Component{
-  render(){
-    return <View style={{flex:1, justifyContent:'center', alignItems:'center'}}><Text>Password Reset</Text></View>
-  }
+  render(){ return <PasswordResetPage {...this.props} /> }
 }
 
 const OptinNavigator = createStackNavigator(
