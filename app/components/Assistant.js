@@ -62,8 +62,8 @@ class Assistant extends React.Component {
   render() {
 
     const _self = this,
-      { user = {}, segmentify = {}, assistant = {} } = _self.props,
-      userID = user.userId || segmentify['userID'] || "",
+      { user = {}, assistant = {} } = _self.props,
+      userID = user.userId || '',
       { show } = assistant;
 
     if (show)
