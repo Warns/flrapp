@@ -56,20 +56,6 @@ export default class App extends React.Component {
             <View style={styles.container}>
               {/*Platform.OS === 'ios' && <StatusBar barStyle="default" />*/}
               {/*Platform.OS === 'android' && <View style={styles.statusBarUnderlay} />*/}
-
-<<<<<<< HEAD
-            <OfflineNotice />
-            <TopMenu />
-            <Settings />
-            <RootNavigation />
-            <ProductView />
-            {
-              //<YoutubePlayer />
-              //<Assistant />
-            }
-            <Preloader />
-          </View>
-=======
               <OfflineNotice />
               <TopMenu />
               <Settings />
@@ -80,7 +66,6 @@ export default class App extends React.Component {
               <Preloader />
             </View>
           </KeyboardAvoidingView>
->>>>>>> 98a38e57b1b9af99844d2b513b4cc0cb101fd0ab
         </Provider>
       );
     }
