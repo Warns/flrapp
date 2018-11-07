@@ -5,6 +5,16 @@ import {
     SET_LOCATION,
 } from 'root/app/helper/Constant';
 
+async function getLocationAsync() {
+    const { Location, Permissions } = Expo;
+    const { status } = await Permissions.askAsync(Permissions.LOCATION);
+    if (status === 'granted') {
+        return Location.getCurrentPositionAsync({ enableHighAccuracy: true });
+    } else {
+        throw new Error('Location permission not granted');
+    }
+}
+
 class LocationServices extends Component {
 
     componentDidMount() {
@@ -14,6 +24,7 @@ class LocationServices extends Component {
     /* https://docs.expo.io/versions/latest/sdk/permissions */
 
     _getLocationAsync = async () => {
+
         const _self = this,
             { Location, Permissions } = Expo,
             { status } = await Permissions.askAsync(Permissions.LOCATION);

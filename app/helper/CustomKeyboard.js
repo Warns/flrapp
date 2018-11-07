@@ -10,10 +10,8 @@ class CustomKeyboard extends Component {
 
     render() {
         return (
-            <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-                <KeyboardAvoidingView behavior='padding' style={{ flex: 1 }}>
-                    {this.props.children}
-                </KeyboardAvoidingView>
+            <TouchableWithoutFeedback style={{flex: 1}} onPress={() => Keyboard.dismiss()}>
+                {this.props.children}
             </TouchableWithoutFeedback>
         );
     }

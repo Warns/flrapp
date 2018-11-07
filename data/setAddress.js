@@ -14,7 +14,7 @@ module.exports = {
     uri: Utils.getURL({ key: 'address', subKey: 'setAddress' }), 
 
     /* allErrMessage: true durumunda tüm hata mesajları sayfanın en üstünde, false durumunda ilgili elementin altında gösterilir */
-    allErrMessage: true, 
+    allErrMessage: false, 
 
     /* işlem başarıyla gerçekleşmişse ve özel bir mesaj göstermek isteniliyorsa mesaj bu kısma yazılır */
     successMessage: '', 
