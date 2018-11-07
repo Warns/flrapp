@@ -76,9 +76,13 @@ const RootStackNavigator = createStackNavigator(
       navigationOptions: {
         header: (props) => {
           const { cart } = store.getState(),
-            { progress = "1/3" } = cart;
-            
-          return <MinimalHeader title="Sepetim" progress={progress} />;
+            { progress = "1/3" } = cart,
+            _onBack = () => {
+              const { navigation } = props;
+              navigation.goBack(null);
+            };
+
+          return <MinimalHeader onPress={_onBack} title="Sepetim" progress={progress} />;
         }
       }
     },
