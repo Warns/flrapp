@@ -4,7 +4,8 @@ import { MinimalHeader } from 'root/app/components';
 import { Form } from 'root/app/form';
 import { 
   FORMDATA,
-  SET_USER } from 'root/app/helper/Constant';
+  SET_USER,
+  ASSISTANT_SHOW } from 'root/app/helper/Constant';
 import { connect } from 'react-redux';
 import { DefaultButton } from 'root/app/UI';
 
@@ -60,6 +61,7 @@ class Password extends React.Component{
     this.props.dispatch({type:SET_USER, value:{ user: data || {} }});
     setTimeout(()=>{
       _self.props.navigation.navigate("Home");
+      _self.props.dispatch({ type: ASSISTANT_SHOW, value: true });
     }, 10);
   }
 

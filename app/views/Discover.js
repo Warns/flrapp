@@ -150,12 +150,9 @@ class Navigation extends React.Component {
 
           const wrp = (
               <View key={'wrp-' + i} style={[{ width }, { paddingLeft: 30, paddingRight: 30, paddingTop: 8 }]}>
-                  <ScrollView>
+                  <ScrollView showsVerticalScrollIndicator={false}>
                       {arr}
                   </ScrollView>
-                  <View style={{ paddingLeft: 37, paddingRight: 37, justifyContent: 'center', alignItems: 'center', height: 100 }}>
-                      {/*<BlackButton item={{ id: obj.id }} onPress={this._onAllPrdPress}>TÜM {obj.title} ÜRÜNLERİ</BlackButton>*/}
-                  </View>
               </View>
           );
 
@@ -163,7 +160,7 @@ class Navigation extends React.Component {
       }
 
       return (
-          <ScrollView ref={ref => this.ScrollView = ref} scrollEnabled={false} horizontal style={{ flex: 1, flexDirection: 'row', }}>
+          <ScrollView ref={ref => this.ScrollView = ref} scrollEnabled={false} horizontal style={{ flex: 1, flexDirection: 'row', }} showsVerticalScrollIndicator={false}>
               {main}
           </ScrollView>
       );
@@ -346,21 +343,12 @@ class NavigationModal extends React.Component {
 
         const wrp = (
             <View key={'btnWrp'} style={[{paddingTop: 0, flex: 1 }]}>
-                <ScrollView>
-                    {/*<Image
-                        style={{ height: 120 }}
-                        source={{ uri: Utils.getImage(obj.img) }}
-                    />*/}
+                <ScrollView showsVerticalScrollIndicator={false}>
                     <View style={{paddingLeft: 20, paddingRight: 20}}>
                         {/*<LineButton item={{ id: obj.id }} key={'btn-000'} style={{ borderTopWidth: 0 }} onPress={this._onAllPrdPress}>TÜM {obj.title} ÜRÜNLERİ</LineButton>*/}
                         {arr}
                     </View>
                 </ScrollView>
-                {/*
-                <View style={{ paddingLeft: 37, paddingRight: 37, justifyContent: 'center', alignItems: 'center', height: 100 }}>
-                    <BlackButton item={{ id: obj.id }} onPress={this._onAllPrdPress}>TÜM {obj.title} ÜRÜNLERİ</BlackButton>
-                </View>
-                */}
             </View>
         );
 

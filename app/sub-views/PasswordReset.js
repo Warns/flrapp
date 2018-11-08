@@ -23,7 +23,7 @@ class PasswordReset extends React.Component{
   }
 
   _Continue = ()=>{
-    
+
   }
 
   render(){
@@ -35,7 +35,7 @@ class PasswordReset extends React.Component{
       <SafeAreaView style={{flex:1}}>
         <MinimalHeader title="" right={<View />} onPress={this._onBackPress} />
         <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
-          <Text style={{color: '#000000', lineHeight:18, fontSize:15}}>Reset Password. [in Process]</Text>
+          <Text style={{color: '#000000', lineHeight:18, fontSize:15}}>{'Coding reset password... 👨‍💻'}</Text>
         </View>
       </SafeAreaView>
     )

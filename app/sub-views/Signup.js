@@ -35,7 +35,7 @@ class Signup extends React.Component{
       <SafeAreaView style={{flex:1}}>
         <MinimalHeader title="" right={<View />} onPress={this._onBackPress} />
         <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
-          <Text style={{color: '#000000', lineHeight:18, fontSize:15}}>Signup. [in Process]</Text>
+          <Text style={{color: '#000000', lineHeight:18, fontSize:15}}>{'Coding signup... 👨‍💻'}</Text>
         </View>
       </SafeAreaView>
     )

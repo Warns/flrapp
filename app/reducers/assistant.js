@@ -1,7 +1,7 @@
 import { ASSISTANT_SHOW } from 'root/app/helper/Constant';
 
 const initialState = {
-    show: true
+    show: false
 };
 
 export default function assistant(state = initialState, action) {

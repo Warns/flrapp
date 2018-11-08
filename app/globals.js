@@ -11,7 +11,7 @@ module.exports = {
   //API_KEY: '033a85ae-9662-ba87-296f-100ecfc50a66', // polo 
   API_KEY: '1b9b737f-5582-c8d7-f535-b9750bdeeb90',
   CLIENT: {
-
+    Auth: {},
     // Here we store all session data.
     // .Auth {}
     // .Login {}

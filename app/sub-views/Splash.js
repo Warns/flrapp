@@ -21,7 +21,8 @@ import {
   FORMDATA,
   SET_USER,
   SET_NAVIGATION,
-  SET_SCREEN_DIMENSIONS
+  SET_SCREEN_DIMENSIONS,
+  ASSISTANT_SHOW,
 } from 'root/app/helper/Constant';
 
 const DIMENSIONS = Dimensions.get('window');
@@ -72,6 +73,7 @@ class Splash extends React.Component {
 
   _continueToHome = () => {
     this.props.navigation.navigate("Home");
+    this.props.dispatch({ type: ASSISTANT_SHOW, value: true });
   }
 
   _onLoginPressed = () => {
