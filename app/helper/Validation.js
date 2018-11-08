@@ -29,7 +29,8 @@ module.exports = {
         //return rgx.test(value) ? { state: true } : { state: false, msg: Translation.getErrorMsg({ key: 'isDate', title: title }) }
         return { state: true };
     },
-    isPhone: ({ value = '', title = '' }) => {
+    isPhone: ({ value, title = '' }) => {
+        value = value || '';
         const rgx = /^((\+\d{1,3}(-| )?\(?\d\)?(-| )?\d{1,3})|(\(?\d{2,3}\)?))(-| )?(\d{3,4})(-| )?(\d{4})(( x| ext)\d{1,5}){0,1}$/g;
         value = value.replace(/\./g, '').replace(/\)/g, '').replace(/\(/g, '').replace(/\s+/g, '');
         return (rgx.test(value) && Utils.cleanText(value).length == 11) ? { state: true } : { state: false, msg: Translation.getErrorMsg({ key: 'isPhone', title: title }) }

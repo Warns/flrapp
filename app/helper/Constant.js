@@ -33,6 +33,8 @@ export const ICONS = {
     campaingTitle: require('root/assets/images/campaing-title.png'),
     downArrow: require('root/assets/icons/downArrow.png'),
     upArrow: require('root/assets/icons/topArrow.png'),
+    searchMap: require('root/assets/icons/search-map.png'),
+    myLocation: require('root/assets/icons/myLocation.png'),
 };
 
 /* CARDS ICON */
