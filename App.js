@@ -109,6 +109,8 @@ export default class App extends React.Component {
         require('root/assets/images/campaing-title.png'),
         require('root/assets/icons/bottomArrow.png'),
         require('root/assets/icons/topArrow.png'),
+        require('root/assets/icons/search-map.png'),
+        require('root/assets/icons/myLocation.png')
       ]),
       Font.loadAsync({
         // We include SpaceMono because we use it in HomeScreen.js. Feel free

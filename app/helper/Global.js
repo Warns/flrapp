@@ -97,7 +97,8 @@ module.exports = {
         typ4: /[^a-zA-ZıiI0-9ğüşöçİĞÜŞÖÇ:\/\s]+/g, /* address alanı için */
         typ5: /[^0-9\(\)\s]+/g, /* telefon için */
     },
-    getRegex: function ({ key = '', value = '' }) {
+    getRegex: function ({ key = '', value }) {
+        value = value || '';
         const _t = this,
             rgx = _t.regex[key] || '';
         if (rgx)
@@ -109,9 +110,11 @@ module.exports = {
         return k.length == 0 ? false : true;
     },
     trimText: (k) => {
+        k = k || '';
         return k.replace(/(^\s+|\s+$)/g, '');
     },
     cleanText: (k) => {
+        k = k || '';
         return k.replace(/\s+/g, '');
     },
     subtractDate: (o) => {

@@ -487,10 +487,11 @@ class ServiceListItem extends Component {
 
     setAjx = async () => {
         const _self = this,
-            { permission, location } = _self.props.rdx,
+            { permission, location = null } = _self.props.rdx,
             { serviceLatitude = '', serviceLongitude = '' } = _self.props.data;
 
-        if (serviceLatitude != '' && serviceLongitude != '' && permission) {
+        if (serviceLatitude != '' && serviceLongitude != '' && permission && location != null) {
+
             const uri = Utils.getCustomURL({ key: 'location', origins: (location['coords']['latitude'] + ',' + location['coords']['longitude']), destinations: (serviceLatitude + ',' + serviceLongitude) });
 
             Utils.ajx({ uri: uri }, (res) => {
@@ -515,12 +516,14 @@ class ServiceListItem extends Component {
 
     _isLocation = () => {
         const _self = this,
-            { serviceLatitude = '', serviceLongitude = '' } = _self.props.data;
+            { serviceLatitude = '', serviceLongitude = '' } = _self.props.data,
+            { distance = null, duration = null } = _self.state;
+
         let view = null;
         if (serviceLatitude != '' && serviceLongitude != '') {
             view = (
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', }}>
-                    <Text style={{ fontFamily: 'Regular', fontSize: 15, }}>{_self.state.distance}   {_self.state.duration}</Text>
+                    <Text style={{ fontFamily: 'Regular', fontSize: 15, }}>{distance} {duration}</Text>
                     <Image
                         style={{ width: 40, height: 40 }}
                         source={ICONS['rightArrow']}
@@ -1313,8 +1316,8 @@ class Viewers extends Component {
         const _self = this,
             { refreshing = true } = _self.props.config;
         if (refreshing)
-            _self.setState({ refreshing: true }, () => { 
-                _self.setAjx({ uri: _self.getUri(), data: _self._getData() }); 
+            _self.setState({ refreshing: true }, () => {
+                _self.setAjx({ uri: _self.getUri(), data: _self._getData() });
             });
     }
 
