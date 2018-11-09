@@ -8,7 +8,15 @@ import {
 } from 'react-native';
 import { FormInput, SelectBox, CheckBox, RadioGroup, DateTimePicker, ErrorBox, CountryPicker, HiddenObject } from './';
 import { CustomKeyboard } from 'root/app/helper';
+<<<<<<< HEAD
 import { DefaultButton } from 'root/app/UI';
+=======
+import { LoadingButton } from 'root/app/UI';
+import {
+    SHOW_PRELOADING
+} from 'root/app/helper/Constant';
+import { store } from 'root/app/store';
+>>>>>>> 1fc0222d7b100a97c49bd791dfc912086533817d
 const Validation = require('root/app/helper/Validation.js');
 const Utils = require('root/app/helper/Global.js');
 const Globals = require('root/app/globals.js');
@@ -238,13 +246,23 @@ class Form extends Component {
             });
 
         console.log(JSON.stringify(obj));
+<<<<<<< HEAD
 
         if (sendAjx)
             _self.ajx({ uri: uri, data: obj }, function ({ type, d }) {
                 if (callback)
                     callback({ type: type, data: d, postData: obj });
+=======
+        if (sendAjx) {
+            store.dispatch({ type: SHOW_PRELOADING, value: true });
+            _self.ajx({ uri: uri, data: obj }, function ({ type, d }) {
+                if (callback)
+                    callback({ type: type, data: d });
+
+                store.dispatch({ type: SHOW_PRELOADING, value: false });
+>>>>>>> 1fc0222d7b100a97c49bd791dfc912086533817d
             });
-        else {
+        } else {
             if (callback)
                 callback({ data: obj });
         }
@@ -258,7 +276,7 @@ class Form extends Component {
             onChangeText(obj);
     }
 
-    _formElement = []; 
+    _formElement = [];
 
     addField = (obj) => {
         const _self = this,
@@ -357,8 +375,8 @@ class Form extends Component {
             arr = _self._formElement,
             total = arr.length;
         /* form elemanlarını onRef ile array kaydedip sonrasında component içerisindeki reset tetikliyoruz. */
-        for( var i = 0; i < total; ++i  )
-            arr[ i ]._onReset();       
+        for (var i = 0; i < total; ++i)
+            arr[i]._onReset();
     }
 
     render() {

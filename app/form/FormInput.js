@@ -137,7 +137,7 @@ class FormInput extends Component {
             input = (
                 <TextInputMask
 
-                    ref={element => {
+                    refInput={element => {
                         this.input = element
                     }}
                     autoCorrect={autoCorrect}
@@ -163,7 +163,7 @@ class FormInput extends Component {
             input = (
                 <TextInputMask
 
-                    ref={element => {
+                    refInput={element => {
                         this.input = element
                     }}
                     autoCorrect={autoCorrect}

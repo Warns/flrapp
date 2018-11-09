@@ -4,6 +4,10 @@ import { MinimalHeader } from 'root/app/components';
 import { Form } from 'root/app/form';
 import { FORMDATA } from 'root/app/helper/Constant';
 import { connect } from 'react-redux';
+import {
+  SHOW_PRELOADING
+} from 'root/app/helper/Constant';
+import { store } from 'root/app/store';
 
 const Utils = require('root/app/helper/Global.js');
 
@@ -69,6 +73,7 @@ class Phone extends React.Component{
 }
 
 function sendVerificationSMS(data, callback){
+  store.dispatch({ type: SHOW_PRELOADING, value: true });
   return fetch('http://www.postaguvercini.com/api_http/sendsms.asp' + data)
     .then((response) => {
         return response.text();
@@ -76,9 +81,11 @@ function sendVerificationSMS(data, callback){
     .then((responseJson) => {
         console.log(responseJson);
         callback();
+        store.dispatch({ type: SHOW_PRELOADING, value: false });
     })
     .catch((error) => {
         console.error(error);
+        store.dispatch({ type: SHOW_PRELOADING, value: false });
     });
 }
 
