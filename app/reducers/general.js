@@ -7,6 +7,7 @@ import {
     UPDATE_PRODUCT_DETAILS_ITEM,
     CLOSE_PRODUCT_DETAILS,
     UPDATE_PRODUCT_VIDEOS,
+    SHOW_PRELOADING,
 } from 'root/app/helper/Constant';
 import { store } from 'root/app/store';
 
@@ -94,6 +95,10 @@ export default function general( state = generalInitialState, action ){
                 ...state.product,
                 videos: action.value.videos,
             }
+        };
+        case SHOW_PRELOADING: return {
+            ...state, 
+            preloading: action.value
         };
         default:
             return state;

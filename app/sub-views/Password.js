@@ -8,6 +8,10 @@ import {
   ASSISTANT_SHOW } from 'root/app/helper/Constant';
 import { connect } from 'react-redux';
 import { DefaultButton } from 'root/app/UI';
+import {
+  SHOW_PRELOADING
+} from 'root/app/helper/Constant';
+import { store } from 'root/app/store';
 
 const Utils = require('root/app/helper/Global.js');
 const globals = require('root/app/globals.js');
@@ -32,6 +36,7 @@ class Password extends React.Component{
       message: '',
     });
 
+    store.dispatch({ type: SHOW_PRELOADING, value: true });
     globals.fetch(
       "https://www.flormar.com.tr/webapi/v3/User/login",
       JSON.stringify({
@@ -54,6 +59,8 @@ class Password extends React.Component{
     }else{
       this.setState({message: "Hatalı şifre, lütfen kontrol et."});
     }
+
+    store.dispatch({ type: SHOW_PRELOADING, value: false });
   }
 
   _Continue = ( data )=>{
