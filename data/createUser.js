@@ -75,7 +75,7 @@ module.exports = {
                     type: 'text',
                     secureTextEntry: true,
                     placeholder: '',
-                    value: '111111',
+                    value: '',
                     validation: [{ key: 'isEmpty' }, { key: 'isMin', value: 6 }, { key: 'isPassword' },],
                 },
                 {

@@ -11,7 +11,7 @@ import { createStackNavigator } from 'react-navigation';
 import { StoreHeader, MinimalHeader } from 'root/app/components/';
 import { LocationService, } from 'root/app/helper/';
 import { Viewer } from 'root/app/viewer/';
-import { LoadingButton, IconButton } from 'root/app/UI';
+import { DefaultButton, IconButton } from 'root/app/UI';
 import {
     ICONS,
     SERVICE_LIST_CLICKED,
@@ -24,6 +24,8 @@ import { store } from 'root/app/store';
 import { MapView } from 'expo';
 const { Marker } = MapView;
 const Utils = require('root/app/helper/Global.js');
+
+const ZOOM_LEVEL = Platform.OS == 'android' ? 16 : 12;
 
 
 class Warning extends Component {
@@ -97,7 +99,7 @@ class AddressDetail extends Component {
         if (phoneNo != '')
             view = (
                 <View style={{ flex: 1, marginLeft: 15 }}>
-                    <LoadingButton onPress={_self._onPress}>{'MAĞAZAYI ARA'}</LoadingButton>
+                    <DefaultButton callback={_self._onPress} name={'MAĞAZAYI ARA'} />
                 </View>
             );
 
@@ -229,7 +231,7 @@ class Detail extends React.Component {
                     onPress={() => _self._reset()}
                     ref={(ref) => { _self.Map = ref }}
                     onLayout={() => _self.Map.fitToCoordinates(coordsArr, { edgePadding: { top: 10, right: 10, bottom: 10, left: 10 }, animated: false })}
-                    maxZoomLevel={12}
+                    maxZoomLevel={ZOOM_LEVEL}
                     zoomControlEnabled={true}
                 >
                     {items}
@@ -240,7 +242,7 @@ class Detail extends React.Component {
                 <MapView
                     style={{ flex: 1 }}
                     ref={(ref) => { _self.Map = ref }}
-                    maxZoomLevel={12}
+                    maxZoomLevel={ZOOM_LEVEL}
                     zoomControlEnabled={true}
                 />
             );

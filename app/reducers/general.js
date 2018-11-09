@@ -28,9 +28,13 @@ const generalInitialState = {
         id: null,
         animate: false,
         item: null,
-        videos:[],
     },
     preloading: false,
+    video:{
+        visibility: false,
+        items:[],
+        selected:0,
+    },
     
     // Other
     SCREEN_DIMENSIONS: {
@@ -90,9 +94,9 @@ export default function general( state = generalInitialState, action ){
             preloading: false,
         };
         case UPDATE_PRODUCT_VIDEOS: return {
-            ...state, product:{
-                ...state.product,
-                videos: action.value.videos,
+            ...state, video:{
+                ...state.video,
+                ...action.value,
             }
         };
         default:

@@ -1,17 +1,20 @@
 import React from 'react';
-import { Animated, Easing, SafeAreaView, Text, View } from 'react-native';
+import { SafeAreaView, Text, View } from 'react-native';
+import { connect } from 'react-redux';
 import { MinimalHeader } from 'root/app/components';
 import { Form } from 'root/app/form';
 import { FORMDATA } from 'root/app/helper/Constant';
-import { connect } from 'react-redux';
+import { DefaultButton } from 'root/app/UI';
 
 const Utils = require('root/app/helper/Global.js');
+const globals = require('root/app/globals.js');
 
 class PasswordReset extends React.Component{
   
   state = {
-    mobileNumber: '',
-    verificationNumber: '',
+    email:null,
+    message: '',
+    sent: true,
   };
 
   _onBackPress = ()=>{
@@ -19,24 +22,66 @@ class PasswordReset extends React.Component{
   }
 
   _onSubmit = ( obj )=>{
+    this.setState({
+      email: obj.data.email,
+      message: '',
+      sent: false,
+    });
 
+    globals.fetch(
+      "https://www.flormar.com.tr/webapi/v3/User/recoverPassword",
+      JSON.stringify({
+        "email": obj.data.email
+      }),
+      this._fetchResultHandler
+    );
+  }
+
+  _fetchResultHandler = ( answer )=>{
+    
+    if(answer.status == 200){
+      this.setState({sent: true})
+    }else{
+      this.setState({message: "Hata oluştu, lütfen tekrar dene!"})
+    }
   }
 
   _Continue = ()=>{
-
+    this.props.navigation.navigate("Home");
   }
 
   render(){
+    let { message, sent, email } = this.state;
+    let formData = FORMDATA['optin_resetpassword'];
+        formData.fields[0].items[0].value = this.props.optin.email;
 
-    let formData = FORMDATA['optin_phone'];
-        formData.fields[0].items[0].value = this.props.optin.phone_formatted;
+    let error = message == '' ? null : <Text style={{color: '#FF2B94', marginTop:10, fontSize:15}}>{message}</Text>;
+
+    let form = sent ? (
+        <View style={{flex:1}}>
+          <View style={{padding:40, paddingBottom:20, paddingTop:20}}>
+              <Text style={{color: '#000000', lineHeight:18, fontSize:15, marginBottom:30}}>Şifreni değiştirme linki {email} adresine gönderildi. Lütfen email adresini kontrol et.</Text>
+              <DefaultButton callback={()=> this.setState({sent:false})} name="TEKRAR DENE" boxColor="#ffffff" textColor="#000000" borderColor="#cccccc" />
+              <View style={{ height:10 }}></View>
+              <DefaultButton callback={this._Continue} name="DEVAM ET" boxColor="#000000" textColor="#ffffff" borderColor="#000000" />
+          </View>
+        </View>
+      ) : (
+        <View style={{flex:1}}>
+          <View style={{padding:40, paddingBottom:20, paddingTop:20}}>
+            <Text style={{color: '#000000', lineHeight:18, fontSize:15}}>Üyelikte kullandığın Email adresini yaz.</Text>
+            {error}
+            </View>
+          <Form callback={this._onSubmit} data={formData} />
+        </View>
+      );
 
     return(
       <SafeAreaView style={{flex:1}}>
         <MinimalHeader title="" right={<View />} onPress={this._onBackPress} />
-        <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
-          <Text style={{color: '#000000', lineHeight:18, fontSize:15}}>{'Coding reset password... 👨‍💻'}</Text>
-        </View>
+        
+          {form}
+        
       </SafeAreaView>
     )
   }

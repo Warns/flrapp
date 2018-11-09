@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { FormInput, SelectBox, CheckBox, RadioGroup, DateTimePicker, ErrorBox, CountryPicker, HiddenObject } from './';
 import { CustomKeyboard } from 'root/app/helper';
-import { LoadingButton } from 'root/app/UI';
+import { DefaultButton } from 'root/app/UI';
 const Validation = require('root/app/helper/Validation.js');
 const Utils = require('root/app/helper/Global.js');
 const Globals = require('root/app/globals.js');
@@ -238,10 +238,11 @@ class Form extends Component {
             });
 
         console.log(JSON.stringify(obj));
+
         if (sendAjx)
             _self.ajx({ uri: uri, data: obj }, function ({ type, d }) {
                 if (callback)
-                    callback({ type: type, data: d });
+                    callback({ type: type, data: d, postData: obj });
             });
         else {
             if (callback)
@@ -364,7 +365,8 @@ class Form extends Component {
         const _self = this,
             { theme = 'DARK', buttonText = 'GİRİŞ YAP', buttonStyle = {}, buttonFontStyle = {}, showButton = true } = _self.props.data,
             { scrollEnabled = true } = _self.props,
-            button = showButton ? <LoadingButton fontStyle={{ ...buttonFontStyle }} style={{ ...buttonStyle }} theme={theme} onPress={_self._onPress.bind(_self)}>{buttonText}</LoadingButton> : null;
+            //button = showButton ? <DefaultButton fontStyle={{ ...buttonFontStyle }} style={{ ...buttonStyle }} theme={theme} callback={_self._onPress.bind(_self)}>{buttonText}</DefaultButton> : null;
+            button = showButton ? <DefaultButton name={buttonText} textColor="#ffffff" boxColor="#000000" borderColor="#000000" callback={_self._onPress.bind(_self)}>{buttonText}</DefaultButton> : null;
 
         return (
             <ScrollView scrollEnabled={scrollEnabled} style={[{ flex: 1 }]}>

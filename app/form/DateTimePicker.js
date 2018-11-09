@@ -65,10 +65,10 @@ class DateTimePicker extends Component {
                     cancelBtnText="Cancel"
                     placeholder="select date"
                     onDateChange={(date) => { this.setState({ value: date }) }}
-
+                    iconSource={require("../../assets/icons/calendar.png")}
                     customStyles={{
                         dateIcon: {
-                           
+                            marginRight: 0,
                         },
                         dateInput: {
                             borderWidth: 0,

@@ -23,6 +23,7 @@ import {
   SET_NAVIGATION,
   SET_SCREEN_DIMENSIONS,
   ASSISTANT_SHOW,
+  UPDATE_PRODUCT_VIDEOS,
 } from 'root/app/helper/Constant';
 
 const DIMENSIONS = Dimensions.get('window');
@@ -81,7 +82,27 @@ class Splash extends React.Component {
   };
 
   _onSignupPressed = () => {
-    this.props.navigation.navigate('Signup');
+
+    this.props.dispatch({type:UPDATE_PRODUCT_VIDEOS, value:{visibility:true, selected:1, items:[
+      {
+      "videoId": "pl92KOsacOc",
+      "provider": "youtube",
+      "thumbnail": "/UPLOAD/BtonzMakyaj_650x365.png",
+      "text": "Bronz Tene Yaz Akşamı Makyajı"
+      },{
+      "videoId": "pl92KOsacOc",
+      "provider": "youtube",
+      "thumbnail": "/UPLOAD/BtonzMakyaj_650x365.png",
+      "text": "Bronz Tene Yaz Akşamı Makyajı"
+      },{
+      "videoId": "pl92KOsacOc",
+      "provider": "youtube",
+      "thumbnail": "/UPLOAD/BtonzMakyaj_650x365.png",
+      "text": "Bronz Tene Yaz Akşamı Makyajı"
+      }
+    ]}});
+
+    //this.props.navigation.navigate('Signup');
   };
 
   _renderItem = ( obj, parallaxProps )=>{

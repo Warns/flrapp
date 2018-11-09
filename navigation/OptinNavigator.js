@@ -69,7 +69,7 @@ const OptinNavigator = createStackNavigator(
   {
     index:0,
     lazy: true,
-    initialRouteName:'Loading',
+    initialRouteName:'Splash',
     headerMode: 'none',
     navigationOptions: {
       gesturesEnabled: false,
