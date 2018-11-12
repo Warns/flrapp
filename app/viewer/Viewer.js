@@ -1056,6 +1056,24 @@ class Viewers extends Component {
         return data;
     }
 
+    _getSegData = (data) => {
+        let arr = [];
+        Object
+            .keys(data)
+            .map((key) => {
+                const k = data[key] || [];
+                if (k.length > 0) {
+                    Object
+                        .keys(k)
+                        .map((m) => {
+                            arr.push(k[m])
+                        });
+                }
+
+            });
+        return arr;
+    }
+
     /* segmentify özel */
     _setSeg = (res) => {
         //console.log(res);
@@ -1064,7 +1082,8 @@ class Viewers extends Component {
             const { responses = [] } = res.data,
                 key = Globals.getSegKey(responses),
                 { params = {} } = responses[0][0],
-                data = params['recommendedProducts'][key] || [],
+                //--> data = params['recommendedProducts'][key] || [],
+                data = _self._getSegData(params['recommendedProducts'] || []),
                 instanceId = params['instanceId'] || '',
                 obj = {
                     "name": "INTERACTION",

@@ -6,7 +6,7 @@ import {
 import { Minus99HorizontalTabs } from 'root/app/components';
 import { connect } from 'react-redux';
 import { createMaterialTopTabNavigator } from 'react-navigation';
-import { Viewer, MapViewer, OrderViewer } from 'root/app/viewer';
+import { Viewer, OrderViewer } from 'root/app/viewer';
 import { Form } from 'root/app/form';
 import { DATA_LOADED, ORDER_LIST_CLICKED, VIEWERTYPE, FORMDATA } from 'root/app/helper/Constant';
 

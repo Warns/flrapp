@@ -4,7 +4,6 @@ export * from './Cart';
 export * from './header/DefaultHeader';
 export * from './header/SplashHeader';
 export * from './header/MinimalHeader';
-export * from './header/StoreHeader';
 export * from './header/CartHeader';
 
 // common

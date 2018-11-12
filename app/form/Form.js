@@ -8,15 +8,13 @@ import {
 } from 'react-native';
 import { FormInput, SelectBox, CheckBox, RadioGroup, DateTimePicker, ErrorBox, CountryPicker, HiddenObject } from './';
 import { CustomKeyboard } from 'root/app/helper';
-<<<<<<< HEAD
 import { DefaultButton } from 'root/app/UI';
-=======
 import { LoadingButton } from 'root/app/UI';
 import {
     SHOW_PRELOADING
 } from 'root/app/helper/Constant';
 import { store } from 'root/app/store';
->>>>>>> 1fc0222d7b100a97c49bd791dfc912086533817d
+
 const Validation = require('root/app/helper/Validation.js');
 const Utils = require('root/app/helper/Global.js');
 const Globals = require('root/app/globals.js');
@@ -246,13 +244,7 @@ class Form extends Component {
             });
 
         console.log(JSON.stringify(obj));
-<<<<<<< HEAD
 
-        if (sendAjx)
-            _self.ajx({ uri: uri, data: obj }, function ({ type, d }) {
-                if (callback)
-                    callback({ type: type, data: d, postData: obj });
-=======
         if (sendAjx) {
             store.dispatch({ type: SHOW_PRELOADING, value: true });
             _self.ajx({ uri: uri, data: obj }, function ({ type, d }) {
@@ -260,7 +252,7 @@ class Form extends Component {
                     callback({ type: type, data: d });
 
                 store.dispatch({ type: SHOW_PRELOADING, value: false });
->>>>>>> 1fc0222d7b100a97c49bd791dfc912086533817d
+
             });
         } else {
             if (callback)
@@ -387,7 +379,10 @@ class Form extends Component {
             button = showButton ? <DefaultButton name={buttonText} textColor="#ffffff" boxColor="#000000" borderColor="#000000" callback={_self._onPress.bind(_self)}>{buttonText}</DefaultButton> : null;
 
         return (
-            <ScrollView scrollEnabled={scrollEnabled} style={[{ flex: 1 }]}>
+            <ScrollView
+            keyboardShouldPersistTaps='handled' 
+            scrollEnabled={scrollEnabled} 
+            style={[{ flex: 1 }]}>
                 <CustomKeyboard style={[{ flex: 1 }]}>
                     <View style={[{ flex: 1, paddingLeft: 40, paddingRight: 40, paddingBottom: 40 }, { ..._self.props.style }]}>
                         {_self._getAllErrMsg()}

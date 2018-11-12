@@ -120,6 +120,7 @@ class CountryPicker extends Component {
     setAjx = ({ key, data = {} }, callback) => {
         const _self = this,
             { uri, rel, keys } = _self.config[key] || {};
+            console.log(data);
         Globals.AJX({ _self: _self, uri: uri, data: data }, function (d) {
             let obj = {},
                 arr = d['data'][keys['arr']];
