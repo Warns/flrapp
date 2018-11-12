@@ -2,6 +2,7 @@ export * from './Viewer';
 export * from './OrderViewer';
 export * from './Extra';
 export * from './ExtraPageDetail';
+export * from './CustomModal';
 
 /* sepet */
 export * from './cart/CartPage';

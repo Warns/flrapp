@@ -28,6 +28,7 @@ module.exports = {
             changePassword: '/webapi/v3/User/changePassword',
             getFavoriteProductList: '/webapi/v3/User/getFavoriteProductList',
             deleteFavoriteProduct: '/webapi/v3/User/deleteFavoriteProduct',
+            getAgreement: '/webapi/v3/User/getAgreement',
             getStockFollowUpList: '/webapi/v3/User/getStockFollowUpList', // takip listem - Stoğa Girenler
             getPriceFollowUpList: '/webapi/v3/User/getPriceFollowUpList', // takip listem - fiyatı düşenler
         },

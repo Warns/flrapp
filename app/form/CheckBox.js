@@ -6,6 +6,15 @@ import {
     TouchableOpacity,
 } from 'react-native';
 import { Container } from './';
+import {
+    SHOW_CUSTOM_POPUP,
+    SET_VIEWER,
+} from 'root/app/helper/Constant';
+import { store } from 'root/app/store';
+import {
+    ParserHTML
+} from 'root/app/helper/'
+
 
 class CheckBox extends Component {
     constructor(props) {
@@ -38,10 +47,17 @@ class CheckBox extends Component {
             callback({ key: id, title: title, value: this.state.value, validation: validation });
     }
 
+    _onOpenModal = () => {
+        const _self = this,
+            { modal = {} } = _self.props.data;
+
+        store.dispatch({ type: SHOW_CUSTOM_POPUP, value: { visibility: true, type: SET_VIEWER, data: modal } });
+    }
+
     render() {
 
         const _self = this,
-            { desc, error = false, errorMsg = null } = _self.props.data,
+            { error = false, errorMsg = null, desc = '', modal = '' } = _self.props.data,
             { control = false } = _self.props,
             { value } = _self.state,
             { checkBox } = styles,
@@ -51,14 +67,34 @@ class CheckBox extends Component {
         if (control)
             _self._callback();
 
-        return (
-            <Container titleShow={true} error={error} errorMsg={errorMsg} wrapperStyle={{ paddingLeft: 0, borderWidth: 0, height: 'auto' }}>
+        let view = null;
+
+        if (modal != '')
+            view = (
+                <View style={{ flexDirection: 'row' }}>
+                    <TouchableOpacity activeOpacity={0.8} onPress={this._onPress}>
+                        {check}
+                    </TouchableOpacity>
+                    <TouchableOpacity activeOpacity={0.8} onPress={this._onOpenModal}>
+                        <ParserHTML wrapperStyle={{ flex: 1 }}>{desc}</ParserHTML>
+                    </TouchableOpacity>
+                </View>
+            )
+        else
+            view = (
                 <TouchableOpacity style={{ flexDirection: 'row' }} activeOpacity={0.8} onPress={this._onPress}>
                     {check}
-                    <Text style={{ flex: 1 }}>{desc}</Text>
+                    <ParserHTML wrapperStyle={{ flex: 1 }}>{desc}</ParserHTML>
                 </TouchableOpacity>
+            );
+
+        return (
+            <Container titleShow={true} error={error} errorMsg={errorMsg} wrapperStyle={{ paddingLeft: 0, borderWidth: 0, height: 'auto' }}>
+                {view}
             </Container>
-        );
+        )
+
+
     }
 }
 

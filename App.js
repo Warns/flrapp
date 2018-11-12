@@ -10,6 +10,9 @@ import { Settings, OfflineNotice } from 'root/app/helper/';
 import Preloader from 'root/app/helper/Preloader';
 import TopMenu from 'root/app/views/TopMenu';
 
+// custom modal
+import { CustomModal } from 'root/app/viewer';
+
 // navigation
 import RootNavigation from './navigation/RootNavigation';
 
@@ -63,6 +66,7 @@ export default class App extends React.Component {
               <ProductView />
               <Assistant />
               <YoutubePlayer />
+              <CustomModal />
               <Preloader />
             </View>
           </KeyboardAvoidingView>
@@ -110,7 +114,8 @@ export default class App extends React.Component {
         require('root/assets/icons/bottomArrow.png'),
         require('root/assets/icons/topArrow.png'),
         require('root/assets/icons/search-map.png'),
-        require('root/assets/icons/myLocation.png')
+        require('root/assets/icons/myLocation.png'),
+        require('root/assets/gifs/goo.gif')
       ]),
       Font.loadAsync({
         // We include SpaceMono because we use it in HomeScreen.js. Feel free

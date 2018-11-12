@@ -35,6 +35,7 @@ export const ICONS = {
     upArrow: require('root/assets/icons/topArrow.png'),
     searchMap: require('root/assets/icons/search-map.png'),
     myLocation: require('root/assets/icons/myLocation.png'),
+    loading: require('root/assets/gifs/goo.gif')
 };
 
 /* CARDS ICON */
@@ -195,3 +196,6 @@ export const SET_SEGMENTIFY_INSTANCEID = 'SET_SEGMENTIFY_INSTANCEID';
 
 /* assistant */
 export const ASSISTANT_SHOW = 'ASSISTANT_SHOW';
+
+/* customPopup */
+export const SHOW_CUSTOM_POPUP = 'SHOW_CUSTOM_POPUP';

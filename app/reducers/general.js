@@ -1,13 +1,14 @@
-import { 
-    SET_CATEGORIES, 
-    SET_SCREEN_DIMENSIONS, 
-    SET_SELECTED_CATEGORY, 
+import {
+    SET_CATEGORIES,
+    SET_SCREEN_DIMENSIONS,
+    SET_SELECTED_CATEGORY,
     SET_TEXTURE_DISPLAY,
     OPEN_PRODUCT_DETAILS,
     UPDATE_PRODUCT_DETAILS_ITEM,
     CLOSE_PRODUCT_DETAILS,
     UPDATE_PRODUCT_VIDEOS,
     SHOW_PRELOADING,
+    SHOW_CUSTOM_POPUP,
 } from 'root/app/helper/Constant';
 import { store } from 'root/app/store';
 
@@ -16,14 +17,14 @@ const Globals = require('root/app/globals.js');
 
 const generalInitialState = {
     categories: [
-      {
-        selector: 'All',
-        id: 'all',
-      }
+        {
+            selector: 'All',
+            id: 'all',
+        }
     ],
     selectedCategory: null,
     textureDisplay: false,
-    product:{
+    product: {
         visibility: false,
         measurements: null,
         id: null,
@@ -31,22 +32,26 @@ const generalInitialState = {
         item: null,
     },
     preloading: false,
-    video:{
+    video: {
         visibility: false,
-        items:[],
-        selected:0,
+        items: [],
+        selected: 0,
     },
-    
+    customModal: {
+        visibility: false,
+        type: '',
+        data: {},
+    },
     // Other
     SCREEN_DIMENSIONS: {
-        topMargin:0,
-        window:null,
+        topMargin: 0,
+        window: null,
     },
-  }
+}
 
-export default function general( state = generalInitialState, action ){
+export default function general(state = generalInitialState, action) {
 
-    switch ( action.type ) {
+    switch (action.type) {
         case SET_CATEGORIES: return {
             ...state,
             categories: action.value,
@@ -64,29 +69,30 @@ export default function general( state = generalInitialState, action ){
             textureDisplay: action.value,
         };
         case CLOSE_PRODUCT_DETAILS: return {
-            ...state, product:{
+            ...state, product: {
                 ...state.product,
                 item: null,
                 visibility: false,
                 measurements: null,
             }
         };
-        case OPEN_PRODUCT_DETAILS:{
+        case OPEN_PRODUCT_DETAILS: {
 
-            if( action.value.id ){
-                fetchProductDetails( action.value.id );
+            if (action.value.id) {
+                fetchProductDetails(action.value.id);
             }
 
-            return {...state, product:{
-                ...state.product,
-                ...action.value,
-                visibility: true,
+            return {
+                ...state, product: {
+                    ...state.product,
+                    ...action.value,
+                    visibility: true,
                 },
                 preloading: true,
             };
         };
         case UPDATE_PRODUCT_DETAILS_ITEM: return {
-            ...state, product:{
+            ...state, product: {
                 ...state.product,
                 item: action.value.product,
                 colors: action.value.colors,
@@ -95,36 +101,43 @@ export default function general( state = generalInitialState, action ){
             preloading: false,
         };
         case UPDATE_PRODUCT_VIDEOS: return {
-            ...state, video:{
+            ...state, video: {
                 ...state.video,
                 ...action.value,
             }
         };
         case SHOW_PRELOADING: return {
-            ...state, 
+            ...state,
             preloading: action.value
         };
+        case SHOW_CUSTOM_POPUP: return {
+            ...state,
+            customModal: {
+                ...action.value
+            }
+        };
+        
         default:
             return state;
     }
 }
 
 // to be moved to actions
-fetchProductDetails = ( id ) => {
+fetchProductDetails = (id) => {
 
     globals.fetch(
         "https://www.flormar.com.tr/webapi/v3/Product/getProductDetail",
         JSON.stringify({
             "productId": id,
-        }), ( answer ) => {
-            
+        }), (answer) => {
+
             console.log('answer for detail', answer.status)
 
-            if( answer.status == 200){
+            if (answer.status == 200) {
                 let colors = [];
-                
-                if(answer.data.product.productGroups) colors = answer.data.product.productGroups;
-                
+
+                if (answer.data.product.productGroups) colors = answer.data.product.productGroups;
+
                 colors.push({
                     productId: answer.data.product.productId,
                     productUrl: answer.data.product.productUrl,
@@ -133,22 +146,22 @@ fetchProductDetails = ( id ) => {
                     mediumImageUrl: answer.data.product.productImages[0].mediumImageUrl,
                     hasStock: answer.data.product.stockQty > 0 ? true : false,
                     name: answer.data.product.shortName
-                  });
-                
-                colors.sort(function(a, b){return a.shortCode - b.shortCode });
+                });
 
-                store.dispatch({type:UPDATE_PRODUCT_DETAILS_ITEM, value: {product:answer.data.product, colors:colors} });
+                colors.sort(function (a, b) { return a.shortCode - b.shortCode });
+
+                store.dispatch({ type: UPDATE_PRODUCT_DETAILS_ITEM, value: { product: answer.data.product, colors: colors } });
 
                 // Fetch video
                 Utils.ajx({ uri: 'https://www.flormar.com.tr/mobile-app-product-video-export.html?urn=' + id }, (result) => {
                     if (result['type'] == 'success')
-                        store.dispatch({type:UPDATE_PRODUCT_VIDEOS, value: {videos: result.data.data.videos} });
+                        store.dispatch({ type: UPDATE_PRODUCT_VIDEOS, value: { videos: result.data.data.videos } });
                 });
 
             }
-            else{
-            // handle error
+            else {
+                // handle error
             }
-    });
+        });
 
 }

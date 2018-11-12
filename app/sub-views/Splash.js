@@ -83,7 +83,7 @@ class Splash extends React.Component {
 
   _onSignupPressed = () => {
 
-    this.props.dispatch({type:UPDATE_PRODUCT_VIDEOS, value:{visibility:true, selected:1, items:[
+    /*this.props.dispatch({type:UPDATE_PRODUCT_VIDEOS, value:{visibility:true, selected:1, items:[
       {
       "videoId": "pl92KOsacOc",
       "provider": "youtube",
@@ -100,9 +100,9 @@ class Splash extends React.Component {
       "thumbnail": "/UPLOAD/BtonzMakyaj_650x365.png",
       "text": "Bronz Tene Yaz Akşamı Makyajı"
       }
-    ]}});
+    ]}});*/
 
-    //this.props.navigation.navigate('Signup');
+    this.props.navigation.navigate('Signup');
   };
 
   _renderItem = ( obj, parallaxProps )=>{

@@ -380,9 +380,9 @@ class Form extends Component {
 
         return (
             <ScrollView
-            keyboardShouldPersistTaps='handled' 
-            scrollEnabled={scrollEnabled} 
-            style={[{ flex: 1 }]}>
+                keyboardShouldPersistTaps='handled'
+                scrollEnabled={scrollEnabled}
+                style={[{ flex: 1 }]}>
                 <CustomKeyboard style={[{ flex: 1 }]}>
                     <View style={[{ flex: 1, paddingLeft: 40, paddingRight: 40, paddingBottom: 40 }, { ..._self.props.style }]}>
                         {_self._getAllErrMsg()}
