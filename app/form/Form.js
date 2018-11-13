@@ -249,7 +249,7 @@ class Form extends Component {
             store.dispatch({ type: SHOW_PRELOADING, value: true });
             _self.ajx({ uri: uri, data: obj }, function ({ type, d }) {
                 if (callback)
-                    callback({ type: type, data: d });
+                    callback({ type: type, data: d, postData: obj });
 
                 store.dispatch({ type: SHOW_PRELOADING, value: false });
             });
