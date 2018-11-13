@@ -28,7 +28,8 @@ import {
   OPEN_PRODUCT_DETAILS, 
   ADD_CART_ITEM, 
   ADD_TO_FAVORITES, 
-  REMOVE_FROM_FAVORITES 
+  REMOVE_FROM_FAVORITES,
+  OPEN_VIDEO_PLAYER,
 } from 'root/app/helper/Constant';
 import { store } from '../../app/store';
 
@@ -53,6 +54,24 @@ class ProductView extends React.Component {
     animationType: 'none',
     favoriteButton:{status:false, a:'FAVORİME EKLE', b:'FAVORİME EKLENDİ'},
   };
+
+  componentDidMount(){
+    this.props.dispatch({type:'UPDATE_PRODUCT_OBJECT', value:{callback:this._initAnimation}});
+  }
+
+  _initAnimation = () => {
+    
+    Animated.timing(
+      this.state.anim, {
+        toValue:1,
+        duration: 600,
+        easing: Easing.inOut(Easing.cubic),
+        onComplete: this._initDetails,
+      }
+    ).start();
+
+    console.log('init animation');
+  }
 
   _animate = () => {
     Animated.timing(
@@ -84,12 +103,26 @@ class ProductView extends React.Component {
   }
 
   _initDetails = ()=>{
-    this.setState({animationDone: true, animationType:'none' });
+    this.setState({animationDone: true });
   }
 
   _close = () =>{
-    //reset
+
     this.props.dispatch({type:CLOSE_PRODUCT_DETAILS, Value:{}});
+
+    this.setState({
+      animationDone: false, 
+      //animationType:'none', 
+      anim: new Animated.Value(0), 
+      opacity: new Animated.Value(0), 
+      detailIsOpen:false, 
+      videosIsOpen:false,
+      favoriteButton:{...this.state.favoriteButton, status:false},
+    });
+
+    /*
+    //reset
+    
     setTimeout(() => {
       this.setState({
         animationDone: false, 
@@ -101,6 +134,8 @@ class ProductView extends React.Component {
         favoriteButton:{...this.state.favoriteButton, status:false},
       });
     }, 111);
+    */
+
   }
 
   _showProductInfo = () => {
@@ -145,23 +180,25 @@ class ProductView extends React.Component {
     else{
       store.dispatch({type:REMOVE_FROM_FAVORITES, value: {id: this.props.product.item.productId} });
     }
-
   }
 
-  _renderProduct = () => {
+  _onVideoPress = (index, item) => {
+
+    //console.log( this.props.product.item );
+    
+    this._close();
+    this.props.dispatch({type:OPEN_VIDEO_PLAYER, value:{visibility:true, selected:index, items:this.props.product.videos}});
+  }
+
+  _renderAnimation = () => {
     let{ anim, detailIsOpen, opacity, canScroll, videosIsOpen, favoriteButton } = this.state;
     let { item, sequence, measurements, animate, colors, videos } = this.props.product;
-    if( item ){
-      let {width, height, pageY, pageX} = measurements;
-      let animatedImage = null;
-      let veil = null;
+    let animatedImage = null;
+    let veil = null;
 
-      const images = [];
-      for( var k in item.productImages ){
-        if(item.productImages[k].imageUrl.indexOf('mobile_texture') < 0){
-          images.push(item.productImages[k]);
-        }
-      }
+    if( item && animate ){
+
+      let {width, height, pageY, pageX} = measurements;
 
       const _width = anim.interpolate({
         inputRange: [0, 1],
@@ -182,23 +219,61 @@ class ProductView extends React.Component {
         inputRange: [0, 1],
         outputRange: [Math.ceil(pageX), 0 + sequence * 270],
       });
+
+      const _vail_top = anim.interpolate({
+        inputRange: [0, .6, 1],
+        outputRange: [SCREEN_DIMENSIONS.height, SCREEN_DIMENSIONS.height, 0],
+      });
   
-      const _opacity = opacity.interpolate({
-        inputRange: [0, 1],
-        outputRange: [1, 0],
-      })
+      const _opacity = anim.interpolate({
+        inputRange: [0, .5, 1],
+        outputRange: [0, 1, 0],
+      });
+
+      animatedImage = <Animated.Image style={{width: _width, height: _height, top: _top, left: _left, position:'absolute', zIndex:10, resizeMode:'contain'}} source={{uri: item.productImages[sequence].mediumImageUrl }} />;
+      veil = <Animated.View style={{width: SCREEN_DIMENSIONS.width, height: SCREEN_DIMENSIONS.height, top:0, left:0, position:'absolute', zIndex:9, opacity:1, backgroundColor:'#ffffff'}} />;
+
+      if( !this.state.animationDone ){
+
+        console.log('if not animation is done');
+        
+        this._animate();
+      }
+    }
+
+    return(
+      <View>
+        {animatedImage}
+        {veil
+        }
+      </View>
+    );
+  }
+
+  _renderProduct = () => {
+    let{ anim, detailIsOpen, opacity, canScroll, videosIsOpen, favoriteButton, animationDone } = this.state;
+    let { item, sequence, measurements, animate, colors, videos } = this.props.product;
+    if( item && animationDone ){
+      
+
+      const images = [];
+      for( var k in item.productImages ){
+        if(item.productImages[k].imageUrl.indexOf('mobile_texture') < 0){
+          images.push(item.productImages[k]);
+        }
+      }
+
+      
       
       if( animate && !this.state.animationDone ){
-        animatedImage = <Animated.Image style={{width: _width, height: _height, top: _top, left: _left, position:'absolute', zIndex:10, resizeMode:'contain'}} source={{uri: item.productImages[sequence].mediumImageUrl }} />;
-        veil = <Animated.View style={{width: SCREEN_DIMENSIONS.width, height: SCREEN_DIMENSIONS.height, top:0, left:0, position:'absolute', zIndex:9, opacity:_opacity, backgroundColor:'#ffffff'}} />;
-        this._animate();
+        
       }
 
       let palette = colors.length > 1 ? <Palette width={SCREEN_DIMENSIONS.width} items={colors} selected={item.shortCode} onPress={this._changeColor} /> : null;
 
       let videosButton = videos.length > 0 ? <ProductActionButton name="Videolar" count={videos.length} expanded={videosIsOpen} onPress={this._showVideos} /> : null;
 
-      let _videos = videosIsOpen && videos.length > 0 ? <VideosList items={videos} /> : null;
+      let _videos = videosIsOpen && videos.length > 0 ? <VideosList items={videos} callback={this._onVideoPress} /> : null;
 
       let recommendations = item.productRecommends.length > 0 ? (
         <View style={{marginTop:35}}>
@@ -236,19 +311,7 @@ class ProductView extends React.Component {
                             ( <DefaultButton callback={this._addToFavorites} name={favoriteButton.a} /> );
 
       return( 
-        <View style={{flex:1, backgroundColor:'rgba(255,255,255,1)'}}>
-          <MinimalHeader onPress={this._close} title={item.productName} noMargin={this.props.SCREEN_DIMENSIONS.OS == 'android' ? true : false } />
-          <ScrollView
-            ref={ref => this.productScrollView = ref}
-            onContentSizeChange={() => {
-              if( canScroll ){
-                this.productScrollView.scrollTo({y: 0});
-                this.setState({canScroll: false});
-              }
-            }}
-          >
-          {animatedImage}
-          {veil}
+          <View>
             <View>
               <Carousel
                   ref={(c) => {this._carousel = c;}}
@@ -297,8 +360,7 @@ class ProductView extends React.Component {
             {_videos}
             {recommendations}
             <View style={{height:60}} />
-          </ScrollView>
-        </View> 
+            </View>
       )
     }
     else
@@ -307,13 +369,71 @@ class ProductView extends React.Component {
 
   render(){
 
+    let { item, screenshot, sequence, measurements } = this.props.product;
+    let {width, height, pageY, pageX} = measurements;
+    let{ canScroll, anim } = this.state;
+
+    let _title = item ? item.productName : '';
+
+      const _width = anim.interpolate({
+        inputRange: [0, 1],
+        outputRange: [width, 270],
+      });
+  
+      const _height = anim.interpolate({
+        inputRange: [0, 1],
+        outputRange: [width * 1.25, 337],
+      });
+  
+      const _top = anim.interpolate({
+        inputRange: [0, 1],
+        outputRange: [pageY -60, 0],
+      });
+  
+      const _left = anim.interpolate({
+        inputRange: [0, 1],
+        outputRange: [Math.ceil(pageX), 0 + sequence * 270],
+      });
+
+    const _scale = anim.interpolate({
+      inputRange: [0, 1],
+      outputRange: [1, .9],
+    });
+
+    const _alpha = anim.interpolate({
+      inputRange: [0, 1],
+      outputRange: [1, 0],
+    });
+
+    let _screenshot = screenshot ? <Animated.Image source={{uri: screenshot }} style={{ position:'absolute', left:0, top:0, width:'100%', height:SCREEN_DIMENSIONS.height-57, resizeMode:'contain', opacity:_alpha, transform:[{scale:_scale}]}} /> : null;
+    let _animatedImage = item ? <Animated.Image style={{width: _width, height: _height, top: _top, left: _left, position:'absolute', zIndex:10, resizeMode:'contain'}} source={{uri: item.productImages[sequence].mediumImageUrl }} />: null;
+
     return(
       <Modal
         animationType={this.state.animationType}
-        transparent={true}
+        transparent={false}
         visible={this.props.product.visibility}
       >
-        {this._renderProduct()}
+        <View style={{flex:1, backgroundColor:'#ffffff'}}>
+          <MinimalHeader onPress={this._close} title={_title} noMargin={this.props.SCREEN_DIMENSIONS.OS == 'android' ? true : false } />
+          <ScrollView
+            ref={ref => this.productScrollView = ref}
+            onContentSizeChange={() => {
+              if( canScroll ){
+                this.productScrollView.scrollTo({y: 0});
+                this.setState({canScroll: false});
+              }
+            }}
+          >
+            {
+              //this._renderAnimation()
+            }
+            {this._renderProduct()
+            }
+            {_screenshot}
+            {_animatedImage}
+          </ScrollView>
+        </View>
       </Modal>
     )
   }

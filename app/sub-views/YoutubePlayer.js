@@ -5,44 +5,65 @@ import {
   Dimensions,
   Modal,
   Text,
+  ScrollView,
+  StyleSheet,
 } from 'react-native';
 import { connect } from 'react-redux';
 import { MinimalHeader, VideosList } from 'root/app/components';
 
 import {
-  UPDATE_PRODUCT_VIDEOS,
+  OPEN_VIDEO_PLAYER,
 } from 'root/app/helper/Constant';
 
 class YoutubePlayer extends React.Component{
 
   state = {
     selected: 0,
+    userAction: false,
+    headerTitle: 'KAPAT',
   }
 
   _onClose = ()=>{
-    this.props.dispatch({type:UPDATE_PRODUCT_VIDEOS, value:{visibility:false, items:[], selected:0}});
+    this.props.dispatch({type:OPEN_VIDEO_PLAYER, value:{visibility:false, items:[], selected:0}});
+  }
+
+  _onVideoPress = (index, item) =>{
+    this.setState({selected: index, userAction:true});
   }
 
   _renderVideos = () =>{
 
-    let { items, selected = 0 } = this.props.video,
-        {videoId = '', text = ''} = items[selected] || {}
+    let { items, selected = 0 } = this.props.video;
 
-    let videoSource = items.length > 0 ? {uri: "https://www.youtube.com/embed/" + videoId + "?rel=0&autoplay=0&showinfo=0&controls=1"} : null;
+    //console.log('sakfhsdkjghfs', selected, this.props.video.visibility);
 
-    let _videos = items.length > 1 ? <VideosList items={items} /> : null;
+
+    let _selected = this.state.userAction ? this.state.selected : selected;
+    let {videoId = '', text = ''} = items[_selected] || {};
+    let _videoId = videoId.indexOf('&') > 0 ? videoId.substring(0, videoId.indexOf('&')) : videoId;
+
+    let videoSource = items.length > 0 ? {uri: "https://www.youtube.com/embed/" + _videoId + "?rel=0&autoplay=0&showinfo=0&controls=1"} : null;
+
+    let _videos = items.length > 1 ? <View><Text style={[styles.sectionHeader, {marginLeft:20, marginBottom:15,}]}>İLGİLİ VİDEOLAR</Text><VideosList items={items} callback={this._onVideoPress} /></View> : null;
+
+    let _title = this.props.product.item ? this.props.product.item.productName : this.state.headerTitle;
 
     return(
     <View style={{flex:1}}>
-      <MinimalHeader onPress={this._onClose} title="KAPAT" right={<View />} />
-        <WebView
-              style={{flex:1, width:'100%', maxHeight:Dimensions.get('window').width * .65, backgroundColor:'#dddddd', borderWidth:1, borderColor:'#dddddd'}}
-              javaScriptEnabled={true}
-              source={ videoSource }
-        />
-        
-        <Text>{text}</Text>
+      <MinimalHeader onPress={this._onClose} title={_title} right={<View />} />
+        <ScrollView style={{flex:1}}>
+        <View style={{flex:1, height:Dimensions.get('window').width * .65, maxHeight:Dimensions.get('window').width * .65, backgroundColor:'#dddddd',}}>
+          <WebView
+                style={{flex:1}}
+                javaScriptEnabled={true}
+                source={ videoSource }
+          />
+        </View>
+        <View style={{flex:1, paddingTop:10}}>
+        <Text style={{fontSize:18, marginLeft:20, marginRight:20, marginBottom:50, }}>{text}</Text>
         {_videos}
+        </View>
+        </ScrollView>
     </View>
     )
   }
@@ -51,7 +72,7 @@ class YoutubePlayer extends React.Component{
 
     return(
       <Modal
-        animationType='slide'
+        animationType='none'
         transparent={false}
         visible={this.props.video.visibility}
       >
@@ -61,15 +82,14 @@ class YoutubePlayer extends React.Component{
   }
 }
 
-/*
-{
-"videoId": "pl92KOsacOc",
-"provider": "youtube",
-"thumbnail": "/UPLOAD/BtonzMakyaj_650x365.png",
-"text": "Bronz Tene Yaz Akşamı Makyajı"
-}
-*/
-
 // filter state
 function mapStateToProps(state){ return state.general; }
 export default connect(mapStateToProps)(YoutubePlayer);
+
+
+const styles = StyleSheet.create({
+  sectionHeader:{
+    fontSize: 16,
+    fontFamily:'Bold',
+  }
+});

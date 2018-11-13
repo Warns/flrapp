@@ -1385,7 +1385,7 @@ class Viewers extends Component {
         const _self = this,
             { itemType = '' } = _self.props.config;
 
-        let view = <Text>Sonuç bulunamadı...</Text>;
+        let view = <View style={{justifyContent:'center', alignItems:'center', flex:1}}><Text>Sonuç bulunamadı...</Text></View>;
 
         if (itemType == ITEMTYPE['CARTLIST'])
             view = (

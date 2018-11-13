@@ -7,7 +7,7 @@ import {
     UPDATE_PRODUCT_DETAILS_ITEM,
     CLOSE_PRODUCT_DETAILS,
     UPDATE_PRODUCT_VIDEOS,
-    SHOW_PRELOADING,
+    OPEN_VIDEO_PLAYER,
 } from 'root/app/helper/Constant';
 import { store } from 'root/app/store';
 
@@ -25,16 +25,17 @@ const generalInitialState = {
     textureDisplay: false,
     product:{
         visibility: false,
-        measurements: null,
+        measurements: {},
         id: null,
         animate: false,
         item: null,
+        screenshot: null,
+        videos:[],
     },
     preloading: false,
     video:{
         visibility: false,
         items:[],
-        selected:0,
     },
     
     // Other
@@ -68,8 +69,15 @@ export default function general( state = generalInitialState, action ){
                 ...state.product,
                 item: null,
                 visibility: false,
-                measurements: null,
+                measurements: {},
             }
+        };
+        case 'UPDATE_PRODUCT_OBJECT':{
+            return{...state, product:{
+                ...state.product,
+                ...action.value,
+                }
+            };
         };
         case OPEN_PRODUCT_DETAILS:{
 
@@ -85,24 +93,31 @@ export default function general( state = generalInitialState, action ){
                 preloading: true,
             };
         };
-        case UPDATE_PRODUCT_DETAILS_ITEM: return {
-            ...state, product:{
-                ...state.product,
-                item: action.value.product,
-                colors: action.value.colors,
-                videos: [],
-            },
-            preloading: false,
+        case UPDATE_PRODUCT_DETAILS_ITEM: {
+
+            if(state.product.callback) state.product.callback();
+            
+            return {
+                ...state, product:{
+                    ...state.product,
+                    item: action.value.product,
+                    colors: action.value.colors,
+                    videos: [],
+                },
+                preloading: false,
+            }
         };
-        case UPDATE_PRODUCT_VIDEOS: return {
+        case OPEN_VIDEO_PLAYER: return {
             ...state, video:{
                 ...state.video,
                 ...action.value,
             }
         };
-        case SHOW_PRELOADING: return {
-            ...state, 
-            preloading: action.value
+        case UPDATE_PRODUCT_VIDEOS: return {
+            ...state, product:{
+                ...state.product,
+                videos: action.value.videos,
+            }
         };
         default:
             return state;
@@ -118,7 +133,7 @@ fetchProductDetails = ( id ) => {
             "productId": id,
         }), ( answer ) => {
             
-            console.log('answer for detail', answer.status)
+            //console.log('answer for detail', answer.status)
 
             if( answer.status == 200){
                 let colors = [];

@@ -35,17 +35,14 @@ class VideosList extends React.Component{
     )
   }
 
-  _onPressItem = ( item ) => {
-
-    console.log( item );
-
-    //this.props.onPress( item.productId );
+  _onPressItem = ( index, item ) => {
+    
+    if(this.props.callback)
+      this.props.callback( index, item );
 
   }
 
   render(){
-
-   console.log(this.state.items);
 
     return(
       <View style={{paddingBottom:20}}>
@@ -71,7 +68,7 @@ class ListItem extends React.Component {
   }
 
   _onPress = () => {
-    this.props.onPressItem(this.props.item);
+    this.props.onPressItem(this.props.index, this.props.item);
   }
 
   render(){
