@@ -5,8 +5,9 @@ import {
     Text,
     Animated,
     Easing,
+    Image
 } from 'react-native';
-import { FORMSTYLE } from 'root/app/helper/Constant';
+import { FORMSTYLE, ICONS } from 'root/app/helper/Constant';
 
 class Container extends Component {
     constructor(props) {
@@ -49,7 +50,7 @@ class Container extends Component {
 
     render() {
         const _self = this,
-            { theme = 'DARK', containerStyle = {}, wrapperStyle = {}, showHeader = true } = _self.props,
+            { theme = 'DARK', containerStyle = {}, wrapperStyle = {}, showHeader = true, showErrorIco = true } = _self.props,
             { container, wrapper, titleSty, errorMsgSty } = styles,
             { BORDER_WIDTH = 1, BORDER_COLOR = '#dddddd', TITLE_COLOR = '#9b9b9b', ERROR_COLOR = '#d3838d', BACKGROUND_COLOR = '#FFFFFF' } = FORMSTYLE[theme],
             children = _self.props.children,
@@ -63,11 +64,27 @@ class Container extends Component {
             });
 
         let { title = null, error = false, errorMsg = null } = _self.props,
+            errorIco = null,
             color = BORDER_COLOR;
 
         if (error) {
             errorMsg = <Text numberOfLines={1} style={[errorMsgSty, { color: ERROR_COLOR }]}>{errorMsg}</Text>
             color = ERROR_COLOR;
+            
+            if( showErrorIco )
+                errorIco = (
+                    <Image
+                        source={(ICONS['error'])}
+                        style={{ 
+                            position: 'absolute',
+                            right: 10,
+                            width: 30, 
+                            height: 30, 
+                            resizeMode: 'contain', 
+                            backgroundColor: '#FFFFFF' 
+                        }}
+                    />
+                );
         }
 
         if (title)
@@ -91,6 +108,7 @@ class Container extends Component {
                 {header}
                 <View style={[wrapper, { borderWidth: BORDER_WIDTH, borderColor: color, backgroundColor: BACKGROUND_COLOR, }, wrapperStyle]}>
                     {children}
+                    {errorIco}
                 </View>
             </View>
         );

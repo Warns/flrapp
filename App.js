@@ -105,7 +105,6 @@ export default class App extends React.Component {
         require('root/assets/icons/youtube.png'),
         require('root/assets/icons/noConnection.png'),
         require('root/assets/icons/placeholder/feeds.png'),
-        require('root/assets/icons/cartNoResult.png'),
         require('root/assets/icons/flormarExtra.png'),
         require('root/assets/icons/userWoman.png'),
         require('root/assets/icons/userMan.png'),
@@ -115,7 +114,13 @@ export default class App extends React.Component {
         require('root/assets/icons/topArrow.png'),
         require('root/assets/icons/search-map.png'),
         require('root/assets/icons/myLocation.png'),
-        require('root/assets/gifs/goo.gif')
+        require('root/assets/gifs/goo.gif'),
+        require('root/assets/icons/error.png'),
+        require('root/assets/icons/cartNoResult.png'),
+        require('root/assets/icons/addressNoResult.png'),
+        require('root/assets/icons/couponNoResult.png'),
+        require('root/assets/icons/favoriteNoResult.png'),
+        require('root/assets/icons/followListNoResult.png'),
       ]),
       Font.loadAsync({
         // We include SpaceMono because we use it in HomeScreen.js. Feel free

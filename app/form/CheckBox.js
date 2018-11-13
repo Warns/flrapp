@@ -89,7 +89,7 @@ class CheckBox extends Component {
             );
 
         return (
-            <Container titleShow={true} error={error} errorMsg={errorMsg} wrapperStyle={{ paddingLeft: 0, borderWidth: 0, height: 'auto' }}>
+            <Container showErrorIco={false} titleShow={true} error={error} errorMsg={errorMsg} wrapperStyle={{ paddingLeft: 0, borderWidth: 0, height: 'auto' }}>
                 {view}
             </Container>
         )
