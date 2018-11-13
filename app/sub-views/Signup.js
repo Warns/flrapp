@@ -51,7 +51,9 @@ class Signup extends React.Component{
     return(
       <SafeAreaView style={{flex:1}}>
         <MinimalHeader title="" right={<View />} onPress={this._onBackPress} />
-        <ScrollView style={{flex:1}}>
+        <ScrollView 
+        keyboardShouldPersistTaps='handled'
+        style={{flex:1}}>
           <View style={{alignItems:'center'}}>
             <Image source={require('../../assets/images/seni-taniyalim.png')} style={{ resizeMode: 'contain', width: 200, height: 100 }} />
           </View>

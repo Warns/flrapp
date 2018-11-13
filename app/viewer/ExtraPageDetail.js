@@ -4,7 +4,7 @@ import {
     Text,
 } from 'react-native';
 import { connect } from 'react-redux';
-import { Viewer, MapViewer, OrderViewer } from 'root/app/viewer';
+import { Viewer, OrderViewer } from 'root/app/viewer';
 import { ORDER_LIST_CLICKED, SET_FORM, FORMDATA, SET_VIEWER } from 'root/app/helper/Constant';
 import { Form } from 'root/app/form';
 

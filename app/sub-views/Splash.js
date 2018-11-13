@@ -71,20 +71,7 @@ class Splash extends React.Component {
 
   _onSignupPressed = () => {
 
-    /*
-    this.props.dispatch({type:OPEN_VIDEO_PLAYER, value:{visibility:true, selected:1, items:[
-      {
-        "provider": "youtube",
-        "text": "İdeal kaş ölçüsü nasıl belirlenir?",
-        "thumbnail": "/UPLOAD/collection/Thumbnail_ideal_kas_olcusu-1.jpg",
-        "videoId": "V8DFWE_4s0g&t=1s",
-      },
-      {
-        "provider": "youtube",
-        "text": "Doğal Kaş Kalınlaştırma: İnce Kaşlar Nasıl Kalınlaştırılır?",
-        "thumbnail": "/UPLOAD/collection/kas-kalinlastirma-1.jpg",
-        "videoId": "20e8lp0uXz0",
-      },
+    /*this.props.dispatch({type:UPDATE_PRODUCT_VIDEOS, value:{visibility:true, selected:1, items:[
       {
         "provider": "youtube",
         "text": "Doğal Görünümlü Kaş Nasıl Elde Edilir?",
@@ -97,8 +84,8 @@ class Splash extends React.Component {
         "thumbnail": "/UPLOAD/collection/Thumbnail_seyrek_kaslar_nasıl_dolgunlastirilir copy copy.jpg",
         "videoId": "nQYHmB8EKyk",
       }
-    ]}});
-    */
+    ]}});*/
+
     this.props.navigation.navigate('Signup');
   };
 

@@ -35,6 +35,7 @@ export const ICONS = {
     upArrow: require('root/assets/icons/topArrow.png'),
     searchMap: require('root/assets/icons/search-map.png'),
     myLocation: require('root/assets/icons/myLocation.png'),
+    loading: require('root/assets/gifs/goo.gif')
 };
 
 /* CARDS ICON */
@@ -96,7 +97,6 @@ export const DATA_LOADED = 'DATA_LOADED';
 export const SERVICE_LIST_CLICKED = 'SERVICE_LIST_CLICKED';
 export const ORDER_LIST_CLICKED = 'ORDER_LIST_CLICKED';
 export const ADDRESS_LIST_CLICKED = 'ADDRESS_LIST_CLICKED';
-export const LOCATION_SERVICE = 'LOCATION_SERVICE';
 export const SET_FORM = 'SET_FORM';
 export const SET_VIEWER = 'SET_VIEWER';
 export const SET_ADDRESS_ITEM_CLICK = 'SET_ADDRESS_ITEM_CLICK';
@@ -197,3 +197,6 @@ export const SET_SEGMENTIFY_INSTANCEID = 'SET_SEGMENTIFY_INSTANCEID';
 
 /* assistant */
 export const ASSISTANT_SHOW = 'ASSISTANT_SHOW';
+
+/* customPopup */
+export const SHOW_CUSTOM_POPUP = 'SHOW_CUSTOM_POPUP';

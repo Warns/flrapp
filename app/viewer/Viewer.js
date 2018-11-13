@@ -11,6 +11,7 @@ import {
     Image,
     Animated,
     Easing,
+    Platform,
 } from 'react-native';
 import HTML from 'react-native-render-html';
 import {
@@ -833,7 +834,7 @@ class FeedsItem extends Component {
     }
 }
 
-class AppShell extends Component {
+class ContentPlaceHolder extends Component {
 
     constructor(props) {
         super(props);
@@ -923,6 +924,29 @@ const HTML_DEFAULT_PROPS = {
     imagesMaxWidth: Dimensions.get('window').width,
     onLinkPress: (evt, href) => { Linking.openURL(href); },
     debug: false
+};
+
+const preload = () => {
+    return (
+        <View style={{ flex: 1, backgroundColor: '#FFFFFF', alignItems: 'center', justifyContent: 'center' }}>
+            <View style={{
+                width: 60,
+                height: 60,
+                borderRadius: 25,
+                overflow: 'hidden',
+                ...Platform.select({
+                    ios: {
+                        zIndex: 9,
+                    },
+                    android: {
+                        elevation: 999,
+                    }
+                }),
+            }}>
+                <Image source={ICONS['loading']} style={{ resizeMode: 'cover', width: 60, height: 60, borderRadius: 30 }} />
+            </View>
+        </View>
+    )
 };
 
 class Viewers extends Component {
@@ -1056,6 +1080,24 @@ class Viewers extends Component {
         return data;
     }
 
+    _getSegData = (data) => {
+        let arr = [];
+        Object
+            .keys(data)
+            .map((key) => {
+                const k = data[key] || [];
+                if (k.length > 0) {
+                    Object
+                        .keys(k)
+                        .map((m) => {
+                            arr.push(k[m])
+                        });
+                }
+
+            });
+        return arr;
+    }
+
     /* segmentify özel */
     _setSeg = (res) => {
         //console.log(res);
@@ -1064,7 +1106,8 @@ class Viewers extends Component {
             const { responses = [] } = res.data,
                 key = Globals.getSegKey(responses),
                 { params = {} } = responses[0][0],
-                data = params['recommendedProducts'][key] || [],
+                //--> data = params['recommendedProducts'][key] || [],
+                data = _self._getSegData(params['recommendedProducts'] || []),
                 instanceId = params['instanceId'] || '',
                 obj = {
                     "name": "INTERACTION",
@@ -1199,7 +1242,7 @@ class Viewers extends Component {
             { loaded } = _self.state;
 
         if (!loaded)
-            return <AppShell key={key} type={itemType} />;
+            return <ContentPlaceHolder key={key} type={itemType} />;
 
         switch (itemType) {
 
@@ -1413,7 +1456,7 @@ class Viewers extends Component {
         const _self = this,
             { scrollEnabled = true } = _self.props,
             { type = VIEWERTYPE['LIST'] } = _self.props.config,
-            { noResult = false } = _self.state;
+            { noResult = false, loaded = false } = _self.state;
 
         let view = null;
         if (noResult)
@@ -1431,33 +1474,35 @@ class Viewers extends Component {
                     onViewableItemsChanged={_self._onViewableItemsChanged}
                 />
             );
-        else if (type == VIEWERTYPE['HTML'])
-            view = (
-                <ScrollView style={{ flex: 1, }}>
-                    <HTML {...HTML_DEFAULT_PROPS} html={_self.state.html} />
-                </ScrollView>
-            );
-        else if (type == VIEWERTYPE['WEBVIEW'])
-            view = (
-                <View style={{ flex: 1, }}>
-                    <WebView
-                        scalesPageToFit={false}
-                        automaticallyAdjustContentInsets={false}
-                        source={{ html: _self.state.html }}
-                    />
-                </View>
-
-            );
-        else if (type == VIEWERTYPE['SCROLLVIEW'])
-            view = (
-                <ScrollView
-                    scrollEnabled={scrollEnabled}
-                    style={{ flex: 1 }}
-                >
-                    {_self._getItem()}
-                </ScrollView>
-
-            );
+        else if (type == VIEWERTYPE['HTML'] || type == VIEWERTYPE['WEBVIEW'] || type == VIEWERTYPE['SCROLLVIEW']) {
+            if( !loaded )
+                view = preload();
+            else if (type == VIEWERTYPE['HTML'])
+                view = (
+                    <ScrollView style={{ flex: 1, }}>
+                        <HTML {...HTML_DEFAULT_PROPS} html={_self.state.html} />
+                    </ScrollView>
+                );
+            else if (type == VIEWERTYPE['WEBVIEW'])
+                view = (
+                    <View style={{ flex: 1, }}>
+                        <WebView
+                            scalesPageToFit={false}
+                            automaticallyAdjustContentInsets={false}
+                            source={{ html: _self.state.html }}
+                        />
+                    </View>
+                );
+            else if (type == VIEWERTYPE['SCROLLVIEW'])
+                view = (
+                    <ScrollView
+                        scrollEnabled={scrollEnabled}
+                        style={{ flex: 1 }}
+                    >
+                        {_self._getItem()}
+                    </ScrollView>
+                );
+        }
 
         return view;
     }

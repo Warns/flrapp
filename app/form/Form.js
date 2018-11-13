@@ -14,6 +14,7 @@ import {
     SHOW_PRELOADING
 } from 'root/app/helper/Constant';
 import { store } from 'root/app/store';
+
 const Validation = require('root/app/helper/Validation.js');
 const Utils = require('root/app/helper/Global.js');
 const Globals = require('root/app/globals.js');
@@ -377,7 +378,10 @@ class Form extends Component {
             button = showButton ? <DefaultButton name={buttonText} textColor="#ffffff" boxColor="#000000" borderColor="#000000" callback={_self._onPress.bind(_self)}>{buttonText}</DefaultButton> : null;
 
         return (
-            <ScrollView scrollEnabled={scrollEnabled} style={[{ flex: 1 }]}>
+            <ScrollView
+                keyboardShouldPersistTaps='handled'
+                scrollEnabled={scrollEnabled}
+                style={[{ flex: 1 }]}>
                 <CustomKeyboard style={[{ flex: 1 }]}>
                     <View style={[{ flex: 1, paddingLeft: 40, paddingRight: 40, paddingBottom: 40 }, { ..._self.props.style }]}>
                         {_self._getAllErrMsg()}

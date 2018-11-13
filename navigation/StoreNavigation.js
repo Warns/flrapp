@@ -8,15 +8,11 @@ import {
     Linking,
 } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
-import { StoreHeader, MinimalHeader } from 'root/app/components/';
-import { LocationService, } from 'root/app/helper/';
-import { Viewer } from 'root/app/viewer/';
+import { MinimalHeader } from 'root/app/components/';
+import { StoreList } from 'root/app/viewer/';
 import { DefaultButton, IconButton } from 'root/app/UI';
 import {
     ICONS,
-    SERVICE_LIST_CLICKED,
-    DATA_LOADED,
-    LOCATION_SERVICE,
     SET_LOCATION,
     NAVIGATE
 } from 'root/app/helper/Constant';
@@ -26,23 +22,6 @@ const { Marker } = MapView;
 const Utils = require('root/app/helper/Global.js');
 
 const ZOOM_LEVEL = Platform.OS == 'android' ? 16 : 12;
-
-
-class Warning extends Component {
-    constructor(props) {
-        super(props);
-    }
-    render() {
-        const k = (Platform.OS === 'ios') ? 'IOS' : 'ANDROID';
-        return (
-            <View style={{ padding: 20 }}>
-                <Text style={{ fontFamily: 'Medium' }}>Yakınlardaki mağazalar konusunda size yardımcı olabilmemiz için konumunuzu görmemize izin verin </Text>
-                <Text style={{ fontFamily: 'Regular' }}>{k} ayarlarında Flormar konum hizmetlerini etkinleştirin veya manuel olarak adresi arayın</Text>
-            </View>
-        );
-    }
-}
-
 
 class AddressDetail extends Component {
     constructor(props) {
@@ -272,134 +251,19 @@ _getLocationAsync = async (success, error) => {
     let location = await Location.getCurrentPositionAsync({});
     success(location);
 };
-
-class Main extends Component {
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            data: [],
-            permission: null,
-            location: null
-        }
-    }
-
-    /* public func */
-    _getData = () => {
-        const _self = this;
-        return { ..._self.state };
-    }
-
-    componentDidMount() {
-        const _self = this,
-            { onRef } = _self.props;
-
-        if (onRef)
-            onRef(this);
-
-        _getLocationAsync((k) => {
-            store.dispatch({ type: SET_LOCATION, value: { permission: true, location: k } });
-            _self.setState({ permission: true, location: k });
-
-        }, (k) => {
-            store.dispatch({ type: SET_LOCATION, value: { permission: false, location: null } });
-            _self.setState({ permission: false, location: null });
-        });
-    }
-
-    componentWillUnmount() {
-        const _self = this,
-            { onRef } = _self.props;
-
-        if (onRef)
-            onRef(null);
-    }
-
-    shouldComponentUpdate(nextProps, nextState) {
-        const _self = this,
-            { data, permission, location } = _self.state;
-        if (!Utils.isArrEqual(data, nextState.data) || permission != nextState.permission)
-            return true;
-
-        return false;
-    }
-
-    _callback = (obj) => {
-        const _self = this,
-            { type } = obj;
-
-        if (type == SERVICE_LIST_CLICKED)
-            _self.props.navigation.navigate('Detail', { activeItem: obj['data'], ..._self.state });
-        else if (type == DATA_LOADED)
-            _self.setState({ data: obj });
-    }
-
-    render() {
-        const _self = this,
-            { filtered = false } = _self.props,
-            DATA = {
-                itemType: 'serviceList',
-                uri: { key: 'service', subKey: 'getServiceList' },
-                keys: {
-                    id: 'serviceId',
-                    arr: 'services',
-                },
-                refreshing: false
-            };
-
-        let view = null;
-        if (filtered) {
-            /* 
-                not: iilk açılışta tüm data gelsin denilirse data kısmından countryId silinmeli
-            */
-            const defCountry = 1,
-                defCity = 1;
-
-            DATA['data'] = {
-                countryId: defCountry,
-                cityId: defCity,
-            };
-
-            DATA['filterData'] = {
-                filtered: filtered,
-                id: 'country',
-                value: {
-                    country: defCountry,
-                    city: defCity,
-                    district: 0,
-                },
-                services: true
-            };
-
-            view = <Viewer config={DATA} callback={_self._callback} />;
-        } else if (!filtered) {
-
-            const { permission, location = {} } = _self.state;
-
-            if (permission) {
-                const { latitude = '', longitude = '' } = location['coords'] || {};
-                DATA['data'] = {
-                    latitude: latitude,
-                    longitude: longitude,
-                    distance: 5
-                };
-                view = <Viewer config={DATA} callback={_self._callback} />;
-            } else
-                view = <Warning />;
-        }
-
-        return (
-            <View style={{ flex: 1 }}>
-                {view}
-            </View>
-        )
-    }
-}
-
 export default class StoreNavigator extends Component {
     constructor(props) {
         super(props);
         _self = this;
+    }
+
+    componentWillMount() {
+        const _self = this;
+        _getLocationAsync((k) => {
+            store.dispatch({ type: SET_LOCATION, value: { permission: true, location: k } });
+        }, (k) => {
+            store.dispatch({ type: SET_LOCATION, value: { permission: false, location: null } });
+        });
     }
 
     _getHeader = ({ props, root = false, ref = '' }) => {
@@ -462,13 +326,13 @@ export default class StoreNavigator extends Component {
     _StoreNavigator = createStackNavigator(
         {
             Main: {
-                screen: props => <Main onRef={ref => _self._main = ref} filtered={false} {...props} />,
+                screen: props => <StoreList onRef={ref => _self._main = ref} filtered={false} {...props} />,
                 navigationOptions: {
                     header: (props) => _self._getHeader({ props: props, root: true, ref: 'main' })
                 }
             },
             Search: {
-                screen: props => <Main onRef={ref => _self._search = ref} filtered={true} {...props} />,
+                screen: props => <StoreList onRef={ref => _self._search = ref} filtered={true} {...props} />,
                 navigationOptions: {
                     header: (props) => _self._getHeader({ props: props, ref: 'search' })
                 }
@@ -495,72 +359,3 @@ export default class StoreNavigator extends Component {
         return <this._StoreNavigator />
     }
 }
-
-/*
-_getHeader = ({ props, root = false }) => {
-    const _onClose = () => {
-        const { navigation } = props;
-        if (root)
-            store.dispatch({ type: NAVIGATE, value: { item: { navigation: 'Home' } } });
-        else
-            navigation.goBack(null);
-    },
-        _onMain = () => {
-            const { navigation } = props;
-            navigation.navigate('Main', {});
-        },
-        _onSearch = () => {
-            const { navigation } = props;
-            navigation.navigate('Search', {});
-        },
-        _onDetail = () => {
-            const { navigation } = props;
-            navigation.navigate('Detail', {});
-        },
-        ico = (
-            <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                <IconButton callback={_onSearch} ico={'list'} icoStyle={{ width: 40, height: 40, resizeMode: 'contain' }} style={{ width: 40, height: 40 }} />
-                <IconButton callback={_onDetail} ico={'map'} icoStyle={{ width: 40, height: 40, resizeMode: 'contain' }} style={{ width: 40, height: 40 }} />
-            </View>
-        );
-
-    return <MinimalHeader
-        onPress={_onClose}
-        title={'YAKIN MAĞAZALAR'}
-        right={ico}
-    />
-}
-
-const StoreNavigator = createStackNavigator(
-    {
-        Main: {
-            screen: props => <Main filtered={false} {...props} />,
-            navigationOptions: {
-                header: (props) => _getHeader({ props: props, root: true })
-            }
-        },
-        Search: {
-            screen: props => <Main filtered={true} {...props} />,
-            navigationOptions: {
-                header: (props) => _getHeader({ props: props })
-            }
-        },
-        Detail: {
-            screen: props => <Detail {...props} />,
-            navigationOptions: {
-                header: (props) => _getHeader({ props: props })
-            }
-        },
-    },
-    {
-        navigationOptions: {
-            header: null
-        },
-        cardStyle: {
-            backgroundColor: '#FFFFFF',
-            elevation: 0,
-        }
-    }
-);
-
-export default StoreNavigator;*/
