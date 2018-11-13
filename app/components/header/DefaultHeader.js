@@ -31,8 +31,8 @@ class DefaultHdr extends Component {
     }
   }
 
-  _onBackPress = () => {
-    //this.props.nav.goBack();
+  _onLogoPress = () => {
+    this.props.dispatch({type: NAVIGATE, value:{item:{navigation:"Home"}}});
   }
 
   _onLoginPress = () => {
@@ -87,7 +87,9 @@ class DefaultHdr extends Component {
           {_self._getUserMenu()}*/} 
           </View>
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Image style={styles.logo} source={require('../../../assets/images/logo-b.png')} />
+            <TouchableOpacity activeOpacity={0.8} onPress={this._onLogoPress}>
+              <Image style={styles.logo} source={require('../../../assets/images/logo-b.png')} />
+            </TouchableOpacity>
           </View>
           <View style={{ padding: 5, paddingRight: 10, width:95, justifyContent:'center', alignItems:'flex-end'}}>
             <Cart />

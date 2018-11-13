@@ -77,7 +77,7 @@ class AddressDetail extends Component {
 
         if (phoneNo != '')
             view = (
-                <View style={{ flex: 1, marginLeft: 15 }}>
+                <View style={{ flex: 1, maxWidth:240, alignSelf:'right' }}>
                     <DefaultButton callback={_self._onPress} name={'MAĞAZAYI ARA'} />
                 </View>
             );
@@ -88,12 +88,15 @@ class AddressDetail extends Component {
     render() {
         const _self = this,
             { serviceName, address, } = _self.props.data;
+
+        const distanceInfo = _self.state.distance ? <Text style={{ fontSize: 15, marginRight:30 }}>{_self.state.distance}   {_self.state.duration}</Text> : null;
+
         return (
-            <Animated.View style={{ position: 'absolute', bottom: 0, zIndex: 2, backgroundColor: '#FFFFFF', width: '100%', minHeight: 100, paddingLeft: 30, paddingBottom: 20, paddingTop: 30, paddingRight: 20 }}>
-                <Text style={{ fontFamily: 'Medium', fontSize: 16, marginBottom: 6 }}>{serviceName}</Text>
-                <Text style={{ fontFamily: 'RegularTyp2', fontSize: 15, marginBottom: 12 }}>{address}</Text>
+            <Animated.View style={{ position: 'absolute', bottom: 0, zIndex: 2, backgroundColor: '#FFFFFF', width: '100%', minHeight: 100, paddingLeft: 30, paddingBottom: 20, paddingTop: 30, paddingRight: 30 }}>
+                <Text style={{ fontFamily: 'Medium', fontSize: 16, marginBottom: 10 }}>{serviceName.toUpperCase()}</Text>
+                <Text style={{ fontSize: 15, marginBottom: 12 }}>{address}</Text>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Text style={{ fontFamily: 'Regular', fontSize: 15, }}>{_self.state.distance}   {_self.state.duration}</Text>
+                    {distanceInfo}
                     {_self._getPhoneButton()}
                 </View>
             </Animated.View>

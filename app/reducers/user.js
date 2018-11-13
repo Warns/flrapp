@@ -35,6 +35,7 @@ export default function user( state = userInitialState, action ){
             let optin_value = JSON.stringify(action.value.user);
 
             globals.setSecureStorage('__OPTIN__', optin_value);
+            fetchCartDetails();
             
             return {
             ...state,
@@ -65,4 +66,8 @@ export default function user( state = userInitialState, action ){
         default:
             return state;
     }
+}
+
+fetchCartDetails = async () => {
+
 }

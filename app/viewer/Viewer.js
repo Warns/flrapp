@@ -83,7 +83,7 @@ class BoxButton extends Component {
         return (
             <TouchableOpacity activeOpacity={0.8} onPress={_self._onPressButton} onLayout={e => _self._measureDimensions(e)}>
                 <View style={[{ alignItems: "center", justifyContent: "center", borderColor: '#666666', borderWidth: 1, backgroundColor: "#FFFFFF", borderRadius: 3, height: 36, paddingLeft: 30, paddingRight: 30 }, { ..._self.props.wrapperStyle }]}>
-                    <Text style={[{ fontFamily: 'Bold', fontSize: 14 }, { ..._self.props.textStyle }]}>{_self.props.children}</Text>
+                    <Text style={[{ fontFamily: 'Bold', fontSize: 16 }, { ..._self.props.textStyle }]}>{_self.props.children}</Text>
                 </View>
             </TouchableOpacity>
         )
@@ -566,8 +566,8 @@ class ServiceListItem extends Component {
         let view = null;
         if (serviceLatitude != '' && serviceLongitude != '') {
             view = (
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', }}>
-                    <Text style={{ fontFamily: 'Regular', fontSize: 15, }}>{distance} {duration}</Text>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop:5, }}>
+                    <Text style={{ fontSize: 15, }}>{distance} {duration}</Text>
                     <Image
                         style={{ width: 40, height: 40 }}
                         source={ICONS['rightArrow']}
@@ -584,8 +584,8 @@ class ServiceListItem extends Component {
 
         return (
             <TouchableOpacity activeOpacity={0.8} onPress={_self._onPress}>
-                <View style={{ paddingBottom: 20, paddingTop: 20, borderBottomColor: '#dcdcdc', borderBottomWidth: 1, marginLeft: 10, marginRight: 10 }}>
-                    <Text style={{ fontFamily: 'Medium', fontSize: 16, marginBottom: 6 }}>{Utils.trimText(serviceName)}</Text>
+                <View style={{ paddingBottom: 15, paddingTop: 20, paddingLeft:10, paddingRight:10, borderBottomColor: '#dcdcdc', borderBottomWidth: 1, marginLeft: 10, marginRight: 10 }}>
+                    <Text style={{ fontFamily: 'Medium', fontSize: 16, marginBottom: 6 }}>{Utils.trimText(serviceName).toUpperCase()}</Text>
                     <Text style={{ fontFamily: 'RegularTyp2', fontSize: 15, }}>{Utils.trimText(address)}</Text>
                     {_self._isLocation()}
                 </View>
@@ -1434,7 +1434,7 @@ class Viewers extends Component {
             case ITEMTYPE['SERVICELIST']:
                 return (
                     <ElevatedView
-                        elevation={4}
+                        elevation={2}
                         style={{
                             backgroundColor: '#FFFFFF',
                             paddingLeft: 20,
@@ -1566,9 +1566,9 @@ class Viewers extends Component {
         let view = _self._getNoResultView({ ico: 'contentNoResult', text: 'İçerik Bulunamadı!' });
 
         if (itemType == ITEMTYPE['CARTLIST'])
-            view = _self._getNoResultView({ ico: 'cartNoResult', text: 'Sepetiniz Henüz Boş', button: <BoxButton wrapperStyle={{ height: 50 }} callback={_self._onAddToCart}>ANASAYFAYA GİT</BoxButton> });
+            view = _self._getNoResultView({ ico: 'cartNoResult', text: 'Sepetiniz Henüz Boş', button: <BoxButton wrapperStyle={{ height: 48 }} callback={_self._onAddToCart}>ANASAYFAYA GİT</BoxButton> });
         else if (itemType == ITEMTYPE['ADDRESS'])
-            view = _self._getNoResultView({ ico: 'addressNoResult', text: 'Adres Bilgileriniz Henüz Boş', button: <BoxButton wrapperStyle={{ height: 50, backgroundColor: '#000000' }} textStyle={{ color: '#FFFFFF' }} callback={_self._onAddToCart}>Yeni Adres Ekle</BoxButton> });
+            view = _self._getNoResultView({ ico: 'addressNoResult', text: 'Adres Bilgileriniz Henüz Boş', button: <BoxButton wrapperStyle={{ height: 48 }} callback={_self._onAddToCart}>YENİ ADRES EKLE</BoxButton> });
         else if (itemType == ITEMTYPE['COUPON'])
             view = _self._getNoResultView({ ico: 'couponNoResult', text: 'Kuponlarınız Boş' });
         else if (itemType == ITEMTYPE['FAVORITE'])
