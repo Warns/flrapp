@@ -148,7 +148,7 @@ module.exports = {
     try {
       await Expo.SecureStore.setItemAsync(key, value);
     } catch (error) {
-      // Error saving data
+      console.log('async storage error: ', error);
     }
   },
 

@@ -37,6 +37,7 @@ class Password extends React.Component{
     });
 
     store.dispatch({ type: SHOW_PRELOADING, value: true });
+
     globals.fetch(
       "https://www.flormar.com.tr/webapi/v3/User/login",
       JSON.stringify({
@@ -50,11 +51,11 @@ class Password extends React.Component{
 
   _fetchResultHandler = ( answer )=>{
 
-    console.log( answer );
-
     if(answer.status == 200){
 
-      this._Continue( answer.data )
+      this.props.dispatch({type:'UPDATE_OPTIN', value:{password: this.state.password}});
+      this.props.dispatch({type:SET_USER, value:{ user: {...answer.data, password: this.state.password} || {} }});
+      this._Continue()
 
     }else{
       this.setState({message: "Hatalı şifre, lütfen kontrol et."});
@@ -63,9 +64,11 @@ class Password extends React.Component{
     store.dispatch({ type: SHOW_PRELOADING, value: false });
   }
 
-  _Continue = ( data )=>{
+  _Continue = ()=>{
+
+    console.log('continue.......');
+
     let _self = this;
-    this.props.dispatch({type:SET_USER, value:{ user: data || {} }});
     setTimeout(()=>{
       _self.props.navigation.navigate("Home");
       _self.props.dispatch({ type: ASSISTANT_SHOW, value: true });
@@ -74,8 +77,7 @@ class Password extends React.Component{
 
   _onResetPressed = ()=>{
     let { email } = this.state;
-
-    this.props.dispatch({type:'UPDATE_OPTIN', value:{ email: email }});
+     
     this.props.navigation.navigate('PasswordReset');
   }
 

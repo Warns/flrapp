@@ -48,7 +48,7 @@ const generalInitialState = {
     // Other
     SCREEN_DIMENSIONS: {
         topMargin: 0,
-        window: null,
+        window: {},
     },
 }
 

@@ -19,7 +19,6 @@ import Carousel, { ParallaxImage, Pagination } from 'react-native-snap-carousel'
 import { Form } from 'root/app/form';
 import {
   FORMDATA,
-  SET_USER,
   SET_NAVIGATION,
   SET_SCREEN_DIMENSIONS,
   ASSISTANT_SHOW,
@@ -27,7 +26,6 @@ import {
 } from 'root/app/helper/Constant';
 
 const DIMENSIONS = Dimensions.get('window');
-const TOP_MARGIN = (Platform.OS === 'ios') ? ( DIMENSIONS.height == 812 || DIMENSIONS.height == 896 ) ? 30 : 20 : Expo.Constants.statusBarHeight;
 
 function mapStateToProps(state) {
   return state
@@ -54,9 +52,6 @@ class Splash extends React.Component {
   }
 
   componentDidMount() {
-
-    this.props.dispatch({ type: SET_SCREEN_DIMENSIONS, value:{window: DIMENSIONS, topMargin:TOP_MARGIN, OS:Platform.OS, isX: TOP_MARGIN == 30 } });
-    this.props.dispatch({ type: SET_NAVIGATION, value: this.props.navigation });
 
   }
 

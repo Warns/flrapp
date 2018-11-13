@@ -72,7 +72,7 @@ class Phone extends React.Component{
   }
 }
 
-function sendVerificationSMS(data, callback){
+async function sendVerificationSMS(data, callback){
   store.dispatch({ type: SHOW_PRELOADING, value: true });
   return fetch('http://www.postaguvercini.com/api_http/sendsms.asp' + data)
     .then((response) => {

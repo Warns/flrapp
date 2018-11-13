@@ -797,7 +797,7 @@ class FeedsItem extends Component {
             view = (
                 <View style={{ flexDirection: 'row', height: 40, borderColor: '#dcdcdc', borderRadius: 3, borderTopEndRadius: 0, borderTopLeftRadius: 0, borderWidth: 1, borderTopWidth: 0 }}>
                     <TouchableOpacity style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} activeOpacity={0.8} onPress={_self._onPress}>
-                        <Text style={{ fontFamily: 'Medium', fontSize: 16 }}>{desc}</Text>
+                        <Text style={{ fontSize: 16, fontWeight:'500' }}>{desc}</Text>
                     </TouchableOpacity>
                     <Image
                         style={{ width: 40, height: 40 }}
