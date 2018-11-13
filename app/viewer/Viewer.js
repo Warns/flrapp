@@ -1562,11 +1562,8 @@ class Viewers extends Component {
         const _self = this,
             { itemType = '' } = _self.props.config;
 
-<<<<<<< HEAD
-        let view = _self._getNoResultView({ ico: 'couponNoResult', text: 'İçerik Bulunamadı' });
-=======
-        let view = <View style={{justifyContent:'center', alignItems:'center', flex:1}}><Text>Sonuç bulunamadı...</Text></View>;
->>>>>>> origin/test-branch
+
+        let view = _self._getNoResultView({ ico: 'contentNoResult', text: 'İçerik Bulunamadı!' });
 
         if (itemType == ITEMTYPE['CARTLIST'])
             view = _self._getNoResultView({ ico: 'cartNoResult', text: 'Sepetiniz Henüz Boş', button: <BoxButton wrapperStyle={{ height: 50 }} callback={_self._onAddToCart}>ANASAYFAYA GİT</BoxButton> });

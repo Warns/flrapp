@@ -41,6 +41,7 @@ export const ICONS = {
     couponNoResult: require('root/assets/icons/couponNoResult.png'),
     favoriteNoResult: require('root/assets/icons/favoriteNoResult.png'),
     followListNoResult: require('root/assets/icons/followListNoResult.png'),
+    contentNoResult: require('root/assets/icons/contentNoResult.png'),
 };
 
 /* CARDS ICON */
