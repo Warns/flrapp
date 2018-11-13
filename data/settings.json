@@ -60,6 +60,31 @@
                 "data": {},
                 "navigation": "ExtraUser"
             },
+
+            /* AÇIK KUPONLAR */
+            {
+                "title": "KUPONLARIM",
+                "type": "listViewer",
+                "itemType": "coupon",
+                "uri": { 
+                    "key": "integrator", 
+                    "subKey": "getCouponDetail" 
+                },
+                "keys": {
+                    "id": "couponKey",
+                    "arr": "couponDetailList",
+                },
+                "data": {
+                    "status": 4,
+                    "type": 2,
+                    "active": true
+                },
+                "filterData": {
+                    "filtered": true
+                },
+                "navigation": "ExtraUser"
+            },
+
             {
                 "title": "KİŞİSEL BİLGİLERİM",
                 "type": "form",

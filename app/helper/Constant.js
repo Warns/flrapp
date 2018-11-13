@@ -25,7 +25,6 @@ export const ICONS = {
     youtube: require('root/assets/icons/youtube.png'),
     noConnection: require('root/assets/icons/noConnection.png'),
     plcFeeds: require('root/assets/icons/placeholder/feeds.png'),
-    noResult: require('root/assets/icons/cartNoResult.png'),
     flormarExtra: require('root/assets/icons/flormarExtra.png'),
     userWomen: require('root/assets/icons/userWoman.png'),
     userMen: require('root/assets/icons/userMan.png'),
@@ -35,7 +34,14 @@ export const ICONS = {
     upArrow: require('root/assets/icons/topArrow.png'),
     searchMap: require('root/assets/icons/search-map.png'),
     myLocation: require('root/assets/icons/myLocation.png'),
-    loading: require('root/assets/gifs/goo.gif')
+    loading: require('root/assets/gifs/goo.gif'),
+    error: require('root/assets/icons/error.png'),
+    cartNoResult: require('root/assets/icons/cartNoResult.png'),
+    addressNoResult: require('root/assets/icons/addressNoResult.png'),
+    couponNoResult: require('root/assets/icons/couponNoResult.png'),
+    favoriteNoResult: require('root/assets/icons/favoriteNoResult.png'),
+    followListNoResult: require('root/assets/icons/followListNoResult.png'),
+    contentNoResult: require('root/assets/icons/contentNoResult.png'),
 };
 
 /* CARDS ICON */

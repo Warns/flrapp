@@ -382,10 +382,53 @@ class CouponListItem extends Component {
     constructor(props) {
         super(props);
     }
+    /* 
+    {
+        "couponKey": "SUPER75",
+        "priceTypeId": 333,
+        "startDate": "2018-07-05T00:00:00",
+        "endDate": "2018-08-20T00:00:00",
+        "description": "75 TL ve Üzeri Alışverişlerde Supershine Lipstick Bordeaux Silk Hediye",
+        "email": "",
+        "userCategoryId": 0,
+        "usageCountPerUser": 10000,
+        "totalUsageCount": 100000000,
+        "onlyForFirstUser": false,
+        "isVisibleInCouponPage": null
+      }
+    */
+
+    _setDateFormat = (k) => {
+        k = k || '';
+        return k.split('T')[0];
+    }
+
     render() {
-        const { couponKey } = this.props.data;
+        let _self = this,
+            { couponKey, description, startDate = '', endDate = '' } = _self.props.data;
+
+        startDate = _self._setDateFormat(startDate);
+        endDate = _self._setDateFormat(endDate);
+
         return (
-            <Text>{couponKey}</Text>
+            <View style={{ borderBottomColor: '#dcdcdc', borderBottomWidth: 1, marginLeft: 20, marginRight: 20, marginTop: 15 }}>
+                <Text style={{ fontFamily: 'Bold', fontSize: 14, marginBottom: 6 }}>{couponKey}</Text>
+                <Text style={{ fontFamily: 'RegularTyp2', fontSize: 14, }}>{description}</Text>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10, paddingBottom: 15 }}>
+                    <View>
+                        <Text style={{ fontFamily: 'RegularTyp2', fontSize: 12, color: '#828282', paddingBottom: 6 }}>{'Başlangıç Tarihi'}</Text>
+                        <Text style={{ fontFamily: 'RegularTyp2', fontSize: 14 }}>{startDate}</Text>
+                    </View>
+                    <View>
+                        <Text style={{ fontFamily: 'RegularTyp2', fontSize: 12, color: '#828282', paddingBottom: 6 }}>{'Bitiş Tarihi'}</Text>
+                        <Text style={{ fontFamily: 'RegularTyp2', fontSize: 14 }}>{endDate}</Text>
+                    </View>
+                    <View>
+                        <Text style={{ fontFamily: 'RegularTyp2', fontSize: 12, color: '#828282', paddingBottom: 6 }}>{'Durum'}</Text>
+                        <Text style={{ fontFamily: 'RegularTyp2', fontSize: 14 }}></Text>
+                    </View>
+                </View>
+            </View>
         )
     }
 }
@@ -900,9 +943,10 @@ class ContentPlaceHolder extends Component {
                     <Placeholder.ImageContent
                         size={60}
                         animate="fade"
-                        lineNumber={4}
+                        lineNumber={2}
                         lineSpacing={5}
-                        lastLineWidth="30%"
+                        firstLineWidth="40%"
+                        lastLineWidth="65%"
                     />
                 </View>
             );
@@ -948,6 +992,73 @@ const preload = () => {
         </View>
     )
 };
+
+class CouponHeader extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            active: 'opened'
+        };
+    }
+
+    _config = {
+        /* Açık Kuponlar */
+        opened: {
+            itemType: 'coupon',
+            uri: Utils.getURL({ key: 'integrator', subKey: 'getCouponDetail' }),
+            keys: {
+                id: 'couponKey',
+                arr: 'couponDetailList',
+            },
+            data: {
+                "status": 4,
+                "type": 2,
+                "active": true
+            },
+        },
+
+        /* Kapananlar */
+        closed: {
+            itemType: 'coupon',
+            uri: Utils.getURL({ key: 'integrator', subKey: 'getCouponDetail' }),
+            keys: {
+                id: 'couponKey',
+                arr: 'couponDetailList',
+            },
+            data: {
+                "status": 4,
+                "type": 2,
+                "active": false
+            },
+        }
+    }
+
+    _onPress = ({ item = {} }) => {
+        const _self = this,
+            { callback } = _self.props,
+            { type } = item;
+
+
+        if (callback)
+            callback(_self._config[type]);
+
+        _self.setState({ active: type });
+    }
+
+    render() {
+        const _self = this,
+            { active } = _self.state,
+            ob = active == 'opened' ? { borderColor: '#DDDDDD', color: '#000000' } : { borderColor: '#FFFFFF', color: '#535353' },
+            cb = active == 'closed' ? { borderColor: '#DDDDDD', color: '#000000' } : { borderColor: '#FFFFFF', color: '#535353' };
+
+        return (
+            <View style={{ flexDirection: 'row', paddingBottom: 17, paddingTop: 20, borderBottomColor: '#dcdcdc', borderBottomWidth: 1, marginLeft: 20, marginRight: 20, justifyContent: 'center', alignItems: 'center' }}>
+                <BoxButton textStyle={{ fontFamily: 'RegularTyp2', color: ob['color'] }} wrapperStyle={{ paddingLeft: 15, paddingRight: 15, borderRadius: 15, marginRight: 12, borderColor: ob['borderColor'] }} item={{ type: 'opened' }} callback={_self._onPress}>{'Açık Kuponlar'}</BoxButton>
+                <BoxButton textStyle={{ fontFamily: 'RegularTyp2', color: cb['color']  }} wrapperStyle={{ paddingLeft: 15, paddingRight: 15, borderRadius: 15, marginLeft: 12, borderColor: cb['borderColor'] }} item={{ type: 'closed' }} callback={_self._onPress}>{'Kapanan'}</BoxButton>
+            </View>
+        );
+    }
+}
 
 class Viewers extends Component {
 
@@ -1169,11 +1280,11 @@ class Viewers extends Component {
                 if (_self.props.noResult)
                     _self.props.noResult();
             } else if (type == VIEWERTYPE['LIST'] || type == VIEWERTYPE['HTMLTOJSON'] || type == VIEWERTYPE['SCROLLVIEW'])
-                _self.setState({ data: data, total: res.data[keyTotal] || 0, loaded: true });
+                _self.setState({ data: data, total: res.data[keyTotal] || 0, loaded: true, noResult: false });
             else if (type == VIEWERTYPE['WEBVIEW'])
-                _self.setState({ html: _self._addStyle({ customClass: customClass, data: data }), loaded: true });
+                _self.setState({ html: _self._addStyle({ customClass: customClass, data: data }), loaded: true, noResult: false });
             else
-                _self.setState({ html: _self._clearTag(data), loaded: true });
+                _self.setState({ html: _self._clearTag(data), loaded: true, noResult: false });
 
             _self._callback({ type: DATA_LOADED, data: data });
 
@@ -1308,8 +1419,9 @@ class Viewers extends Component {
                 });
 
             _self.setAjx({ uri: _self.getUri(), data: data });
+        } else if (itemType == ITEMTYPE['COUPON']) {
+            _self.setAjx({ uri: _self.getUri(), data: obj['data'] || {} });
         }
-
     }
 
     _getFilter = () => {
@@ -1349,7 +1461,9 @@ class Viewers extends Component {
                             districtChoose={Translation['dropdown']['districtChoose']}
                         />
                     </ElevatedView>
-                )
+                );
+            case ITEMTYPE['COUPON']:
+                return <CouponHeader callback={_self._filtered} />
             default:
                 return null;
         }
@@ -1424,30 +1538,45 @@ class Viewers extends Component {
         */
     }
 
+    _getNoResultView = ({ ico = '', text = '', button = null }) => {
+        return (
+            <View style={{ flex: 1, justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
+                <View style={{ width: 275, alignItems: 'center', justifyContent: 'center' }}>
+                    <Image
+                        style={{
+                            width: 158,
+                            height: 158,
+                            resizeMode: 'contain',
+                            marginBottom: 20
+                        }}
+                        source={ICONS[ico]}
+                    />
+                    <Text style={{ fontFamily: 'RegularTyp2', fontSize: 22, marginBottom: 34 }}>{text}</Text>
+                    {button}
+                </View>
+            </View>
+        );
+    }
+
     _noResultView = () => {
         const _self = this,
             { itemType = '' } = _self.props.config;
 
-        let view = <View style={{justifyContent:'center', alignItems:'center', flex:1}}><Text>Sonuç bulunamadı...</Text></View>;
+
+        let view = _self._getNoResultView({ ico: 'contentNoResult', text: 'İçerik Bulunamadı!' });
 
         if (itemType == ITEMTYPE['CARTLIST'])
-            view = (
-                <View style={{ flex: 1, justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
-                    <View style={{ width: 275, alignItems: 'center', justifyContent: 'center' }}>
-                        <Image
-                            style={{
-                                width: 158,
-                                height: 158,
-                                resizeMode: 'contain',
-                                marginBottom: 20
-                            }}
-                            source={ICONS['noResult']}
-                        />
-                        <Text style={{ fontFamily: 'RegularTyp2', fontSize: 22, marginBottom: 34 }}>Sepetiniz Henüz Boş</Text>
-                        <BoxButton wrapperStyle={{ height: 50 }} callback={_self._onAddToCart}>ANASAYFAYA GİT</BoxButton>
-                    </View>
-                </View>
-            );
+            view = _self._getNoResultView({ ico: 'cartNoResult', text: 'Sepetiniz Henüz Boş', button: <BoxButton wrapperStyle={{ height: 50 }} callback={_self._onAddToCart}>ANASAYFAYA GİT</BoxButton> });
+        else if (itemType == ITEMTYPE['ADDRESS'])
+            view = _self._getNoResultView({ ico: 'addressNoResult', text: 'Adres Bilgileriniz Henüz Boş', button: <BoxButton wrapperStyle={{ height: 50, backgroundColor: '#000000' }} textStyle={{ color: '#FFFFFF' }} callback={_self._onAddToCart}>Yeni Adres Ekle</BoxButton> });
+        else if (itemType == ITEMTYPE['COUPON'])
+            view = _self._getNoResultView({ ico: 'couponNoResult', text: 'Kuponlarınız Boş' });
+        else if (itemType == ITEMTYPE['FAVORITE'])
+            view = _self._getNoResultView({ ico: 'favoriteNoResult', text: 'Favorileriniz Boş' });
+        else if (itemType == ITEMTYPE['FOLLOWLIST'])
+            view = _self._getNoResultView({ ico: 'followListNoResult', text: 'Takip Listeniz Boş' });
+        else if (itemType == ITEMTYPE['ORDER'])
+            view = _self._getNoResultView({ ico: 'cartNoResult', text: 'Siparişleriniz Boş' });
 
         return view;
     }
@@ -1475,7 +1604,7 @@ class Viewers extends Component {
                 />
             );
         else if (type == VIEWERTYPE['HTML'] || type == VIEWERTYPE['WEBVIEW'] || type == VIEWERTYPE['SCROLLVIEW']) {
-            if( !loaded )
+            if (!loaded)
                 view = preload();
             else if (type == VIEWERTYPE['HTML'])
                 view = (
