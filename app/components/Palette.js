@@ -98,7 +98,7 @@ class Palette extends React.Component{
       })
     }
 
-    console.log('>>>..', this.state.selected);
+    //console.log('>>>..', this.state.selected);
 
     return(
       <View style={{flex:1, backgroundColor:'#ffffff', maxHeight:165, height:120, backgroundColor:'#dddddd'}}>

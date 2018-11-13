@@ -5,6 +5,7 @@ import {
   Easing,
   Animated,
 } from 'react-native';
+globals = require('root/app/globals.js');
 
 export default class Loading extends React.Component{
   state = {
@@ -21,27 +22,48 @@ export default class Loading extends React.Component{
         easing: Easing.out(Easing.cubic),
       }
     ).start();
+    
     this.setState({
       backgroundColor:'#ffffff',
     });
 
-    setTimeout(() => {
-      this._getOut();
-    }, 2500);
+    this._loadInitialState();
   }
 
-  _getOut = ()=>{
+  _loadInitialState = async () => {
+
+    globals.getSecureStorage('__OPTIN__', (answer) => {
+
+      console.log(answer);
+
+      if (answer !== 'no'){
+        console.log( JSON.parse(answer) );
+      }
+      else 
+      setTimeout(() => {
+        this._getOut(false);
+      }, 2500);
+    });
+
+  }
+
+  _getOut = ( login )=>{
+
+    let _self = this;
+
     Animated.timing(
       this.state.anim, {
         toValue: 0,
         duration: 800,
         easing: Easing.out(Easing.cubic),
-        onComplete:this._Continue
+        onComplete:() => _self._Continue( login )
       }
     ).start();
   }
 
-  _Continue = ()=>{
+  _Continue = ( login )=>{
+    login ?
+    this.props.navigation.navigate("Home"):
     this.props.navigation.navigate('Splash');
   }
 
@@ -76,4 +98,14 @@ export default class Loading extends React.Component{
       </View>
     )
   }
+}
+
+// check Async Local Secure Storage for user information.
+async function _loadInitialState(callback) {
+  globals.getSecureStorage('__OPTIN__', (answer) => {
+    if (answer !== 'no')
+      callback( JSON.parse(answer) );
+    else 
+      callback('no');
+  });
 }

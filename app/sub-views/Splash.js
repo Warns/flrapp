@@ -23,7 +23,7 @@ import {
   SET_NAVIGATION,
   SET_SCREEN_DIMENSIONS,
   ASSISTANT_SHOW,
-  UPDATE_PRODUCT_VIDEOS,
+  OPEN_VIDEO_PLAYER,
 } from 'root/app/helper/Constant';
 
 const DIMENSIONS = Dimensions.get('window');
@@ -57,19 +57,7 @@ class Splash extends React.Component {
 
     this.props.dispatch({ type: SET_SCREEN_DIMENSIONS, value:{window: DIMENSIONS, topMargin:TOP_MARGIN, OS:Platform.OS, isX: TOP_MARGIN == 30 } });
     this.props.dispatch({ type: SET_NAVIGATION, value: this.props.navigation });
-  
-    _loadInitialState(this._routeAccordingToAsyncStorage);
 
-  }
-
-  _routeAccordingToAsyncStorage = () => {
-
-    if (globals.CLIENT.Login != null) {
-      //auto login
-    }
-    else {
-      console.log('there is no login info')
-    }
   }
 
   _continueToHome = () => {
@@ -85,20 +73,16 @@ class Splash extends React.Component {
 
     /*this.props.dispatch({type:UPDATE_PRODUCT_VIDEOS, value:{visibility:true, selected:1, items:[
       {
-      "videoId": "pl92KOsacOc",
-      "provider": "youtube",
-      "thumbnail": "/UPLOAD/BtonzMakyaj_650x365.png",
-      "text": "Bronz Tene Yaz Akşamı Makyajı"
-      },{
-      "videoId": "pl92KOsacOc",
-      "provider": "youtube",
-      "thumbnail": "/UPLOAD/BtonzMakyaj_650x365.png",
-      "text": "Bronz Tene Yaz Akşamı Makyajı"
-      },{
-      "videoId": "pl92KOsacOc",
-      "provider": "youtube",
-      "thumbnail": "/UPLOAD/BtonzMakyaj_650x365.png",
-      "text": "Bronz Tene Yaz Akşamı Makyajı"
+        "provider": "youtube",
+        "text": "Doğal Görünümlü Kaş Nasıl Elde Edilir?",
+        "thumbnail": "/UPLOAD/collection/Thumbnail_dogal_görünümlü_kas.jpg",
+        "videoId": "D3ty3l4x2GA",
+      },
+      {
+        "provider": "youtube",
+        "text": "Seyrek Kaşlar Nasıl Doldurulur?",
+        "thumbnail": "/UPLOAD/collection/Thumbnail_seyrek_kaslar_nasıl_dolgunlastirilir copy copy.jpg",
+        "videoId": "nQYHmB8EKyk",
       }
     ]}});*/
 
@@ -261,12 +245,3 @@ class Splash extends React.Component {
 }
 
 export default connect(mapStateToProps)(Splash);
-
-
-async function _loadInitialState(callback) {
-  globals.getSecureStorage('__USER__', (answer) => {
-    if (answer !== 'no')
-      globals.CLIENT = JSON.parse(answer);
-    callback();
-  });
-}

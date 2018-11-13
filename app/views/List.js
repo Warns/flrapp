@@ -133,7 +133,7 @@ export default class List extends React.Component {
     globals.fetch(
       "https://www.flormar.com.tr/webapi/v3/Product/getProductList",
       JSON.stringify({
-        "page": 1,
+        //"page": 1,
         "pageSize": 100,
         "filter": filterValues,
         "catId": this.props.category.id, //18775
@@ -144,14 +144,16 @@ export default class List extends React.Component {
 
   _listResultHandler = (answer) => {
 
+    //console.log( answer );
+
     let _items = answer.data.products;
 
+    /*
     if (this.props.category.img && answer.data.filters.findIndex(obj => obj.isSelected == true) == -1) {
       _items.splice((answer.data.totalProductCount < 4 ? 0 : 4), 0,
         { productType: 'cover', side: 'left', img: this.props.category.img },
         { productType: 'cover', side: 'right', img: this.props.category.img });
-    }
-
+    }*/
     //console.log('list loaded', answer);
 
     //console.log(answer.data);
@@ -201,33 +203,24 @@ export default class List extends React.Component {
     }
   }
 
+  _listView = null;
+
   _onPressItem = (index, measurements) => {
-    //this.props.navigation.navigate('Details', {user: index});
-
-    /*
-    this.setState({
-      selectedDetail: this.state.items[index].productId,
-      animatingUri: this.state.items[index].mediumImageUrl, // this is useless
-      measurements: measurements,
-    });
-*/
-    //console.log('on pressss', this.state.items[index].productId);
-
-    store.dispatch({ type: OPEN_PRODUCT_DETAILS, value: { id: this.state.items[index].productId, measurements: measurements, animate: true, sequence: this.state.textureDisplay ? 1 : 0 } });
-
-    //this._openDetail();
-
-    /*
-    globals.fetch(
-      "https://www.flormar.com.tr/webapi/v3/Product/getProductDetail",
-      JSON.stringify({
-        "productId": this.state.items[index].productId,
-      }),
-      this._detailResultHandler
-    );
-    */
-
-    //this._animateImage();
+    
+    Expo.takeSnapshotAsync(this._listView, {formar:'jpeg'})
+      .then( (result) => { 
+        //this.setState({screenshot:result});
+        
+        store.dispatch({ type: OPEN_PRODUCT_DETAILS, 
+                         value: { 
+                           screenshot: result, 
+                           id: this.state.items[index].productId, 
+                           measurements: measurements, 
+                           animate: true, 
+                           sequence: this.state.textureDisplay ? 1 : 0 
+                          } 
+                      });
+      });
   }
 
   _detailResultHandler = (answer) => {
@@ -309,9 +302,8 @@ export default class List extends React.Component {
     const detailContent = <ProductView imageMeasurements={{ width: width, height: height, top: pageY, left: pageX, type: textureDisplay ? 1 : 0 }} screenDimensions={SCREEN_DIMENSIONS} item={this.state.selectedDetail} onClose={this._closeDetail} />;
 
     return (
-      <View style={{ flex: 1, backgroundColor: '#ffffff' }}>
-
-        <ListHeader onFiltersChange={this._onFiltersChange} totalProductCount={totalProductCount} filters={filters} onDisplayChange={this._onDisplayChange} textureDisplay={this.state.textureDisplay} />
+      <View ref={(c) => {this._listView = c;}} style={{ flex: 1, backgroundColor: '#ffffff' }}>
+      <ListHeader onFiltersChange={this._onFiltersChange} totalProductCount={totalProductCount} filters={filters} onDisplayChange={this._onDisplayChange} textureDisplay={this.state.textureDisplay} />
         <FlatList
           style={{ flex: 1, flexDirection: 'column' }}
           scrollEnabled={true}
