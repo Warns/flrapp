@@ -11,6 +11,7 @@ module.exports = {
 
     /* işlem başarıyla gerçekleşmişse ve özel bir mesaj göstermek isteniliyorsa mesaj bu kısma yazılır */
     successMessage: '',
+
     buttonText: 'BİLGİLERİ KAYDET',
 
     fields: [
@@ -20,7 +21,6 @@ module.exports = {
                     id: 'firstName',
                     title: 'Ad',
                     type: 'text',
-                    placeholder: '',
                     value: '',
                     validation: [{ key: 'isEmpty' }, { key: 'isMin', value: 3 },],
                     regex: 'typ1',
@@ -29,7 +29,6 @@ module.exports = {
                     id: 'lastName',
                     title: 'Soyad',
                     type: 'text',
-                    placeholder: '',
                     value: '',
                     validation: [{ key: 'isEmpty' }, { key: 'isMin', value: 2 }],
                     regex: 'typ1'
@@ -42,7 +41,6 @@ module.exports = {
                     id: 'email',
                     title: 'E-mail',
                     type: 'text',
-                    placeholder: '',
                     value: '',
                     validation: [{ key: 'isEmpty' }, { key: 'isMail', }],
                     keyboardType: 'email-address',
@@ -51,9 +49,11 @@ module.exports = {
                     id: 'mobilePhone',
                     title: 'Cep Telefonu',
                     type: 'text',
-                    placeholder: '',
                     value: '',
                     mask: '0 (999) 999 99 99',
+                    customFormat: (k) => {
+                        return Utils.customPhoneFormat( k );
+                    },
                     validation: [{ key: 'isEmpty' }, { key: 'isPhone' },],
                     keyboardType: 'numeric',
                     regex: 'typ5',
@@ -77,7 +77,9 @@ module.exports = {
                     type: 'dataTimePicker',
                     placeholder: '',
                     value: '',
-                    customFormat: (k) => { return k.replace(/\./g, ''); },
+                    customFormat: (k) => {
+                        return Utils.customDateFormat( k );
+                    },
                     maxDate: -14,
                     validation: [{ key: 'isEmpty' }, { key: 'isDate' },],
                 },

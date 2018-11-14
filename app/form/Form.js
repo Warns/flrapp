@@ -5,6 +5,7 @@ import {
     Text,
     TouchableOpacity,
     StyleSheet,
+    Alert
 } from 'react-native';
 import { FormInput, SelectBox, CheckBox, RadioGroup, DateTimePicker, ErrorBox, CountryPicker, HiddenObject } from './';
 import { CustomKeyboard } from 'root/app/helper';
@@ -97,10 +98,10 @@ class Form extends Component {
         const _self = this;
         _self.setState({ loading: true });
         Globals.fetch(uri, JSON.stringify(data), (answer) => {
-            //console.log(answer);
             if (_self._isMounted) {
                 if (answer === 'error') {
-                    console.log('fatalllll error: could not get access token');
+                    if (typeof callback !== 'undefined')
+                        callback({ type: 'error', d: answer });
                 } else {
                     if (answer.status == 200) {
                         if (typeof callback !== 'undefined')
@@ -231,10 +232,20 @@ class Form extends Component {
         }, 1);
     }
 
+    _preload = (b) => {
+        store.dispatch({ type: SHOW_PRELOADING, value: b });
+    }
+
+    _alert = (message) => {
+        setTimeout(() => {
+            Alert.alert(message);
+        }, 333);
+    }
+
     _send = (obj) => {
         const _self = this,
             { callback } = _self.props,
-            { sendAjx = true } = _self.props.data;
+            { sendAjx = true, successMessage = '' } = _self.props.data;
 
         /* objeye fix olarak eklenmek istenen alanlar varsa addfields bölümde tanımlanır. Tanımlanan key valuelar success objesine eklenir. */
         const { addFields = [], uri } = _self.props.data;
@@ -243,15 +254,24 @@ class Form extends Component {
                 obj[n['id']] = n['value'];
             });
 
-        console.log(JSON.stringify(obj));
-
+        console.log('form post', JSON.stringify(obj));
         if (sendAjx) {
-            store.dispatch({ type: SHOW_PRELOADING, value: true });
+            _self._preload(true);
             _self.ajx({ uri: uri, data: obj }, function ({ type, d }) {
+                console.log('form response', JSON.stringify(d));
+
+                _self._preload(false);
+
+                if (type == 'error') {
+                    const { message = 'HATA...' } = d;
+                    _self._alert(message);
+                } else {
+                    if (successMessage != '')
+                        _self._alert(successMessage);
+                }
+
                 if (callback)
                     callback({ type: type, data: d, postData: obj });
-
-                store.dispatch({ type: SHOW_PRELOADING, value: false });
             });
         } else {
             if (callback)

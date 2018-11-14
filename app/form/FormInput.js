@@ -108,6 +108,7 @@ class FormInput extends Component {
             } = styles,
             {
                 title,
+                disabled = false,
                 secureTextEntry = false,
                 keyboardType = 'default',
                 multiline = false,
@@ -131,15 +132,19 @@ class FormInput extends Component {
                 titleShow,
             } = _self.state;
 
+        let disabledObj = {};
+        if (disabled)
+            disabledObj = { editable: false, selectTextOnFocus: false };
+
         let input = null;
 
         if (creditCart)
             input = (
                 <TextInputMask
-
                     refInput={element => {
                         this.input = element
                     }}
+                    {...disabledObj}
                     autoCorrect={autoCorrect}
                     maxLength={19}
                     multiline={multiline}
@@ -162,10 +167,10 @@ class FormInput extends Component {
         else if (mask)
             input = (
                 <TextInputMask
-
                     refInput={element => {
                         this.input = element
                     }}
+                    {...disabledObj}
                     autoCorrect={autoCorrect}
                     maxLength={mask.length}
                     multiline={multiline}
@@ -194,6 +199,7 @@ class FormInput extends Component {
                     ref={element => {
                         this.input = element
                     }}
+                    {...disabledObj}
                     autoCapitalize={'none'}
                     autoCorrect={autoCorrect}
                     maxLength={maxLength}

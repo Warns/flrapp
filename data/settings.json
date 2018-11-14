@@ -43,6 +43,9 @@
                     "arr": "products"
                 },
                 "data": {},
+                "filterData": {
+                    "filtered": true
+                },
                 "navigation": "ExtraUser"
             },
             {
@@ -91,11 +94,6 @@
                 "itemType": "setUser",
                 "navigation": "ExtraUser"
             },
-            /*{
-                "title": "FİLTRE",
-                "type": "form",
-                "itemType": "productFilter"
-            },*/
             {
                 "title": "ADRES BİLGİLERİM",
                 "type": "listViewer",
