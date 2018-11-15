@@ -1439,7 +1439,7 @@ class Viewers extends Component {
             case ITEMTYPE['SERVICELIST']:
                 return (
                     <ElevatedView
-                        elevation={1}
+                        elevation={0}
                         style={{
                             backgroundColor: '#FFFFFF',
                             paddingLeft: 20,

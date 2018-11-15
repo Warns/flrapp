@@ -96,11 +96,12 @@ const RootStackNavigator = createStackNavigator(
 
   },
   {
-    navigationOptions: () => ({
+    navigationOptions: {
+      gesturesEnabled: false,
       headerTitleStyle: {
         fontWeight: 'normal',
       },
-    }),
+    },
     cardStyle: {
       //paddingTop: Platform.OS === 'ios' ? 0 : StatusBar.currentHeight,
       backgroundColor: '#FFFFFF',

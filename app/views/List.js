@@ -134,7 +134,7 @@ export default class List extends React.Component {
       "https://www.flormar.com.tr/webapi/v3/Product/getProductList",
       JSON.stringify({
         "page": 1,
-        "pageSize": 6,
+        "pageSize": 100,
         "filter": filterValues,
         "catId": this.props.category.id, //18775
       }),
