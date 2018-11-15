@@ -31,7 +31,8 @@ import {
     SET_CART_ADDRESS,
     SET_SEGMENTIFY_INSTANCEID,
     ADD_CART_ITEM,
-    OPEN_PRODUCT_DETAILS
+    OPEN_PRODUCT_DETAILS,
+    SHOW_PRELOADING
 } from 'root/app/helper/Constant';
 import {
     ElevatedView,
@@ -40,6 +41,7 @@ import { RatingButton, DoubleClickButton, IconButton } from 'root/app/UI';
 import { CountryPicker, SelectBox } from 'root/app/form';
 import { connect } from 'react-redux';
 import { AddressListItem } from './';
+import { store } from 'root/app/store';
 import Placeholder from 'rn-placeholder';
 
 const Translation = require('root/app/helper/Translation.js');
@@ -566,7 +568,7 @@ class ServiceListItem extends Component {
         let view = null;
         if (serviceLatitude != '' && serviceLongitude != '') {
             view = (
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop:5, }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 5, }}>
                     <Text style={{ fontSize: 15, }}>{distance} {duration}</Text>
                     <Image
                         style={{ width: 40, height: 40 }}
@@ -584,7 +586,7 @@ class ServiceListItem extends Component {
 
         return (
             <TouchableOpacity activeOpacity={0.8} onPress={_self._onPress}>
-                <View style={{ paddingBottom: 15, paddingTop: 20, paddingLeft:10, paddingRight:10, borderBottomColor: '#dcdcdc', borderBottomWidth: 1, marginLeft: 10, marginRight: 10 }}>
+                <View style={{ paddingBottom: 15, paddingTop: 20, paddingLeft: 10, paddingRight: 10, borderBottomColor: '#dcdcdc', borderBottomWidth: 1, marginLeft: 10, marginRight: 10 }}>
                     <Text style={{ fontFamily: 'Medium', fontSize: 16, marginBottom: 6 }}>{Utils.trimText(serviceName).toUpperCase()}</Text>
                     <Text style={{ fontFamily: 'RegularTyp2', fontSize: 15, }}>{Utils.trimText(address)}</Text>
                     {_self._isLocation()}
@@ -840,7 +842,7 @@ class FeedsItem extends Component {
             view = (
                 <View style={{ flexDirection: 'row', height: 40, borderColor: '#dcdcdc', borderRadius: 3, borderTopEndRadius: 0, borderTopLeftRadius: 0, borderWidth: 1, borderTopWidth: 0 }}>
                     <TouchableOpacity style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} activeOpacity={0.8} onPress={_self._onPress}>
-                        <Text style={{ fontSize: 16, fontWeight:'500' }}>{desc}</Text>
+                        <Text style={{ fontSize: 16, fontWeight: '500' }}>{desc}</Text>
                     </TouchableOpacity>
                     <Image
                         style={{ width: 40, height: 40 }}
@@ -993,68 +995,56 @@ const preload = () => {
     )
 };
 
-class CouponHeader extends Component {
+class CustomFilterHeader extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            active: 'opened'
+            active: this.props.activeIndex || 0
         };
-    }
-
-    _config = {
-        /* Açık Kuponlar */
-        opened: {
-            itemType: 'coupon',
-            uri: Utils.getURL({ key: 'integrator', subKey: 'getCouponDetail' }),
-            keys: {
-                id: 'couponKey',
-                arr: 'couponDetailList',
-            },
-            data: {
-                "status": 4,
-                "type": 2,
-                "active": true
-            },
-        },
-
-        /* Kapananlar */
-        closed: {
-            itemType: 'coupon',
-            uri: Utils.getURL({ key: 'integrator', subKey: 'getCouponDetail' }),
-            keys: {
-                id: 'couponKey',
-                arr: 'couponDetailList',
-            },
-            data: {
-                "status": 4,
-                "type": 2,
-                "active": false
-            },
-        }
     }
 
     _onPress = ({ item = {} }) => {
         const _self = this,
-            { callback } = _self.props,
+            { callback, config } = _self.props,
             { type } = item;
 
-
         if (callback)
-            callback(_self._config[type]);
+            callback(config[type]);
 
         _self.setState({ active: type });
     }
 
+    _getButton = () => {
+        const _self = this,
+            { config } = _self.props,
+            { active } = _self.state;
+
+        return Object.keys(config).map((key) => {
+            const k = config[key],
+                title = k['title'] || '',
+                color = active == key ? '#000000' : '#535353',
+                borderColor = active == key ? '#DDDDDD' : '#FFFFFF',
+                btn = (
+                    <BoxButton
+                        key={key}
+                        item={{ type: key }}
+                        textStyle={{ fontFamily: 'RegularTyp2', color: color }}
+                        wrapperStyle={{ paddingLeft: 15, paddingRight: 15, borderRadius: 15, marginRight: 12, borderColor: borderColor }}
+                        callback={_self._onPress}>
+                        {title}
+                    </BoxButton>
+                );
+            return btn;
+        });
+    }
+
     render() {
         const _self = this,
-            { active } = _self.state,
-            ob = active == 'opened' ? { borderColor: '#DDDDDD', color: '#000000' } : { borderColor: '#FFFFFF', color: '#535353' },
-            cb = active == 'closed' ? { borderColor: '#DDDDDD', color: '#000000' } : { borderColor: '#FFFFFF', color: '#535353' };
+            button = _self._getButton();
 
         return (
             <View style={{ flexDirection: 'row', paddingBottom: 17, paddingTop: 20, borderBottomColor: '#dcdcdc', borderBottomWidth: 1, marginLeft: 20, marginRight: 20, justifyContent: 'center', alignItems: 'center' }}>
-                <BoxButton textStyle={{ fontFamily: 'RegularTyp2', color: ob['color'] }} wrapperStyle={{ paddingLeft: 15, paddingRight: 15, borderRadius: 15, marginRight: 12, borderColor: ob['borderColor'] }} item={{ type: 'opened' }} callback={_self._onPress}>{'Açık Kuponlar'}</BoxButton>
-                <BoxButton textStyle={{ fontFamily: 'RegularTyp2', color: cb['color']  }} wrapperStyle={{ paddingLeft: 15, paddingRight: 15, borderRadius: 15, marginLeft: 12, borderColor: cb['borderColor'] }} item={{ type: 'closed' }} callback={_self._onPress}>{'Kapanan'}</BoxButton>
+                {button}
             </View>
         );
     }
@@ -1309,12 +1299,16 @@ class Viewers extends Component {
 
     /* item element remove */
     _removeItem = ({ key = '', value = '' }) => {
+        /*
         const _self = this,
             { data } = _self.state,
             arr = data.filter(function (item, index) {
                 return item[key] != value;
             });
         _self.setState({ data: arr });
+        */
+        const _self = this;
+        _self._onUpdateItem();
     }
 
     /* tüm listeyi güncelle */
@@ -1418,9 +1412,20 @@ class Viewers extends Component {
                         data[key] = value;
                 });
 
-            _self.setAjx({ uri: _self.getUri(), data: data });
+            store.dispatch({ type: SHOW_PRELOADING, value: true });
+            _self.setAjx({ uri: _self.getUri(), data: data }, () => {
+                store.dispatch({ type: SHOW_PRELOADING, value: false });
+            });
         } else if (itemType == ITEMTYPE['COUPON']) {
-            _self.setAjx({ uri: _self.getUri(), data: obj['data'] || {} });
+            store.dispatch({ type: SHOW_PRELOADING, value: true });
+            _self.setAjx({ uri: _self.getUri(), data: obj['data'] || {} }, () => {
+                store.dispatch({ type: SHOW_PRELOADING, value: false });
+            });
+        } else if (itemType == ITEMTYPE['FOLLOWLIST']) {
+            store.dispatch({ type: SHOW_PRELOADING, value: true });
+            _self.setAjx({ uri: obj['uri'] || '', data: obj['data'] || {} }, () => {
+                store.dispatch({ type: SHOW_PRELOADING, value: false });
+            });
         }
     }
 
@@ -1462,8 +1467,66 @@ class Viewers extends Component {
                         />
                     </ElevatedView>
                 );
-            case ITEMTYPE['COUPON']:
-                return <CouponHeader callback={_self._filtered} />
+            case ITEMTYPE['COUPON']: {
+                const _config = [
+                    {
+                        title: 'Açık Kuponlar',
+                        itemType: 'coupon',
+                        uri: Utils.getURL({ key: 'integrator', subKey: 'getCouponDetail' }),
+                        keys: {
+                            id: 'couponKey',
+                            arr: 'couponDetailList',
+                        },
+                        data: {
+                            "status": 4,
+                            "type": 2,
+                            "active": true
+                        },
+                    },
+                    {
+                        title: 'Kapanan',
+                        itemType: 'coupon',
+                        uri: Utils.getURL({ key: 'integrator', subKey: 'getCouponDetail' }),
+                        keys: {
+                            id: 'couponKey',
+                            arr: 'couponDetailList',
+                        },
+                        data: {
+                            "status": 4,
+                            "type": 2,
+                            "active": false
+                        },
+                    }
+                ];
+
+                return <CustomFilterHeader config={_config} callback={_self._filtered} />;
+
+            } case ITEMTYPE['FOLLOWLIST']: {
+                const _config = [
+                    {
+                        title: 'Fiyatı Düşenler',
+                        itemType: 'followList',
+                        uri: Utils.getURL({ key: 'user', subKey: 'getPriceFollowUpList' }),
+                        keys: {
+                            id: 'productId',
+                            arr: 'products',
+                        },
+                        data: {},
+                    },
+                    {
+                        title: 'Stoğa Girenler',
+                        itemType: 'followList',
+                        uri: Utils.getURL({ key: 'user', subKey: 'getStockFollowUpList' }),
+                        keys: {
+                            id: 'productId',
+                            arr: 'products',
+                        },
+                        data: {},
+                    }
+                ];
+
+                return <CustomFilterHeader config={_config} callback={_self._filtered} />;
+            }
             default:
                 return null;
         }

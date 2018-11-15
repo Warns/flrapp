@@ -11,8 +11,38 @@ import { MinimalHeader, } from 'root/app/components';
 import {
   SHOW_CUSTOM_POPUP,
   SET_VIEWER,
+  SET_FORM,
+  FORMDATA
 } from 'root/app/helper/Constant';
 import { Viewer } from 'root/app/viewer/';
+import { Form } from 'root/app/form';
+
+/*
+
+const data = {
+                        "title": "KULLANICI SÖZLEŞMESİ",
+                        "type": "webViewer",
+                        "uri": {
+                            "key": "user",
+                            "subKey": "getAgreement"
+                        },
+                        "keys": {
+                            "arr": "agreementHtml"
+                        }
+                    };
+
+store.dispatch({ type: SHOW_CUSTOM_POPUP, value: { visibility: true, type: SET_VIEWER, data: data } });
+
+
+const form = {
+  "type": "SET_FORM",
+  "itemType": "changePassword"
+}
+
+store.dispatch({ type: SHOW_CUSTOM_POPUP, value: { visibility: true, type: SET_FORM, data: form } });
+
+
+*/
 
 class CustomModals extends Component {
 
@@ -21,20 +51,22 @@ class CustomModals extends Component {
   }
 
   _onClose = () => {
-    this.props.dispatch({ type: SHOW_CUSTOM_POPUP, value: { visibility: false, data: {}, type: '' } });
+    this.props.dispatch({ type: SHOW_CUSTOM_POPUP, value: { visibility: false, data: {}, type: '', itemType: '' } });
   }
 
   _getViewer = () => {
     const _self = this,
-      { type, data = {}, postData = {} } = _self.props.customModal;
+      { type, itemType, data = {}, postData = {}, modalTitle = 'KAPAT' } = _self.props.customModal;
 
     let view = null;
     if (type == SET_VIEWER)
       view = <Viewer postData={postData} config={data} />;
+    else if (type == SET_FORM)
+      view = <Form callback={_self._callback} postData={postData} data={FORMDATA[itemType]} />;
 
     return (
       <View style={{ flex: 1 }}>
-        <MinimalHeader onPress={this._onClose} title="KAPAT" right={<View />} />
+        <MinimalHeader onPress={this._onClose} title={modalTitle} right={<View />} />
         {view}
       </View>
     );

@@ -136,6 +136,9 @@ module.exports = {
                     placeholder: '',
                     value: '',
                     mask: '0(599) 9999999',
+                    customFormat: (k) => {
+                        return Utils.customPhoneFormat( k );
+                    },
                     validation: [{ key: 'isEmpty' }, { key: 'isPhone' },],
                     keyboardType: 'numeric',
                     regex: 'typ5',

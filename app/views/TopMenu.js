@@ -19,6 +19,7 @@ import { store } from 'root/app/store';
 
 const Utils = require('root/app/helper/Global.js');
 const Globals = require('root/app/globals.js');
+const Translation = require('root/app/helper/Translation.js');
 
 class CustomModal extends Component {
     constructor(props) {
@@ -114,8 +115,16 @@ class Menu extends Component {
             anim: new Animated.Value(0),
         }
     }
+
     componentDidMount() {
-        this._animate({ type: 'show' });
+        const _self = this;
+        _self._isMounted = true;
+        _self._animate({ type: 'show' });
+    }
+
+    componentWillUnmount() {
+        const _self = this;
+        _self._isMounted = false;
     }
 
     /* https://gist.github.com/dabit3/19844207dc9f64a4cbd70f31734353e6 */
@@ -147,11 +156,29 @@ class Menu extends Component {
     /* menu item clicked */
     _onMenuClicked = (obj) => {
         const _self = this,
+            { type, uri = {}, itemType } = obj['item'] || {},
             { onMenuClicked } = _self.props;
-        _self._animate({ typ: 'hide' }, () => {
-            if (onMenuClicked)
-                onMenuClicked(obj);
-        });
+
+        /* ÇIKIŞ BUTONUNA ÖZEL İŞLEM */
+        if (type == ITEMTYPE['TRIGGERBUTTON'] && ITEMTYPE['EXITBUTTON'] == itemType)
+            Utils.confirm({ message: Translation['confirm']['exitButton'] }, ({ type }) => {
+                if (type == 'ok') {
+                    Globals.AJX({ _self: _self, uri: Utils.getURL(uri) }, (res) => {
+                        const { status } = res;
+                        if (status == 200) {
+                            _self._animate({ typ: 'hide' }, () => {
+                                store.dispatch({ type: HIDE_MENU });
+                                store.dispatch({ type: REMOVE_USER });
+                            });
+                        }
+                    });
+                }
+            });
+        else
+            _self._animate({ typ: 'hide' }, () => {
+                if (onMenuClicked)
+                    onMenuClicked(obj);
+            });
     }
 
     _header = () => {
@@ -233,13 +260,13 @@ class Menu extends Component {
             alignSelf = dir == 'left' ? 'flex-start' : 'flex-end',
             direction = dir == 'right' ? { right: pos } : { left: pos };
 
-            let{ isX, window, OS } = store.getState().general.SCREEN_DIMENSIONS;
+        let { isX, window, OS } = store.getState().general.SCREEN_DIMENSIONS;
 
-            let _top = OS == 'android' ? -28: isX ? -12 : 0;
+        let _top = OS == 'android' ? -28 : isX ? -12 : 0;
 
         return (
 
-            <View style={{ flex: 1, top:_top, minHeight: window.height - 25 }}>
+            <View style={{ flex: 1, top: _top, minHeight: window.height - 25 }}>
                 <Animated.View style={{ opacity: op, zIndex: 1, flex: 1, position: 'absolute', backgroundColor: '#000000', left: 0, right: 0, top: 0, bottom: 0, width: '100%', height: '100%' }}>
                     <TouchableOpacity style={{ flex: 1 }} activeOpacity={1} onPress={this._onClose}></TouchableOpacity>
                 </Animated.View>
@@ -294,22 +321,9 @@ class TopMenu extends Component {
     }
 
     _onMenuClicked = (obj) => {
-        const _self = this,
-            { type, uri = {}, itemType } = obj['item'] || {};
+        const _self = this;
         _self.props.dispatch({ type: HIDE_MENU });/* modal komple kapatıyor */
-
-        /* setting.json ile oluşturulan button tipine göre işlem yapmak */
-        if (type == ITEMTYPE['TRIGGERBUTTON'])
-            Globals.AJX({ _self: _self, uri: Utils.getURL(uri) }, (res) => {
-                const { status } = res;
-                if (status == 200) {
-                    /* ÇIKIŞ BUTONUNA ÖZEL İŞLEM */
-                    if (ITEMTYPE['EXITBUTTON'] == itemType)
-                        _self.props.dispatch({ type: REMOVE_USER });
-                }
-            });
-        else
-            _self.props.dispatch({ type: NAVIGATE, value: obj });
+        _self.props.dispatch({ type: NAVIGATE, value: obj });
     }
 
     render() {

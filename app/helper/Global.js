@@ -210,6 +210,32 @@ module.exports = {
         k = k.split(' ')[0];
         return (k.slice(0, 2) + '.' + k.slice(2, 4) + '.' + k.slice(4, 8));
     },
+    setDateFormat: function( k ){
+        k = parseFloat( k || '0' );
+        if( k < 10 )
+            k = '0' + k;
+        return k
+    },
+    customDateFormat: function (k) {
+        k = k || '';
+        var _t = this;
+        /* date formatlama, "birtday": "22.1.1990 00:00:00 => 22011990" */
+        k = k.split(' ')[0];
+        k = k.split('.');
+
+        k[0] = _t.setDateFormat( k[0] );
+        k[1] = _t.setDateFormat( k[1] );
+
+        return (k[0] + '' + k[1] + '' + k[2]);
+    },
+    customPhoneFormat: function (k) {
+        k = k || '';
+        /* phone formatlama, "mobilePhone": "0(999) 9999999 => 9999999999" */
+        if (k[0] == 0)
+            k = k.substr(1, k.length);
+
+        return k.replace(/\(/g, '').replace(/\)/g, '').replace(/\s+/g, '');
+    },
     ajx: function ({ uri = '' }, callback) {
         return fetch(uri)
             .then((res) => res.json())
@@ -281,23 +307,23 @@ module.exports = {
     },
     generateSMSVerificationCode: function (length, options) {
         if (isNaN(length)) {
-          throw new TypeError('Length must be a number', 'generate-sms-verification-code/index.js', 3)
+            throw new TypeError('Length must be a number', 'generate-sms-verification-code/index.js', 3)
         }
         if (length < 1) {
-          throw new RangeError('Length must be at least 1', 'generate-sms-verification-code/index.js', 6)
+            throw new RangeError('Length must be at least 1', 'generate-sms-verification-code/index.js', 6)
         }
         let possible = '0123456789'
         let string = ''
         for (let i = 0; i < length; i++) {
-          string += possible.charAt(Math.floor(Math.random() * possible.length))
+            string += possible.charAt(Math.floor(Math.random() * possible.length))
         }
-      
+
         if (options) {
-          if (options.type === 'number') {
-            return parseFloat(string)
-          }
+            if (options.type === 'number') {
+                return parseFloat(string)
+            }
         }
-      
+
         return string
     },
 };

@@ -61,9 +61,9 @@ class DateTimePicker extends Component {
                     format={dateFormat}
                     minDate={this._getMinDate()}
                     maxDate={this._getMaxDate()}
-                    confirmBtnText="Confirm"
-                    cancelBtnText="Cancel"
-                    placeholder="select date"
+                    confirmBtnText="Tamam"
+                    cancelBtnText="İptal"
+                    placeholder=""
                     onDateChange={(date) => { this.setState({ value: date }) }}
                     iconSource={require("../../assets/icons/calendar.png")}
                     customStyles={{

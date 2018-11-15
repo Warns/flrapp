@@ -3,13 +3,13 @@ const Utils = require('root/app/helper/Global.js');
 module.exports = {
 
     /* uri: istek yapılacak url */
-    uri: Utils.getURL({ key: 'address', subKey: 'createAddress' }), 
+    uri: Utils.getURL({ key: 'address', subKey: 'createAddress' }),
 
     /* allErrMessage: true durumunda tüm hata mesajları sayfanın en üstünde, false durumunda ilgili elementin altında gösterilir */
-    allErrMessage: false, 
+    allErrMessage: false,
 
     /* işlem başarıyla gerçekleşmişse ve özel bir mesaj göstermek isteniliyorsa mesaj bu kısma yazılır */
-    successMessage: '', 
+    successMessage: '',
 
     /* post için oluşturulan nesneye sabit bir alan eklenecekse bu kısma */
     addFields: [
@@ -76,7 +76,7 @@ module.exports = {
                     id: 'country',
                     title: 'Ülke/Şehir',
                     type: 'countryPicker',
-                    value: {  
+                    value: {
                         country: 1,
                         city: 1,
                         district: 999,
@@ -107,6 +107,9 @@ module.exports = {
                     placeholder: '',
                     value: '05055124852',
                     mask: '0(599) 9999999',
+                    customFormat: (k) => {
+                        return Utils.customPhoneFormat(k);
+                    },
                     validation: [{ key: 'isEmpty' }, { key: 'isPhone' },],
                     keyboardType: 'numeric',
                     regex: 'typ5',

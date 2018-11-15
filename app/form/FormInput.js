@@ -25,6 +25,22 @@ class FormInput extends Component {
         }
     }
 
+    componentDidMount() {
+        const _self = this,
+            { onRef } = _self.props;
+
+        if (onRef)
+            onRef(this);
+    }
+
+    componentWillUnmount() {
+        const _self = this,
+            { onRef } = _self.props;
+
+        if (onRef)
+            onRef(null);
+    }
+
     /* 
         selectbox seçim yapıldığında inputtaki değeri güncellemesi için ekstradan willUpdate kontrolü eklendi
         normalde inputlar için bu fonk. çalışmaması lazım
@@ -101,6 +117,12 @@ class FormInput extends Component {
             callback({ key: id, title: title, value: value, validation: validation });
     }
 
+    _onReset = () => {
+        const _self = this;
+        _self._onChangeText('');
+        _self._onBlur();
+    }
+
     render() {
         const _self = this,
             {
@@ -108,6 +130,7 @@ class FormInput extends Component {
             } = styles,
             {
                 title,
+                disabled = false,
                 secureTextEntry = false,
                 keyboardType = 'default',
                 multiline = false,
@@ -131,15 +154,19 @@ class FormInput extends Component {
                 titleShow,
             } = _self.state;
 
+        let disabledObj = {};
+        if (disabled)
+            disabledObj = { editable: false, selectTextOnFocus: false };
+
         let input = null;
 
         if (creditCart)
             input = (
                 <TextInputMask
-
                     refInput={element => {
                         this.input = element
                     }}
+                    {...disabledObj}
                     autoCorrect={autoCorrect}
                     maxLength={19}
                     multiline={multiline}
@@ -162,10 +189,10 @@ class FormInput extends Component {
         else if (mask)
             input = (
                 <TextInputMask
-
                     refInput={element => {
                         this.input = element
                     }}
+                    {...disabledObj}
                     autoCorrect={autoCorrect}
                     maxLength={mask.length}
                     multiline={multiline}
@@ -194,6 +221,7 @@ class FormInput extends Component {
                     ref={element => {
                         this.input = element
                     }}
+                    {...disabledObj}
                     autoCapitalize={'none'}
                     autoCorrect={autoCorrect}
                     maxLength={maxLength}
@@ -215,7 +243,7 @@ class FormInput extends Component {
             this._callback();
 
         return (
-            <TouchableOpacity activeOpacity={0.7} onPress={this._onPress.bind(this)}>
+            <TouchableOpacity style={{flex:1}} activeOpacity={0.7} onPress={this._onPress.bind(this)}>
                 <Container
                     containerStyle={{ ...containerStyle }}
                     wrapperStyle={{ ...wrapperStyle }}

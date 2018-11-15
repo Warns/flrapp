@@ -2,22 +2,76 @@ import React, { Component } from 'react';
 import {
     ScrollView,
     View,
-    Text,
-    TouchableOpacity,
     StyleSheet,
+    Alert,
+    Platform,
+    Image,
+    Keyboard,
+    TouchableOpacity,
+    Text
 } from 'react-native';
 import { FormInput, SelectBox, CheckBox, RadioGroup, DateTimePicker, ErrorBox, CountryPicker, HiddenObject } from './';
 import { CustomKeyboard } from 'root/app/helper';
 import { DefaultButton } from 'root/app/UI';
-import { LoadingButton } from 'root/app/UI';
 import {
-    SHOW_PRELOADING
+    ICONS,
+    SHOW_PRELOADING,
+    SHOW_CUSTOM_POPUP,
+    SET_FORM
 } from 'root/app/helper/Constant';
 import { store } from 'root/app/store';
 
 const Validation = require('root/app/helper/Validation.js');
 const Utils = require('root/app/helper/Global.js');
 const Globals = require('root/app/globals.js');
+const preload = () => {
+    return (
+        <View style={{ flex: 1, backgroundColor: '#FFFFFF', alignItems: 'center', justifyContent: 'center' }}>
+            <View style={{
+                width: 60,
+                height: 60,
+                borderRadius: 25,
+                overflow: 'hidden',
+                ...Platform.select({
+                    ios: {
+                        zIndex: 9,
+                    },
+                    android: {
+                        elevation: 999,
+                    }
+                }),
+            }}>
+                <Image source={ICONS['loading']} style={{ resizeMode: 'cover', width: 60, height: 60, borderRadius: 30 }} />
+            </View>
+        </View>
+    );
+};
+
+class Button extends Component {
+    constructor(props) {
+        super(props);
+    }
+
+    _onPress = () => {
+        const _self = this,
+            { callback, data } = _self.props;
+        if (callback)
+            callback(data);
+    }
+
+    render() {
+        const _self = this,
+            { title = '', fontStyle = {}, wrapperStyle = {} } = _self.props.data;
+
+        return (
+            <View style={[{ ...wrapperStyle }]}>
+                <TouchableOpacity onPress={this._onPress}>
+                    <Text style={[{ ...fontStyle }]} > {title}</Text>
+                </TouchableOpacity>
+            </View>
+        );
+    }
+}
 
 class Form extends Component {
 
@@ -97,10 +151,10 @@ class Form extends Component {
         const _self = this;
         _self.setState({ loading: true });
         Globals.fetch(uri, JSON.stringify(data), (answer) => {
-            //console.log(answer);
             if (_self._isMounted) {
                 if (answer === 'error') {
-                    console.log('fatalllll error: could not get access token');
+                    if (typeof callback !== 'undefined')
+                        callback({ type: 'error', d: answer });
                 } else {
                     if (answer.status == 200) {
                         if (typeof callback !== 'undefined')
@@ -231,10 +285,20 @@ class Form extends Component {
         }, 1);
     }
 
+    _preload = (b) => {
+        store.dispatch({ type: SHOW_PRELOADING, value: b });
+    }
+
+    _alert = (message) => {
+        setTimeout(() => {
+            Alert.alert(message);
+        }, 333);
+    }
+
     _send = (obj) => {
         const _self = this,
             { callback } = _self.props,
-            { sendAjx = true } = _self.props.data;
+            { sendAjx = true, successMessage = '', resetForm = false } = _self.props.data;
 
         /* objeye fix olarak eklenmek istenen alanlar varsa addfields bölümde tanımlanır. Tanımlanan key valuelar success objesine eklenir. */
         const { addFields = [], uri } = _self.props.data;
@@ -243,15 +307,30 @@ class Form extends Component {
                 obj[n['id']] = n['value'];
             });
 
-        console.log(JSON.stringify(obj));
-
+        console.log('form post', JSON.stringify(obj));
         if (sendAjx) {
-            store.dispatch({ type: SHOW_PRELOADING, value: true });
+            _self._preload(true);
             _self.ajx({ uri: uri, data: obj }, function ({ type, d }) {
+                console.log('form response', JSON.stringify(d));
+
+                _self._preload(false);
+
+                if (type == 'error') {
+                    const { message = 'HATA...' } = d;
+                    _self._alert(message);
+                } else {
+                    if (successMessage != '')
+                        _self._alert(successMessage);
+
+                    if (resetForm)
+                        _self._onResetForm();
+                }
+
+                Keyboard.dismiss();
+
                 if (callback)
                     callback({ type: type, data: d, postData: obj });
 
-                store.dispatch({ type: SHOW_PRELOADING, value: false });
             });
         } else {
             if (callback)
@@ -271,19 +350,61 @@ class Form extends Component {
 
     addField = (obj) => {
         const _self = this,
-            { id, type, css = {}, showHeader = true } = obj,
+            { id, type, css = {}, showHeader = true, constantValue = false } = obj,
             { containerStyle = {}, wrapperStyle = {}, fontStyle = {}, defaultTitleStyle = {} } = css,
             { theme = 'DARK' } = _self.props.data,
             validation = this.state.validation,
-            _callback = this._callback;
+            _callback = this._callback,
+            objCallback = constantValue ? {} : { callback: _self._callback };
+
+        /* 
+            setuser şifremi değiştir alanı için yapıldı.
+            constantValue: defValue değeri aktifse bir input ve değeri görünürde var ama herhangi bir şekilde 
+            işleme dahil olmayacaksa kullanılıyor ve jsonda verilen valueyu kullanıyor.
+        */
+        if (!constantValue)
+            _self.totalCount = _self.totalCount + 1;
 
         switch (type) {
             case 'creditCart':
-                return <FormInput containerStyle={{ ...containerStyle }} wrapperStyle={{ ...wrapperStyle }} onChangeText={_self._onChangeText} creditCart={true} theme={theme} callback={_callback} control={validation} key={id} data={obj} />;
+                return <FormInput
+                    onRef={ref => (_self._formElement.push(ref))}
+                    containerStyle={{ ...containerStyle }}
+                    wrapperStyle={{ ...wrapperStyle }}
+                    onChangeText={_self._onChangeText}
+                    creditCart={true}
+                    theme={theme}
+                    callback={_callback}
+                    control={validation}
+                    key={id}
+                    data={obj}
+                />;
             case 'text':
-                return <FormInput containerStyle={{ ...containerStyle }} wrapperStyle={{ ...wrapperStyle }} theme={theme} callback={_callback} control={validation} key={id} data={obj} />;
+                return <FormInput
+                    onRef={ref => (_self._formElement.push(ref))}
+                    containerStyle={{ ...containerStyle }}
+                    wrapperStyle={{ ...wrapperStyle }}
+                    theme={theme}
+                    {...objCallback}
+                    //callback={_callback}
+                    control={validation}
+                    key={id}
+                    data={obj}
+                />;
             case 'select':
-                return <SelectBox onRef={ref => (_self._formElement.push(ref))} showHeader={showHeader} defaultTitleStyle={{ ...defaultTitleStyle }} fontStyle={{ ...fontStyle }} containerStyle={{ ...containerStyle }} wrapperStyle={{ ...wrapperStyle }} theme={theme} callback={_callback} control={validation} key={id} data={obj} />;
+                return <SelectBox
+                    onRef={ref => (_self._formElement.push(ref))}
+                    showHeader={showHeader}
+                    defaultTitleStyle={{ ...defaultTitleStyle }}
+                    fontStyle={{ ...fontStyle }}
+                    containerStyle={{ ...containerStyle }}
+                    wrapperStyle={{ ...wrapperStyle }}
+                    theme={theme}
+                    callback={_callback}
+                    control={validation}
+                    key={id}
+                    data={obj}
+                />;
             case 'chekbox':
                 return <CheckBox containerStyle={{ ...containerStyle }} wrapperStyle={{ ...wrapperStyle }} theme={theme} callback={_callback} control={validation} key={id} data={obj} />;
             case 'radio':
@@ -294,14 +415,21 @@ class Form extends Component {
                 return <CountryPicker theme={theme} callback={_callback} control={validation} key={id} data={obj} />;
             case 'hiddenObject':
                 return <HiddenObject callback={_callback} control={validation} key={id} data={obj} />;
+            case 'button':
+                return <Button callback={_self._modalButtonClick} key={id} data={obj} />;
             default:
                 return null;
         }
     }
 
+    _modalButtonClick = (obj) => {
+        store.dispatch({ type: SHOW_CUSTOM_POPUP, value: { visibility: true, ...obj['modal'] } });
+    }
+
     /* serverdan dönen json ile form datasının default değerlerini eşitlemek */
     _setDefault = (itm) => {
         const _self = this,
+            { constantValue = false } = itm, /* constantValue; def. value eşitlenirken burdaki değeri baz alsın */
             id = itm['id'] || '',
             type = itm.type,
             { defaultData } = _self.state;
@@ -318,7 +446,9 @@ class Form extends Component {
                 def = def.substr(2, def.length);
         }
 
-        if (type == 'countryPicker') {
+        if (constantValue) {
+            // nothing
+        } else if (type == 'countryPicker') {
             itm['value']['country'] = defaultData['countryId'] || -1;
             itm['value']['city'] = defaultData['cityId'] || -1;
             itm['value']['district'] = defaultData['districtId'] || -1;
@@ -343,7 +473,6 @@ class Form extends Component {
                         if ((data['defValue'] || '') != '')
                             itm = _self._setDefault(itm);
 
-                        _self.totalCount = _self.totalCount + 1;
                         return _self.addField(itm);
                     }),
                     css = item['items'].length > 1 ? styles.row : styles.field;
@@ -370,26 +499,40 @@ class Form extends Component {
             arr[i]._onReset();
     }
 
-    render() {
+    _getViewer = () => {
         const _self = this,
+            { show } = _self.state,
             { theme = 'DARK', buttonText = 'GİRİŞ YAP', buttonStyle = {}, buttonFontStyle = {}, showButton = true } = _self.props.data,
             { scrollEnabled = true } = _self.props,
-            //button = showButton ? <DefaultButton fontStyle={{ ...buttonFontStyle }} style={{ ...buttonStyle }} theme={theme} callback={_self._onPress.bind(_self)}>{buttonText}</DefaultButton> : null;
             button = showButton ? <DefaultButton name={buttonText} textColor="#ffffff" boxColor="#000000" borderColor="#000000" callback={_self._onPress.bind(_self)}>{buttonText}</DefaultButton> : null;
 
+        if (!show)
+            return preload();
+        else
+            return (
+                <ScrollView
+                    keyboardShouldPersistTaps='handled'
+                    scrollEnabled={scrollEnabled}
+                    style={{ flex: 1, }}>
+                    <CustomKeyboard style={[{ flex: 1 }]}>
+                        <View style={[{ flex: 1, paddingLeft: 40, paddingRight: 40, paddingBottom: 40 }, { ..._self.props.style }]}>
+                            {_self._getAllErrMsg()}
+                            {_self.add()}
+                            {button}
+                        </View>
+                    </CustomKeyboard >
+                </ScrollView>
+            );
+    }
+
+    render() {
+        const _self = this,
+            view = _self._getViewer();
+
         return (
-            <ScrollView
-                keyboardShouldPersistTaps='handled'
-                scrollEnabled={scrollEnabled}
-                style={[{ flex: 1 }]}>
-                <CustomKeyboard style={[{ flex: 1 }]}>
-                    <View style={[{ flex: 1, paddingLeft: 40, paddingRight: 40, paddingBottom: 40 }, { ..._self.props.style }]}>
-                        {_self._getAllErrMsg()}
-                        {_self.add()}
-                        {button}
-                    </View>
-                </CustomKeyboard >
-            </ScrollView>
+            <View style={{ flex: 1, }}>
+                {view}
+            </View>
         );
     }
 }

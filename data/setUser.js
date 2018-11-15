@@ -9,60 +9,17 @@ module.exports = {
     },
 
     /* uri: istek yapılacak url */
-    uri: Utils.getURL({ key: 'user', subKey: 'setUser' }), 
+    uri: Utils.getURL({ key: 'user', subKey: 'setUser' }),
 
     /* allErrMessage: true durumunda tüm hata mesajları sayfanın en üstünde, false durumunda ilgili elementin altında gösterilir */
-    allErrMessage: false, 
+    allErrMessage: false,
 
     /* işlem başarıyla gerçekleşmişse ve özel bir mesaj göstermek isteniliyorsa mesaj bu kısma yazılır */
-    successMessage: '', 
+    successMessage: 'Bilgileriniz başarıyla güncellenmiştir',
 
-    /* post için oluşturulan nesneye sabit bir alan eklenecekse bu kısma */
-    addFields: [
-        /*{
-            id: 'isGuest',
-            value: true
-        },*/
-    ],
-
-
-    /*
-    {
-    "birthDay": "22.1.1990 00:00:00",
-
-    "gender": "E",
-  }
-    */
+    buttonText: 'KAYDET',
 
     fields: [
-        {
-            items: [
-                {
-                    id: 'userId',
-                    title: 'userId',
-                    type: 'hiddenObject',
-                    value: 0,
-                },
-                {
-                    id: 'points',
-                    title: 'points',
-                    type: 'hiddenObject',
-                    value: 0,
-                },
-                {
-                    id: 'cardNo',
-                    title: 'cardNo',
-                    type: 'hiddenObject',
-                    value: '',
-                },
-                {
-                    id: 'agreement',
-                    title: 'agreement',
-                    type: 'hiddenObject',
-                    value: '',
-                },
-            ]
-        },
         {
             items: [
                 {
@@ -95,7 +52,62 @@ module.exports = {
                     value: '',
                     validation: [{ key: 'isEmpty' }, { key: 'isMail', }],
                     keyboardType: 'email-address',
+                    disabled: true,
+                    css: {
+                        wrapperStyle: {
+                            backgroundColor: '#C1C1C1'
+                        }
+                    }
+                }
+            ]
+        },
+
+        {
+            wrapperStyle: {
+                flexDirection: 'row'
+            },
+            items: [
+                {
+                    constantValue: true,
+                    id: 'pass',
+                    title: 'Şifre',
+                    type: 'text',
+                    secureTextEntry: true,
+                    value: 'flrapp',
+                    disabled: true,
+                    css: {
+                        wrapperStyle: {
+                            backgroundColor: '#C1C1C1'
+                        }
+                    }
                 },
+                {
+                    constantValue: true,
+                    id: 'passChangeButton',
+                    title: 'Şifremi değiştir',
+                    type: 'button',
+                    value: 'button',
+                    fontStyle:{
+                        textDecorationLine: 'underline',
+                    },
+                    wrapperStyle:{
+                        paddingLeft: 10,
+                        paddingRight: 10,
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    },
+                    modal: {
+                        modalTitle: "Şifremi Değiştir",
+                        type: "SET_FORM",
+                        itemType: "changePassword"
+                    }
+                }
+            ]
+        },
+
+
+        {
+            items: [
                 {
                     id: 'mobilePhone',
                     title: 'Cep Telefonu',
@@ -103,30 +115,27 @@ module.exports = {
                     placeholder: '',
                     value: '',
                     mask: '0(999) 9999999',
+                    customFormat: (k) => {
+                        return Utils.customPhoneFormat(k);
+                    },
                     validation: [{ key: 'isEmpty' }, { key: 'isPhone' },],
                     keyboardType: 'numeric',
                     regex: 'typ5',
                 },
             ]
         },
+
         {
             items: [
-                /*{
-                    id: 'password',
-                    title: 'Şifre',
-                    type: 'text',
-                    secureTextEntry: true,
-                    placeholder: '',
-                    value: '',
-                    validation: [{ key: 'isEmpty' }, { key: 'isMin', value: 6 }, { key: 'isPassword' },],
-                },*/
                 {
                     id: 'birthDay',
                     title: 'Doğum Tarihi',
                     type: 'dataTimePicker',
                     placeholder: '',
                     value: '',
-                    customFormat: (k) => { return k.replace(/\./g, ''); },
+                    customFormat: (k) => {
+                        return Utils.customDateFormat(k);
+                    },
                     maxDate: -14,
                     validation: [{ key: 'isEmpty' }, { key: 'isDate' },],
                 },
@@ -145,18 +154,6 @@ module.exports = {
                 },
             ]
         },
-        /*{
-            items: [
-                {
-                    id: 'agreement',
-                    title: 'Üyelik ve Gizlilik Sözleşmesi',
-                    desc: 'Üyelik ve Gizlilik Sözleşmesi ve Kişisel Verilerin Korunması Maddesini kabul ediyorum.',
-                    type: 'chekbox',
-                    value: false,
-                    validation: [{ key: 'isChecked' },],
-                },
-            ]
-        },*/
         {
             items: [
                 {
@@ -165,7 +162,7 @@ module.exports = {
                     desc: 'E-Posta ile bilgilendirme istiyorum',
                     type: 'chekbox',
                     value: true,
-                    validation: [{ key: 'isChecked' },],
+                    //validation: [{ key: 'isChecked' },],
                 },
             ]
         },
@@ -177,7 +174,7 @@ module.exports = {
                     desc: 'SMS iptali için 3347 RET FLR yazarak mesaj gönderebilirsin.SMS ve e-posta almak istemiyorsan 0850 333 0 319 nolu çağrı merkezimizden bize ulaşabilirsin.',
                     type: 'chekbox',
                     value: true,
-                    validation: [{ key: 'isChecked' },],
+                    //validation: [{ key: 'isChecked' },],
                 },
 
             ]
