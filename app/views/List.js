@@ -133,8 +133,8 @@ export default class List extends React.Component {
     globals.fetch(
       "https://www.flormar.com.tr/webapi/v3/Product/getProductList",
       JSON.stringify({
-        //"page": 1,
-        "pageSize": 100,
+        "page": 1,
+        "pageSize": 6,
         "filter": filterValues,
         "catId": this.props.category.id, //18775
       }),
@@ -148,12 +148,12 @@ export default class List extends React.Component {
 
     let _items = answer.data.products;
 
-    /*
+    
     if (this.props.category.img && answer.data.filters.findIndex(obj => obj.isSelected == true) == -1) {
       _items.splice((answer.data.totalProductCount < 4 ? 0 : 4), 0,
         { productType: 'cover', side: 'left', img: this.props.category.img },
         { productType: 'cover', side: 'right', img: this.props.category.img });
-    }*/
+    }
     //console.log('list loaded', answer);
 
     //console.log(answer.data);
@@ -209,7 +209,6 @@ export default class List extends React.Component {
     
     Expo.takeSnapshotAsync(this._listView, {formar:'jpeg'})
       .then( (result) => { 
-        //this.setState({screenshot:result});
         
         store.dispatch({ type: OPEN_PRODUCT_DETAILS, 
                          value: { 

@@ -65,7 +65,7 @@ export default class App extends React.Component {
               <RootNavigation />
               <ProductView />
               <Assistant />
-              <YoutubePlayer />
+              { /*<YoutubePlayer />*/ }
               <CustomModal />
               <Preloader />
             </View>

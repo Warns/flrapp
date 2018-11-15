@@ -77,7 +77,7 @@ class AddressDetail extends Component {
 
         if (phoneNo != '')
             view = (
-                <View style={{ flex: 1, maxWidth:240, alignSelf:'right' }}>
+                <View style={{ flex: 1, maxWidth:240 }}>
                     <DefaultButton callback={_self._onPress} name={'MAĞAZAYI ARA'} />
                 </View>
             );

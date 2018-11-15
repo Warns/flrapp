@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import Regeturlct, { Component } from 'react';
 import {
     ScrollView,
     View,
@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import { Viewer } from 'root/app/viewer/';
 import {
-    UPDATE_CART,
+    UPDATE_tT,
     SET_CART_INFO,
     DATA_LOADED,
     SET_CART_NO_RESULT,
