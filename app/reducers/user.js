@@ -1,14 +1,17 @@
-import { 
+import {
     SET_USER,
     REMOVE_USER,
     SET_CART_NUM,
+    SET_CART_ITEMS,
 } from 'root/app/helper/Constant';
+import { store } from 'root/app/store';
+Utils = require('root/app/helper/Global.js');
 globals = require('root/app/globals.js');
 
 const userInitialState = {
     ID: '007',
 
-    optin:{
+    optin: {
         phone: null,
         phone_formatted: null,
         phone_verification: null,
@@ -21,39 +24,40 @@ const userInitialState = {
         userLogout: false,
     },
 
-    user:{},
+    user: {},
 }
 
-export default function user( state = userInitialState, action ){
-    
-    switch ( action.type ) {
+export default function user(state = userInitialState, action) {
+
+    switch (action.type) {
         case SET_CART_NUM: return {
             ID: action.value
         };
-        case SET_USER:{
+        case SET_USER: {
 
             let optin_value = JSON.stringify(action.value.user);
 
             globals.setSecureStorage('__OPTIN__', optin_value);
             fetchCartDetails();
-            
+
             return {
-            ...state,
-            ...action.value
+                ...state,
+                ...action.value
             }
         };
         case 'UPDATE_OPTIN': return {
             ...state,
-            optin:{ ...state.optin,
-                    ...action.value,
+            optin: {
+                ...state.optin,
+                ...action.value,
             }
         };
-        case REMOVE_USER:{
+        case REMOVE_USER: {
 
-            let newOptin = {...state.user, userLoggedOut:true};
-            
+            let newOptin = { ...state.user, userLoggedOut: true };
+
             globals.setSecureStorage('__OPTIN__', JSON.stringify(newOptin));
-            
+
             return {
                 ...state,
                 user: {},
@@ -61,7 +65,7 @@ export default function user( state = userInitialState, action ){
                     email: newOptin.email,
                     phone_formatted: newOptin.mobilePhone,
                 }
-            }; 
+            };
         };
         default:
             return state;
@@ -69,5 +73,11 @@ export default function user( state = userInitialState, action ){
 }
 
 fetchCartDetails = async () => {
-
+    globals
+        .fetch(Utils.getURL({ key: 'cart', subKey: 'getCart' }), JSON.stringify({ 'cartLocation': 'basket' }), (answer) => {
+            if (answer.status == 200) {
+                const { products = [] } = answer.data || {};
+                store.dispatch({ type: SET_CART_ITEMS, value: products.length });
+            }
+        });
 }

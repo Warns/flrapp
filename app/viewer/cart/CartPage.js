@@ -1,4 +1,4 @@
-import Regeturlct, { Component } from 'react';
+import React, { Component } from 'react';
 import {
     ScrollView,
     View,
