@@ -53,8 +53,9 @@ class Extra extends Component {
         else if (type == VIEWERTYPE['FORM'])
             view = <Form
                 {...props}
+                style={{ paddingBottom: 20, paddingTop: 20 }}
                 data={FORMDATA[itemType]}
-                //callback={this._callback}
+            //callback={this._callback}
             />;
 
         return view;

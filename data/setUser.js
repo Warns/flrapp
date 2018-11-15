@@ -9,13 +9,15 @@ module.exports = {
     },
 
     /* uri: istek yapılacak url */
-    uri: Utils.getURL({ key: 'user', subKey: 'setUser' }), 
+    uri: Utils.getURL({ key: 'user', subKey: 'setUser' }),
 
     /* allErrMessage: true durumunda tüm hata mesajları sayfanın en üstünde, false durumunda ilgili elementin altında gösterilir */
-    allErrMessage: false, 
+    allErrMessage: false,
 
     /* işlem başarıyla gerçekleşmişse ve özel bir mesaj göstermek isteniliyorsa mesaj bu kısma yazılır */
-    successMessage: 'Bilgileriniz başarıyla güncellenmiştir', 
+    successMessage: 'Bilgileriniz başarıyla güncellenmiştir',
+
+    buttonText: 'KAYDET',
 
     fields: [
         {
@@ -52,11 +54,60 @@ module.exports = {
                     keyboardType: 'email-address',
                     disabled: true,
                     css: {
-                        wrapperStyle: { 
+                        wrapperStyle: {
+                            backgroundColor: '#C1C1C1'
+                        }
+                    }
+                }
+            ]
+        },
+
+        {
+            wrapperStyle: {
+                flexDirection: 'row'
+            },
+            items: [
+                {
+                    constantValue: true,
+                    id: 'pass',
+                    title: 'Şifre',
+                    type: 'text',
+                    secureTextEntry: true,
+                    value: 'flrapp',
+                    disabled: true,
+                    css: {
+                        wrapperStyle: {
                             backgroundColor: '#C1C1C1'
                         }
                     }
                 },
+                {
+                    constantValue: true,
+                    id: 'passChangeButton',
+                    title: 'Şifremi değiştir',
+                    type: 'button',
+                    value: 'button',
+                    fontStyle:{
+                        textDecorationLine: 'underline',
+                    },
+                    wrapperStyle:{
+                        paddingLeft: 10,
+                        paddingRight: 10,
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    },
+                    modal: {
+                        modalTitle: "Şifremi Değiştir",
+                        type: "SET_FORM",
+                        itemType: "changePassword"
+                    }
+                }
+            ]
+        },
+
+
+        {
+            items: [
                 {
                     id: 'mobilePhone',
                     title: 'Cep Telefonu',
@@ -65,7 +116,7 @@ module.exports = {
                     value: '',
                     mask: '0(999) 9999999',
                     customFormat: (k) => {
-                        return Utils.customPhoneFormat( k );
+                        return Utils.customPhoneFormat(k);
                     },
                     validation: [{ key: 'isEmpty' }, { key: 'isPhone' },],
                     keyboardType: 'numeric',
@@ -73,6 +124,7 @@ module.exports = {
                 },
             ]
         },
+
         {
             items: [
                 {
@@ -82,7 +134,7 @@ module.exports = {
                     placeholder: '',
                     value: '',
                     customFormat: (k) => {
-                        return Utils.customDateFormat( k );
+                        return Utils.customDateFormat(k);
                     },
                     maxDate: -14,
                     validation: [{ key: 'isEmpty' }, { key: 'isDate' },],

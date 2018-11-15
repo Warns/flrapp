@@ -222,7 +222,7 @@ module.exports = {
         /* date formatlama, "birtday": "22.1.1990 00:00:00 => 22011990" */
         k = k.split(' ')[0];
         k = k.split('.');
-console.log('tarih', k);
+
         k[0] = _t.setDateFormat( k[0] );
         k[1] = _t.setDateFormat( k[1] );
 

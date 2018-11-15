@@ -25,6 +25,22 @@ class FormInput extends Component {
         }
     }
 
+    componentDidMount() {
+        const _self = this,
+            { onRef } = _self.props;
+
+        if (onRef)
+            onRef(this);
+    }
+
+    componentWillUnmount() {
+        const _self = this,
+            { onRef } = _self.props;
+
+        if (onRef)
+            onRef(null);
+    }
+
     /* 
         selectbox seçim yapıldığında inputtaki değeri güncellemesi için ekstradan willUpdate kontrolü eklendi
         normalde inputlar için bu fonk. çalışmaması lazım
@@ -99,6 +115,12 @@ class FormInput extends Component {
 
         if (callback)
             callback({ key: id, title: title, value: value, validation: validation });
+    }
+
+    _onReset = () => {
+        const _self = this;
+        _self._onChangeText('');
+        _self._onBlur();
     }
 
     render() {
@@ -221,7 +243,7 @@ class FormInput extends Component {
             this._callback();
 
         return (
-            <TouchableOpacity activeOpacity={0.7} onPress={this._onPress.bind(this)}>
+            <TouchableOpacity style={{flex:1}} activeOpacity={0.7} onPress={this._onPress.bind(this)}>
                 <Container
                     containerStyle={{ ...containerStyle }}
                     wrapperStyle={{ ...wrapperStyle }}

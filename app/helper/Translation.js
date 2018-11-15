@@ -5,7 +5,8 @@ module.exports = {
     confirm: {
         cancel: 'İptal',
         ok: 'Tamam',
-        removeMessage: 'Silmek istediğinize emin misiniz?'
+        removeMessage: 'Silmek istediğinize emin misiniz?',
+        exitButton: 'Çıkış yapmak istediğinize emin misiniz?'
     },
     dropdown:{
         choose: 'Seçiniz',

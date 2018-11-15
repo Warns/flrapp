@@ -61,6 +61,9 @@ module.exports = {
                     placeholder: '',
                     value: '',
                     mask: '0(999) 999 99 99',
+                    customFormat: (k) => {
+                        return Utils.customPhoneFormat( k );
+                    },
                     validation: [{ key: 'isEmpty' }, { key: 'isPhone' },],
                     keyboardType: 'numeric',
                     regex: 'typ5',

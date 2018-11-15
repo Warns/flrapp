@@ -3,7 +3,11 @@ const Utils = require('root/app/helper/Global.js');
 module.exports = {
     uri: Utils.getURL({ key: 'user', subKey: 'changePassword' }),
 
-    successMessage: '',
+    successMessage: 'Şifreniz değiştirildi. Teşekkür ederiz.',
+
+    resetForm: true, // form gönderimi başarılı olarak gerçeklemişse formdaki değerlerin resetlenmesi
+
+    buttonText: 'KAYDET',
 
     fields: [
         {
@@ -14,7 +18,7 @@ module.exports = {
                     type: 'text',
                     secureTextEntry: true,
                     placeholder: '',
-                    value: '111111',
+                    value: '',
                     validation: [{ key: 'isEmpty' }, { key: 'isMin', value: 6 }, { key: 'isPassword' },],
                 }
             ]
@@ -27,7 +31,7 @@ module.exports = {
                     type: 'text',
                     secureTextEntry: true,
                     placeholder: '',
-                    value: '222222',
+                    value: '',
                     validation: [{ key: 'isEmpty' }, { key: 'isMin', value: 6 }, { key: 'isPassword' },],
                 }
             ]
@@ -40,7 +44,7 @@ module.exports = {
                     type: 'text',
                     secureTextEntry: true,
                     placeholder: '',
-                    value: '222222222222222',
+                    value: '',
                     validation: [{ key: 'isEmpty' }, { key: 'isMin', value: 6 }, { key: 'isEqual', value: 'newPassword1' },],
                 }
             ]
