@@ -1318,8 +1318,10 @@ class Viewers extends Component {
             if (_self.props.response)
                 _self.props.response({ type: DATA_LOADED, data: res.data });
 
+            /* callback */
             if (typeof callback !== 'undefined')
                 callback();
+
         });
     }
 
@@ -1348,7 +1350,7 @@ class Viewers extends Component {
     }
 
     _preload = async (b) => {
-        store.dispatch({ type: SHOW_PRELOADING, value: b });
+        //store.dispatch({ type: SHOW_PRELOADING, value: b });
     }
 
     /* tüm listeyi güncelle */
