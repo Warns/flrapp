@@ -1117,7 +1117,7 @@ class Viewers extends Component {
         return false;
     }
 
-    _onRequest = (callback) => {
+    onDidFocus = () => {
         const _self = this,
             { navigation, config } = _self.props,
             { type = VIEWERTYPE['LIST'] } = config;
@@ -1128,15 +1128,7 @@ class Viewers extends Component {
         if (type == VIEWERTYPE['SEG'])
             Globals.seg({ data: config.data }, _self._setSeg);
         else
-            _self.setAjx({ uri: _self.getUri(), data: _self._getData() }, () => {
-                if (typeof callback !== 'undefined')
-                    callback();
-            });
-    }
-
-    onDidFocus = () => {
-        const _self = this;
-        _self._onRequest();
+            _self.setAjx({ uri: _self.getUri(), data: _self._getData() });
     }
 
     componentDidMount() {
@@ -1362,10 +1354,7 @@ class Viewers extends Component {
     /* tüm listeyi güncelle */
     _onUpdateItem = () => {
         const _self = this;
-        _self._preload(true);
-        _self._onRequest(() => {
-            _self._preload(false);
-        });
+        _self.onDidFocus();
     }
 
     /* Viewer genel callback */
@@ -1383,10 +1372,7 @@ class Viewers extends Component {
     /* refreshing */
     _refreshing = () => {
         const _self = this;
-        _self._preload(true);
-        _self._onRequest(() => {
-            _self._preload(false);
-        });
+        _self.onDidFocus();
     }
 
     /* update redux */
