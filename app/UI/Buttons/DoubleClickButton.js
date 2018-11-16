@@ -14,6 +14,8 @@ class DoubleClickButton extends Component {
         super(props);
     }
 
+    _stm = null;
+
     _onPress = () => {
         const _self = this,
             { callback } = _self.props,
@@ -27,8 +29,14 @@ class DoubleClickButton extends Component {
 
         _self.lastPress = time;
 
-        if (callback)
-            callback({ type: clicked });
+        if (_self._stm != null)
+            clearTimeout(_self._stm)
+
+        _self._stm = setTimeout(() => {
+            if (callback)
+                callback({ type: clicked });
+        }, 410)
+
     }
 
     render() {

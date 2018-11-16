@@ -210,9 +210,9 @@ module.exports = {
         k = k.split(' ')[0];
         return (k.slice(0, 2) + '.' + k.slice(2, 4) + '.' + k.slice(4, 8));
     },
-    setDateFormat: function( k ){
-        k = parseFloat( k || '0' );
-        if( k < 10 )
+    setDateFormat: function (k) {
+        k = parseFloat(k || '0');
+        if (k < 10)
             k = '0' + k;
         return k
     },
@@ -223,8 +223,8 @@ module.exports = {
         k = k.split(' ')[0];
         k = k.split('.');
 
-        k[0] = _t.setDateFormat( k[0] );
-        k[1] = _t.setDateFormat( k[1] );
+        k[0] = _t.setDateFormat(k[0]);
+        k[1] = _t.setDateFormat(k[1]);
 
         return (k[0] + '' + k[1] + '' + k[2]);
     },
@@ -326,4 +326,11 @@ module.exports = {
 
         return string
     },
+    getCartCount: function (data) {
+        let { products = [] } = data || {}, count = 0;
+        products.forEach((item) => {
+            count = count + (item['quantity'] || 0)
+        });
+        return count;
+    }
 };

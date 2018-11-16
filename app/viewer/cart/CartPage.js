@@ -13,7 +13,8 @@ import {
     SET_CART_NO_RESULT,
     RESET_CART,
     SET_CART_PROGRESS,
-    ASSISTANT_SHOW
+    ASSISTANT_SHOW,
+    SET_CART_ITEMS
 } from 'root/app/helper/Constant';
 import { connect } from 'react-redux';
 import Footer from './Footer';
@@ -80,10 +81,9 @@ const Cart = class Main extends Component {
     _response = ({ type, data }) => {
         const _self = this;
         if (type === DATA_LOADED) {
-            console.log(JSON.stringify(data))
+            _self.props.dispatch({ type: SET_CART_ITEMS, value: Utils.getCartCount(data || {}) });
             _self.props.dispatch({ type: SET_CART_INFO, value: data });
         }
-
     }
 
     _onUpdate = () => {
