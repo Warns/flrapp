@@ -211,7 +211,7 @@ module.exports = {
       obj[key] = data[key];
     });
 
-    console.log(obj);
+    //-->console.log(obj);
 
     fetch(uri, {
       method: 'POST',

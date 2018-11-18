@@ -76,8 +76,7 @@ fetchCartDetails = async () => {
     globals
         .fetch(Utils.getURL({ key: 'cart', subKey: 'getCart' }), JSON.stringify({ 'cartLocation': 'basket' }), (answer) => {
             if (answer.status == 200) {
-                const { products = [] } = answer.data || {};
-                store.dispatch({ type: SET_CART_ITEMS, value: products.length });
+                store.dispatch({ type: SET_CART_ITEMS, value: Utils.getCartCount(answer.data || {}) });
             }
         });
 }

@@ -32,7 +32,11 @@ import {
     SET_SEGMENTIFY_INSTANCEID,
     ADD_CART_ITEM,
     OPEN_PRODUCT_DETAILS,
-    SHOW_PRELOADING
+    SHOW_PRELOADING,
+    UPDATE_PRODUCT_VIDEOS,
+    SET_VIDEO_PLAYER,
+    SHOW_CUSTOM_POPUP,
+    NAVIGATE
 } from 'root/app/helper/Constant';
 import {
     ElevatedView,
@@ -268,9 +272,9 @@ class FavoriteListItem extends Component {
 
     _onAddToCart = () => {
         const _self = this,
-            { data = {}, rdx = {} } = _self.props,
+            { data = {} } = _self.props,
             { productId } = data;
-        rdx.dispatch({ type: ADD_CART_ITEM, value: { id: productId, quantity: 1 } });
+        store.dispatch({ type: ADD_CART_ITEM, value: { id: productId, quantity: 1 } });
     }
 
     _onRemove = () => {
@@ -456,9 +460,9 @@ class FollowListItem extends Component {
 
     _onAddToCart = () => {
         const _self = this,
-            { data = {}, rdx = {} } = _self.props,
+            { data = {} } = _self.props,
             { productId } = data;
-        rdx.dispatch({ type: ADD_CART_ITEM, value: { id: productId, quantity: 1 } });
+        store.dispatch({ type: ADD_CART_ITEM, value: { id: productId, quantity: 1 } });
     }
 
     render() {
@@ -533,7 +537,7 @@ class ServiceListItem extends Component {
 
     setAjx = async () => {
         const _self = this,
-            { permission, location = null } = _self.props.rdx,
+            { permission, location = null } = store.getState().location || {},
             { serviceLatitude = '', serviceLongitude = '' } = _self.props.data;
 
         if (serviceLatitude != '' && serviceLongitude != '' && permission && location != null) {
@@ -699,10 +703,38 @@ class FeedsItem extends Component {
     /* feeds item tıklamada */
     _onPress = () => {
         const _self = this,
-            { productId, labels = [] } = _self.props.data;
+            { productId, labels = [], name, image, params = {} } = _self.props.data;
 
         if (FEEDSTYPE['PRODUCT'] == labels[0])
-            _self.props.rdx.dispatch({ type: OPEN_PRODUCT_DETAILS, value: { id: productId, measurements: {}, animate: false, sequence: 0 } });
+            store.dispatch({
+                type: OPEN_PRODUCT_DETAILS,
+                value: {
+                    id: productId,
+                    measurements: {},
+                    animate: false,
+                    sequence: 0
+                }
+            });
+        else if (FEEDSTYPE['VIDEO'] == labels[0])
+            store.dispatch({
+                type: SHOW_CUSTOM_POPUP,
+                value: {
+                    visibility: true,
+                    type: SET_VIDEO_PLAYER,
+                    //modalTitle: name,
+                    data: {
+                        selected: 0,
+                        items: [
+                            {
+                                "provider": "youtube",
+                                "text": name,
+                                "thumbnail": image,
+                                "videoId": params['youtubeId'] || ''
+                            }
+                        ]
+                    }
+                }
+            });
     }
 
     _onRatingClicked = ({ id, userLike }) => {
@@ -757,7 +789,8 @@ class FeedsItem extends Component {
                     _self._animate(false);
                 }, 100);
             });
-        }
+        } else
+            _self._onPress();
     };
 
     _heartAnim = () => {
@@ -788,7 +821,9 @@ class FeedsItem extends Component {
 
     _getProduct = () => {
         const _self = this,
-            { image = '', name, price } = _self.props.data;
+            { image = '', name, price, params } = _self.props.data,
+            { colorCount } = params,
+            color = colorCount > 0 ? <Text style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#9b9b9b', marginBottom: 10 }}>{colorCount}{' Renk'}</Text> : null;
 
         return (
             <DoubleClickButton callback={_self._callback}>
@@ -802,7 +837,7 @@ class FeedsItem extends Component {
                     <View style={{ flex: 1, paddingTop: 30 }}>
                         <Text style={{ fontFamily: 'Bold', fontSize: 22, marginBottom: 10 }}>{Utils.getPriceFormat(price)}</Text>
                         <Text style={{ fontFamily: 'Medium', fontSize: 16 }}>{name}</Text>
-                        <Text style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#9b9b9b', marginBottom: 10 }}>{'21 Renk'}</Text>
+                        {color}
                         <Text style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#be1066' }}>{'Hızla tükeniyor'}</Text>
                     </View>
                 </View>
@@ -1182,6 +1217,7 @@ class Viewers extends Component {
     }
 
     _getSegData = (data) => {
+        //return data['video|THIS_WEEK|NONE'];
         let arr = [];
         Object
             .keys(data)
@@ -1282,8 +1318,10 @@ class Viewers extends Component {
             if (_self.props.response)
                 _self.props.response({ type: DATA_LOADED, data: res.data });
 
+            /* callback */
             if (typeof callback !== 'undefined')
                 callback();
+
         });
     }
 
@@ -1309,6 +1347,10 @@ class Viewers extends Component {
         */
         const _self = this;
         _self._onUpdateItem();
+    }
+
+    _preload = async (b) => {
+        //store.dispatch({ type: SHOW_PRELOADING, value: b });
     }
 
     /* tüm listeyi güncelle */
@@ -1356,15 +1398,15 @@ class Viewers extends Component {
             case ITEMTYPE['ADDRESS']:
                 return <AddressListItem config={_self.props.config} callback={_self._callback} onRemove={_self._removeItem} data={item} />;
             case ITEMTYPE['FAVORITE']:
-                return <FavoriteListItem rdx={_self.props} onRemove={_self._removeItem} data={item} />;
+                return <FavoriteListItem onRemove={_self._removeItem} data={item} />;
             case ITEMTYPE['ORDER']:
                 return <OrderListItem callback={this._callback} data={item} />;
             case ITEMTYPE['COUPON']:
                 return <CouponListItem data={item} />;
             case ITEMTYPE['FOLLOWLIST']:
-                return <FollowListItem rdx={_self.props} data={item} />;
+                return <FollowListItem data={item} />;
             case ITEMTYPE['SERVICELIST']:
-                return <ServiceListItem callback={_self._callback} rdx={_self.props.location} data={item} />;
+                return <ServiceListItem callback={_self._callback} data={item} />;
             case ITEMTYPE['VIDEO']:
                 return <VideoListItem data={item} />;
             case ITEMTYPE['FEEDS']:
@@ -1412,19 +1454,19 @@ class Viewers extends Component {
                         data[key] = value;
                 });
 
-            store.dispatch({ type: SHOW_PRELOADING, value: true });
+            _self._preload(true);
             _self.setAjx({ uri: _self.getUri(), data: data }, () => {
-                store.dispatch({ type: SHOW_PRELOADING, value: false });
+                _self._preload(false);
             });
         } else if (itemType == ITEMTYPE['COUPON']) {
-            store.dispatch({ type: SHOW_PRELOADING, value: true });
+            _self._preload(true);
             _self.setAjx({ uri: _self.getUri(), data: obj['data'] || {} }, () => {
-                store.dispatch({ type: SHOW_PRELOADING, value: false });
+                _self._preload(false);
             });
         } else if (itemType == ITEMTYPE['FOLLOWLIST']) {
-            store.dispatch({ type: SHOW_PRELOADING, value: true });
+            _self._preload(true);
             _self.setAjx({ uri: obj['uri'] || '', data: obj['data'] || {} }, () => {
-                store.dispatch({ type: SHOW_PRELOADING, value: false });
+                _self._preload(false);
             });
         }
     }
@@ -1621,6 +1663,11 @@ class Viewers extends Component {
         );
     }
 
+    /* anasayfaya dön */
+    _onGotoHome = () => {
+        this.props.dispatch({ type: NAVIGATE, value: { item: { navigation: "Home" } } });
+    }
+
     _noResultView = () => {
         const _self = this,
             { itemType = '' } = _self.props.config;
@@ -1629,7 +1676,7 @@ class Viewers extends Component {
         let view = _self._getNoResultView({ ico: 'contentNoResult', text: 'İçerik Bulunamadı!' });
 
         if (itemType == ITEMTYPE['CARTLIST'])
-            view = _self._getNoResultView({ ico: 'cartNoResult', text: 'Sepetiniz Henüz Boş', button: <BoxButton wrapperStyle={{ height: 48 }} callback={_self._onAddToCart}>ANASAYFAYA GİT</BoxButton> });
+            view = _self._getNoResultView({ ico: 'cartNoResult', text: 'Sepetiniz Henüz Boş', button: <BoxButton wrapperStyle={{ height: 48 }} callback={_self._onGotoHome}>ANASAYFAYA GİT</BoxButton> });
         else if (itemType == ITEMTYPE['ADDRESS'])
             view = _self._getNoResultView({ ico: 'addressNoResult', text: 'Adres Bilgileriniz Henüz Boş', button: <BoxButton wrapperStyle={{ height: 48 }} callback={_self._onAddToCart}>YENİ ADRES EKLE</BoxButton> });
         else if (itemType == ITEMTYPE['COUPON'])

@@ -42,6 +42,7 @@ const RootStackNavigator = createStackNavigator(
     Optin: {
       screen: OptinNavigator,
       navigationOptions: {
+        gesturesEnabled: false,
         header: null
       }
     },
@@ -49,6 +50,7 @@ const RootStackNavigator = createStackNavigator(
     Home: {
       screen: HomeTabNavigator,
       navigationOptions: {
+        gesturesEnabled: false,
         header: () => <DefaultHeader />,
       }
     },
@@ -97,7 +99,6 @@ const RootStackNavigator = createStackNavigator(
   },
   {
     navigationOptions: {
-      gesturesEnabled: false,
       headerTitleStyle: {
         fontWeight: 'normal',
       },

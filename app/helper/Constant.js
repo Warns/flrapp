@@ -106,6 +106,7 @@ export const ADDRESS_LIST_CLICKED = 'ADDRESS_LIST_CLICKED';
 export const SET_FORM = 'SET_FORM';
 export const SET_VIEWER = 'SET_VIEWER';
 export const SET_ADDRESS_ITEM_CLICK = 'SET_ADDRESS_ITEM_CLICK';
+export const SET_VIDEO_PLAYER = 'SET_VIDEO_PLAYER';
 export const UPDATE_CART = 'UPDATE_CART';
 export const REMOVE_CART = 'REMOVE_CART';
 
