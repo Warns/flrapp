@@ -86,9 +86,18 @@ class Palette extends React.Component{
 
   render(){
 
-    let {items} = this.state;
+    let {items, width} = this.props;
     let colorsArray = [];
 
+    //console.log('palette', items.length);
+
+    if( items.length * this.state.width < width ){
+      this.setState({
+        width: Math.ceil( width / items.length ),
+      })
+    }
+
+    /*
     for( i in items ){
       colorsArray.push({
         name: items[i].shortCode + ' ' + items[i].name,
@@ -97,7 +106,7 @@ class Palette extends React.Component{
         icon: items[i].smallImageUrl.replace('mobile_image_1', 'mobile_texture').replace('http', 'https')
       })
     }
-
+*/
     //console.log('>>>..', this.state.selected);
 
     return(
@@ -105,7 +114,7 @@ class Palette extends React.Component{
         <FlatList
           //style={{borderWidth:1, borderColor:'red'}}
           scrollEnabled={true}
-          data={this.state.items}
+          data={items}
           keyExtractor={this._keyExtractor}
           renderItem={this._renderItem}
           horizontal={true}

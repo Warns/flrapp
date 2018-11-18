@@ -130,6 +130,19 @@ class ProductDetails extends React.Component{
         this.props.navigation.navigate('productReviewsList', {});
       }
 
+      _addToFavorites = () => {
+        this.setState({
+          favoriteButton:{...this.state.favoriteButton, status:!this.state.favoriteButton.status},
+        });
+    
+        if(this.state.favoriteButton.status){
+          this.props.dispatch({type:ADD_TO_FAVORITES, value: {id: this.props.product.item.productId} });
+        }
+        else{
+          this.props.dispatch({type:REMOVE_FROM_FAVORITES, value: {id: this.props.product.item.productId} });
+        }
+      }
+
     _renderProduct = () => {
         let{ anim, detailIsOpen, opacity, canScroll, videosIsOpen, favoriteButton, animationDone } = this.state;
         let { item, sequence, measurements, animate, colors, videos } = this.props.product;
@@ -150,6 +163,8 @@ class ProductDetails extends React.Component{
           if( animate && !this.state.animationDone ){
             
           }
+
+          //console.log(';;;', colors.length)
     
           let palette = colors.length > 1 ? <Palette width={SCREEN_DIMENSIONS.width} items={colors} selected={item.shortCode} onPress={this._changeColor} /> : null;
     
