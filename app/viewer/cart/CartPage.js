@@ -2,22 +2,21 @@ import React, { Component } from 'react';
 import {
     ScrollView,
     View,
-    TouchableOpacity,
-    Text
 } from 'react-native';
 import { Viewer } from 'root/app/viewer/';
 import {
-    UPDATE_tT,
+    UPDATE_CART,
     SET_CART_INFO,
     DATA_LOADED,
     SET_CART_NO_RESULT,
     RESET_CART,
     SET_CART_PROGRESS,
     ASSISTANT_SHOW,
-    SET_CART_ITEMS
+    SET_CART_ITEMS,
 } from 'root/app/helper/Constant';
 import { connect } from 'react-redux';
 import Footer from './Footer';
+import UnderSide from './UnderSide';
 
 const DATA = {
     type: 'scrollView',
@@ -33,7 +32,8 @@ const DATA = {
 /* footer config */
 const CONFIG = {
     buttonText: 'ALIŞVERİŞİ TAMAMLA',
-    coupon: true
+    coupon: true,
+    opportunity: true
 };
 
 const Cart = class Main extends Component {
@@ -89,7 +89,6 @@ const Cart = class Main extends Component {
     _onUpdate = () => {
         const _self = this;
         _self.child._onUpdateItem();
-        alert('update')
     }
 
     _onPress = () => {
@@ -121,12 +120,29 @@ const Cart = class Main extends Component {
 
     render() {
         const _self = this,
-            { paddingBottom } = _self.state;
+            { paddingBottom } = _self.state,
+            { cartNoResult = false } = _self.props.cart,
+            backgroundColor = cartNoResult ? '#FFFFFF' : 'rgb(244, 236, 236)';
         return (
             <View style={{ flex: 1 }}>
-                <View style={{ flex: 1, marginBottom: paddingBottom, }}>
-                    <Viewer noResult={_self._noResult} onRef={ref => (_self.child = ref)} {..._self.props} config={DATA} response={this._response} callback={this._callback} />
-                </View>
+                <ScrollView
+                    style={{
+                        flex: 1,
+                        marginBottom: paddingBottom,
+                        backgroundColor: backgroundColor
+                    }}>
+                    <Viewer
+                        noResult={_self._noResult}
+                        onRef={ref => (_self.child = ref)}
+                        {..._self.props}
+                        config={DATA}
+                        response={this._response}
+                        callback={this._callback}
+                        wrapperStyle={{ backgroundColor: backgroundColor }}
+                        style={{ backgroundColor: '#FFFFFF' }}
+                    />
+                    <UnderSide opportunity={CONFIG['opportunity']} />
+                </ScrollView>
                 <Footer expand={_self._onExpand} onCouponCallback={_self._onCouponCallback} onPress={_self._onPress} data={CONFIG} />
             </View>
         )

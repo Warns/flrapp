@@ -30,6 +30,7 @@ export const ICONS = {
     userMen: require('root/assets/icons/userMan.png'),
     campaingRectangle: require('root/assets/images/campaing-rectangle.png'),
     campaingTitle: require('root/assets/images/campaing-title.png'),
+    bottomArrow: require('root/assets/icons/bottomArrow.png'),
     downArrow: require('root/assets/icons/downArrow.png'),
     upArrow: require('root/assets/icons/topArrow.png'),
     searchMap: require('root/assets/icons/search-map.png'),
@@ -42,6 +43,7 @@ export const ICONS = {
     favoriteNoResult: require('root/assets/icons/favoriteNoResult.png'),
     followListNoResult: require('root/assets/icons/followListNoResult.png'),
     contentNoResult: require('root/assets/icons/contentNoResult.png'),
+    asistanButton: require('root/assets/icons/asistanButton.png'),
 };
 
 /* CARDS ICON */
@@ -84,7 +86,8 @@ export const ITEMTYPE = {
     VIDEO: 'video',
     FEEDS: 'feeds',
     TRIGGERBUTTON: 'triggerButton',
-    EXITBUTTON: 'exitButton'
+    EXITBUTTON: 'exitButton',
+    OPPORTUNITY: 'opportunity' // SEPET SAYFASI FIRSATLAR
 };
 
 export const FEEDSTYPE = {

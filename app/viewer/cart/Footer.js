@@ -37,18 +37,6 @@ class Main extends Component {
             onPress();
     }
 
-    _getForm = () => {
-        const _self = this,
-            { showCoupon = false } = _self.state,
-            { coupon = false } = _self.props.data;
-        let view = null;
-        if (coupon && showCoupon)
-            view = (
-                <Form scrollEnabled={false} style={{ marginTop: 10, marginBottom: 10, paddingLeft: 0, paddingRight: 0, paddingBottom: 0, flexDirection: 'row', }} data={FORMDATA['useCoupon']} callback={this._onFormCallback} />
-            );
-        return view;
-    }
-
     _onShowCoupon = () => {
         const _self = this,
             { expand } = _self.props,
@@ -59,17 +47,49 @@ class Main extends Component {
             expand(!showCoupon);
     }
 
+    _getCouponCode = () => {
+        const _self = this,
+            { cartInfo = {} } = _self.props.cart,
+            { couponCode = null } = cartInfo;
+
+        return couponCode || '';
+    }
+
+    _getForm = () => {
+        const _self = this,
+            { showCoupon = false } = _self.state,
+            { coupon = false } = _self.props.data;
+        let view = null;
+        if (coupon && showCoupon) {
+            const data = FORMDATA['useCoupon'];
+            data['fields'][0]['items'][0]['value'] = _self._getCouponCode();
+
+            view = (
+                <Form scrollEnabled={false} style={{ marginTop: 10, marginBottom: 10, paddingLeft: 0, paddingRight: 0, paddingBottom: 0, flexDirection: 'row', }} data={data} callback={this._onFormCallback} />
+            );
+        }
+
+        return view;
+    }
+
     _getFormButton = () => {
         const _self = this,
             { showCoupon = false } = _self.state,
             { coupon = false } = _self.props.data,
-            ico = showCoupon ? 'upArrow' : 'downArrow';
+            ico = showCoupon ? 'upArrow' : 'bottomArrow';
+
+        let txt = 'Promosyon Kodu';
+        if (showCoupon) {
+            const couponCode = _self._getCouponCode();
+            if (couponCode != '')
+                txt = 'Bu promosyon kodunu girdiniz:';
+        }
 
         let view = null;
         if (coupon)
             view = (
                 <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }} activeOpacity={0.8} onPress={_self._onShowCoupon}>
-                    <Text style={{ fontFamily: 'RegularTyp2', fontSize: 13, marginRight: 12 }}>{'Promosyon Kodu'}</Text>
+                    <Text style={{ fontFamily: 'RegularTyp2', fontSize: 13, marginRight: 12 }}>{txt}</Text>
                     <Image
                         style={{ width: 9, height: 5 }}
                         source={ICONS[ico]}
@@ -144,4 +164,4 @@ class Main extends Component {
 }
 
 function mapStateToProps(state) { return state }
-export default connect(mapStateToProps)(Main);;
+export default connect(mapStateToProps)(Main);

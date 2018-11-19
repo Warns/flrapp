@@ -47,6 +47,9 @@ import { connect } from 'react-redux';
 import { AddressListItem } from './';
 import { store } from 'root/app/store';
 import Placeholder from 'rn-placeholder';
+import {
+    ParserHTML
+} from 'root/app/helper/';
 
 const Translation = require('root/app/helper/Translation.js');
 const Utils = require('root/app/helper/Global.js');
@@ -207,34 +210,49 @@ class CartListItem extends Component {
         return { values: values, value: quantity };
     }
 
-    render() {
+    _getPromotions = () => {
         const _self = this,
             { data = {} } = _self.props,
-            { shortName, productName = '', smallImageUrl, total, quantity, unitCode } = data;
+            { promotions = [] } = data;
+
+        return promotions.map((itm, ind) => {
+            const { promotionName = '' } = itm;
+            return <Text key={ind} style={{ marginTop: 10, fontSize: 12, fontFamily: 'RegularTyp2', color: 'rgb(255, 43, 148)' }}>{promotionName}</Text>
+        });
+    }
+
+    render() {
+        const _self = this,
+            { data = {}, index = 0, totalCount = 0 } = _self.props,
+            { shortName, productName = '', smallImageUrl, total, quantity, unitCode } = data,
+            marginBottom = index == totalCount - 1 ? 0 : 10;
 
         return (
-            <View style={{ flexDirection: 'row', paddingTop: 15, paddingBottom: 15, paddingRight: 20, paddingLeft: 10, borderBottomColor: '#dcdcdc', borderBottomWidth: 1, marginBottom: 10, marginLeft: 10, marginRight: 10 }}>
-                <View style={{ width: 60, justifyContent: 'center', }}>
-                    <Image
-                        style={{ width: 49, height: 60 }}
-                        source={{ uri: Utils.getImage(smallImageUrl) }}
-                    />
-                </View>
-                <View style={{ flex: 1 }}>
-                    <View>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <Text numberOfLines={1} style={{ fontFamily: 'Medium', fontSize: 15, width: '90%' }}>{productName}</Text>
-                            <IconButton ico={'close'} callback={_self._onRemove} />
+            <View style={{ paddingTop: 15, paddingBottom: 15, paddingRight: 20, paddingLeft: 10, borderBottomColor: '#dcdcdc', borderBottomWidth: 1, marginBottom: marginBottom, marginLeft: 10, marginRight: 10 }}>
+                <View style={{ flexDirection: 'row', }}>
+                    <View style={{ width: 60, justifyContent: 'center', }}>
+                        <Image
+                            style={{ width: 49, height: 60 }}
+                            source={{ uri: Utils.getImage(smallImageUrl) }}
+                        />
+                    </View>
+                    <View style={{ flex: 1 }}>
+                        <View>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <Text numberOfLines={1} style={{ fontFamily: 'Medium', fontSize: 15, width: '90%' }}>{productName}</Text>
+                                <IconButton ico={'close'} callback={_self._onRemove} />
+                            </View>
+                            <Text numberOfLines={1} style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#555555' }}>{shortName}</Text>
                         </View>
-                        <Text numberOfLines={1} style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#555555' }}>{shortName}</Text>
-                    </View>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 16 }}>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 16 }}>
 
-                        <SelectBox fontStyle={{ fontSize: 12, fontFamily: 'RegularTyp2', }} showHeader={false} wrapperStyle={{ width: 85, height: 30, borderRadius: 15 }} containerStyle={{ marginBottom: 0 }} closed={true} callback={_self._onChange} data={_self.getSelectValue()} />
+                            <SelectBox fontStyle={{ fontSize: 12, fontFamily: 'RegularTyp2', }} showHeader={false} wrapperStyle={{ width: 85, height: 30, borderRadius: 15 }} containerStyle={{ marginBottom: 0 }} closed={true} callback={_self._onChange} data={_self.getSelectValue()} />
 
-                        <Text style={{ fontFamily: 'Bold', fontSize: 16 }}>{Utils.getPriceFormat(total)}</Text>
+                            <Text style={{ fontFamily: 'Bold', fontSize: 16 }}>{Utils.getPriceFormat(total)}</Text>
+                        </View>
                     </View>
                 </View>
+                {_self._getPromotions()}
             </View>
         );
     }
@@ -914,6 +932,24 @@ class FeedsItem extends Component {
     }
 }
 
+class OpportunityListItem extends Component {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        const _self = this,
+            { index } = _self.props,
+            { desc } = _self.props.data,
+            leftSpace = index == 0 ? 20 : 0;
+
+        return (
+            <View style={{ backgroundColor: '#FFFFFF', width: 220, minHeight: 130, marginRight: 10, marginLeft: leftSpace, padding: 15, }}>
+                <ParserHTML style={{ fontSize: 15, lineHeight: 21 }} wrapperStyle={{ fontSize: 15, lineHeight: 21 }}>{desc}</ParserHTML>
+            </View>
+        )
+    }
+}
+
 class ContentPlaceHolder extends Component {
 
     constructor(props) {
@@ -1297,7 +1333,7 @@ class Viewers extends Component {
             if (customFunc != '')
                 data = _self._customFunc(data);
 
-            if (type == VIEWERTYPE['HTMLTOJSON'])
+            if (type == VIEWERTYPE['HTMLTOJSON'] && data.length > 0)
                 data = JSON.parse(data)[keys['obj']][keys['objArr']] || [];
 
             if (data.length == 0) {
@@ -1306,7 +1342,7 @@ class Viewers extends Component {
                 if (_self.props.noResult)
                     _self.props.noResult();
             } else if (type == VIEWERTYPE['LIST'] || type == VIEWERTYPE['HTMLTOJSON'] || type == VIEWERTYPE['SCROLLVIEW'])
-                _self.setState({ data: data, total: res.data[keyTotal] || 0, loaded: true, noResult: false });
+                _self.setState({ data: data, total: res.data[keyTotal] || data.length || 0, loaded: true, noResult: false });
             else if (type == VIEWERTYPE['WEBVIEW'])
                 _self.setState({ html: _self._addStyle({ customClass: customClass, data: data }), loaded: true, noResult: false });
             else
@@ -1383,18 +1419,20 @@ class Viewers extends Component {
         _self.props.dispatch(obj);
     }
 
-    _renderItem = ({ item, key }) => {
+    _renderItem = ({ item, key, index }) => {
         const _self = this,
             { itemType = '' } = _self.props.config,
-            { loaded } = _self.state;
+            { loaded, total } = _self.state;
 
         if (!loaded)
             return <ContentPlaceHolder key={key} type={itemType} />;
 
         switch (itemType) {
 
+            case ITEMTYPE['OPPORTUNITY']:
+                return <OpportunityListItem key={key} index={index} callback={_self._callback} data={item} />;
             case ITEMTYPE['CARTLIST']:
-                return <CartListItem key={key} callback={_self._callback} onUpdateItem={_self._onUpdateItem} onRemove={_self._removeItem} data={item} />;
+                return <CartListItem totalCount={total} index={index} key={key} callback={_self._callback} onUpdateItem={_self._onUpdateItem} onRemove={_self._removeItem} data={item} />;
             case ITEMTYPE['ADDRESS']:
                 return <AddressListItem config={_self.props.config} callback={_self._callback} onRemove={_self._removeItem} data={item} />;
             case ITEMTYPE['FAVORITE']:
@@ -1425,7 +1463,7 @@ class Viewers extends Component {
 
         if (data.length > 0)
             data.map((item, ind) => {
-                arr.push(_self._renderItem({ item: item, key: _self._keyExtractor(item, ind) }));
+                arr.push(_self._renderItem({ item: item, key: _self._keyExtractor(item, ind), index: ind }));
             });
 
         return arr;
@@ -1643,9 +1681,9 @@ class Viewers extends Component {
         */
     }
 
-    _getNoResultView = ({ ico = '', text = '', button = null }) => {
+    _getNoResultView = ({ wrapperStyle = {}, ico = '', text = '', button = null }) => {
         return (
-            <View style={{ flex: 1, justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
+            <View style={[{ flex: 1, justifyContent: 'center', alignContent: 'center', alignItems: 'center' }, wrapperStyle]}>
                 <View style={{ width: 275, alignItems: 'center', justifyContent: 'center' }}>
                     <Image
                         style={{
@@ -1676,7 +1714,7 @@ class Viewers extends Component {
         let view = _self._getNoResultView({ ico: 'contentNoResult', text: 'İçerik Bulunamadı!' });
 
         if (itemType == ITEMTYPE['CARTLIST'])
-            view = _self._getNoResultView({ ico: 'cartNoResult', text: 'Sepetiniz Henüz Boş', button: <BoxButton wrapperStyle={{ height: 48 }} callback={_self._onGotoHome}>ANASAYFAYA GİT</BoxButton> });
+            view = _self._getNoResultView({ wrapperStyle: { paddingTop: 60 }, ico: 'cartNoResult', text: 'Sepetiniz Henüz Boş', button: <BoxButton wrapperStyle={{ height: 48 }} callback={_self._onGotoHome}>ANASAYFAYA GİT</BoxButton> });
         else if (itemType == ITEMTYPE['ADDRESS'])
             view = _self._getNoResultView({ ico: 'addressNoResult', text: 'Adres Bilgileriniz Henüz Boş', button: <BoxButton wrapperStyle={{ height: 48 }} callback={_self._onAddToCart}>YENİ ADRES EKLE</BoxButton> });
         else if (itemType == ITEMTYPE['COUPON'])
@@ -1687,6 +1725,8 @@ class Viewers extends Component {
             view = _self._getNoResultView({ ico: 'followListNoResult', text: 'Takip Listeniz Boş' });
         else if (itemType == ITEMTYPE['ORDER'])
             view = _self._getNoResultView({ ico: 'cartNoResult', text: 'Siparişleriniz Boş' });
+        else if (itemType == ITEMTYPE['OPPORTUNITY'])
+            view = null;
 
         return view;
     }
@@ -1694,7 +1734,7 @@ class Viewers extends Component {
     _getViewer = () => {
         const _self = this,
             { scrollEnabled = true } = _self.props,
-            { type = VIEWERTYPE['LIST'] } = _self.props.config,
+            { type = VIEWERTYPE['LIST'], horizontal = false, showsHorizontalScrollIndicator = true } = _self.props.config,
             { noResult = false, loaded = false } = _self.state;
 
         let view = null;
@@ -1703,6 +1743,8 @@ class Viewers extends Component {
         else if (type == VIEWERTYPE['SEG'] || type == VIEWERTYPE['LIST'] || type == VIEWERTYPE['HTMLTOJSON'])
             view = (
                 <FlatList
+                    showsHorizontalScrollIndicator={showsHorizontalScrollIndicator}
+                    horizontal={horizontal}
                     scrollEnabled={scrollEnabled}
                     data={_self.state.data}
                     keyExtractor={_self._keyExtractor}
@@ -1749,7 +1791,7 @@ class Viewers extends Component {
     render() {
         const _self = this;
         return (
-            <View style={{ flex: 1, }}>
+            <View style={[{ flex: 1 }, { ..._self.props.wrapperStyle }]}>
                 {_self._getFilter()}
                 <View style={[{ flex: 1, padding: 0 }, { ..._self.props.style }]}>
                     {_self._getViewer()}
