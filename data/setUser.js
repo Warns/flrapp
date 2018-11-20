@@ -55,7 +55,7 @@ module.exports = {
                     disabled: true,
                     css: {
                         wrapperStyle: {
-                            backgroundColor: '#C1C1C1'
+                            backgroundColor: '#f6f6f6'
                         }
                     }
                 }
@@ -77,7 +77,7 @@ module.exports = {
                     disabled: true,
                     css: {
                         wrapperStyle: {
-                            backgroundColor: '#C1C1C1'
+                            backgroundColor: '#f6f6f6'
                         }
                     }
                 },

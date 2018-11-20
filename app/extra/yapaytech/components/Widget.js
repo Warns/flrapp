@@ -15,6 +15,7 @@ import { Constants } from "expo";
 const { height, width } = Dimensions.get("window");
 const maxHeight = height - Constants.statusBarHeight;
 const WidgetSize = 50;
+import { connect } from 'react-redux';
 
 const styles = StyleSheet.create({
   container: {
@@ -37,10 +38,15 @@ const styles = StyleSheet.create({
   },
   widgetImage: { width: WidgetSize, height: WidgetSize }
 });
-export default class Widget extends React.Component {
+class Widget extends React.Component {
   render() {
+    const _self = this,
+      { assistant = {} } = _self.props,
+      { show = true } = assistant,
+      bottom = show ? 0 : -(WidgetSize * 2);
+
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, { bottom }]}>
         <TouchableWithoutFeedback onPress={this.props.open}>
           <View style={styles.widget}>
             <Image
@@ -53,3 +59,6 @@ export default class Widget extends React.Component {
     );
   }
 }
+
+function mapStateToProps(state) { return state }
+export default connect(mapStateToProps)(Widget);

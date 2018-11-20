@@ -44,6 +44,8 @@ export const ICONS = {
     followListNoResult: require('root/assets/icons/followListNoResult.png'),
     contentNoResult: require('root/assets/icons/contentNoResult.png'),
     asistanButton: require('root/assets/icons/asistanButton.png'),
+    button: require('root/assets/icons/button.png'),
+    searchClose: require('root/assets/icons/searchClose.png'),
 };
 
 /* CARDS ICON */
@@ -124,6 +126,7 @@ export const FORMDATA = {
     setUser: require('root/data/setUser.js'),
     productFilter: require('root/data/productFilter.js'),
     useCoupon: require('root/data/useCoupon.js'),
+    deleteCoupon: require('root/data/deleteCoupon.js'),
     creditCart: require('root/data/creditCart.js'),
     //Opt-in
     optin_phone: require('root/data/optin_phone.js'),
@@ -207,6 +210,8 @@ export const SET_SEGMENTIFY_INSTANCEID = 'SET_SEGMENTIFY_INSTANCEID';
 
 /* assistant */
 export const ASSISTANT_SHOW = 'ASSISTANT_SHOW';
+export const SET_ASSISTANT = 'SET_ASSISTANT';
+export const ASSISTANT_OPENED = 'ASSISTANT_OPENED';
 
 /* customPopup */
 export const SHOW_CUSTOM_POPUP = 'SHOW_CUSTOM_POPUP';

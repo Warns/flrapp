@@ -70,6 +70,7 @@ module.exports = {
             updateCartLine: '/webapi/v3/Cart/updateCartLine',
             deleteCartLine: '/webapi/v3/Cart/deleteCartLine',
             useCoupon: '/webapi/v3/Cart/useCoupon',
+            deleteCoupon: '/webapi/v3/Cart/deleteCoupon',
             getCargo: '/webapi/v3/Cart/getCargo',
             getPayment: '/webapi/v3/Cart/getPayment',
             getAgreement: '/webapi/v3/Cart/getAgreement',
@@ -117,6 +118,11 @@ module.exports = {
     cleanText: (k) => {
         k = k || '';
         return k.replace(/\s+/g, '');
+    },
+    clearHtmlTag: function (k) {
+        /* https://css-tricks.com/snippets/javascript/strip-html-tags-in-javascript/ */
+        k = k || '';
+        return k.replace(/(<([^>]+)>)/ig, '');
     },
     subtractDate: (o) => {
         var typ = o['typ'] || 'remove',

@@ -1714,7 +1714,7 @@ class Viewers extends Component {
         let view = _self._getNoResultView({ ico: 'contentNoResult', text: 'İçerik Bulunamadı!' });
 
         if (itemType == ITEMTYPE['CARTLIST'])
-            view = _self._getNoResultView({ wrapperStyle: { paddingTop: 60 }, ico: 'cartNoResult', text: 'Sepetiniz Henüz Boş', button: <BoxButton wrapperStyle={{ height: 48 }} callback={_self._onGotoHome}>ANASAYFAYA GİT</BoxButton> });
+            view = _self._getNoResultView({ ico: 'cartNoResult', text: 'Sepetiniz Henüz Boş', button: <BoxButton wrapperStyle={{ height: 48 }} callback={_self._onGotoHome}>ANASAYFAYA GİT</BoxButton> });
         else if (itemType == ITEMTYPE['ADDRESS'])
             view = _self._getNoResultView({ ico: 'addressNoResult', text: 'Adres Bilgileriniz Henüz Boş', button: <BoxButton wrapperStyle={{ height: 48 }} callback={_self._onAddToCart}>YENİ ADRES EKLE</BoxButton> });
         else if (itemType == ITEMTYPE['COUPON'])

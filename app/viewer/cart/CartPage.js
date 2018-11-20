@@ -40,7 +40,8 @@ const Cart = class Main extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            paddingBottom: 125
+            paddingBottom: 125,
+            cartLoaded: false
         };
     }
 
@@ -74,8 +75,10 @@ const Cart = class Main extends Component {
 
     _callback = ({ type, data }) => {
         const _self = this;
-        /*if (type === UPDATE_CART)
-            console.log(data);*/
+        if (type === DATA_LOADED) {
+            if (data.length > 0)
+                _self.setState({ cartLoaded: true });
+        }
     }
 
     _response = ({ type, data }) => {
@@ -118,18 +121,35 @@ const Cart = class Main extends Component {
         _self.setState({ paddingBottom: paddingBottom });
     }
 
+    _animate = ({ typ = 'show' }, callback) => {
+        const _self = this;
+        Animated.timing(
+            _self.state.anim,
+            {
+                toValue: typ == 'show' ? 1 : 0,
+                duration: 300,
+                easing: Easing.inOut(Easing.quad)
+            }
+        ).start(() => {
+            if (typeof callback !== 'undefined')
+                callback();
+        });
+    }
+
     render() {
         const _self = this,
-            { paddingBottom } = _self.state,
-            { cartNoResult = false } = _self.props.cart,
-            backgroundColor = cartNoResult ? '#FFFFFF' : 'rgb(244, 236, 236)';
+            { paddingBottom, cartLoaded = false } = _self.state,
+            backgroundColor = cartLoaded ? 'rgb(244, 236, 236)' : '#FFFFFF',
+            underside = cartLoaded ? <UnderSide opportunity={CONFIG['opportunity']} /> : null;
+
         return (
             <View style={{ flex: 1 }}>
                 <ScrollView
+                    contentContainerStyle={{ flexGrow: 1 }}
                     style={{
                         flex: 1,
                         marginBottom: paddingBottom,
-                        backgroundColor: backgroundColor
+                        backgroundColor: backgroundColor,
                     }}>
                     <Viewer
                         noResult={_self._noResult}
@@ -141,7 +161,7 @@ const Cart = class Main extends Component {
                         wrapperStyle={{ backgroundColor: backgroundColor }}
                         style={{ backgroundColor: '#FFFFFF' }}
                     />
-                    <UnderSide opportunity={CONFIG['opportunity']} />
+                    {underside}
                 </ScrollView>
                 <Footer expand={_self._onExpand} onCouponCallback={_self._onCouponCallback} onPress={_self._onPress} data={CONFIG} />
             </View>

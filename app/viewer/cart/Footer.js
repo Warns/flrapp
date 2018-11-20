@@ -4,11 +4,12 @@ import {
     Text,
     TouchableOpacity,
     Image,
+    Keyboard
 } from 'react-native';
 import { connect } from 'react-redux';
 import { ElevatedView } from 'root/app/components/';
 import { Form } from 'root/app/form';
-import { LoadingButton } from 'root/app/UI';
+import { LoadingButton, IconButton } from 'root/app/UI';
 import {
     ICONS,
     FORMDATA,
@@ -28,6 +29,8 @@ class Main extends Component {
             { onCouponCallback } = _self.props;
         if (onCouponCallback)
             onCouponCallback(obj);
+
+        Keyboard.dismiss();
     }
 
     _onPress = () => {
@@ -47,6 +50,15 @@ class Main extends Component {
             expand(!showCoupon);
     }
 
+    _onCouponButton = () => {
+        const _self = this;
+
+        Keyboard.dismiss();
+
+        if (_self.child != null)
+            _self.child._onPress();
+    }
+
     _getCouponCode = () => {
         const _self = this,
             { cartInfo = {} } = _self.props.cart,
@@ -61,11 +73,32 @@ class Main extends Component {
             { coupon = false } = _self.props.data;
         let view = null;
         if (coupon && showCoupon) {
-            const data = FORMDATA['useCoupon'];
-            data['fields'][0]['items'][0]['value'] = _self._getCouponCode();
+            const couponCode = _self._getCouponCode(),
+                data = couponCode != '' ? FORMDATA['deleteCoupon'] : FORMDATA['useCoupon'],
+                ico = couponCode != '' ? 'searchClose' : 'button',
+                passive = couponCode != '' ? <View style={{ width: '100%', height: '100%', position: 'absolute', left: 0, top: 0, zIndex: 1, }} ></View> : null;
+
+            data['fields'][0]['items'][0]['value'] = couponCode;
 
             view = (
-                <Form scrollEnabled={false} style={{ marginTop: 10, marginBottom: 10, paddingLeft: 0, paddingRight: 0, paddingBottom: 0, flexDirection: 'row', }} data={data} callback={this._onFormCallback} />
+                <View style={{ flexDirection: 'row', marginTop: 10, marginBottom: 10, }}>
+                    <Form
+                        onRef={ref => (_self.child = ref)}
+                        scrollEnabled={false}
+                        style={{ paddingLeft: 0, paddingRight: 0, paddingBottom: 0 }}
+                        data={data}
+                        callback={this._onFormCallback}
+                    />
+                    {passive}
+                    <IconButton
+                        buttonStyle={{ zIndex: 3, }}
+                        style={{ width: 40, height: 40, position: 'absolute', right: 5, top: 5, }}
+                        icoStyle={{ width: 40, height: 40 }}
+                        ico={ico}
+                        callback={_self._onCouponButton}
+                    />
+
+                </View>
             );
         }
 
@@ -74,6 +107,7 @@ class Main extends Component {
 
     _getFormButton = () => {
         const _self = this,
+            { cartNoResult = false } = _self.props.cart,
             { showCoupon = false } = _self.state,
             { coupon = false } = _self.props.data,
             ico = showCoupon ? 'upArrow' : 'bottomArrow';
@@ -86,7 +120,7 @@ class Main extends Component {
         }
 
         let view = null;
-        if (coupon)
+        if (coupon && !cartNoResult)
             view = (
                 <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }} activeOpacity={0.8} onPress={_self._onShowCoupon}>
                     <Text style={{ fontFamily: 'RegularTyp2', fontSize: 13, marginRight: 12 }}>{txt}</Text>
@@ -144,7 +178,7 @@ class Main extends Component {
 
         return (
             <ElevatedView
-                elevation={6}
+                elevation={2}
                 style={{
                     position: 'absolute',
                     width: '100%',

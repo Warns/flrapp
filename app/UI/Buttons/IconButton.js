@@ -27,10 +27,10 @@ class IconButton extends Component {
 
     render() {
         const _self = this,
-            { ico, icoStyle = {}, style = {} } = _self.props;
+            { ico, icoStyle = {}, style = {}, buttonStyle = {} } = _self.props;
 
         return (
-            <TouchableOpacity activeOpacity={0.8} onPress={_self._onPressButton} onLayout={e => _self._measureDimensions(e)}>
+            <TouchableOpacity style={buttonStyle} activeOpacity={0.8} onPress={_self._onPressButton} onLayout={e => _self._measureDimensions(e)}>
                 <View style={[{ width: 12, height: 12, justifyContent: 'center', alignItems: 'center' }, style]}>
                     <Image
                         style={[{ width: 12, height: 12 }, icoStyle]}

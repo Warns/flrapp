@@ -3,12 +3,13 @@ import {
     View,
     TouchableOpacity,
     Text,
-    Image
+    Image,
 } from 'react-native';
 import { Viewer } from 'root/app/viewer/';
 import {
     ICONS,
-    DATA_LOADED
+    DATA_LOADED,
+    ASSISTANT_OPENED
 } from 'root/app/helper/Constant';
 import { connect } from 'react-redux';
 
@@ -72,6 +73,11 @@ const UnderSide = class Main extends Component {
         return view;
     }
 
+    _onAssistanClick = () => {
+        const _self = this;
+        _self.props.dispatch({ type: ASSISTANT_OPENED, value: true });
+    }
+
     _getView = () => {
         const _self = this;
 
@@ -80,7 +86,7 @@ const UnderSide = class Main extends Component {
 
                 {_self._getOpportunity()}
 
-                <TouchableOpacity>
+                <TouchableOpacity activeOpacity={0.8} onPress={_self._onAssistanClick}>
                     <View style={{ flexDirection: 'row', marginLeft: 20, marginRight: 20 }}>
                         <View style={{ width: 50, height: 50, backgroundColor: '#FFFFFF', borderRadius: 50, alignItems: 'center', justifyContent: 'center' }}>
                             <Image

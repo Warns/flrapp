@@ -15,6 +15,9 @@ import {
 
 import { connect } from 'react-redux';
 import { MinimalHeader } from '../components/header/MinimalHeader';
+import {
+  SET_ASSISTANT
+} from 'root/app/helper/Constant';
 import Dahi from 'root/app/extra/yapaytech';
 
 //globals = require('../globals.js');
@@ -62,76 +65,73 @@ class Assistant extends React.Component {
   render() {
 
     const _self = this,
-      { user = {}, assistant = {} } = _self.props,
-      userID = user.userId || '',
-      { show } = assistant;
+      { user = {} } = _self.props,
+      userID = user.userId || '';
 
-    if (show)
-      return (
-          <Dahi
-            user={userID}
-            token="89400cde1b7e4df233b195554d93c69f"
-            event={(type, data) => {
-              switch (type) {
-                case "Webview":
-                  break;
-
-                default:
-                  break;
-              }
-              console.log("@", type, data);
-            }}
-          />
-      );
-    else
-      return null;
-
-
-   /* let topMargin = this.state.boxAnim.interpolate({
-      inputRange: [0, 1],
-      outputRange: [100, 0],
-    });
-
-    let vailHeight = this.state.expanded ? 0 : null;
-    let area = this.state.expanded ? null : <TouchableOpacity style={styles.area} activeOpacity={1} onPress={this._expand} />;
-
-    let header = this.state.expanded ? <MinimalHeader title="" onBackPress={this._closeModal} /> : null;
-
-      
     return (
+      <Dahi
+        onRef={ref => (_self.props.dispatch({ type: SET_ASSISTANT, value: ref }))}
+        user={userID}
+        token="89400cde1b7e4df233b195554d93c69f"
+        event={(type, data) => {
+          switch (type) {
+            case "Webview":
+              break;
 
-      <View style={styles.wrapper}>
-        <TouchableOpacity activeOpacity={.9} onPress={this._openModal}>
-          <View style={styles.circle}>
-            <Image source={require('../../assets/images/assistant.gif')} style={{ resizeMode: 'contain', width: 50, height: 50, borderRadius: 25 }} />
-          </View>
-        </TouchableOpacity>
-        <Modal
-          animationType="none"
-          transparent={true}
-          visible={this.state.assistantIsVisible}
-        >
-          <View style={{ backgroundColor: 'rgba(0,0,0,.4)', flex: 1 }}>
-            <View style={{ flex: 1, maxHeight: vailHeight }}>
-              <TouchableOpacity style={{ flex: 1 }} onPress={this._closeModal} />
-            </View>
-            {header}
-            <Animated.View style={{ flex: 1, marginTop: topMargin, backgroundColor: '#ffffff' }}>
-              <Image source={require('../../assets/images/loader.gif')} style={{ position: 'absolute', alignSelf: 'center', bottom: 100, width: 250, height: 151, }} />
-              {area}
-              <WebView
-                source={{ uri: 'https://www.minus99.com/lab/misc/flormar-assistant.html' }}
-                style={{ margin: 0, opacity: this.state.opacity }}
-                onLoadEnd={() => { this.setState({ opacity: 1 }) }}
-                onMessage={this._onMessage}
-              />
-            </Animated.View>
-          </View>
-        </Modal>
-      </View>
+            default:
+              break;
+          }
+          console.log("@", type, data);
+        }}
+      />
+    );
 
-    )
-    */
+
+    /* let topMargin = this.state.boxAnim.interpolate({
+       inputRange: [0, 1],
+       outputRange: [100, 0],
+     });
+ 
+     let vailHeight = this.state.expanded ? 0 : null;
+     let area = this.state.expanded ? null : <TouchableOpacity style={styles.area} activeOpacity={1} onPress={this._expand} />;
+ 
+     let header = this.state.expanded ? <MinimalHeader title="" onBackPress={this._closeModal} /> : null;
+ 
+       
+     return (
+ 
+       <View style={styles.wrapper}>
+         <TouchableOpacity activeOpacity={.9} onPress={this._openModal}>
+           <View style={styles.circle}>
+             <Image source={require('../../assets/images/assistant.gif')} style={{ resizeMode: 'contain', width: 50, height: 50, borderRadius: 25 }} />
+           </View>
+         </TouchableOpacity>
+         <Modal
+           animationType="none"
+           transparent={true}
+           visible={this.state.assistantIsVisible}
+         >
+           <View style={{ backgroundColor: 'rgba(0,0,0,.4)', flex: 1 }}>
+             <View style={{ flex: 1, maxHeight: vailHeight }}>
+               <TouchableOpacity style={{ flex: 1 }} onPress={this._closeModal} />
+             </View>
+             {header}
+             <Animated.View style={{ flex: 1, marginTop: topMargin, backgroundColor: '#ffffff' }}>
+               <Image source={require('../../assets/images/loader.gif')} style={{ position: 'absolute', alignSelf: 'center', bottom: 100, width: 250, height: 151, }} />
+               {area}
+               <WebView
+                 source={{ uri: 'https://www.minus99.com/lab/misc/flormar-assistant.html' }}
+                 style={{ margin: 0, opacity: this.state.opacity }}
+                 onLoadEnd={() => { this.setState({ opacity: 1 }) }}
+                 onMessage={this._onMessage}
+               />
+             </Animated.View>
+           </View>
+         </Modal>
+       </View>
+ 
+     )
+     */
   }
 }
 

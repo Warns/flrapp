@@ -49,6 +49,18 @@ export default class DahiChat extends React.Component {
       this.openChat();
     }, 200); */
   }
+  componentDidMount() {
+    const _self = this,
+      { onRef } = _self.props;
+    if (onRef)
+      onRef(this);
+  }
+  componentWillUnmount() {
+    const _self = this,
+      { onRef } = _self.props;
+    if (onRef)
+      onRef(null);
+  }
   translateY = new Animated.Value(0);
   _panResponder = PanResponder.create({
     onMoveShouldSetResponderCapture: () => true,

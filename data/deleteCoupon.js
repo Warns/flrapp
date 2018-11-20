@@ -2,12 +2,12 @@ const Utils = require('root/app/helper/Global.js');
 
 module.exports = {
 
-    uri: Utils.getURL({ key: 'cart', subKey: 'useCoupon' }),
+    uri: Utils.getURL({ key: 'cart', subKey: 'deleteCoupon' }),
 
-    successMessage: 'Kupon Kodunuz Aktif Edilmiştir.',
+    successMessage: 'Kodunuz İptal Edilmiştir.',
 
     showButton: false,
-    buttonText: 'Kullan',
+    buttonText: 'İptal',
     buttonStyle: {
         width: 60
     },
@@ -25,13 +25,16 @@ module.exports = {
                     type: 'text',
                     value: '',
                     validation: [{ key: 'isEmpty' }],
-                    //disabled: false,
+                    //disabled: true,
                     css: {
                         containerStyle: { 
                             marginBottom: 0,
                             marginRight: 0, 
+                        },
+                        wrapperStyle: {
+                            backgroundColor: '#f6f6f6'
                         }
-                    },           
+                    }          
                 },
             ]
         }

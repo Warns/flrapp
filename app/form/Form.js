@@ -317,7 +317,7 @@ class Form extends Component {
 
                 if (type == 'error') {
                     const { message = 'HATA...' } = d;
-                    _self._alert(message);
+                    _self._alert(Utils.clearHtmlTag(message));
                 } else {
                     if (successMessage != '')
                         _self._alert(successMessage);
