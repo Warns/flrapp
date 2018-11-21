@@ -21,3 +21,4 @@ export * from './Assistant';
 export * from './Carousel';
 export * from './Navigation';
 export * from './ElevatedView';
+export * from './ReadMoreText';

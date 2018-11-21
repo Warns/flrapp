@@ -36,10 +36,15 @@ import {
     UPDATE_PRODUCT_VIDEOS,
     SET_VIDEO_PLAYER,
     SHOW_CUSTOM_POPUP,
-    NAVIGATE
+    NAVIGATE,
+    SET_VIEWER,
+    SET_CATEGORIES,
+    SET_SELECTED_CATEGORY,
 } from 'root/app/helper/Constant';
 import {
+    HorizontalProducts,
     ElevatedView,
+    ReadMoreText,
 } from 'root/app/components';
 import { RatingButton, DoubleClickButton, IconButton } from 'root/app/UI';
 import { CountryPicker, SelectBox } from 'root/app/form';
@@ -47,6 +52,7 @@ import { connect } from 'react-redux';
 import { AddressListItem } from './';
 import { store } from 'root/app/store';
 import Placeholder from 'rn-placeholder';
+import YoutubePlayer from 'root/app/sub-views/YoutubePlayer';
 import {
     ParserHTML
 } from 'root/app/helper/';
@@ -634,16 +640,108 @@ class CampaingItem extends Component {
     constructor(props) {
         super(props);
     }
+
+    _onPress = () => {
+        const _self = this,
+            { name, utpCode, image } = _self.props.data,
+            data = [{
+                title: name,
+                id: '18710',
+                img: Utils.getImage(image),
+                utpCode: utpCode
+            }];
+        store.dispatch({ type: SET_CATEGORIES, value: data });
+        store.dispatch({ type: SET_SELECTED_CATEGORY, value: name });
+        store.dispatch({ type: NAVIGATE, value: { item: { navigation: 'Category' } } });
+    }
+
     render() {
-        const { image, utpCode } = this.props.data;
+        const _self = this,
+            { image } = _self.props.data;
         return (
-            <View style={{ margin: 10, marginBottom: 20 }}>
+            <TouchableOpacity activeOpacity={0.8} onPress={_self._onPress}>
+                <View style={{ margin: 10, marginBottom: 20 }}>
+                    <Image
+                        style={{ height: 300 }}
+                        source={{ uri: Utils.getImage(image) }}
+                    />
+                </View>
+            </TouchableOpacity>
+        )
+    }
+}
+
+class CustomDetailListItem extends Component {
+    constructor(props) {
+        super(props);
+    }
+
+    _getHead = () => {
+        const _self = this,
+            { video = '', image = '' } = _self.props.data;
+
+        let view = null;
+        if (video != '') {
+            const data = {
+                selected: 0,
+                items: [
+                    {
+                        "provider": "youtube",
+                        "videoId": video,
+                    }
+                ]
+            }
+            view = <YoutubePlayer items={data} selected={0} />
+        }
+        else if (image != '')
+            view = (
                 <Image
                     style={{ height: 300 }}
                     source={{ uri: Utils.getImage(image) }}
                 />
+            );
+        return view;
+    }
+
+    _getBody = () => {
+        const _self = this,
+            { desc = '' } = _self.props.data;
+
+        return <ReadMoreText>{desc}</ReadMoreText>
+    }
+
+    _changeProduct = (id) => {
+        store.dispatch({ type: SHOW_CUSTOM_POPUP, value: { visibility: false, data: {}, type: '', itemType: '' } });
+        store.dispatch({ type: OPEN_PRODUCT_DETAILS, value: { id: id, measurements: {}, animate: false, sequence: 0 } });
+    }
+
+    _getFooter = () => {
+        const _self = this,
+            { products = '' } = _self.props.data;
+
+        let view = null;
+        if (products != '')
+            view = (
+                (
+                    <View>
+                        <Text>İLGİLİ ÜRÜNLER</Text>
+                        <HorizontalProducts items={item.productRecommends} onPress={this._changeProduct} />
+                    </View>
+                )
+            );
+
+        return view;
+    }
+
+    render() {
+        const _self = this;
+        return (
+            <View style={{ flex: 1 }}>
+                {_self._getHead()}
+                {_self._getBody()}
+                {_self._getFooter()}
             </View>
-        )
+        );
     }
 }
 
@@ -723,7 +821,34 @@ class FeedsItem extends Component {
         const _self = this,
             { productId, labels = [], name, image, params = {} } = _self.props.data;
 
-        if (FEEDSTYPE['PRODUCT'] == labels[0])
+
+        if (FEEDSTYPE['COLLECTION'] == labels[0] || FEEDSTYPE['BLOGPOST'] == labels[0]) {
+            const data = {
+                "type": "htmlToJSON",
+                "itemType": "customDetail",
+                "uri": {
+                    "key": "export",
+                    "subKey": "getExport"
+                },
+                "keys": {
+                    "id": "id",
+                    "arr": "html",
+                    "obj": "data",
+                    "objArr": "content"
+                },
+                "data": {
+                    "exportType": "mobiAppFeedsDetail",
+                    "customParameters": [
+                        {
+                            "key": "icr",
+                            "value": productId || "19644"
+                        }
+                    ]
+                }
+            };
+
+            store.dispatch({ type: SHOW_CUSTOM_POPUP, value: { visibility: true, type: SET_VIEWER, data: data } });
+        } else if (FEEDSTYPE['PRODUCT'] == labels[0])
             store.dispatch({
                 type: OPEN_PRODUCT_DETAILS,
                 value: {
@@ -1235,7 +1360,8 @@ class Viewers extends Component {
             Object
                 .entries(data)
                 .forEach(([ind, item]) => {
-                    const obj = {};
+                    const { bannerName = '' } = item,
+                        obj = { name: bannerName };
                     Object
                         .entries(item['parameters'])
                         .forEach(([childInd, child]) => {
@@ -1244,6 +1370,8 @@ class Viewers extends Component {
                                 obj['image'] = child['parameterValue'];
                             else if (child['parameterKey'] == 'prmCamID')
                                 obj['utpCode'] = child['parameterValue'];
+                            else if (child['parameterKey'] == 'prmCamSlug')
+                                obj['slug'] = child['parameterValue'];
                         })
                     arr.push(obj);
                 });
@@ -1273,7 +1401,7 @@ class Viewers extends Component {
 
     /* segmentify özel */
     _setSeg = (res) => {
-        //console.log(res);
+        console.log(res);
         const _self = this;
         if (res['type'] == 'success') {
             const { responses = [] } = res.data,
@@ -1333,8 +1461,10 @@ class Viewers extends Component {
             if (customFunc != '')
                 data = _self._customFunc(data);
 
-            if (type == VIEWERTYPE['HTMLTOJSON'] && data.length > 0)
+            if (type == VIEWERTYPE['HTMLTOJSON'] && data.length > 0) {
+                data = data.replace(/(\r\n|\n|\r)/gm, " "); // htmlden gelen fazla boşlukları siliyoruz. Yoksa JSON.parse hata veriyor
                 data = JSON.parse(data)[keys['obj']][keys['objArr']] || [];
+            }
 
             if (data.length == 0) {
                 _self.setState({ data: [], total: 0, loaded: true, noResult: true });
@@ -1428,7 +1558,8 @@ class Viewers extends Component {
             return <ContentPlaceHolder key={key} type={itemType} />;
 
         switch (itemType) {
-
+            case ITEMTYPE['CUSTOMDETAIL']:
+                return <CustomDetailListItem key={key} index={index} callback={_self._callback} data={item} />;
             case ITEMTYPE['OPPORTUNITY']:
                 return <OpportunityListItem key={key} index={index} callback={_self._callback} data={item} />;
             case ITEMTYPE['CARTLIST']:
