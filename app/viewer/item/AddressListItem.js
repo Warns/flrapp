@@ -248,7 +248,7 @@ class AddressList extends Component {
             itemButtonType = _self._getItemType();
 
         return (
-            <View style={{ flexDirection: 'column', margin: 10, marginBottom: 20, paddingTop: 20, paddingBottom: 20, paddingRight: 20, paddingLeft: 10, borderBottomColor: '#dcdcdc', borderBottomWidth: 1, }}>
+            <View style={{ flexDirection: 'column', margin: 10, marginBottom: 10, paddingTop: 16, paddingBottom: 12, paddingRight: 10, paddingLeft: 10, borderBottomColor: '#dcdcdc', borderBottomWidth: 1, }}>
                 <View>
                     <Text style={{ fontFamily: 'Medium', fontSize: 15 }}>{addressName}</Text>
                     <Text style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#555555' }}>{address}</Text>

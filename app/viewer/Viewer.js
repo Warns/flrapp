@@ -40,6 +40,7 @@ import {
     SET_VIEWER,
     SET_CATEGORIES,
     SET_SELECTED_CATEGORY,
+    NEW_ADDRESS_CLICKED,
 } from 'root/app/helper/Constant';
 import {
     HorizontalProducts,
@@ -646,9 +647,8 @@ class CampaingItem extends Component {
             { name, utpCode, image } = _self.props.data,
             data = [{
                 title: name,
-                id: '18710',
                 img: Utils.getImage(image),
-                utpCode: utpCode
+                utpId: utpCode
             }];
         store.dispatch({ type: SET_CATEGORIES, value: data });
         store.dispatch({ type: SET_SELECTED_CATEGORY, value: name });
@@ -1837,6 +1837,11 @@ class Viewers extends Component {
         this.props.dispatch({ type: NAVIGATE, value: { item: { navigation: "Home" } } });
     }
 
+    _onNewAddress =()=>{
+        const _self = this;
+        _self._callback({ type: NEW_ADDRESS_CLICKED });        
+    }
+
     _noResultView = () => {
         const _self = this,
             { itemType = '' } = _self.props.config;
@@ -1847,7 +1852,7 @@ class Viewers extends Component {
         if (itemType == ITEMTYPE['CARTLIST'])
             view = _self._getNoResultView({ ico: 'cartNoResult', text: 'Sepetiniz Henüz Boş', button: <BoxButton wrapperStyle={{ height: 48 }} callback={_self._onGotoHome}>ANASAYFAYA GİT</BoxButton> });
         else if (itemType == ITEMTYPE['ADDRESS'])
-            view = _self._getNoResultView({ ico: 'addressNoResult', text: 'Adres Bilgileriniz Henüz Boş', button: <BoxButton wrapperStyle={{ height: 48 }} callback={_self._onAddToCart}>YENİ ADRES EKLE</BoxButton> });
+            view = _self._getNoResultView({ ico: 'addressNoResult', text: 'Adres Bilgileriniz Henüz Boş', button: <BoxButton wrapperStyle={{ height: 48, backgroundColor: '#000000' }} textStyle={{ color: '#FFFFFF' }} callback={_self._onNewAddress}>Yeni Adres Ekle</BoxButton> });
         else if (itemType == ITEMTYPE['COUPON'])
             view = _self._getNoResultView({ ico: 'couponNoResult', text: 'Kuponlarınız Boş' });
         else if (itemType == ITEMTYPE['FAVORITE'])

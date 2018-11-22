@@ -127,17 +127,35 @@ export default class List extends React.Component {
 
   _updateList = (filterValues) => {
 
-    console.log(store.getState().general.selectedCategory, store.getState().general.categories, this.props.category);
+    //console.log(store.getState().general.selectedCategory, store.getState().general.categories, this.props.category);
 
     filterValues = filterValues || '';
+    const _self = this,
+      { category = {} } = _self.props;
+      /*  
+        ex:
+        [{
+                title: name,
+                img: Utils.getImage(image),
+                utpId: utpCode
+            }]
+
+            veya 
+
+            [{
+                title: name,
+                img: Utils.getImage(image),
+                id: id
+            }]
+      */
     globals.fetch(
       "https://www.flormar.com.tr/webapi/v3/Product/getProductList",
       JSON.stringify({
         "page": 1,
         "pageSize": 100,
         "filter": filterValues,
-        "catId": this.props.category.id, //18775
-        //"utpId": 268,
+        "catId": category['id'] || '', //18775
+        ...category
       }),
       this._listResultHandler
     );
@@ -149,7 +167,7 @@ export default class List extends React.Component {
 
     let _items = answer.data.products;
 
-    
+
     if (this.props.category.img && answer.data.filters.findIndex(obj => obj.isSelected == true) == -1) {
       _items.splice((answer.data.totalProductCount < 4 ? 0 : 4), 0,
         { productType: 'cover', side: 'left', img: this.props.category.img },
@@ -207,19 +225,20 @@ export default class List extends React.Component {
   _listView = null;
 
   _onPressItem = (index, measurements) => {
-    
-    Expo.takeSnapshotAsync(this._listView, {formar:'jpeg'})
-      .then( (result) => { 
-        
-        store.dispatch({ type: OPEN_PRODUCT_DETAILS, 
-                         value: { 
-                           screenshot: result, 
-                           id: this.state.items[index].productId, 
-                           measurements: measurements, 
-                           animate: true, 
-                           sequence: this.state.textureDisplay ? 1 : 0 
-                          } 
-                      });
+
+    Expo.takeSnapshotAsync(this._listView, { formar: 'jpeg' })
+      .then((result) => {
+
+        store.dispatch({
+          type: OPEN_PRODUCT_DETAILS,
+          value: {
+            screenshot: result,
+            id: this.state.items[index].productId,
+            measurements: measurements,
+            animate: true,
+            sequence: this.state.textureDisplay ? 1 : 0
+          }
+        });
       });
   }
 
@@ -302,8 +321,8 @@ export default class List extends React.Component {
     const detailContent = <ProductView imageMeasurements={{ width: width, height: height, top: pageY, left: pageX, type: textureDisplay ? 1 : 0 }} screenDimensions={SCREEN_DIMENSIONS} item={this.state.selectedDetail} onClose={this._closeDetail} />;
 
     return (
-      <View ref={(c) => {this._listView = c;}} style={{ flex: 1, backgroundColor: '#ffffff' }}>
-      <ListHeader onFiltersChange={this._onFiltersChange} totalProductCount={totalProductCount} filters={filters} onDisplayChange={this._onDisplayChange} textureDisplay={this.state.textureDisplay} />
+      <View ref={(c) => { this._listView = c; }} style={{ flex: 1, backgroundColor: '#ffffff' }}>
+        <ListHeader onFiltersChange={this._onFiltersChange} totalProductCount={totalProductCount} filters={filters} onDisplayChange={this._onDisplayChange} textureDisplay={this.state.textureDisplay} />
         <FlatList
           style={{ flex: 1, flexDirection: 'column' }}
           scrollEnabled={true}
@@ -366,7 +385,7 @@ class ListHeader extends React.Component {
 
   _onFormReset = () => {
     const _self = this;
-   
+
     if (_self.child)
       _self.child._onResetForm();
   }
@@ -425,8 +444,8 @@ class ListHeader extends React.Component {
           <View style={{ flex: 1, paddingLeft: 20, paddingRight: 20 }}>
             <Form onRef={ref => (_self.child = ref)} style={{ flex: 1, paddingLeft: 0, paddingRight: 0, paddingBottom: 0 }} callback={this._filterCallback} data={Utils.filterToSelectObject(filters)} />
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingBottom: 20, }}>
-              <LoadingButton style={{ borderWidth: 1, borderColor: '#000000' }}  fontStyle={{fontFamily: 'Bold', fontSize: 16 }} onPress={_self._onFormApply} contentStyle={{ flex: 1, marginRight: 5 }}>{'UYGULA'}</LoadingButton>
-              <LoadingButton style={{ backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#666666' }} fontStyle={{fontFamily: 'Bold', fontSize: 16, color: '#000000'}} onPress={_self._onFormReset} contentStyle={{ flex: 1, marginLeft: 5 }}>{'TEMİZLE'}</LoadingButton>
+              <LoadingButton style={{ borderWidth: 1, borderColor: '#000000' }} fontStyle={{ fontFamily: 'Bold', fontSize: 16 }} onPress={_self._onFormApply} contentStyle={{ flex: 1, marginRight: 5 }}>{'UYGULA'}</LoadingButton>
+              <LoadingButton style={{ backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#666666' }} fontStyle={{ fontFamily: 'Bold', fontSize: 16, color: '#000000' }} onPress={_self._onFormReset} contentStyle={{ flex: 1, marginLeft: 5 }}>{'TEMİZLE'}</LoadingButton>
             </View>
           </View>
 

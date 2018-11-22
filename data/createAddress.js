@@ -11,42 +11,14 @@ module.exports = {
     /* işlem başarıyla gerçekleşmişse ve özel bir mesaj göstermek isteniliyorsa mesaj bu kısma yazılır */
     successMessage: '',
 
+    buttonText: 'Kaydet',
+
     /* post için oluşturulan nesneye sabit bir alan eklenecekse bu kısma */
     addFields: [
         {
             id: 'corprateFl',
             value: false
         },
-
-        /*{
-            id: 'isGuest',
-            value: true
-        },
-        
-        {
-            id: 'readOnly',
-            value: true
-        },
-        {
-            id: 'companyName',
-            value: ''
-        },
-        {
-            id: 'taxOffice',
-            value: ''
-        },
-        {
-            id: 'taxNumber',
-            value: ''
-        },
-        {
-            id: 'phone',
-            value: ''
-        },
-        {
-            id: 'tckn',
-            value: ''
-        },*/
     ],
 
     fields: [
@@ -56,7 +28,7 @@ module.exports = {
                     id: 'fullName',
                     title: 'Kayıt İsmi',
                     type: 'text',
-                    value: 'test',
+                    value: '',
                     validation: [{ key: 'isEmpty' }, { key: 'isMin', value: 2 },],
                     regex: 'typ1',
                 },
@@ -64,7 +36,7 @@ module.exports = {
                     id: 'addressName',
                     title: 'Ad Soyad',
                     type: 'text',
-                    value: 'test',
+                    value: '',
                     validation: [{ key: 'isEmpty' }, { key: 'isTwo', value: { first: 3, last: 2 } }],
                     regex: 'typ1'
                 },
@@ -78,8 +50,8 @@ module.exports = {
                     type: 'countryPicker',
                     value: {
                         country: 1,
-                        city: 1,
-                        district: 999,
+                        city: -1,
+                        district: -1,
                     },
                     errorState: {
                         countryId: { error: false, errorMsg: null },
@@ -105,7 +77,7 @@ module.exports = {
                     title: 'Cep Telefonu',
                     type: 'text',
                     placeholder: '',
-                    value: '05055124852',
+                    value: '',
                     mask: '0(599) 9999999',
                     customFormat: (k) => {
                         return Utils.customPhoneFormat(k);
@@ -124,7 +96,7 @@ module.exports = {
                     type: 'text',
                     value: '',
                     multiline: true,
-                    validation: [{ key: 'isEmpty' },],
+                    validation: [{ key: 'isEmpty' },{ key: 'isMin', value: 10 }],
                 },
             ]
         },

@@ -46,6 +46,7 @@ export const ICONS = {
     asistanButton: require('root/assets/icons/asistanButton.png'),
     button: require('root/assets/icons/button.png'),
     searchClose: require('root/assets/icons/searchClose.png'),
+    plus: require('root/assets/icons/plus.png'),
 };
 
 /* CARDS ICON */
@@ -109,6 +110,7 @@ export const DATA_LOADED = 'DATA_LOADED';
 export const SERVICE_LIST_CLICKED = 'SERVICE_LIST_CLICKED';
 export const ORDER_LIST_CLICKED = 'ORDER_LIST_CLICKED';
 export const ADDRESS_LIST_CLICKED = 'ADDRESS_LIST_CLICKED';
+export const NEW_ADDRESS_CLICKED = 'NEW_ADDRESS_CLICKED';
 export const SET_FORM = 'SET_FORM';
 export const SET_VIEWER = 'SET_VIEWER';
 export const SET_ADDRESS_ITEM_CLICK = 'SET_ADDRESS_ITEM_CLICK';

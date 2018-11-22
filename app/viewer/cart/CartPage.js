@@ -36,12 +36,16 @@ const CONFIG = {
     opportunity: true
 };
 
+/* */
+const PADDING_BOTTOM = 115,
+    EXPAND_PADDING_BOTTOM = 200;
+
 const Cart = class Main extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            paddingBottom: 125,
-            cartLoaded: false
+            paddingBottom: PADDING_BOTTOM,
+            loaded: false
         };
     }
 
@@ -77,7 +81,7 @@ const Cart = class Main extends Component {
         const _self = this;
         if (type === DATA_LOADED) {
             if (data.length > 0)
-                _self.setState({ cartLoaded: true });
+                _self.setState({ loaded: true });
         }
     }
 
@@ -116,31 +120,16 @@ const Cart = class Main extends Component {
 
     _onExpand = (b) => {
         const _self = this,
-            paddingBottom = b ? 200 : 125;
+            paddingBottom = b ? EXPAND_PADDING_BOTTOM : PADDING_BOTTOM;
 
         _self.setState({ paddingBottom: paddingBottom });
     }
 
-    _animate = ({ typ = 'show' }, callback) => {
-        const _self = this;
-        Animated.timing(
-            _self.state.anim,
-            {
-                toValue: typ == 'show' ? 1 : 0,
-                duration: 300,
-                easing: Easing.inOut(Easing.quad)
-            }
-        ).start(() => {
-            if (typeof callback !== 'undefined')
-                callback();
-        });
-    }
-
     render() {
         const _self = this,
-            { paddingBottom, cartLoaded = false } = _self.state,
-            backgroundColor = cartLoaded ? 'rgb(244, 236, 236)' : '#FFFFFF',
-            underside = cartLoaded ? <UnderSide opportunity={CONFIG['opportunity']} /> : null;
+            { paddingBottom, loaded = false } = _self.state,
+            backgroundColor = loaded ? 'rgb(244, 236, 236)' : '#FFFFFF',
+            underside = loaded ? <UnderSide opportunity={CONFIG['opportunity']} /> : null;
 
         return (
             <View style={{ flex: 1 }}>

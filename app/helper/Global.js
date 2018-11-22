@@ -307,7 +307,7 @@ module.exports = {
             filter['fields'].push(k);
         });
 
-        console.log(JSON.stringify(filter))
+        //console.log(JSON.stringify(filter))
 
         return filter;
     },

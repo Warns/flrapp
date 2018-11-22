@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { Viewer } from 'root/app/viewer/';
 import {
+    ICONS,
     SET_CART_INFO,
     SET_DIFFERENT_ADDRESS,
     SET_ADDRESS_ITEM_CLICK,
@@ -16,10 +17,13 @@ import {
     DATA_LOADED,
     SET_FORM,
     SET_CART_PROGRESS,
+    NEW_ADDRESS_CLICKED,
+    SET_CART_ADDRESS
 } from 'root/app/helper/Constant';
 import { connect } from 'react-redux';
 import { CheckBox } from 'root/app/form';
 import Footer from './Footer';
+import UnderSide from './UnderSide';
 
 const Translation = require('root/app/helper/Translation.js');
 const Utils = require('root/app/helper/Global.js');
@@ -49,6 +53,9 @@ const CONFIG = {
     buttonText: 'DEVAM ET',
     coupon: false
 };
+
+/* */
+const PADDING_BOTTOM = 115;
 
 
 class CargoItem extends Component {
@@ -111,14 +118,7 @@ const Address = class Main extends Component {
         _self._isMounted = true;
 
         _self.setAjx({ uri: Utils.getURL({ key: 'cart', subKey: 'getCart' }), data: { cartLocation: 'delivery' } }, (res) => {
-
-            _self._getCargoAjx();
-
             _self.props.dispatch({ type: SET_CART_INFO, value: res.data });
-
-            setTimeout(() => {
-                _self.setState({ loaded: true });
-            }, 10);
         });
     }
 
@@ -177,11 +177,27 @@ const Address = class Main extends Component {
         });
     }
 
+    /* tek bir adres varsa seçili gelsin */
+    _setSingleAddress = (data) => {
+        if (data.length == 1) {
+            const _self = this,
+                { addressId } = data[0];
+            _self.props.dispatch({ type: SET_CART_ADDRESS, value: { addressId: addressId, addressType: 'billAddress' } });
+        }
+    }
+
     _callback = (obj) => {
         const _self = this,
-            { type } = obj;
+            { type, data = [] } = obj;
 
-        if (type == DATA_LOADED) return false;
+        if (type == DATA_LOADED) {
+            if (data.length > 0) {
+                _self._setSingleAddress(data);
+                _self._getCargoAjx();
+                _self.setState({ loaded: true });
+            }
+        } else if (type == NEW_ADDRESS_CLICKED)
+            _self._onNewAddress();
         else if (type == SET_ADDRESS_ITEM_CLICK)
             _self._getCargoAjx();
         else
@@ -211,11 +227,14 @@ const Address = class Main extends Component {
         if (navigation)
             navigation.navigate('Payment', {});
     }
+    /* */
+    _getCargoItems = () => {
+        const _self = this,
+            { cargoes = [] } = _self.state;
 
-    _onCheckBoxChange = ({ value = false }) => {
-        /* fatura farklı adres */
-        const _self = this;
-        _self.props.dispatch({ type: SET_DIFFERENT_ADDRESS, value: value });
+        return cargoes.map((item, order) => {
+            return <CargoItem key={order} data={item} />;
+        });
     }
 
     /* YENI ADRESS EKLEMEK */
@@ -232,18 +251,29 @@ const Address = class Main extends Component {
         _self.props.navigation.navigate('Detail', obj);
     }
 
-    _getCargoItems = () => {
-        const _self = this,
-            { cargoes = [] } = _self.state;
-
-        return cargoes.map((item, order) => {
-            return <CargoItem key={order} data={item} />;
-        });
+    _newAddressButton = () => {
+        const _self = this;
+        return (
+            <View style={{ alignItems: 'flex-end', paddingTop: 23, paddingBottom: 12, marginLeft: 15, marginRight: 15 }}>
+                <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }} onPress={_self._onNewAddress}>
+                    <Text style={{ fontFamily: 'Bold', fontSize: 14 }}>YENİ ADRES EKLE</Text>
+                    <Image
+                        source={(ICONS['plus'])}
+                        style={{ width: 40, height: 40, resizeMode: 'contain' }}
+                    />
+                </TouchableOpacity>
+            </View>
+        );
     }
 
-    _getView = () => {
+    /* fatura farklı adres */
+    _onCheckBoxChange = ({ value = false }) => {
+        const _self = this;
+        _self.props.dispatch({ type: SET_DIFFERENT_ADDRESS, value: value });
+    }
+
+    _differentAddressButton = () => {
         const _self = this,
-            { loaded = false } = _self.state,
             { selectedAddress = {} } = _self.props.cart,
             { differentAddress = false } = selectedAddress,
             checkboxConfig = {
@@ -251,32 +281,59 @@ const Address = class Main extends Component {
                 value: differentAddress
             };
 
-        let view = null;
-        //if (loaded)
-        view = (
+        return <CheckBox closed={true} callback={_self._onCheckBoxChange} data={checkboxConfig} />;
+    }
+
+    /* */
+    _getFoot = () => {
+        const _self = this,
+            { loaded = false } = _self.state,
+            differentAddressButton = loaded ? _self._differentAddressButton() : null,
+            cargoItems = loaded ? _self._getCargoItems() : null;
+
+        return (
+            <View style={{ padding: 30 }}>
+                {differentAddressButton}
+                {cargoItems}
+            </View>
+        );
+    }
+
+    /* */
+    _getView = () => {
+        const _self = this,
+            { loaded = false } = _self.state,
+            backgroundColor = loaded ? 'rgb(244, 236, 236)' : '#FFFFFF',
+            newAddressButton = loaded ? _self._newAddressButton() : null,
+            foot = loaded ? _self._getFoot() : null,
+            underside = loaded ? <UnderSide wrapperStyle={{ backgroundColor: 'rgb(244, 236, 236)' }} /> : null;
+
+        return (
             <View style={{ flex: 1 }}>
-                <ScrollView style={{ flex: 1, marginBottom: 125, }}>
-                    <TouchableOpacity onPress={_self._onNewAddress}>
-                        <Text>YENİ ADRES EKLE +</Text>
-                    </TouchableOpacity>
-
-                    <Viewer
-                        scrollEnabled={false}
-                        onRef={ref => (_self.child = ref)}
-                        style={{ paddingLeft: 10, paddingRight: 10, }}
-                        config={DATA}
-                        callback={this._callback}
-                        refreshing={true}
-                    />
-                    <CheckBox closed={true} callback={_self._onCheckBoxChange} data={checkboxConfig} />
-
-                    {_self._getCargoItems()}
-
+                <ScrollView
+                    contentContainerStyle={{ flexGrow: 1 }}
+                    style={{
+                        flex: 1,
+                        marginBottom: PADDING_BOTTOM,
+                        backgroundColor: backgroundColor,
+                    }}>
+                    <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
+                        {newAddressButton}
+                        <Viewer
+                            onRef={ref => (_self.child = ref)}
+                            style={{ flex: 0 }}
+                            wrapperStyle={{ flex: 0 }}
+                            config={DATA}
+                            callback={this._callback}
+                            refreshing={true}
+                        />
+                        {foot}
+                    </View>
+                    {underside}
                 </ScrollView>
                 <Footer onPress={_self._onPress} data={CONFIG} />
             </View>
         );
-        return view;
     }
 
     render() {
