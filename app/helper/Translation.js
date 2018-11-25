@@ -19,12 +19,13 @@ module.exports = {
         edit: 'Düzenle',
         select: 'SEÇ',
         selected: 'SEÇİLDİ',
-        selectShipAddress: 'ADRESİ SEÇ',
-        selectedShipAddress: 'SEÇİLİ ADRES',
+        selectShipAddress: 'TESLİMAT ADRESİ',
+        selectedShipAddress: 'TESLİMAT ADRESİ',
         selectBillAddress: 'FATURA ADRESİ',
-        selectedBillAddress: 'FATURA ADRESİ SEÇİLDİ',
+        selectedBillAddress: 'FATURA ADRESİ',
         errorShipAddress: 'Teslimat ve fatura adresi seçmelisiniz.',
         errorBillAddress: 'Fatura adresi seçmelisiniz.',
+        errorCargo: 'Kargo seçmelisiniz'
     },
     store: {
         headerTitle: 'YAKIN MAĞAZALAR'
