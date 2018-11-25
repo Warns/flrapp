@@ -297,22 +297,22 @@ export default class StoreNavigator extends Component {
         if (ref == 'main')
             ico = (
                 <View style={buttonWrp}>
-                    <IconButton callback={_onSearch} ico={'searchMap'} icoStyle={{ width: 40, height: 40, resizeMode: 'contain' }} style={{ width: 40, height: 40 }} />
-                    <IconButton callback={_onDetail} ico={'map'} icoStyle={{ width: 40, height: 40, resizeMode: 'contain' }} style={{ width: 40, height: 40 }} />
+                    <IconButton callback={_onSearch} ico={'searchMap'} />
+                    <IconButton callback={_onDetail} ico={'map'} />
                 </View>
             );
         else if (ref == 'search')
             ico = (
                 <View style={buttonWrp}>
-                    <IconButton callback={_onMain} ico={'list'} icoStyle={{ width: 40, height: 40, resizeMode: 'contain' }} style={{ width: 40, height: 40 }} />
+                    <IconButton callback={_onMain} ico={'list'} />
 
                 </View>
             );
         else
             ico = (
                 <View style={buttonWrp}>
-                    <IconButton callback={_onMain} ico={'list'} icoStyle={{ width: 40, height: 40, resizeMode: 'contain' }} style={{ width: 40, height: 40 }} />
-                    <IconButton callback={_onSearch} ico={'searchMap'} icoStyle={{ width: 40, height: 40, resizeMode: 'contain' }} style={{ width: 40, height: 40 }} />
+                    <IconButton callback={_onMain} ico={'list'} />
+                    <IconButton callback={_onSearch} ico={'searchMap'} />
                 </View>
             );
 

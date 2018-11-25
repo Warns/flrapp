@@ -91,9 +91,7 @@ class Main extends Component {
                     />
                     {passive}
                     <IconButton
-                        buttonStyle={{ zIndex: 3, }}
-                        style={{ width: 40, height: 40, position: 'absolute', right: 5, top: 5, }}
-                        icoStyle={{ width: 40, height: 40 }}
+                        style={{ zIndex: 5, position: 'absolute', right: 5, top: 5, }}
                         ico={ico}
                         callback={_self._onCouponButton}
                     />

@@ -47,6 +47,7 @@ export const ICONS = {
     button: require('root/assets/icons/button.png'),
     searchClose: require('root/assets/icons/searchClose.png'),
     plus: require('root/assets/icons/plus.png'),
+    closedIco: require('root/assets/icons/closedIco.png'),
 };
 
 /* CARDS ICON */

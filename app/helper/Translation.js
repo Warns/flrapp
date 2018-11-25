@@ -80,7 +80,8 @@ module.exports = {
         promo: 'Alışverişe Başla',
         product: 'Satın al',
         blog: 'İletiyi incele',
-        collection: 'Koleksiyonu keşfet'
+        collection: 'Koleksiyonu keşfet',
+        campaing: 'Detaylar'
     },
     getErrorMsg: function ({ key = '', title = '', value = '' }) {
         const _t = this;

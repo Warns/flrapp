@@ -210,7 +210,7 @@ class Menu extends Component {
             arr = ['facebook', 'instagram', 'youtube', 'twitter'],
             btn = arr.map((k, ind) => {
                 const m = ind > 0 ? 20 : 0;
-                return <IconButton callback={_self._socialButtonClick} item={{ type: k }} key={k} ico={k} icoStyle={{ width: 40, height: 40 }} style={{ marginLeft: m, width: 40, height: 40 }} />;
+                return <IconButton callback={_self._socialButtonClick} item={{ type: k }} key={k} ico={k} style={{ marginLeft: m }} />;
             });
         return btn;
     }
