@@ -146,6 +146,9 @@ class ChatView extends React.Component {
       case "webview":
         if (this.props.event) this.props.event("Webview", { url: val.data });
         break;
+      case "external":
+        if (this.props.event) this.props.event(val.event, val);
+        break;
       case "chatStatus":
         this.props.onEvent("ready");
         break;
