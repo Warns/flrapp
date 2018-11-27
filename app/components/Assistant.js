@@ -18,6 +18,8 @@ import { MinimalHeader } from '../components/header/MinimalHeader';
 import {
   SET_ASSISTANT,
   OPEN_PRODUCT_DETAILS,
+  SHOW_CUSTOM_POPUP,
+  SET_VIDEO_PLAYER,
 } from 'root/app/helper/Constant';
 import Dahi from 'root/app/extra/yapaytech';
 
@@ -75,21 +77,42 @@ class Assistant extends React.Component {
         user={userID}
         token="89400cde1b7e4df233b195554d93c69f"
         event={(type, data) => {
-          const { id = '' } = data;
+          const { id = '', labels = '', } = data;
           switch (type) {
             case "Webview":
               break;
             case "external": {
-              console.log(id);
-              _self.props.dispatch({
-                type: OPEN_PRODUCT_DETAILS,
-                value: {
-                  id: id,
-                  measurements: {},
-                  animate: false,
-                  sequence: 0
-                }
-              });
+              if (labels == 'product')
+                _self.props.dispatch({
+                  type: OPEN_PRODUCT_DETAILS,
+                  value: {
+                    id: id,
+                    measurements: {},
+                    animate: false,
+                    sequence: 0
+                  }
+                });
+              else if (labels == 'video') {
+                const { videoName = '', youtubeId = '' } = data;
+                _self.props.dispatch({
+                  type: SHOW_CUSTOM_POPUP,
+                  value: {
+                    visibility: true,
+                    type: SET_VIDEO_PLAYER,
+                    data: {
+                      selected: 0,
+                      items: [
+                        {
+                          "provider": "youtube",
+                          "text": videoName,
+                          "videoId": youtubeId
+                        }
+                      ]
+                    }
+                  }
+                });
+              }
+
               break;
             }
 

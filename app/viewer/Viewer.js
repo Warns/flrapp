@@ -1847,11 +1847,16 @@ class Viewers extends Component {
             { productId = '' } = item,
             { segmentify = {} } = _self.props,
             data = {
+                "name": "PRODUCT_VIEW",
+                "productId": productId,
+                "noUpdate": true
+            };
+            /*data = {
                 "name": "INTERACTION",
                 "type": "widget-view",
                 "instanceId": segmentify['instanceID'] || '',
                 "interactionId": productId
-            };
+            };*/
 
         Globals.seg({ data: data }, (res) => {
 
