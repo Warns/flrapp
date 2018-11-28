@@ -326,7 +326,7 @@ class Form extends Component {
                         _self._onResetForm();
                 }
 
-                Keyboard.dismiss();
+                //Keyboard.dismiss();
 
                 if (callback)
                     callback({ type: type, data: d, postData: obj });

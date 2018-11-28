@@ -106,6 +106,63 @@ class BoxButton extends Component {
     }
 }
 
+/* https://medium.com/technoetics/adding-image-placeholders-in-react-native-the-right-way-9140e78ac5c2 */
+class progressiveImage extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            thumbnailOpacity: new Animated.Value(0)
+        }
+    }
+    onLoad() {
+        Animated.timing(this.state.thumbnailOpacity, {
+            toValue: 0,
+            duration: 250
+        }).start()
+
+    }
+    onThumbnailLoad() {
+        Animated.timing(this.state.thumbnailOpacity, {
+            toValue: 1,
+            duration: 250
+        }).start();
+    }
+    render() {
+        return (
+            <View
+                width={this.props.style.width}
+                height={this.props.style.height}
+                backgroundColor={'#ffffff'}
+            >
+                <Animated.Image
+                    resizeMode={'contain'}
+                    key={this.props.key}
+                    style={[
+                        {
+                            position: 'absolute'
+                        },
+                        this.props.style
+                    ]}
+                    source={this.props.source}
+                    onLoad={(event) => this.onLoad(event)}
+                />
+                <Animated.Image
+                    resizeMode={'contain'}
+                    key={this.props.key}
+                    style={[
+                        {
+                            opacity: this.state.thumbnailOpacity
+                        },
+                        this.props.style
+                    ]}
+                    source={this.props.thumbnail}
+                    onLoad={(event) => this.onThumbnailLoad(event)}
+                />
+            </View>
+        )
+    }
+}
+
 
 class CartListItem extends Component {
 
@@ -187,11 +244,20 @@ class CartListItem extends Component {
         const _self = this,
             { data = {}, onUpdateItem } = _self.props,
             { cartItemId } = data;
-        Globals.AJX({ _self: _self, uri: Utils.getURL({ key: 'cart', subKey: 'deleteCartLine' }), data: { cartItemId: [cartItemId] } }, (res) => {
-            const { status, message } = res;
-            if (status == 200 && onUpdateItem)
-                onUpdateItem({ type: REMOVE_CART, data: res });
+
+        Utils.confirm({ message: Translation['confirm']['removeMessage'] }, ({ type }) => {
+            if (type == 'ok') {
+                Globals.AJX({ _self: _self, uri: Utils.getURL({ key: 'cart', subKey: 'deleteCartLine' }), data: { cartItemId: [cartItemId] } }, (res) => {
+                    const { status, message } = res;
+                    if (status == 200 && onUpdateItem)
+                        setTimeout(() => {
+                            onUpdateItem({ type: REMOVE_CART, data: res });
+                        }, 100);
+                });
+
+            }
         });
+
     }
 
     getSelectValue = () => {
@@ -247,7 +313,7 @@ class CartListItem extends Component {
                         <View>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                                 <Text numberOfLines={1} style={{ fontFamily: 'Medium', fontSize: 15, width: '90%' }}>{productName}</Text>
-                                <IconButton ico={'close'} callback={_self._onRemove} />
+                                <IconButton ico={'closedIco'} callback={_self._onRemove} />
                             </View>
                             <Text numberOfLines={1} style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#555555' }}>{shortName}</Text>
                         </View>
@@ -339,7 +405,7 @@ class FavoriteListItem extends Component {
                     <View>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                             <Text numberOfLines={1} style={{ fontFamily: 'Medium', fontSize: 15 }}>{productName}</Text>
-                            <IconButton ico={'close'} callback={_self._onRemove} />
+                            <IconButton ico={'closedIco'} callback={_self._onRemove} />
                         </View>
                         <Text numberOfLines={1} style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#555555' }}>{shortName}</Text>
 
@@ -649,10 +715,31 @@ class CampaingItem extends Component {
                 title: name,
                 img: Utils.getImage(image),
                 utpId: utpCode
-            }];
+            }]; console.log(data)
         store.dispatch({ type: SET_CATEGORIES, value: data });
         store.dispatch({ type: SET_SELECTED_CATEGORY, value: name });
         store.dispatch({ type: NAVIGATE, value: { item: { navigation: 'Category' } } });
+    }
+
+    _getFooter = () => {
+        let view = null;
+
+        const _self = this,
+            desc = Translation['feeds']['campaing'] || '';
+
+        if (desc != '')
+            view = (
+                <View style={{ flexDirection: 'row', height: 40, borderColor: '#dcdcdc', borderRadius: 3, borderTopEndRadius: 0, borderTopLeftRadius: 0, borderWidth: 1, borderTopWidth: 0 }}>
+                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                        <Text style={{ fontSize: 16, fontWeight: '500' }}>{desc}</Text>
+                    </View>
+                    <Image
+                        style={{ width: 40, height: 40 }}
+                        source={ICONS['rightArrow']}
+                    />
+                </View>
+            );
+        return view;
     }
 
     render() {
@@ -665,6 +752,7 @@ class CampaingItem extends Component {
                         style={{ height: 300 }}
                         source={{ uri: Utils.getImage(image) }}
                     />
+                    {_self._getFooter()}
                 </View>
             </TouchableOpacity>
         )
@@ -1759,11 +1847,16 @@ class Viewers extends Component {
             { productId = '' } = item,
             { segmentify = {} } = _self.props,
             data = {
+                "name": "PRODUCT_VIEW",
+                "productId": productId,
+                "noUpdate": true
+            };
+            /*data = {
                 "name": "INTERACTION",
                 "type": "widget-view",
                 "instanceId": segmentify['instanceID'] || '',
                 "interactionId": productId
-            };
+            };*/
 
         Globals.seg({ data: data }, (res) => {
 
@@ -1837,9 +1930,9 @@ class Viewers extends Component {
         this.props.dispatch({ type: NAVIGATE, value: { item: { navigation: "Home" } } });
     }
 
-    _onNewAddress =()=>{
+    _onNewAddress = () => {
         const _self = this;
-        _self._callback({ type: NEW_ADDRESS_CLICKED });        
+        _self._callback({ type: NEW_ADDRESS_CLICKED });
     }
 
     _noResultView = () => {

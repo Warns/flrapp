@@ -18,7 +18,8 @@ import {
     SET_FORM,
     SET_CART_PROGRESS,
     NEW_ADDRESS_CLICKED,
-    SET_CART_ADDRESS
+    SET_CART_ADDRESS,
+    CARGO_CLICKED
 } from 'root/app/helper/Constant';
 import { connect } from 'react-redux';
 import { CheckBox } from 'root/app/form';
@@ -73,23 +74,106 @@ class CargoItem extends Component {
     constructor(props) {
         super(props);
     }
-    render() {
+
+    _onPress = () => {
         const _self = this,
-            { price, cargoIcon, cargoName, isDefault = false } = _self.props.data,
-            borderColor = isDefault ? '#000000' : '#D1D1D1';
+            { callback, data } = _self.props;
+        if (callback)
+            callback(data);
+    }
 
-
+    _radio = (b) => {
+        const _self = this,
+            k = b ? <View style={{ width: 8, height: 8, borderRadius: 8, backgroundColor: 'rgb(244, 74, 126)' }} /> : null;
 
         return (
-            <View style={{ borderColor: borderColor, width: 60, borderWidth: 1, justifyContent: 'center' }}>
+            <View style={{ width: 18, height: 18, borderRadius: 18, borderWidth: 1, borderColor: 'rgb(130, 130, 130)', alignItems: 'center', justifyContent: 'center', marginRight: 8 }}>
+                {k}
+            </View>
+        );
+    }
+
+    render() {
+        const _self = this,
+            { data, active = false } = _self.props,
+            { price, cargoIcon, cargoName } = data,
+            radio = _self._radio(active),
+            prc = price == 0 ? null : <Text>{Utils.getPriceFormat(price)}</Text>;
+
+        return (
+            <TouchableOpacity activeOpacity={0.8} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', marginTop: 15 }} onPress={_self._onPress}>
+                {radio}
+                <Image
+                    style={{ resizeMode: 'contain', width: 50, height: 40, marginRight: 15 }}
+                    source={{ uri: Utils.getImage(cargoIcon) }}
+                />
+                <Text style={{ marginRight: 15 }}>{cargoName}</Text>
+                {prc}
+            </TouchableOpacity>
+        );
+    }
+}
+
+class Cargoes extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            activeId: this.props.activeId || ''
+        };
+    }
+
+    _single = () => {
+        const _self = this,
+            { data = [] } = _self.props,
+            { cargoName = '', cargoIcon = '' } = data[0];
+
+        return (
+            <View style={{ flexDirection: 'row' }}>
+                <Text style={{ flex: 1, paddingRight: 10 }}>{'Siparişleriniz güvenli bir şekilde ' + cargoName + ' ile size teslim edilecektir.'}</Text>
                 <Image
                     style={{ resizeMode: 'contain', width: 50, height: 50, }}
                     source={{ uri: Utils.getImage(cargoIcon) }}
                 />
-                <Text>{cargoName}</Text>
-                <Text>{price}</Text>
             </View>
         );
+    }
+
+    _callback = (data) => {
+        const _self = this,
+            { callback } = _self.props,
+            { cargoId } = data;
+        _self.setState({ activeId: cargoId });
+
+        if (callback)
+            callback({ type: CARGO_CLICKED, data: cargoId });
+    }
+
+    _multiple = () => {
+        const _self = this,
+            { data } = _self.props,
+            { activeId } = _self.state,
+            cargoes = data.map((item) => {
+                const { cargoId } = item,
+                    active = activeId == cargoId ? true : false;
+                return <CargoItem active={active} key={cargoId} data={item} callback={_self._callback} />;
+            });
+
+        return (
+            <View>
+                <Text style={{ fontSize: 16, fontFamily: 'Regular' }}>{'Kargo Seç:'}</Text>
+                {cargoes}
+            </View>
+        );
+    }
+
+    _getView = () => {
+        const _self = this,
+            { data = [] } = _self.props;
+        return data.length == 1 ? _self._single() : _self._multiple();
+    }
+    render() {
+        const _self = this;
+        return _self._getView();
     }
 }
 
@@ -141,39 +225,28 @@ const Address = class Main extends Component {
         });
     }
 
-    _getCargoAjx = (callback) => {
+    /* yapılan seçimlere göre cart tekrardan set etmek */
+    _setCart = (obj, callback) => {
         const _self = this,
             { selectedAddress = {} } = _self.props.cart,
-            { shipAddress = 0, billAddress = 0 } = selectedAddress;
-
-        _self.setAjx({ uri: Utils.getURL({ key: 'cart', subKey: 'getCargo' }), data: { shipAddressId: shipAddress } }, (res) => {
-            console.log(res);
-            const { status, data = {} } = res,
-                { cargoes = [] } = data;
-
-            _self.setState({ cargoes: cargoes });
-
-            if (status == '200' && cargoes.length > 0) {
-                const { cargoId = 0 } = cargoes[0],
-                    k = {
-                        'shipAddressId': shipAddress,
-                        'billAddressId': billAddress,
-                        'cargoId': cargoId,
-                        'cartLocation': 'delivery'
-                    };
-
-                _self.props.dispatch({ type: SET_CART_CARGO, value: cargoId });
-
-                _self.setAjx({ uri: Utils.getURL({ key: 'cart', subKey: 'setCart' }), data: k }, (res) => {
-                    const { status } = res;
-                    if (status == 200)
-                        console.log('BAŞARILI....');
-
-
-                    if (typeof callback !== 'undefined')
-                        callback();
-                });
+            { shipAddress = 0, billAddress = 0 } = selectedAddress,
+            { cargoId } = obj;
+        _self.props.dispatch({ type: SET_CART_CARGO, value: cargoId });
+        _self.setAjx({
+            uri: Utils.getURL({ key: 'cart', subKey: 'setCart' }),
+            data: {
+                'shipAddressId': shipAddress,
+                'billAddressId': billAddress,
+                'cargoId': cargoId,
+                'cartLocation': 'delivery'
             }
+        }, (res) => {
+            const { status } = res;
+            if (status == 200)
+                console.log('BAŞARILI....', res);
+
+            if (typeof callback !== 'undefined')
+                callback();
         });
     }
 
@@ -212,28 +285,56 @@ const Address = class Main extends Component {
     _onPress = () => {
         const _self = this,
             { navigation, cart = {} } = _self.props,
-            { selectedAddress = {} } = cart,
+            { selectedAddress = {}, postData } = cart,
+            { cargoId = 0 } = postData,
             { shipAddress = 0, billAddress = 0, differentAddress = false } = selectedAddress,
-            { errorShipAddress, errorBillAddress } = Translation['address'] || {};
+            { errorShipAddress, errorBillAddress, errorCargo } = Translation['address'] || {};
 
-        if (!differentAddress && shipAddress == 0) {
+        if (shipAddress == 0) {
             Alert.alert(errorShipAddress);
             return false;
         } else if (differentAddress && billAddress == 0) {
             Alert.alert(errorBillAddress);
             return false;
+        }else if( cargoId == 0 ){
+            Alert.alert(errorCargo);
+            return false;     
         }
 
-        if (navigation)
-            navigation.navigate('Payment', {});
+        /*if (navigation)
+            navigation.navigate('Payment', {});*/
     }
-    /* */
+
+    /* kargoları listele */
+    _cargoClicked = ({ type, data }) => {
+        const _self = this;
+        _self._setCart({ 'cargoId': data });
+    }
+
     _getCargoItems = () => {
-        const _self = this,
+        let _self = this,
             { cargoes = [] } = _self.state;
 
-        return cargoes.map((item, order) => {
-            return <CargoItem key={order} data={item} />;
+        return <Cargoes callback={_self._cargoClicked} data={cargoes} />
+    }
+
+    _getCargoAjx = () => {
+        const _self = this,
+            { selectedAddress = {} } = _self.props.cart,
+            { shipAddress = 0, billAddress = 0 } = selectedAddress;
+
+        _self.setAjx({ uri: Utils.getURL({ key: 'cart', subKey: 'getCargo' }), data: { shipAddressId: shipAddress } }, (res) => {
+            const { status, data = {} } = res,
+                { cargoes = [] } = data;
+
+            _self.setState({ cargoes: cargoes });
+
+            /* tek bir kargo var default seçili gelsin */
+            if (status == '200' && cargoes.length > 0)
+                if (cargoes.length == 1) {
+                    const { cargoId = 0 } = cargoes[0];
+                    _self._setCart({ 'cargoId': cargoId });
+                }
         });
     }
 
@@ -254,7 +355,7 @@ const Address = class Main extends Component {
     _newAddressButton = () => {
         const _self = this;
         return (
-            <View style={{ alignItems: 'flex-end', paddingTop: 23, paddingBottom: 12, marginLeft: 15, marginRight: 15 }}>
+            <View style={{ alignItems: 'flex-end', paddingTop: 15, marginLeft: 15, marginRight: 15 }}>
                 <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }} onPress={_self._onNewAddress}>
                     <Text style={{ fontFamily: 'Bold', fontSize: 14 }}>YENİ ADRES EKLE</Text>
                     <Image
@@ -281,7 +382,11 @@ const Address = class Main extends Component {
                 value: differentAddress
             };
 
-        return <CheckBox closed={true} callback={_self._onCheckBoxChange} data={checkboxConfig} />;
+        return (
+            <View style={{ paddingBottom: 20 }}>
+                <CheckBox closed={true} callback={_self._onCheckBoxChange} data={checkboxConfig} />
+            </View>
+        )
     }
 
     /* */
@@ -292,7 +397,7 @@ const Address = class Main extends Component {
             cargoItems = loaded ? _self._getCargoItems() : null;
 
         return (
-            <View style={{ padding: 30 }}>
+            <View style={{ padding: 20, paddingTop: 10, paddingBottom: 45 }}>
                 {differentAddressButton}
                 {cargoItems}
             </View>

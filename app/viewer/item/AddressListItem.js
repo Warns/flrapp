@@ -146,14 +146,19 @@ class AddressList extends Component {
             { data = {} } = _self.props,
             { addressId } = data,
             { selectedAddress = {} } = _self.props.cart,
-            { shipAddress } = selectedAddress,
-            { selectShipAddress, selectedShipAddress } = Translation['address'] || {};
+            { shipAddress, differentAddress } = selectedAddress;
+        let { selectShipAddress, selectedShipAddress, select, selected } = Translation['address'] || {};
+
+        if (!differentAddress) {
+            selectShipAddress = select;
+            selectedShipAddress = selected;
+        }
 
         let view = null;
         if (addressId == shipAddress)
             view = (
                 <BoxButton
-                    wrapperStyle={{ backgroundColor: '#000000' }}
+                    wrapperStyle={{ backgroundColor: 'rgb(255, 43, 148)', borderColor: 'rgb(255, 43, 148)', minWidth: 130, paddingLeft: 0, paddingRight: 0 }}
                     textStyle={{ color: '#FFFFFF' }}
                     callback={_self._onShipAddressPress}>
                     {selectedShipAddress}
@@ -162,6 +167,7 @@ class AddressList extends Component {
         else
             view = (
                 <BoxButton
+                    wrapperStyle={{ minWidth: 130, paddingLeft: 0, paddingRight: 0 }}
                     callback={_self._onShipAddressPress}>
                     {selectShipAddress}
                 </BoxButton>
@@ -191,7 +197,7 @@ class AddressList extends Component {
             if (addressId == billAddress)
                 view = (
                     <BoxButton
-                        wrapperStyle={{ backgroundColor: '#000000' }}
+                        wrapperStyle={{ backgroundColor: 'rgb(255, 43, 148)', borderColor: 'rgb(255, 43, 148)', minWidth: 130, paddingLeft: 0, paddingRight: 0, marginLeft: 10 }}
                         textStyle={{ color: '#FFFFFF' }}
                         callback={_self._onBillAddressPress}>
                         {selectedBillAddress}
@@ -200,6 +206,7 @@ class AddressList extends Component {
             else
                 view = (
                     <BoxButton
+                        wrapperStyle={{ minWidth: 130, paddingLeft: 0, paddingRight: 0, marginLeft: 10 }}
                         callback={_self._onBillAddressPress}>
                         {selectBillAddress}
                     </BoxButton>
@@ -231,7 +238,7 @@ class AddressList extends Component {
                     <TouchableOpacity activeOpacity={0.8} onPress={_self._onPress}>
                         <Text style={{ fontFamily: 'RegularTyp2', fontSize: 15 }}>{edit}</Text>
                     </TouchableOpacity>
-                    <View>
+                    <View style={{ flexDirection: 'row' }}>
                         {_self._getShipAddressButton()}
                         {_self._getBillAddressButton()}
                     </View>
@@ -248,7 +255,7 @@ class AddressList extends Component {
             itemButtonType = _self._getItemType();
 
         return (
-            <View style={{ flexDirection: 'column', margin: 10, marginBottom: 10, paddingTop: 16, paddingBottom: 12, paddingRight: 10, paddingLeft: 10, borderBottomColor: '#dcdcdc', borderBottomWidth: 1, }}>
+            <View style={{ flexDirection: 'column', marginLeft: 10, marginRight: 10, marginBottom: 10, paddingTop: 16, paddingBottom: 12, paddingRight: 10, paddingLeft: 10, borderBottomColor: '#dcdcdc', borderBottomWidth: 1, }}>
                 <View>
                     <Text style={{ fontFamily: 'Medium', fontSize: 15 }}>{addressName}</Text>
                     <Text style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#555555' }}>{address}</Text>

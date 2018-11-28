@@ -65,7 +65,7 @@ export default class App extends React.Component {
               <RootNavigation />
               <ProductView />
               <Assistant />
-              { /*<YoutubePlayer />*/ }
+              { /*<YoutubePlayer />*/}
               <CustomModal />
               <Preloader />
             </View>
@@ -122,6 +122,11 @@ export default class App extends React.Component {
         require('root/assets/icons/favoriteNoResult.png'),
         require('root/assets/icons/followListNoResult.png'),
         require('root/assets/icons/contentNoResult.png'),
+        require('root/assets/icons/asistanButton.png'),
+        require('root/assets/icons/button.png'),
+        require('root/assets/icons/searchClose.png'),
+        require('root/assets/icons/plus.png'),
+        require('root/assets/icons/closedIco.png')
       ]),
       Font.loadAsync({
         // We include SpaceMono because we use it in HomeScreen.js. Feel free

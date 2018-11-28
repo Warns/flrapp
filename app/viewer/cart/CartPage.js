@@ -102,8 +102,8 @@ const Cart = class Main extends Component {
         const _self = this,
             { navigation } = _self.props;
 
-        /*if (navigation)
-            navigation.navigate('Address', {});*/
+        if (navigation)
+            navigation.navigate('Address', {});
     }
 
     _onCouponCallback = ({ type, data = {} }) => {
