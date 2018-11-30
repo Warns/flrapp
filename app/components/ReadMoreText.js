@@ -4,7 +4,9 @@ import {
     Text,
     TouchableOpacity,
     StyleSheet,
+    Image
 } from 'react-native';
+import { ICONS } from "root/app/helper/Constant";
 
 class ReadMoreText extends Component {
     constructor(props) {
@@ -21,18 +23,27 @@ class ReadMoreText extends Component {
     }
 
     render() {
-        const { txt, btn } = styles;
-        const { more = '+ okumaya devam et', less = 'daha kısa', numberOfLines = 3 } = this.props;
-        const num = this.state.expanded ? null : (numberOfLines || null);
-        const buttonLabel = this.state.expanded ? less : more;
+        const _self = this,
+            { txt, btn } = styles,
+            { more = 'Daha fazla', less = 'Daha az', numberOfLines = 6 } = _self.props,
+            num = _self.state.expanded ? null : (numberOfLines || null),
+            buttonLabel = _self.state.expanded ? less : more,
+            ico = _self.state.expanded ? 'upArrow' : 'bottomArrow';
 
         return (
             <View>
                 <Text numberOfLines={num} style={txt}>
-                    {this.props.children}
+                    {_self.props.children}
                 </Text>
-                <TouchableOpacity activeOpacity={0.8} onPress={this._onPressButton}>
+                <TouchableOpacity
+                    activeOpacity={0.8}
+                    style={{
+                        flexDirection: "row",
+                        alignItems: "center"
+                    }}
+                    onPress={_self._onPressButton}>
                     <Text style={btn}>{buttonLabel}</Text>
+                    <Image style={{ width: 9, height: 5, marginLeft: 7 }} source={ICONS[ico]} />
                 </TouchableOpacity>
             </View>
         );
@@ -41,16 +52,15 @@ class ReadMoreText extends Component {
 
 const styles = StyleSheet.create({
     txt: {
-        color: '#231f20',
-        fontSize: 14,
+        color: 'rgb(108, 108, 108)',
+        fontSize: 16,
         marginBottom: 20,
-        lineHeight: 20,
+        fontFamily: 'RegularTyp2'
     },
     btn: {
-        color: '#231f20',
-        fontFamily: 'Medium',
-        fontSize: 14,
-        marginBottom: 20
+        color: '#000000',
+        fontFamily: 'RegularTyp2',
+        fontSize: 16,
     }
 });
 

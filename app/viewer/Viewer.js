@@ -46,6 +46,7 @@ import {
     HorizontalProducts,
     ElevatedView,
     ReadMoreText,
+    ShareButton,
 } from 'root/app/components';
 import { RatingButton, DoubleClickButton, IconButton } from 'root/app/UI';
 import { CountryPicker, SelectBox } from 'root/app/form';
@@ -770,16 +771,15 @@ class CustomDetailListItem extends Component {
 
         let view = null;
         if (video != '') {
-            const data = {
-                selected: 0,
-                items: [
-                    {
-                        "provider": "youtube",
-                        "videoId": video,
-                    }
-                ]
-            }
-            view = <YoutubePlayer items={data} selected={0} />
+            const items = [
+                {
+                    "provider": "youtube",
+                    "text": '',
+                    "thumbnail": image,
+                    "videoId": video
+                }
+            ];
+            view = <YoutubePlayer items={items} selected={0} />;
         }
         else if (image != '')
             view = (
@@ -791,11 +791,16 @@ class CustomDetailListItem extends Component {
         return view;
     }
 
-    _getBody = () => {
+    _getDsc = () => {
         const _self = this,
             { desc = '' } = _self.props.data;
 
-        return <ReadMoreText>{desc}</ReadMoreText>
+        return (
+            <View style={{ margin: 20, paddingBottom: 30, marginBottom: 30, marginTop: 10, borderBottomColor: 'rgb(216, 216, 216)', borderBottomWidth: 1 }}>
+                <ReadMoreText>{desc}</ReadMoreText>
+            </View>
+        );
+
     }
 
     _changeProduct = (id) => {
@@ -803,7 +808,7 @@ class CustomDetailListItem extends Component {
         store.dispatch({ type: OPEN_PRODUCT_DETAILS, value: { id: id, measurements: {}, animate: false, sequence: 0 } });
     }
 
-    _getFooter = () => {
+    _getReleatedProduct = () => {
         const _self = this,
             { products = '' } = _self.props.data;
 
@@ -812,7 +817,7 @@ class CustomDetailListItem extends Component {
             view = (
                 (
                     <View>
-                        <Text>İLGİLİ ÜRÜNLER</Text>
+                        <Text style={{ fontFamily: 'Bold', fontSize: 16, marginBottom: 20, marginLeft: 20 }}>İLGİLİ ÜRÜNLER</Text>
                         <HorizontalProducts items={item.productRecommends} onPress={this._changeProduct} />
                     </View>
                 )
@@ -821,13 +826,25 @@ class CustomDetailListItem extends Component {
         return view;
     }
 
+    _getBody = () => {
+        const _self = this,
+            { link, title } = _self.props.data;
+
+        return (
+            <View style={{ flex: 1, paddingBottom: 30 }}>
+                {_self._getDsc()}
+                <ShareButton style={{ justifyContent: 'center' }} url={Utils.getImage(link)} title={title} />
+                {_self._getReleatedProduct()}
+            </View>
+        )
+    }
+
     render() {
         const _self = this;
         return (
             <View style={{ flex: 1 }}>
                 {_self._getHead()}
                 {_self._getBody()}
-                {_self._getFooter()}
             </View>
         );
     }
@@ -929,7 +946,8 @@ class FeedsItem extends Component {
                     "customParameters": [
                         {
                             "key": "icr",
-                            "value": productId || "19644"
+                            //"value": 20961
+                            "value": productId
                         }
                     ]
                 }
@@ -958,7 +976,7 @@ class FeedsItem extends Component {
                         items: [
                             {
                                 "provider": "youtube",
-                                "text": name,
+                                "text": params['videoName'] || '',
                                 "thumbnail": image,
                                 "videoId": params['youtubeId'] || ''
                             }
@@ -1851,12 +1869,12 @@ class Viewers extends Component {
                 "productId": productId,
                 "noUpdate": true
             };
-            /*data = {
-                "name": "INTERACTION",
-                "type": "widget-view",
-                "instanceId": segmentify['instanceID'] || '',
-                "interactionId": productId
-            };*/
+        /*data = {
+            "name": "INTERACTION",
+            "type": "widget-view",
+            "instanceId": segmentify['instanceID'] || '',
+            "interactionId": productId
+        };*/
 
         Globals.seg({ data: data }, (res) => {
 

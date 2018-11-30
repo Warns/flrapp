@@ -1,5 +1,5 @@
 import React from 'react';
-import { 
+import {
   View,
   WebView,
   Dimensions,
@@ -11,7 +11,7 @@ import {
 import { connect } from 'react-redux';
 import { VideosList } from 'root/app/components';
 
-class YoutubePlayer extends React.Component{
+class YoutubePlayer extends React.Component {
 
   state = {
     selected: 0,
@@ -19,50 +19,52 @@ class YoutubePlayer extends React.Component{
     headerTitle: 'KAPAT',
   }
 
-  _onVideoPress = (index, item) =>{
-    this.setState({selected: index, userAction:true});
+  _onVideoPress = (index, item) => {
+    this.setState({ selected: index, userAction: true });
   }
 
-  render(){
+  render() {
 
     let { items, selected = 0 } = this.props;
 
     let _selected = this.state.userAction ? this.state.selected : selected;
-    let {videoId = '', text = ''} = items[_selected] || {};
+    let { videoId = '', text = '' } = items[_selected] || {};
     let _videoId = videoId.indexOf('&') > 0 ? videoId.substring(0, videoId.indexOf('&')) : videoId;
 
-    let videoSource = items.length > 0 ? {uri: "https://www.youtube.com/embed/" + _videoId + "?rel=0&autoplay=0&showinfo=0&controls=1"} : null;
+    let videoSource = items.length > 0 ? { uri: "https://www.youtube.com/embed/" + _videoId + "?rel=0&autoplay=0&showinfo=0&controls=1" } : null;
 
-    let _videos = items.length > 1 ? <View><Text style={[styles.sectionHeader, {marginLeft:20, marginBottom:15,}]}>İLGİLİ VİDEOLAR</Text><VideosList items={items} callback={this._onVideoPress} /></View> : null;
+    let _videos = items.length > 1 ? <View><Text style={[styles.sectionHeader, { marginLeft: 20, marginBottom: 15, }]}>İLGİLİ VİDEOLAR</Text><VideosList items={items} callback={this._onVideoPress} /></View> : null;
 
-    return(
-      <View style={{flex:1}}>
-          <ScrollView style={{flex:1}}>
-          <View style={{flex:1, height:Dimensions.get('window').width * .65, maxHeight:Dimensions.get('window').width * .65, backgroundColor:'#dddddd',}}>
+    text = text != '' ? <Text style={{ fontSize: 18, marginLeft: 20, marginRight: 20, marginBottom: 50, }}>{text}</Text> : null;
+
+    return (
+      <View style={{ flex: 1 }}>
+        <ScrollView style={{ flex: 1 }}>
+          <View style={{ flex: 1, height: Dimensions.get('window').width * .65, maxHeight: Dimensions.get('window').width * .65, backgroundColor: '#dddddd', }}>
             <WebView
-                  style={{flex:1}}
-                  javaScriptEnabled={true}
-                  source={ videoSource }
+              style={{ flex: 1 }}
+              javaScriptEnabled={true}
+              source={videoSource}
             />
           </View>
-          <View style={{flex:1, paddingTop:10}}>
-          <Text style={{fontSize:18, marginLeft:20, marginRight:20, marginBottom:50, }}>{text}</Text>
-          {_videos}
+          <View style={{ flex: 1, paddingTop: 10 }}>
+            {text}
+            {_videos}
           </View>
-          </ScrollView>
+        </ScrollView>
       </View>
     )
   }
 }
 
 // filter state
-function mapStateToProps(state){ return state.general; }
+function mapStateToProps(state) { return state.general; }
 export default connect(mapStateToProps)(YoutubePlayer);
 
 
 const styles = StyleSheet.create({
-  sectionHeader:{
+  sectionHeader: {
     fontSize: 16,
-    fontFamily:'Bold',
+    fontFamily: 'Bold',
   }
 });
