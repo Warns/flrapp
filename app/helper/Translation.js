@@ -76,6 +76,7 @@ module.exports = {
        isEqual: '{{value}} ile eşit değil',
     },
     feeds: {
+        instagramDetail: 'Instagram\'a git',
         instagram: 'Keşfet',
         video: 'Video\'yu izle',
         promo: 'Alışverişe Başla',

@@ -32,20 +32,29 @@ class ShareButton extends Component {
         );
     }
 
+    _getView = () => {
+        const _self = this,
+            { url = '' } = _self.props;
+        let view = null;
+        if (url != '')
+            view = (
+                <TouchableOpacity
+                    activeOpacity={0.8}
+                    style={[{
+                        flexDirection: "row",
+                        alignItems: "center"
+                    }, { ..._self.props.style }]}
+                    onPress={_self._onPress}>
+                    <Text style={{ fontFamily: 'Regular', fontSize: 12, textDecorationLine: 'underline', color: 'rgb(130, 130, 130)' }}>{'Paylaş'}</Text>
+                </TouchableOpacity>
+            );
+
+        return view;
+    }
+
     render() {
         const _self = this;
-
-        return (
-            <TouchableOpacity
-                activeOpacity={0.8}
-                style={[{
-                    flexDirection: "row",
-                    alignItems: "center"
-                }, { ..._self.props.style }]}
-                onPress={_self._onPress}>
-                <Text>{'Paylaş'}</Text>
-            </TouchableOpacity>
-        );
+        return _self._getView();
     }
 }
 

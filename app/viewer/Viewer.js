@@ -41,6 +41,7 @@ import {
     SET_CATEGORIES,
     SET_SELECTED_CATEGORY,
     NEW_ADDRESS_CLICKED,
+    SET_INSTAGRAM,
 } from 'root/app/helper/Constant';
 import {
     HorizontalProducts,
@@ -793,10 +794,14 @@ class CustomDetailListItem extends Component {
 
     _getDsc = () => {
         const _self = this,
-            { desc = '' } = _self.props.data;
+            { desc = '', link = '', title = '' } = _self.props.data;
 
         return (
             <View style={{ margin: 20, paddingBottom: 30, marginBottom: 30, marginTop: 10, borderBottomColor: 'rgb(216, 216, 216)', borderBottomWidth: 1 }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 }}>
+                    <Text numberOfLines={2} style={{ fontFamily: 'Bold', fontSize: 16, flex: 1, paddingRight: 10 }}>{title}</Text>
+                    <ShareButton style={{ paddingTop: 2 }} url={Utils.getImage(link)} title={title} />
+                </View>
                 <ReadMoreText>{desc}</ReadMoreText>
             </View>
         );
@@ -827,13 +832,10 @@ class CustomDetailListItem extends Component {
     }
 
     _getBody = () => {
-        const _self = this,
-            { link, title } = _self.props.data;
-
+        const _self = this;
         return (
             <View style={{ flex: 1, paddingBottom: 30 }}>
                 {_self._getDsc()}
-                <ShareButton style={{ justifyContent: 'center' }} url={Utils.getImage(link)} title={title} />
                 {_self._getReleatedProduct()}
             </View>
         )
@@ -946,14 +948,16 @@ class FeedsItem extends Component {
                     "customParameters": [
                         {
                             "key": "icr",
-                            //"value": 20961
                             "value": productId
                         }
                     ]
                 }
             };
 
-            store.dispatch({ type: SHOW_CUSTOM_POPUP, value: { visibility: true, type: SET_VIEWER, data: data } });
+            store.dispatch({
+                type: SHOW_CUSTOM_POPUP,
+                value: { visibility: true, type: SET_VIEWER, data: data }
+            });
         } else if (FEEDSTYPE['PRODUCT'] == labels[0])
             store.dispatch({
                 type: OPEN_PRODUCT_DETAILS,
@@ -984,6 +988,24 @@ class FeedsItem extends Component {
                     }
                 }
             });
+        else if (FEEDSTYPE['INSTAGRAM'] == labels[0])
+            store.dispatch({
+                type: SHOW_CUSTOM_POPUP,
+                value: {
+                    visibility: true,
+                    type: SET_INSTAGRAM,
+                    data: {
+                        "title": "",
+                        "description": "Sen hareket ettikçe ışıltı saçacak Dazzle Up Lip Gloss ile yepyeni bir gloss deneyimine ne dersin? #FlormarLiteItUp",
+                        "link": "https://www.instagram.com/p/BqffIIbhlt9/",
+                        "image_link": "https://scontent.cdninstagram.com/vp/c9e4309ece2bd32cadbe5ddc72ef6ac7/5C9111DD/t51.2885-15/e35/s150x150/44634207_357213888187904_3334655814915087386_n.jpg",
+                        "user_name": "sevilsworld",
+                        "user_image": "https://scontent.cdninstagram.com/vp/c9e4309ece2bd32cadbe5ddc72ef6ac7/5C9111DD/t51.2885-15/e35/s150x150/44634207_357213888187904_3334655814915087386_n.jpg",
+                        "count": "3586"
+                    }
+                }
+            });
+
     }
 
     _onRatingClicked = ({ id, userLike }) => {
@@ -1009,9 +1031,9 @@ class FeedsItem extends Component {
         if (type == FEEDSTYPE['VIDEO'])
             source = ICONS['feedVideo'];
         else if (type == FEEDSTYPE['INSTAGRAM'])
-            source = ICONS['feedInstagram']
+            source = ICONS['feedInstagram'];
         else if (type == FEEDSTYPE['CAMPAING'])
-            source = ICONS['feedCampaing']
+            source = ICONS['feedCampaing'];
 
         if (source == null) return null;
 
@@ -1070,8 +1092,8 @@ class FeedsItem extends Component {
 
     _getProduct = () => {
         const _self = this,
-            { image = '', name, price, params } = _self.props.data,
-            { colorCount } = params,
+            { image = '', name, price, params = {} } = _self.props.data,
+            { colorCount = 0 } = params,
             color = colorCount > 0 ? <Text style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#9b9b9b', marginBottom: 10 }}>{colorCount}{' Renk'}</Text> : null;
 
         return (
@@ -1510,7 +1532,7 @@ class Viewers extends Component {
         console.log(res);
         const _self = this;
         if (res['type'] == 'success') {
-            const { responses = [] } = res.data,
+            let { responses = [] } = res.data,
                 key = Globals.getSegKey(responses),
                 { params = {} } = responses[0][0],
                 //--> data = params['recommendedProducts'][key] || [],
@@ -1524,6 +1546,17 @@ class Viewers extends Component {
                 };
 
             _self.props.dispatch({ type: SET_SEGMENTIFY_INSTANCEID, value: instanceId });
+
+            /*data = [
+                {
+                    name: 'dsasdasd',
+                    labels: ['blog'],
+                    image: '/UPLOAD/collection/Campaign-Web-Mobileweb-1500x500decemberurunseti.jpg',
+
+                    productId: 20961 // collection, blog
+                }
+
+            ];*/
 
             /* feeds ilk yüklendiğinde 1 defa impresionlar tetiklenecek  */
             Globals.seg({ data: obj }, (response) => {

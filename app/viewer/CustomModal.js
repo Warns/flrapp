@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 import {
   View,
-  WebView,
-  Dimensions,
   Modal,
-  Text,
 } from 'react-native';
 import { connect } from 'react-redux';
 import { MinimalHeader, } from 'root/app/components';
@@ -13,9 +10,10 @@ import {
   SET_VIEWER,
   SET_FORM,
   SET_VIDEO_PLAYER,
-  FORMDATA
+  FORMDATA,
+  SET_INSTAGRAM
 } from 'root/app/helper/Constant';
-import { Viewer } from 'root/app/viewer/';
+import { Viewer, InstagramDetail } from 'root/app/viewer/';
 import { Form } from 'root/app/form';
 import YoutubePlayer from 'root/app/sub-views/YoutubePlayer';
 
@@ -88,7 +86,8 @@ class CustomModals extends Component {
     else if (type == SET_VIDEO_PLAYER) {
       const { items = [], selected = 0 } = data;
       view = <YoutubePlayer items={items} selected={selected} />;
-    }
+    } else if (type == SET_INSTAGRAM)
+      view = <InstagramDetail data={data} />;
 
     return (
       <View style={{ flex: 1 }}>

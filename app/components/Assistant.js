@@ -11,6 +11,7 @@ import {
   WebView,
   Platform,
   KeyboardAvoidingView,
+  Linking,
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -79,8 +80,12 @@ class Assistant extends React.Component {
         event={(type, data) => {
           const { id = '', labels = '', } = data;
           switch (type) {
-            case "Webview":
+            case "Webview": {
+              const { url = '' } = data;
+              if (url != '')
+                Linking.openURL(url);
               break;
+            }
             case "external": {
               if (labels == 'product')
                 _self.props.dispatch({
