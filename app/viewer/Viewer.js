@@ -928,7 +928,6 @@ class FeedsItem extends Component {
         const _self = this,
             { productId, labels = [], name, image, params = {} } = _self.props.data;
 
-
         if (FEEDSTYPE['COLLECTION'] == labels[0] || FEEDSTYPE['BLOGPOST'] == labels[0]) {
             const data = {
                 "type": "htmlToJSON",
@@ -988,13 +987,14 @@ class FeedsItem extends Component {
                     }
                 }
             });
-        else if (FEEDSTYPE['INSTAGRAM'] == labels[0])
+        else if (FEEDSTYPE['INSTAGRAM'] == labels[0]) {
             store.dispatch({
                 type: SHOW_CUSTOM_POPUP,
                 value: {
                     visibility: true,
                     type: SET_INSTAGRAM,
-                    data: {
+                    data: params
+                    /*data: {
                         "title": "",
                         "description": "Sen hareket ettikçe ışıltı saçacak Dazzle Up Lip Gloss ile yepyeni bir gloss deneyimine ne dersin? #FlormarLiteItUp",
                         "link": "https://www.instagram.com/p/BqffIIbhlt9/",
@@ -1002,9 +1002,20 @@ class FeedsItem extends Component {
                         "user_name": "sevilsworld",
                         "user_image": "https://scontent.cdninstagram.com/vp/c9e4309ece2bd32cadbe5ddc72ef6ac7/5C9111DD/t51.2885-15/e35/s150x150/44634207_357213888187904_3334655814915087386_n.jpg",
                         "count": "3586"
-                    }
+                    }*/
                 }
             });
+        } else if (FEEDSTYPE['CAMPAING'] == labels[0]) {
+            const { title = '', utp = '', image = '' } = params,
+                data = [{
+                    title: title,
+                    img: Utils.getImage(image),
+                    utpId: utp
+                }]; 
+            store.dispatch({ type: SET_CATEGORIES, value: data });
+            store.dispatch({ type: SET_SELECTED_CATEGORY, value: name });
+            store.dispatch({ type: NAVIGATE, value: { item: { navigation: 'Category' } } });
+        }
 
     }
 
@@ -1529,7 +1540,7 @@ class Viewers extends Component {
 
     /* segmentify özel */
     _setSeg = (res) => {
-        console.log(res);
+        //console.log(res);
         const _self = this;
         if (res['type'] == 'success') {
             let { responses = [] } = res.data,

@@ -89,6 +89,9 @@ class InstagramDetail extends Component {
         const _self = this,
             { user_name = '', description = '', count, user_image } = _self.props.data;
 
+        if (description == '')
+            return null;
+
         return (
             <View style={{ flexDirection: 'row', paddingLeft: 10 }}>
                 <View style={{ height: 36, width: 36, borderRadius: 36, overflow: 'hidden' }}>
