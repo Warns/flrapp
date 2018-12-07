@@ -26,6 +26,7 @@ import {
   SET_CATEGORIES,
   SET_SELECTED_CATEGORY,
   NAVIGATE,
+  SET_VIEWER
 } from 'root/app/helper/Constant';
 import Dahi from 'root/app/extra/yapaytech';
 
@@ -87,7 +88,7 @@ class Assistant extends React.Component {
 
     return (
       <Dahi
-        header={<MinimalHeader title="Kapat" onPress={_self._closed} />}
+        header={<MinimalHeader noMargin={true} title="Kapat" onPress={_self._closed} />}
         onRef={ref => (_self.props.dispatch({ type: SET_ASSISTANT, value: ref }))}
         user={userID}
         token="2de6962972e9a6c1f84e423441be409a"
