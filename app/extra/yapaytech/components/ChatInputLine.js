@@ -13,15 +13,24 @@ import { MaterialIcons } from "@expo/vector-icons";
 import I18n from "../Language";
 
 const styles = StyleSheet.create({
-  center: { alignItems: "center", justifyContent: "center" }
+  center: { alignItems: "center", justifyContent: "center" },
+  flexcenter: { flex: 1, justifyContent: "center", alignItems: "center" },
+  textinput: {
+    paddingLeft: 5,
+    flex: 1,
+    borderWidth: 1,
+    borderColor: "#d4d4d4",
+    borderRadius: 6
+  },
+  sendbutton: { width: 50, fontSize: 15, textAlign: "center" },
+  micbutton: { width: 50, fontSize: 15, textAlign: "center" }
 });
 
 export default class ChatInputLine extends React.Component {
   constructor() {
     super();
     this.input = React.createRef();
-    this.state = { s: false,
-      l: []};
+    this.state = { s: false, l: [] };
   }
 
   bootvoice(voice) {
@@ -116,33 +125,23 @@ export default class ChatInputLine extends React.Component {
         }}
       >
         {this.state.s ? (
-          <View
-            style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-          >
-            <Text style={{ color: "#000000aa" }}>
-              {this.state.l.join(" ") || I18n.t("nowlistening")}
-            </Text>
+          <View style={styles.flexcenter}>
+            <Image
+              style={{ width: 36, height: 12 }}
+              source={require("../assets/speaking.png")}
+            />
           </View>
         ) : (
           <TextInput
             placeholder={I18n.t("sendmessage")}
-            style={{
-              paddingLeft: 5,
-              flex: 1,
-              borderWidth: 1,
-              borderColor: "#d4d4d4",
-              borderRadius: 6
-            }}
+            style={styles.textinput}
             autoCorrect={false}
             blurOnSubmit={false}
             domStorageEnabled
             returnKeyType="send"
             underlineColorAndroid="transparent"
             onFocus={() => {
-              this.chat.run(
-                "window.dahiKeeper.chat.client.assistant.closeList()"
-              );
-              this.props.onEvent("inputfocus");
+              this.props.event("inputfocus");
             }}
             onChangeText={this.onChangeText}
             //value={this.props.text}
@@ -152,7 +151,7 @@ export default class ChatInputLine extends React.Component {
         )}
         {this.props.text || !this.voice ? (
           <TouchableOpacity style={styles.center} onPress={this.sendMessage}>
-            <Text style={{ width: 50, fontSize: 15, textAlign: "center" }}>
+            <Text style={styles.sendbutton}>
               <MaterialIcons
                 name="send"
                 size={30}
@@ -162,7 +161,7 @@ export default class ChatInputLine extends React.Component {
           </TouchableOpacity>
         ) : (
           <TouchableOpacity style={styles.center} onPress={this.micStart}>
-            <Text style={{ width: 50, fontSize: 15, textAlign: "center" }}>
+            <Text style={styles.micbutton}>
               <MaterialIcons
                 name="mic"
                 size={30}

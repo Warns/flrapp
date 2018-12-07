@@ -55,7 +55,7 @@ class ChatView extends React.Component {
     this.eventLib = this.eventLib.bind(this);
     this.onError = this.onError.bind(this);
     this.web = React.createRef();
-    this.randomId = "user-" + Math.random();
+    this.randomId = Math.random();
     this.cache = [];
   }
 
@@ -86,7 +86,7 @@ class ChatView extends React.Component {
   }
 
   componentWillMount() {
-    let user = { id: this.props.user || this.randomId };
+    let user = { id: "user-" + (this.props.user || this.randomId) };
     const patchPostMessageFunction = function() {
       var originalPostMessage = window.postMessage;
       var patchedPostMessage = function(message, targetOrigin, transfer) {
@@ -144,19 +144,12 @@ class ChatView extends React.Component {
   async action(val) {
     switch (val.event) {
       case "webview":
-        if (this.props.event) this.props.event("Webview", { url: val.data });
+        this.props.event("Webview", { url: val.data });
         break;
       case "external":
-        if (this.props.event) this.props.event(val.event, val);
-        break;
+      case "dahi":
       case "chatStatus":
-        this.props.onEvent("ready");
-        break;
-      case "thumb_down":
-        this.props.startReview();
-        break;
-      case "pMenu":
-        this.props.setter({ pMenu: val.data });
+        this.props.event(val.event, val);
         break;
       case "setState":
         this.props.setter(val.data);

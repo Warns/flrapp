@@ -19,7 +19,10 @@ import {
     SET_CART_PROGRESS,
     NEW_ADDRESS_CLICKED,
     SET_CART_ADDRESS,
-    CARGO_CLICKED
+    CARGO_CLICKED,
+    CART_FOOTER_MARGIN_BOTTOM,
+    CART_BACKGROUND_COLOR_1, 
+    CART_BACKGROUND_COLOR_2,
 } from 'root/app/helper/Constant';
 import { connect } from 'react-redux';
 import { CheckBox } from 'root/app/form';
@@ -54,10 +57,6 @@ const CONFIG = {
     buttonText: 'DEVAM ET',
     coupon: false
 };
-
-/* */
-const PADDING_BOTTOM = 115;
-
 
 class CargoItem extends Component {
     /*
@@ -176,6 +175,14 @@ class Cargoes extends Component {
         return _self._getView();
     }
 }
+
+/*
+    NOT: 
+
+    1- componentDidMount getCart - delivery tetikleniyor ve redux cart güncelleniyor.
+    
+    
+*/
 
 const Address = class Main extends Component {
     constructor(props) {
@@ -408,10 +415,10 @@ const Address = class Main extends Component {
     _getView = () => {
         const _self = this,
             { loaded = false } = _self.state,
-            backgroundColor = loaded ? 'rgb(244, 236, 236)' : '#FFFFFF',
+            backgroundColor = loaded ? CART_BACKGROUND_COLOR_1 : CART_BACKGROUND_COLOR_2,
             newAddressButton = loaded ? _self._newAddressButton() : null,
             foot = loaded ? _self._getFoot() : null,
-            underside = loaded ? <UnderSide wrapperStyle={{ backgroundColor: 'rgb(244, 236, 236)' }} /> : null;
+            underside = loaded ? <UnderSide wrapperStyle={{ backgroundColor: CART_BACKGROUND_COLOR_1 }} /> : null;
 
         return (
             <View style={{ flex: 1 }}>
@@ -419,10 +426,10 @@ const Address = class Main extends Component {
                     contentContainerStyle={{ flexGrow: 1 }}
                     style={{
                         flex: 1,
-                        marginBottom: PADDING_BOTTOM,
+                        marginBottom: CART_FOOTER_MARGIN_BOTTOM,
                         backgroundColor: backgroundColor,
                     }}>
-                    <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
+                    <View style={{ flex: 1, backgroundColor: CART_BACKGROUND_COLOR_2 }}>
                         {newAddressButton}
                         <Viewer
                             onRef={ref => (_self.child = ref)}

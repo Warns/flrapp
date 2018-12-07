@@ -1,7 +1,7 @@
 import {
     ASSISTANT_SHOW,
     SET_ASSISTANT,
-    ASSISTANT_OPENED
+    ASSISTANT_OPENED,
 } from 'root/app/helper/Constant';
 
 const initialState = {

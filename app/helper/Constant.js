@@ -119,6 +119,10 @@ export const SET_ADDRESS_ITEM_CLICK = 'SET_ADDRESS_ITEM_CLICK';
 export const SET_VIDEO_PLAYER = 'SET_VIDEO_PLAYER';
 export const UPDATE_CART = 'UPDATE_CART';
 export const REMOVE_CART = 'REMOVE_CART';
+export const CART_FOOTER_MARGIN_BOTTOM = 115;
+export const CART_FOOTER_EXPAND_MARGIN_BOTTOM = 200;
+export const CART_BACKGROUND_COLOR_1 = 'rgb(244, 236, 236)';
+export const CART_BACKGROUND_COLOR_2 = '#FFFFFF';
 
 /* form */
 export const FORMDATA = {

@@ -57,6 +57,7 @@ export default function user(state = userInitialState, action) {
             let newOptin = { ...state.user, userLoggedOut: true };
 
             globals.setSecureStorage('__OPTIN__', JSON.stringify(newOptin));
+            fetchCartDetails();
 
             return {
                 ...state,
@@ -74,7 +75,7 @@ export default function user(state = userInitialState, action) {
 
 fetchCartDetails = async () => {
     globals
-        .fetch(Utils.getURL({ key: 'cart', subKey: 'getCart' }), JSON.stringify({ 'cartLocation': 'basket' }), (answer) => {
+        .fetch(Utils.getURL({ key: 'cart', subKey: 'getCart' }), JSON.stringify({ 'cartLocation': 'basket' }), (answer) => { 
             if (answer.status == 200) {
                 store.dispatch({ type: SET_CART_ITEMS, value: Utils.getCartCount(answer.data || {}) });
             }

@@ -41,8 +41,6 @@ class Main extends Component {
   _onCouponButton = () => {
     const _self = this;
 
-    alert("nanay");
-
     Keyboard.dismiss();
 
     if (_self.child != null) _self.child._onPress();

@@ -18,11 +18,18 @@ import { connect } from 'react-redux';
 import { MinimalHeader } from '../components/header/MinimalHeader';
 import {
   SET_ASSISTANT,
+  ASSISTANT_OPENED,
   OPEN_PRODUCT_DETAILS,
   SHOW_CUSTOM_POPUP,
   SET_VIDEO_PLAYER,
+  FEEDSTYPE,
+  SET_CATEGORIES,
+  SET_SELECTED_CATEGORY,
+  NAVIGATE,
 } from 'root/app/helper/Constant';
 import Dahi from 'root/app/extra/yapaytech';
+
+const Utils = require('root/app/helper/Global.js');
 
 //globals = require('../globals.js');
 
@@ -66,6 +73,12 @@ class Assistant extends React.Component {
     console.log(m);
   }
 
+  _closed = () => {
+    const _self = this;
+    /* toogle olduğu için kapanacak */
+    _self.props.dispatch({ type: ASSISTANT_OPENED });
+  }
+
   render() {
 
     const _self = this,
@@ -74,9 +87,10 @@ class Assistant extends React.Component {
 
     return (
       <Dahi
+        header={<MinimalHeader title="Kapat" onPress={_self._closed} />}
         onRef={ref => (_self.props.dispatch({ type: SET_ASSISTANT, value: ref }))}
         user={userID}
-        token="89400cde1b7e4df233b195554d93c69f"
+        token="2de6962972e9a6c1f84e423441be409a"
         event={(type, data) => {
           const { id = '', labels = '', } = data;
           switch (type) {
@@ -87,7 +101,8 @@ class Assistant extends React.Component {
               break;
             }
             case "external": {
-              if (labels == 'product')
+
+              if (labels == FEEDSTYPE['PRODUCT'])
                 _self.props.dispatch({
                   type: OPEN_PRODUCT_DETAILS,
                   value: {
@@ -97,7 +112,7 @@ class Assistant extends React.Component {
                     sequence: 0
                   }
                 });
-              else if (labels == 'video') {
+              else if (labels == FEEDSTYPE['VIDEO']) {
                 const { videoName = '', youtubeId = '' } = data;
                 _self.props.dispatch({
                   type: SHOW_CUSTOM_POPUP,
@@ -116,6 +131,47 @@ class Assistant extends React.Component {
                     }
                   }
                 });
+              } else if (FEEDSTYPE['COLLECTION'] == labels || FEEDSTYPE['BLOGPOST'] == labels) {
+                const data = {
+                  "type": "htmlToJSON",
+                  "itemType": "customDetail",
+                  "uri": {
+                    "key": "export",
+                    "subKey": "getExport"
+                  },
+                  "keys": {
+                    "id": "id",
+                    "arr": "html",
+                    "obj": "data",
+                    "objArr": "content"
+                  },
+                  "data": {
+                    "exportType": "mobiAppFeedsDetail",
+                    "customParameters": [
+                      {
+                        "key": "icr",
+                        "value": id
+                      }
+                    ]
+                  }
+                };
+
+                _self.props.dispatch({
+                  type: SHOW_CUSTOM_POPUP,
+                  value: { visibility: true, type: SET_VIEWER, data: data }
+                });
+
+              } else if (FEEDSTYPE['CAMPAING'] == labels) {
+
+                const { title = '', utp = '', image_link = '' } = data,
+                  arr = [{
+                    title: title,
+                    img: Utils.getImage(image_link),
+                    utpId: utp
+                  }];
+                  _self.props.dispatch({ type: SET_CATEGORIES, value: arr });
+                  _self.props.dispatch({ type: SET_SELECTED_CATEGORY, value: title });
+                  _self.props.dispatch({ type: NAVIGATE, value: { item: { navigation: 'Category' } } });
               }
 
               break;
@@ -124,6 +180,8 @@ class Assistant extends React.Component {
             default:
               break;
           }
+
+          _self._closed();
           console.log("@", type, data);
         }}
       />

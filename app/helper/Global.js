@@ -14,6 +14,7 @@ module.exports = {
             getBannerList: '/webapi/v3/Banner/getBannerList'
         },
         product: {
+            getSearchSuggestionList: '/webapi/v3/Product/getSearchSuggestionList',
             getProductList: '/webapi/v3/Product/getProductList',
             getProductVideos: 'https://www.flormar.com.tr/mobile-app-product-video-export.htm',
         },
@@ -334,9 +335,10 @@ module.exports = {
     },
     getCartCount: function (data) {
         let { products = [] } = data || {}, count = 0;
-        products.forEach((item) => {
-            count = count + (item['quantity'] || 0)
-        });
+        if( products != null )
+            products.forEach((item) => {
+                count = count + (item['quantity'] || 0)
+            });
         return count;
     }
 };
