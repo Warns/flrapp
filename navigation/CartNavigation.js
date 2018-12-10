@@ -18,6 +18,7 @@ const CartNavigation = createStackNavigator(
         },
     },
     {
+        //initialRouteName:'Payment',
         navigationOptions: {
             header: null
         },

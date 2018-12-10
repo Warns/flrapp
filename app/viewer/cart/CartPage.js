@@ -112,7 +112,7 @@ const Cart = class Main extends Component {
             { navigation, user = {}, cart = {} } = _self.props,
             { userId = '' } = user['user'],
             { cartNoResult = false } = cart;
-            
+
         if (userId == '') { //--> logoff
             if (cartNoResult) {
                 //--> sepet boş anasayfaya dön

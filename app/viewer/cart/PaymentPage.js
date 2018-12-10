@@ -11,6 +11,7 @@ import {
     SET_CART_INFO,
     ICONS,
     SET_VIEWER,
+    SHOW_CUSTOM_POPUP,
     FORMDATA,
     SET_CART_PROGRESS,
     CART_FOOTER_MARGIN_BOTTOM,
@@ -20,10 +21,14 @@ import {
 import { connect } from 'react-redux';
 import Footer from './Footer';
 import { CheckBox, Form } from 'root/app/form';
+import { store } from 'root/app/store';
 import creditCardType, { getTypeInfo, types as CardType } from 'credit-card-type';
 import UnderSide from './UnderSide';
 
-const Translation = require('root/app/helper/Translation.js');
+import { createMaterialTopTabNavigator } from 'react-navigation';
+import { Minus99HorizontalTabs } from 'root/app/components';
+
+
 const Utils = require('root/app/helper/Global.js');
 const Globals = require('root/app/globals.js');
 
@@ -37,6 +42,7 @@ const CONFIG_POPUP = {
     "cart": {
         "type": "scrollView",
         "itemType": "cartList",
+        "viewType": "miniCart", /* viewType = minicart ise sepetteki remove ve update işlemleri gizlenecek */
         "uri": { "key": "cart", "subKey": "getCart" },
         "keys": {
             "id": "cartItemId",
@@ -68,6 +74,14 @@ const CONFIG_POPUP = {
     }
 };
 
+const setAjx = ({ _self, uri, data }, callback) => {
+    Globals.AJX({ _self: _self, uri: uri, data: data }, (res) => {
+        const { status, message } = res;
+        if (status == 200 && typeof callback !== 'undefined')
+            callback(res);
+    });
+};
+
 class Foot extends Component {
     constructor(props) {
         super(props);
@@ -75,7 +89,10 @@ class Foot extends Component {
 
     _onPress = (k) => {
         const _self = this;
-        _self.props.navigation.navigate('Detail', { type: SET_VIEWER, data: CONFIG_POPUP[k] || {} });
+        store.dispatch({
+            type: SHOW_CUSTOM_POPUP,
+            value: { visibility: true, type: SET_VIEWER, data: CONFIG_POPUP[k] || {} }
+        });
     }
 
     _getButton = ({ type, buttonName, chk = false }) => {
@@ -106,99 +123,46 @@ class Foot extends Component {
         return (
             <View style={{ flex: 1, paddingLeft: 20, paddingRight: 20 }}>
                 {cart}
+                {agreement2}
                 {agreement1}
-                {agreement2}  
             </View>
         );
     }
 }
 
+/* 
+
+olmayan cart tipleri
+
+case "visaelectron":
+    kktSprId = "4";
+    maxCvcLength = 3;
+    break;
+
+    case "forbrugsforeningen":
+    kktSprId = "6";
+    maxCvcLength = 3;
+    break;
+case "dankort":
+    kktSprId = "7";
+    maxCvcLength = 3;
+    break;
+
+case "troy":
+    kktSprId = "12";
+    maxCvcLength = 3;
+    break;    
+
+*/
+
 class CrediCart extends Component {
     constructor(props) {
         super(props);
         const _self = this;
-        _self.state = {};
-        _self.cartControl = true;
-    }
-
-    componentDidMount() {
-        const _self = this;
-        _self._isMounted = true;
-    }
-
-    componentWillUnmount() {
-        const _self = this;
-        _self._isMounted = false;
-    }
-
-    _callback = () => {
-
-    }
-
-    _getInstallment = (val) => {
-        const _self = this;
-        _self.setAjx({ uri: Utils.getURL({ key: 'cart', subKey: 'getInstallment' }), data: { bin: val } }, (res) => {
-            alert('_getInstallment' + JSON.stringify(res));
-        });
-    }
-
-    setAjx = ({ uri, data }, callback) => {
-        const _self = this;
-        Globals.AJX({ _self: _self, uri: uri, data: data }, (res) => {
-            const { status, message } = res;
-            if (status == 200 && typeof callback !== 'undefined')
-                callback(res);
-        });
-    }
-
-    _onChangeText = (obj) => {
-        const _self = this,
-            { key = '', value = '' } = obj;
-
-        if (key == 'creditCardNo') {
-            const val = Utils.cleanText(value),
-                count = val.length,
-                num = 6;
-
-            if (count == num && _self.cartControl) {
-                _self._getInstallment(val);
-            } else if (count > num)
-                _self.cartControl = false;
-            else if (count < num)
-                _self.cartControl = true;
-        }
-    }
-
-    render() {
-        const _self = this;
-        return <Form onChangeText={_self._onChangeText} callback={_self._callback} data={FORMDATA['creditCart']} />;
-    }
-}
-
-const Payment = class Main extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            loaded: false
+        _self.state = {
+            srcCardImage: ''
         };
-    }
-
-    componentDidMount() {
-        const _self = this,
-            { navigation } = _self.props;
-
-        _self._isMounted = true;
-
-        _self.setAjx({ uri: Utils.getURL({ key: 'cart', subKey: 'getCart' }), data: { cartLocation: 'payment' } }, (res) => {
-            _self.props.dispatch({ type: SET_CART_INFO, value: res.data });
-            setTimeout(() => {
-                _self.setState({ loaded: true });
-                _self._getPayment();
-            }, 10);
-        });
-
-        if (navigation)
-            _self._Listener = navigation.addListener('willFocus', _self.onWillFocus);
+        _self.cartControl = true;
 
         /*
         https://github.com/braintree/credit-card-type
@@ -216,15 +180,269 @@ const Payment = class Main extends Component {
         console.log(JSON.stringify(visaCards));
         
         visaCards = creditCardType('5536838507150030');
-        console.log(JSON.stringify(visaCards));
-        */
+        console.log(JSON.stringify(visaCards));*/
+    }
+
+    componentDidMount() {
+        const _self = this;
+        _self._isMounted = true;
+    }
+
+    componentWillUnmount() {
+        const _self = this;
+        _self._isMounted = false;
+    }
+
+    _cardType = {
+        'visa': {
+            src: '/scripts/keyboard/img/visa.png'
+        },
+        'mastercard': {
+            src: '/scripts/keyboard/img/mastercard.png'
+        },
+        'american-express': {
+            src: '/scripts/keyboard/img/amex.png'
+        },
+        'diners-club': {
+            src: '/scripts/keyboard/img/dinersclub.png'
+        },
+        'discover': {
+            src: '/scripts/keyboard/img/discover.png'
+        },
+        'jcb': {
+            src: '/scripts/keyboard/img/jcb.png'
+        },
+        'unionpay': {
+            src: '/scripts/keyboard/img/unionpay.png'
+        },
+        'maestro': {
+            src: '/scripts/keyboard/img/maestro.png'
+        }
+    };
+
+    _getCard = (value) => {
+        const _self = this,
+            card = (creditCardType(value) || [])[0] || {},
+            { type = '' } = card,
+            { src = '' } = _self._cardType[type] || {};
+
+        /* min. 2 karekter girişinden sonra kartı göster */
+        _self.setState({ srcCardImage: value.length >= 2 ? src : '' });
+    }
+
+    _getCardImage = () => {
+        const _self = this,
+            { srcCardImage = '' } = _self.state;
+        if (srcCardImage != '')
+            return (<Image
+                style={{
+                    position: 'absolute',
+                    right: 40,
+                    width: 30,
+                    height: 30,
+                    resizeMode: 'contain'
+                }}
+                source={{ uri: Utils.getImage(srcCardImage) }}
+            />);
+        else
+            return null;
+    }
+
+    _callback = () => {
+
+    }
+
+    /* taksit seçenekleri */
+    _getInstallment = (val) => {
+        const _self = this;
+        setAjx({ _self: _self, uri: Utils.getURL({ key: 'cart', subKey: 'getInstallment' }), data: { bin: val } }, (res) => {
+            const { status, data = {} } = res,
+                { creditCarts = [] } = data,
+                { installments = [] } = creditCarts[ 0 ];
+
+            if (status == 200)
+                console.log('_getInstallment' + installments);
+        });
+    }
+
+    _onChangeText = (obj) => {
+        const _self = this,
+            { key = '', value = '' } = obj;
+
+        if (key == 'creditCardNo') {
+            const val = Utils.cleanText(value),
+                count = val.length,
+                num = 6;
+
+            _self._getCard(val);
+
+            if (count == num && _self.cartControl) {
+                _self._getInstallment(val);
+            } else if (count > num)
+                _self.cartControl = false;
+            else if (count < num)
+                _self.cartControl = true;
+        }
+    }
+
+    render() {
+        const _self = this;
+        return (
+            <View style={{ flex: 1, paddingTop: 10 }}>
+                {_self._getCardImage()}
+                <Form
+                    style={{ paddingBottom: 0 }}
+                    onChangeText={_self._onChangeText}
+                    callback={_self._callback}
+                    data={FORMDATA['creditCart']}
+                />;
+            </View>
+        );
+
+    }
+}
+
+/* navigator BankTransfer component */
+class BankTransfer extends Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return <Text>banka havalesi</Text>;
+    }
+}
+
+/* navigator CreditCart component */
+class CreditCart extends Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        const _self = this;
+        return (
+            <View style={{ flex: 1 }}>
+                <ScrollView
+                    contentContainerStyle={{
+                        flexGrow: 1,
+                    }}
+                    style={{
+                        flex: 1,
+                        marginBottom: CART_FOOTER_MARGIN_BOTTOM,
+                        backgroundColor: CART_BACKGROUND_COLOR_1,
+                    }}>
+                    <View style={{ flex: 1, backgroundColor: CART_BACKGROUND_COLOR_2, paddingTop: 20 }}>
+                        <CrediCart />
+                        <Foot {..._self.props} />
+                    </View>
+                    <UnderSide wrapperStyle={{ backgroundColor: CART_BACKGROUND_COLOR_1 }} />
+                </ScrollView>
+                <Footer onPress={_self._onPress} data={CONFIG} />
+            </View>
+        );
+    }
+}
+
+/* create payment navigator; creditCart, bankTransfer */
+class CustomHorizontalTabs extends Component {
+
+    jumpToIndex = this.props.jumpTo;
+
+    _onTabsPress = (obj, index) => {
+        this.jumpToIndex(obj.routeName);
+    }
+
+    render() {
+        const routes = this.props.navigationState.routes,
+            i = this.props.navigationState.index;
+
+        return (
+            <Minus99HorizontalTabs items={routes} selected={i} callback={this._onTabsPress} />
+        )
+    }
+}
+
+class Navigator extends Component {
+
+    constructor(props) {
+        super(props);
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        const _self = this;
+        if (!Utils.isArrEqual(_self.props.payment, nextProps.payment))
+            return true;
+
+        return false;
+    }
+
+    _getComponent = ({ item, props }) => {
+        const _self = this,
+            { paymentType = '' } = item;
+
+        switch (paymentType) {
+            case 'creditCart':
+                return <CreditCart data={item} />;
+            case 'bankTransfer':
+                return <BankTransfer data={item} />;
+            default:
+                return null;
+        }
+    }
+
+    _getScreen = () => {
+        const _self = this,
+            { payment = [] } = _self.props,
+            obj = {};
+
+        payment.map((item, ind) => {
+            const { paymentName } = item;
+            obj[paymentName] = {
+                screen: props => _self._getComponent({ item: item, props: props }),
+                navigationOptions: {
+                    title: paymentName,
+                }
+            }
+        });
+
+        return obj;
+    }
+
+    TabNavigator = createMaterialTopTabNavigator(
+        this._getScreen(),
+        {
+            swipeEnabled: false,
+            lazy: true,
+            tabBarPosition: 'top',
+            tabBarComponent: CustomHorizontalTabs,
+        }
+    );
+
+    render() {
+        const _self = this;
+        return <_self.TabNavigator />
+    }
+}
+
+/*
+   1 - componentDidMount, getCart => payment
+   2 - getPayment ile ödeme tiplerini çek ve tabnavigator oluştur.
+*/
+
+const Payment = class Main extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            loaded: false,
+            payment: []
+        };
     }
 
     onWillFocus = () => {
         const _self = this;
         _self.props.dispatch({ type: SET_CART_PROGRESS, value: "3/3" });
     }
-
 
     componentWillUnmount() {
         const _self = this,
@@ -236,52 +454,43 @@ const Payment = class Main extends Component {
             _self._Listener.remove();
     }
 
+    componentDidMount() {
+        const _self = this,
+            { navigation } = _self.props;
+
+        _self._isMounted = true;
+
+        if (navigation)
+            _self._Listener = navigation.addListener('willFocus', _self.onWillFocus);
+
+        setAjx({ _self: _self, uri: Utils.getURL({ key: 'cart', subKey: 'getCart' }), data: { cartLocation: 'payment' } }, (res) => {
+            _self.props.dispatch({ type: SET_CART_INFO, value: res.data });
+            setTimeout(() => { _self._getPayment(); }, 10);
+        });
+    }
+
+    /* ödeme tiplerini çek ve oluştur */
     _getPayment = () => {
         const _self = this,
             { cart = {} } = _self.props,
             { cargoId = 0 } = cart.postData;
 
-        _self.setAjx({ uri: Utils.getURL({ key: 'cart', subKey: 'getPayment' }), data: { cargoId: cargoId } }, (res) => {
-            alert('getPayment' + JSON.stringify(res));
+        setAjx({ _self: _self, uri: Utils.getURL({ key: 'cart', subKey: 'getPayment' }), data: { cargoId: cargoId } }, (res) => {
+            const { status, data = {} } = res,
+                { payments = [] } = data;
+            if (status == 200)
+                _self.setState({
+                    payment: payments,
+                    loaded: true
+                });
         });
-    }
-
-    setAjx = ({ uri, data }, callback) => {
-        const _self = this;
-        Globals.AJX({ _self: _self, uri: uri, data: data }, (res) => {
-            const { status, message } = res;
-            if (status == 200 && typeof callback !== 'undefined')
-                callback(res);
-        });
-    }
-
-    _getView = () => {
-        const _self = this;
-
-        return (
-            <View style={{ flex: 1 }}>
-                <ScrollView
-                    contentContainerStyle={{ flexGrow: 1 }}
-                    style={{
-                        flex: 1,
-                        marginBottom: CART_FOOTER_MARGIN_BOTTOM,
-                        backgroundColor: CART_BACKGROUND_COLOR_1,
-                    }}>
-                    <View style={{ flex: 1, backgroundColor: CART_BACKGROUND_COLOR_2 }}>
-                        <CrediCart />
-                        <Foot {..._self.props} />
-                    </View>
-                    <UnderSide wrapperStyle={{ backgroundColor: CART_BACKGROUND_COLOR_1 }} />
-                </ScrollView>
-                <Footer onPress={_self._onPress} data={CONFIG} />
-            </View>
-        );
     }
 
     render() {
         const _self = this,
-            view = _self._getView();
-        return view;
+            { loaded = false, payment = [] } = _self.state;
+
+        return loaded ? <Navigator payment={payment} /> : null;
     }
 }
 

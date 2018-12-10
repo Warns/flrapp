@@ -46,6 +46,8 @@ class DateTimePicker extends Component {
         } = this.props.data;
 
         const {
+            containerStyle = {},
+            wrapperStyle = {},
             control = false,
         } = this.props;
 
@@ -53,7 +55,13 @@ class DateTimePicker extends Component {
             this._callback();
 
         return (
-            <Container titleShow={true} title={title} error={error} errorMsg={errorMsg}>
+            <Container
+                containerStyle={{ ...containerStyle }}
+                wrapperStyle={{ ...wrapperStyle }}
+                titleShow={true}
+                title={title}
+                error={error}
+                errorMsg={errorMsg}>
                 <DatePicker
                     style={{ flex: 1, }}
                     date={this.state.value}

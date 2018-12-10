@@ -296,11 +296,51 @@ class CartListItem extends Component {
         });
     }
 
+    _getView = () => {
+        const _self = this,
+            { data = {}, viewType = '' } = _self.props,
+            { shortName, productName = '', total } = data;
+
+        if (viewType == 'miniCart')
+            return (
+                <View style={{ flex: 1 }}>
+                    <View>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <Text numberOfLines={1} style={{ fontFamily: 'Medium', fontSize: 15, width: '90%' }}>{productName}</Text>
+                        </View>
+                    </View>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 16 }}>
+                        <Text numberOfLines={1} style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#555555' }}>{shortName}</Text>
+                        <Text style={{ fontFamily: 'Bold', fontSize: 16 }}>{Utils.getPriceFormat(total)}</Text>
+                    </View>
+                </View>
+            );
+        else
+            return (
+                <View style={{ flex: 1 }}>
+                    <View>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <Text numberOfLines={1} style={{ fontFamily: 'Medium', fontSize: 15, width: '90%' }}>{productName}</Text>
+                            <IconButton ico={'closedIco'} callback={_self._onRemove} />
+                        </View>
+                        <Text numberOfLines={1} style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#555555' }}>{shortName}</Text>
+                    </View>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 16 }}>
+
+                        <SelectBox fontStyle={{ fontSize: 12, fontFamily: 'RegularTyp2', }} showHeader={false} wrapperStyle={{ width: 85, height: 30, borderRadius: 15 }} containerStyle={{ marginBottom: 0 }} closed={true} callback={_self._onChange} data={_self.getSelectValue()} />
+
+                        <Text style={{ fontFamily: 'Bold', fontSize: 16 }}>{Utils.getPriceFormat(total)}</Text>
+                    </View>
+                </View>
+            );
+    }
+
     render() {
         const _self = this,
             { data = {}, index = 0, totalCount = 0 } = _self.props,
-            { shortName, productName = '', smallImageUrl, total, quantity, unitCode } = data,
-            marginBottom = index == totalCount - 1 ? 0 : 10;
+            { smallImageUrl } = data,
+            marginBottom = index == totalCount - 1 ? 0 : 10,
+            view = _self._getView();
 
         return (
             <View style={{ paddingTop: 15, paddingBottom: 15, paddingRight: 20, paddingLeft: 10, borderBottomColor: '#dcdcdc', borderBottomWidth: 1, marginBottom: marginBottom, marginLeft: 10, marginRight: 10 }}>
@@ -311,21 +351,7 @@ class CartListItem extends Component {
                             source={{ uri: Utils.getImage(smallImageUrl) }}
                         />
                     </View>
-                    <View style={{ flex: 1 }}>
-                        <View>
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <Text numberOfLines={1} style={{ fontFamily: 'Medium', fontSize: 15, width: '90%' }}>{productName}</Text>
-                                <IconButton ico={'closedIco'} callback={_self._onRemove} />
-                            </View>
-                            <Text numberOfLines={1} style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#555555' }}>{shortName}</Text>
-                        </View>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 16 }}>
-
-                            <SelectBox fontStyle={{ fontSize: 12, fontFamily: 'RegularTyp2', }} showHeader={false} wrapperStyle={{ width: 85, height: 30, borderRadius: 15 }} containerStyle={{ marginBottom: 0 }} closed={true} callback={_self._onChange} data={_self.getSelectValue()} />
-
-                            <Text style={{ fontFamily: 'Bold', fontSize: 16 }}>{Utils.getPriceFormat(total)}</Text>
-                        </View>
-                    </View>
+                    {view}
                 </View>
                 {_self._getPromotions()}
             </View>
@@ -1011,7 +1037,7 @@ class FeedsItem extends Component {
                     title: title,
                     img: Utils.getImage(image),
                     utpId: utp
-                }]; 
+                }];
             store.dispatch({ type: SET_CATEGORIES, value: data });
             store.dispatch({ type: SET_SELECTED_CATEGORY, value: name });
             store.dispatch({ type: NAVIGATE, value: { item: { navigation: 'Category' } } });
@@ -1701,7 +1727,7 @@ class Viewers extends Component {
 
     _renderItem = ({ item, key, index }) => {
         const _self = this,
-            { itemType = '' } = _self.props.config,
+            { itemType = '', viewType = '' } = _self.props.config,
             { loaded, total } = _self.state;
 
         if (!loaded)
@@ -1713,7 +1739,7 @@ class Viewers extends Component {
             case ITEMTYPE['OPPORTUNITY']:
                 return <OpportunityListItem key={key} index={index} callback={_self._callback} data={item} />;
             case ITEMTYPE['CARTLIST']:
-                return <CartListItem totalCount={total} index={index} key={key} callback={_self._callback} onUpdateItem={_self._onUpdateItem} onRemove={_self._removeItem} data={item} />;
+                return <CartListItem viewType={viewType} totalCount={total} index={index} key={key} callback={_self._callback} onUpdateItem={_self._onUpdateItem} onRemove={_self._removeItem} data={item} />;
             case ITEMTYPE['ADDRESS']:
                 return <AddressListItem config={_self.props.config} callback={_self._callback} onRemove={_self._removeItem} data={item} />;
             case ITEMTYPE['FAVORITE']:

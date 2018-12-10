@@ -16,12 +16,16 @@ class FormInput extends Component {
     constructor(props) {
         super(props);
         const _self = this,
-            { value = '', title } = _self.props.data;
+            { 
+                value = '', 
+                title, 
+                showTitle = false //-> bu deger true gelirse placeholder yapısı olmadan direk title gösterilecek
+            } = _self.props.data;
 
         _self.state = {
             value: value,
-            placeholder: value != '' ? '' : title,
-            titleShow: value != '' ? true : false
+            placeholder: showTitle ? '' : (value != '' ? '' : title),
+            titleShow: showTitle ? true : (value != '' ? true : false)
         }
     }
 
@@ -62,28 +66,29 @@ class FormInput extends Component {
 
     _onFocus = () => {
         const _self = this,
-            { onFocus, id = '' } = _self.props;
+            { onFocus, id = '' } = _self.props,
+            { showTitle = false } = _self.props.data;
 
         if (onFocus)
             onFocus({ key: id });
 
         setTimeout(() => {
             const { value } = _self.state;
-            if (value == '')
+            if (value == '' && !showTitle)
                 _self.setState({ placeholder: '', titleShow: true });
         }, 5);
     }
     _onBlur = () => {
         const _self = this,
             { onBlur, id = '' } = _self.props,
-            { title } = _self.props.data;
+            { title, showTitle = false } = _self.props.data;
 
         if (onBlur)
             onBlur({ key: id });
 
         setTimeout(() => {
             const { value } = _self.state;
-            if (value == '')
+            if (value == '' && !showTitle)
                 _self.setState({ placeholder: title, titleShow: false });
         }, 5)
     }
@@ -139,7 +144,7 @@ class FormInput extends Component {
                 errorMsg = null,
                 autoCorrect = false,
                 mask = null,
-                showHeader = true
+                showHeader = true,
             } = _self.props.data,
             {
                 control = false,
@@ -243,7 +248,7 @@ class FormInput extends Component {
             this._callback();
 
         return (
-            <TouchableOpacity style={{flex:1}} activeOpacity={0.7} onPress={this._onPress.bind(this)}>
+            <TouchableOpacity style={{ flex: 1 }} activeOpacity={0.7} onPress={this._onPress.bind(this)}>
                 <Container
                     containerStyle={{ ...containerStyle }}
                     wrapperStyle={{ ...wrapperStyle }}
