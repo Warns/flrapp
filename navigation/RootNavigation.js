@@ -3,6 +3,7 @@ import React from 'react';
 import {
   Platform,
   StatusBar,
+  Text,
 } from 'react-native';
 import { connect } from 'react-redux';
 import { createStackNavigator, createMaterialTopTabNavigator } from 'react-navigation';
@@ -62,14 +63,14 @@ const RootStackNavigator = createStackNavigator(
     Extra: {
       screen: ExtraNavigation,
       navigationOptions: {
-        header: () => <DefaultHeader />,
+        header: () => <DefaultHeader backButton={true} />,
       }
     },
 
     ExtraUser: {
       screen: ExtraNavigation,
       navigationOptions: {
-        header: () => <DefaultHeader />,
+        header: () => <DefaultHeader backButton={true} />,
       }
     },
 

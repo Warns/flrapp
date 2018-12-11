@@ -32,11 +32,11 @@ class DefaultHdr extends Component {
   }
 
   _onLogoPress = () => {
-    this.props.dispatch({type: NAVIGATE, value:{item:{navigation:"Home"}}});
+    this.props.dispatch({ type: NAVIGATE, value: { item: { navigation: "Home" } } });
   }
 
   _onLoginPress = () => {
-    this.props.dispatch({type: NAVIGATE, value:{item:{navigation:"Splash"}}});
+    this.props.dispatch({ type: NAVIGATE, value: { item: { navigation: "Splash" } } });
   }
 
   _onUserMenuPress = () => {
@@ -66,34 +66,40 @@ class DefaultHdr extends Component {
 
   render() {
     const _self = this;
-    
+
     let { topMargin } = this.props.general.SCREEN_DIMENSIONS;
 
-    let _left = this.props.user.user.firstName ? _self._getUserMenu() : (
+    let _account = this.props.user.user.firstName ? _self._getUserMenu() : (
       <TouchableOpacity activeOpacity={.8} onPress={this._onLoginPress}>
-        <View style={{backgroundColor:'#ffffff', borderColor:'#BBBBBB', borderWidth:1, borderRadius:5, height:36, minWidth:80, paddingLeft:9, paddingRight:9, justifyContent:'center', alignItems:'center'}}>
-          <Text style={{fontSize:14, fontFamily:'Medium'}}>GİRİŞ YAP</Text>
+        <View style={{ backgroundColor: '#ffffff', borderColor: '#BBBBBB', borderWidth: 1, borderRadius: 5, height: 36, minWidth: 80, paddingLeft: 9, paddingRight: 9, justifyContent: 'center', alignItems: 'center' }}>
+          <Text style={{ fontSize: 14, fontFamily: 'Medium' }}>GİRİŞ YAP</Text>
         </View>
       </TouchableOpacity>
     );
 
+    let _left = this.props.backButton == true ? (
+      <TouchableOpacity onPress={this._onLogoPress}>
+        <Image source={require('../../../assets/images/icons/back.png')} style={{ width: 40, height: 40, resizeMode: 'contain' }} />
+      </TouchableOpacity>
+    ) : _account;
+
     return (
-      <View style={{height: 60 + topMargin, paddingTop:topMargin, flexDirection:'row', backgroundColor:'#ffffff'}}>
-        <View style={{ width:95, flexDirection: 'row', alignItems:'center', paddingLeft:10, }}>
+      <View style={{ height: 60 + topMargin, paddingTop: topMargin, flexDirection: 'row', backgroundColor: '#ffffff' }}>
+        <View style={{ width: 95, flexDirection: 'row', alignItems: 'center', paddingLeft: 10, }}>
           {_left}
           {/*<TouchableOpacity style={{ padding: 5, paddingRight: 0 }} onPress={this._onBackPress}>
             <Image source={require('../../../assets/images/icons/back.png')} style={{ width: 40, height: 40, resizeMode: 'contain' }} />
           </TouchableOpacity>
-          {_self._getUserMenu()}*/} 
-          </View>
-          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <TouchableOpacity activeOpacity={0.8} onPress={this._onLogoPress}>
-              <Image style={styles.logo} source={require('../../../assets/images/logo-b.png')} />
-            </TouchableOpacity>
-          </View>
-          <View style={{ padding: 5, paddingRight: 10, width:95, justifyContent:'center', alignItems:'flex-end'}}>
-            <Cart />
-          </View>
+          {_self._getUserMenu()}*/}
+        </View>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <TouchableOpacity activeOpacity={0.8} onPress={this._onLogoPress}>
+            <Image style={styles.logo} source={require('../../../assets/images/logo-b.png')} />
+          </TouchableOpacity>
+        </View>
+        <View style={{ padding: 5, paddingRight: 10, width: 95, justifyContent: 'center', alignItems: 'flex-end' }}>
+          <Cart />
+        </View>
       </View>
     );
   }
