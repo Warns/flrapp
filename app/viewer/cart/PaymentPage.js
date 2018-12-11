@@ -12,12 +12,16 @@ import {
     ICONS,
     SET_VIEWER,
     FORMDATA,
-    SET_CART_PROGRESS
+    SET_CART_PROGRESS,
+    CART_FOOTER_MARGIN_BOTTOM,
+    CART_BACKGROUND_COLOR_1,
+    CART_BACKGROUND_COLOR_2
 } from 'root/app/helper/Constant';
 import { connect } from 'react-redux';
 import Footer from './Footer';
 import { CheckBox, Form } from 'root/app/form';
 import creditCardType, { getTypeInfo, types as CardType } from 'credit-card-type';
+import UnderSide from './UnderSide';
 
 const Translation = require('root/app/helper/Translation.js');
 const Utils = require('root/app/helper/Global.js');
@@ -28,7 +32,6 @@ const CONFIG = {
     buttonText: 'ÖDEME YAP',
     coupon: false
 };
-
 
 const CONFIG_POPUP = {
     "cart": {
@@ -75,50 +78,36 @@ class Foot extends Component {
         _self.props.navigation.navigate('Detail', { type: SET_VIEWER, data: CONFIG_POPUP[k] || {} });
     }
 
-    render() {
-        const _self = this;
+    _getButton = ({ type, buttonName, chk = false }) => {
+        const _self = this,
+            checkbox = chk ? <CheckBox closed={true} callback={_self._onCheckBoxChange} data={{ desc: 'Okudum ve kabul ediyorum' }} /> : null;
 
         return (
+            <View style={{ borderBottomColor: '#d8d8d8', borderBottomWidth: 1 }}>
+                <TouchableOpacity activeOpacity={.8} onPress={_self._onPress.bind(this, type)}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', height: 60, justifyContent: 'space-between' }}>
+                        <Text style={{ fontFamily: 'Bold', fontSize: 16 }}>{buttonName}</Text>
+                        <Image
+                            style={{ width: 40, height: 40 }}
+                            source={ICONS['rightArrow']}
+                        />
+                    </View>
+                </TouchableOpacity>
+                {checkbox}
+            </View>
+        );
+    }
+
+    render() {
+        const _self = this,
+            cart = _self._getButton({ type: 'cart', buttonName: 'Sepet özetini göster' }),
+            agreement1 = _self._getButton({ type: 'agreement1Html', buttonName: 'Mesafeli satış sözleşmesi', chk: true }),
+            agreement2 = _self._getButton({ type: 'agreement2Html', buttonName: 'Üyelik sözleşmesi', chk: true });
+        return (
             <View style={{ flex: 1, paddingLeft: 20, paddingRight: 20 }}>
-                <View style={{ borderBottomColor: '#d8d8d8', borderBottomWidth: 1 }}>
-                    <TouchableOpacity activeOpacity={.8} onPress={_self._onPress.bind(this, 'cart')}>
-                        <View style={{ flexDirection: 'row', alignItems: 'center', height: 60, justifyContent: 'space-between' }}>
-                            <Text style={{ fontFamily: 'Bold', fontSize: 16 }}>{'Sepet özetini göster'}</Text>
-                            <Image
-                                style={{ width: 40, height: 40 }}
-                                source={ICONS['rightArrow']}
-                            />
-                        </View>
-                    </TouchableOpacity>
-                </View>
-
-                <View style={{ borderBottomColor: '#d8d8d8', borderBottomWidth: 1 }}>
-                    <TouchableOpacity activeOpacity={.8} onPress={_self._onPress.bind(this, 'agreement2Html')}>
-                        <View style={{ flexDirection: 'row', alignItems: 'center', height: 60, justifyContent: 'space-between' }}>
-                            <Text style={{ fontFamily: 'Bold', fontSize: 16 }}>{'Üyelik sözleşmesi'}</Text>
-                            <Image
-                                style={{ width: 40, height: 40 }}
-                                source={ICONS['rightArrow']}
-                            />
-                        </View>
-                    </TouchableOpacity>
-
-                    <CheckBox closed={true} callback={_self._onCheckBoxChange} data={{ desc: 'Okudum ve kabul ediyorum' }} />
-
-                </View>
-
-                <View style={{ borderBottomColor: '#d8d8d8', borderBottomWidth: 1 }}>
-                    <TouchableOpacity activeOpacity={.8} onPress={_self._onPress.bind(this, 'agreement1Html')}>
-                        <View style={{ flexDirection: 'row', alignItems: 'center', height: 60, justifyContent: 'space-between' }}>
-                            <Text style={{ fontFamily: 'Bold', fontSize: 16 }}>{'Mesafeli satış sözleşmesi'}</Text>
-                            <Image
-                                style={{ width: 40, height: 40 }}
-                                source={ICONS['rightArrow']}
-                            />
-                        </View>
-                    </TouchableOpacity>
-                    <CheckBox closed={true} callback={_self._onCheckBoxChange} data={{ desc: 'Okudum ve kabul ediyorum' }} />
-                </View>
+                {cart}
+                {agreement1}
+                {agreement2}  
             </View>
         );
     }
@@ -199,7 +188,7 @@ const Payment = class Main extends Component {
             { navigation } = _self.props;
 
         _self._isMounted = true;
-        
+
         _self.setAjx({ uri: Utils.getURL({ key: 'cart', subKey: 'getCart' }), data: { cartLocation: 'payment' } }, (res) => {
             _self.props.dispatch({ type: SET_CART_INFO, value: res.data });
             setTimeout(() => {
@@ -267,21 +256,26 @@ const Payment = class Main extends Component {
     }
 
     _getView = () => {
-        const _self = this,
-            { loaded = false } = _self.state;
+        const _self = this;
 
-        let view = null;
-        //if (loaded)
-        view = (
+        return (
             <View style={{ flex: 1 }}>
-                <ScrollView style={{ flex: 1, marginBottom: 125, }}>
-                    <CrediCart />
-                    <Foot {..._self.props} />
+                <ScrollView
+                    contentContainerStyle={{ flexGrow: 1 }}
+                    style={{
+                        flex: 1,
+                        marginBottom: CART_FOOTER_MARGIN_BOTTOM,
+                        backgroundColor: CART_BACKGROUND_COLOR_1,
+                    }}>
+                    <View style={{ flex: 1, backgroundColor: CART_BACKGROUND_COLOR_2 }}>
+                        <CrediCart />
+                        <Foot {..._self.props} />
+                    </View>
+                    <UnderSide wrapperStyle={{ backgroundColor: CART_BACKGROUND_COLOR_1 }} />
                 </ScrollView>
                 <Footer onPress={_self._onPress} data={CONFIG} />
             </View>
         );
-        return view;
     }
 
     render() {

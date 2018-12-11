@@ -29,18 +29,12 @@ export default class ChatScreen extends React.Component {
           token={this.props.token}
           user={this.props.user}
           event={this.props.event}
-          urlCheck={this.urlCheck}
-          startReview={this.startReview}
-          onEvent={this.props.onEvent}
           ref={this.chat}
         />
         <InputContainer
-          onSignOut={this.signout}
           chat={this.chatRef}
-          pMenu={this.state.pMenu}
+          event={this.props.event}
           voice={this.props.voice}
-          onEvent={this.props.onEvent}
-          bots={this.state.bots}
         />
       </View>
     );

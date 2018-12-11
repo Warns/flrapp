@@ -26,11 +26,7 @@ const styles = StyleSheet.create({
 });
 
 export default class InputContainer extends React.Component {
-  constructor() {
-    super();
-    this.input = React.createRef();
-    this.state = { text: "" };
-  }
+  state = { text: "" };
 
   get chat() {
     return this.props.chat();
@@ -43,11 +39,8 @@ export default class InputContainer extends React.Component {
           text={this.state.text}
           chat={this.props.chat}
           setter={it => this.setState(it)}
-          pMenu={this.props.pMenu}
           voice={this.props.voice}
-          onEvent={this.props.onEvent}
-          bots={this.props.bots}
-          ref={this.input}
+          event={this.props.event}
         />
       </View>
     );

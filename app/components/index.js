@@ -22,3 +22,4 @@ export * from './Carousel';
 export * from './Navigation';
 export * from './ElevatedView';
 export * from './ReadMoreText';
+export * from './ShareButton';

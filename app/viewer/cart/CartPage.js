@@ -13,6 +13,11 @@ import {
     SET_CART_PROGRESS,
     ASSISTANT_SHOW,
     SET_CART_ITEMS,
+    NAVIGATE,
+    CART_FOOTER_MARGIN_BOTTOM,
+    CART_FOOTER_EXPAND_MARGIN_BOTTOM,
+    CART_BACKGROUND_COLOR_1, 
+    CART_BACKGROUND_COLOR_2
 } from 'root/app/helper/Constant';
 import { connect } from 'react-redux';
 import Footer from './Footer';
@@ -36,15 +41,19 @@ const CONFIG = {
     opportunity: true
 };
 
-/* */
-const PADDING_BOTTOM = 115,
-    EXPAND_PADDING_BOTTOM = 200;
+/*
+    NOT: 
+    
+    1- <Viewer config={DATA} response={this._response} />; sepet silme ve update işlemlerinde her seferinde içeriği update ediyoruz içerik update oldukça response ile son hali dönüyor ve reduxa bağlı cart refresh ediyoruz.  
+
+    2- Kullanıcı eğer footerdaki kupon kodunu girmişse viewer update ediyoruz. böylece sepet güncelleniyor ve redux cart güncelleniyor.
+*/
 
 const Cart = class Main extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            paddingBottom: PADDING_BOTTOM,
+            paddingBottom: CART_FOOTER_MARGIN_BOTTOM,
             loaded: false
         };
     }
@@ -100,10 +109,29 @@ const Cart = class Main extends Component {
 
     _onPress = () => {
         const _self = this,
-            { navigation } = _self.props;
-
-        if (navigation)
-            navigation.navigate('Address', {});
+            { navigation, user = {}, cart = {} } = _self.props,
+            { userId = '' } = user['user'],
+            { cartNoResult = false } = cart;
+            
+        if (userId == '') { //--> logoff
+            if (cartNoResult) {
+                //--> sepet boş anasayfaya dön
+                _self.props.dispatch({ type: NAVIGATE, value: { item: { navigation: "Home" } } });
+            } else {
+                //--> sepet dolu logine git
+                _self.props.dispatch({ type: NAVIGATE, value: { item: { navigation: "Optin" } } });
+            }
+            
+        } else if (userId != '') { //--> login
+            if (cartNoResult) {
+                //--> sepet boş anasayfaya dön
+                _self.props.dispatch({ type: NAVIGATE, value: { item: { navigation: "Home" } } });
+            } else {
+                //--> sepet dolu bir sonraki aşama
+                if (navigation)
+                    navigation.navigate('Address', {});
+            }
+        }
     }
 
     _onCouponCallback = ({ type, data = {} }) => {
@@ -120,7 +148,7 @@ const Cart = class Main extends Component {
 
     _onExpand = (b) => {
         const _self = this,
-            paddingBottom = b ? EXPAND_PADDING_BOTTOM : PADDING_BOTTOM;
+            paddingBottom = b ? CART_FOOTER_EXPAND_MARGIN_BOTTOM : CART_FOOTER_MARGIN_BOTTOM;
 
         _self.setState({ paddingBottom: paddingBottom });
     }
@@ -128,7 +156,7 @@ const Cart = class Main extends Component {
     render() {
         const _self = this,
             { paddingBottom, loaded = false } = _self.state,
-            backgroundColor = loaded ? 'rgb(244, 236, 236)' : '#FFFFFF',
+            backgroundColor = loaded ? CART_BACKGROUND_COLOR_1 : CART_BACKGROUND_COLOR_2,
             underside = loaded ? <UnderSide opportunity={CONFIG['opportunity']} /> : null;
 
         return (
@@ -148,7 +176,7 @@ const Cart = class Main extends Component {
                         response={this._response}
                         callback={this._callback}
                         wrapperStyle={{ backgroundColor: backgroundColor }}
-                        style={{ backgroundColor: '#FFFFFF' }}
+                        style={{ backgroundColor: CART_BACKGROUND_COLOR_2 }}
                     />
                     {underside}
                 </ScrollView>

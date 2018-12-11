@@ -114,10 +114,15 @@ export const ADDRESS_LIST_CLICKED = 'ADDRESS_LIST_CLICKED';
 export const NEW_ADDRESS_CLICKED = 'NEW_ADDRESS_CLICKED';
 export const SET_FORM = 'SET_FORM';
 export const SET_VIEWER = 'SET_VIEWER';
+export const SET_INSTAGRAM = 'SET_INSTAGRAM';
 export const SET_ADDRESS_ITEM_CLICK = 'SET_ADDRESS_ITEM_CLICK';
 export const SET_VIDEO_PLAYER = 'SET_VIDEO_PLAYER';
 export const UPDATE_CART = 'UPDATE_CART';
 export const REMOVE_CART = 'REMOVE_CART';
+export const CART_FOOTER_MARGIN_BOTTOM = 115;
+export const CART_FOOTER_EXPAND_MARGIN_BOTTOM = 200;
+export const CART_BACKGROUND_COLOR_1 = 'rgb(244, 236, 236)';
+export const CART_BACKGROUND_COLOR_2 = '#FFFFFF';
 
 /* form */
 export const FORMDATA = {
