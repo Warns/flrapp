@@ -132,7 +132,7 @@ class Assistant extends React.Component {
                     }
                   }
                 });
-              } else if (FEEDSTYPE['COLLECTION'] == labels || FEEDSTYPE['BLOGPOST'] == labels) {
+              } else if (FEEDSTYPE['BLOGPOST'] == labels) {
                 const data = {
                   "type": "htmlToJSON",
                   "itemType": "customDetail",
@@ -162,7 +162,7 @@ class Assistant extends React.Component {
                   value: { visibility: true, type: SET_VIEWER, data: data }
                 });
 
-              } else if (FEEDSTYPE['CAMPAING'] == labels) {
+              } else if (FEEDSTYPE['CAMPAING'] == labels || FEEDSTYPE['COLLECTION'] == labels) {
 
                 const { title = '', utp = '', image_link = '' } = data,
                   arr = [{
@@ -170,6 +170,7 @@ class Assistant extends React.Component {
                     img: Utils.getImage(image_link),
                     utpId: utp
                   }];
+                  
                   _self.props.dispatch({ type: SET_CATEGORIES, value: arr });
                   _self.props.dispatch({ type: SET_SELECTED_CATEGORY, value: title });
                   _self.props.dispatch({ type: NAVIGATE, value: { item: { navigation: 'Category' } } });

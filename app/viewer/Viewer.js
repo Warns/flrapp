@@ -954,7 +954,7 @@ class FeedsItem extends Component {
         const _self = this,
             { productId, labels = [], name, image, params = {} } = _self.props.data;
 
-        if (FEEDSTYPE['COLLECTION'] == labels[0] || FEEDSTYPE['BLOGPOST'] == labels[0]) {
+        if (FEEDSTYPE['BLOGPOST'] == labels[0]) {
             const data = {
                 "type": "htmlToJSON",
                 "itemType": "customDetail",
@@ -1031,7 +1031,7 @@ class FeedsItem extends Component {
                     }*/
                 }
             });
-        } else if (FEEDSTYPE['CAMPAING'] == labels[0]) {
+        } else if (FEEDSTYPE['CAMPAING'] == labels[0] || FEEDSTYPE['COLLECTION'] == labels[0]) {
             const { title = '', utp = '', image = '' } = params,
                 data = [{
                     title: title,
@@ -1207,7 +1207,14 @@ class FeedsItem extends Component {
     }
 
     render() {
-        const _self = this;
+        const _self = this,
+        { labels = [] } = _self.props.data;
+
+        /*
+        test
+        if( labels[0] != 'instagram' )
+            return null;
+        */
         return (
             <View style={{ margin: 10, marginBottom: 20 }}>
                 <View style={{ position: 'relative' }}>
