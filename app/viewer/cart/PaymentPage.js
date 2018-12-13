@@ -253,7 +253,7 @@ class CrediCart extends Component {
     }
 
     /* taksit seçenekleri */
-    _getInstallment = (val) => {
+    _getInstallment = (val) => { console.log('saasdasd');
         const _self = this;
         setAjx({ _self: _self, uri: Utils.getURL({ key: 'cart', subKey: 'getInstallment' }), data: { bin: val } }, (res) => {
             const { status, data = {} } = res,
@@ -261,7 +261,7 @@ class CrediCart extends Component {
                 { installments = [] } = creditCarts[ 0 ];
 
             if (status == 200)
-                console.log('_getInstallment' + installments);
+                console.log('_getInstallment', installments);
         });
     }
 

@@ -819,8 +819,8 @@ class CustomDetailListItem extends Component {
     }
 
     _getDsc = () => {
-        const _self = this,
-            { desc = '', link = '', title = '' } = _self.props.data;
+        let _self = this,
+            { dsc = '', shortDsc = '', shortDesc = '', link = '', title = '' } = _self.props.data;
 
         return (
             <View style={{ margin: 20, paddingBottom: 30, marginBottom: 30, marginTop: 10, borderBottomColor: 'rgb(216, 216, 216)', borderBottomWidth: 1 }}>
@@ -828,10 +828,9 @@ class CustomDetailListItem extends Component {
                     <Text numberOfLines={2} style={{ fontFamily: 'Bold', fontSize: 16, flex: 1, paddingRight: 10 }}>{title}</Text>
                     <ShareButton style={{ paddingTop: 2 }} url={Utils.getImage(link)} title={title} />
                 </View>
-                <ReadMoreText>{desc}</ReadMoreText>
+                <ReadMoreText lessText={shortDesc} moreText={dsc} />
             </View>
         );
-
     }
 
     _changeProduct = (id) => {
@@ -1208,7 +1207,7 @@ class FeedsItem extends Component {
 
     render() {
         const _self = this,
-        { labels = [] } = _self.props.data;
+            { labels = [] } = _self.props.data;
 
         /*
         test

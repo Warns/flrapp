@@ -25,10 +25,11 @@ module.exports = {
         flex: 1
       },
       items: [
-        {
+        /*{
           id: 'year',
           title: 'Bitiş tarihi',
           type: 'dataTimePicker',
+          //dateFormat: 'MM.YY',
           maxDate: 14,
           validation: [{ key: 'isEmpty' }, { key: 'isDate' },],
           css: {
@@ -37,6 +38,15 @@ module.exports = {
               flex: 1.2
             }
           },
+        },*/
+        {
+          showTitle: true,
+          id: 'year',
+          title: 'Bitiş tarihi',
+          type: 'text',
+          placeholder: '00/00',
+          mask: '99/99',
+          validation: [{ key: 'isEmpty' }],
         },
         {
           showTitle: true,

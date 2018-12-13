@@ -16,7 +16,8 @@ class FormInput extends Component {
     constructor(props) {
         super(props);
         const _self = this,
-            { 
+            {
+                placeholder = '', 
                 value = '', 
                 title, 
                 showTitle = false //-> bu deger true gelirse placeholder yapısı olmadan direk title gösterilecek
@@ -24,7 +25,7 @@ class FormInput extends Component {
 
         _self.state = {
             value: value,
-            placeholder: showTitle ? '' : (value != '' ? '' : title),
+            placeholder: showTitle ? placeholder : (value != '' ? '' : title),
             titleShow: showTitle ? true : (value != '' ? true : false)
         }
     }
