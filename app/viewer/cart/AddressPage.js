@@ -308,8 +308,8 @@ const Address = class Main extends Component {
             return false;     
         }
 
-        if (navigation)
-            navigation.navigate('Payment', {});
+        /*if (navigation)
+            navigation.navigate('Payment', {});*/
     }
 
     /* kargoları listele */
