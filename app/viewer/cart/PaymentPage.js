@@ -549,7 +549,7 @@ const Payment = class Main extends Component {
     _getPayment = () => {
         const _self = this,
             { cart = {} } = _self.props,
-            { cargoId = 0 } = cart.postData;
+            { cargoId = 0 } = cart.setCart;
 
         setAjx({ _self: _self, uri: Utils.getURL({ key: 'cart', subKey: 'getPayment' }), data: { cargoId: cargoId } }, (res) => {
             const { status, data = {} } = res,

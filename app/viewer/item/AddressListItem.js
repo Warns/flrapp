@@ -145,8 +145,8 @@ class AddressList extends Component {
         const _self = this,
             { data = {} } = _self.props,
             { addressId } = data,
-            { selectedAddress = {} } = _self.props.cart,
-            { shipAddress, differentAddress } = selectedAddress;
+            { setCart = {} } = _self.props.cart,
+            { shipAddressId, differentAddress } = setCart;
         let { selectShipAddress, selectedShipAddress, select, selected } = Translation['address'] || {};
 
         if (!differentAddress) {
@@ -155,7 +155,7 @@ class AddressList extends Component {
         }
 
         let view = null;
-        if (addressId == shipAddress)
+        if (addressId == shipAddressId)
             view = (
                 <BoxButton
                     wrapperStyle={{ backgroundColor: 'rgb(255, 43, 148)', borderColor: 'rgb(255, 43, 148)', minWidth: 130, paddingLeft: 0, paddingRight: 0, marginLeft: 10 }}
@@ -188,13 +188,13 @@ class AddressList extends Component {
         const _self = this,
             { data = {} } = _self.props,
             { addressId } = data,
-            { selectedAddress = {} } = _self.props.cart,
-            { billAddress, differentAddress } = selectedAddress,
+            { setCart = {} } = _self.props.cart,
+            { billAddressId, differentAddress } = setCart,
             { selectBillAddress, selectedBillAddress } = Translation['address'] || {};
 
         let view = null;
         if (differentAddress) {
-            if (addressId == billAddress)
+            if (addressId == billAddressId)
                 view = (
                     <BoxButton
                         wrapperStyle={{ backgroundColor: 'rgb(255, 43, 148)', borderColor: 'rgb(255, 43, 148)', minWidth: 130, paddingLeft: 0, paddingRight: 0 }}

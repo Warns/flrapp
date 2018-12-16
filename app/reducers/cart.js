@@ -18,27 +18,23 @@ const cartInitialState = {
     name: 'Cart',
     cartProductsNumber: 0,
     cartInfo: {},
-    selectedAddress: {
-        shipAddress: 0, /* teslimat adresi */
-        billAddress: 0, /* fatura adresi */
-        differentAddress: false /* farklı adrese gönder; false = teslimat, fatura aynı / true = farklı */
-    },
-    /* setCart yaptığımız zaman tüm seçimleri göndermemiz gerekiyor */
-    postData: {
-        shipAddressId: 0,
-        billAddressId: 0,
+    cartNoResult: false,
+    
+    setCart: {
+        differentAddress: false, /* farklı adrese gönder; false = teslimat, fatura aynı / true = farklı */
+        shipAddressId: 0, /* teslimat adresi */
+        billAddressId: 0, /* fatura adresi */
         customerNote: '',
         paymentId: 0,
         cargoId: 0,
         bankId: 0,
         installmentId: 0,
         usePoint: 0,
-        //useBankPoint: true,
-        //cartLocation: '',
+        useBankPoint: true,
+        cartLocation: '',
         paymentNote: '',
         serviceId: 0
-    },
-    cartNoResult: false
+    }
 };
 
 export default function cart(state = cartInitialState, action) {
@@ -54,89 +50,96 @@ export default function cart(state = cartInitialState, action) {
         };
         case ADD_CART_ITEM: {
 
-            if( action.value.id ){
-                addCartLine( action.value );
+            if (action.value.id) {
+                addCartLine(action.value);
             }
 
-            return {...state,
+            return {
+                ...state,
                 cartProductsNumber: state.cartProductsNumber + action.value.quantity
             };
         };
         case ADD_TO_FAVORITES: {
-            if( action.value.id ){
-                addFavoriteProduct( action.value );
+            if (action.value.id) {
+                addFavoriteProduct(action.value);
             }
         };
         case REMOVE_FROM_FAVORITES: {
-            if( action.value.id ){
-                deleteFavoriteProduct( action.value );
+            if (action.value.id) {
+                deleteFavoriteProduct(action.value);
             }
         }
+
         case SET_CART_ADDRESS: {
-            const { selectedAddress = {} } = state,
-                { differentAddress = false } = selectedAddress,
+            const { setCart = {} } = state,
+                { differentAddress = false } = setCart,
                 { addressId, addressType = 'shipAddress' } = action.value;
 
             if (!differentAddress)
                 return {
                     ...state,
-                    selectedAddress: { ...state.selectedAddress, shipAddress: addressId, billAddress: addressId },
-                    postData: { ...state.postData, shipAddressId: addressId, billAddressId: addressId }
+                    setCart: { ...state.setCart, shipAddressId: addressId, billAddressId: addressId }
                 }
             else {
                 if (addressType == 'shipAddress')
                     return {
                         ...state,
-                        selectedAddress: { ...state.selectedAddress, shipAddress: addressId },
-                        postData: { ...state.postData, shipAddressId: addressId }
+                        setCart: { ...state.setCart, shipAddressId: addressId }
                     }
                 else if (addressType == 'billAddress')
                     return {
                         ...state,
-                        selectedAddress: { ...state.selectedAddress, billAddress: addressId },
-                        postData: { ...state.postData, billAddressId: addressId }
+                        setCart: { ...state.setCart, billAddressId: addressId }
                     }
             }
         };
         case SET_DIFFERENT_ADDRESS: {
-            const { selectedAddress = {} } = state,
-                { shipAddress } = selectedAddress,
+            const { setCart = {} } = state,
+                { shipAddressId } = setCart,
                 b = action.value;
 
             if (b)
                 return {
                     ...state,
-                    selectedAddress: { ...state.selectedAddress, differentAddress: b, billAddress: 0 },
-                    postData: { ...state.postData, billAddressId: 0 }
+                    setCart: { ...state.setCart, differentAddress: b, billAddressId: 0 }
                 }
             else
                 return {
                     ...state,
-                    selectedAddress: { ...state.selectedAddress, differentAddress: b, billAddress: shipAddress },
-                    postData: { ...state.postData, billAddressId: shipAddress }
+                    setCart: { ...state.setCart, billAddressId: shipAddressId, differentAddress: b }
                 }
         };
         case SET_CART_CARGO: {
             return {
                 ...state,
-                postData: { ...state.postData, cargoId: action.value }
+                setCart: { ...state.setCart, cargoId: action.value }
             }
         };
         case SET_CART_NO_RESULT: {
             return {
                 ...state,
-                cartNoResult: action.value 
+                cartNoResult: action.value
             }
         };
         case RESET_CART: {
             return {
                 ...state,
                 cartNoResult: false,
-                selectedAddress: {
-                    shipAddress: 0,
-                    billAddress: 0, 
-                    differentAddress: false
-                }, 
+                setCart: {
+                    differentAddress: false,
+                    shipAddressId: 0,
+                    billAddressId: 0,
+                    customerNote: '',
+                    paymentId: 0,
+                    cargoId: 0,
+                    bankId: 0,
+                    installmentId: 0,
+                    usePoint: 0,
+                    useBankPoint: true,
+                    cartLocation: '',
+                    paymentNote: '',
+                    serviceId: 0
+                },
             }
         };
         case SET_CART_PROGRESS: {
@@ -146,48 +149,48 @@ export default function cart(state = cartInitialState, action) {
             }
         };
 
-        
+
         default:
             return state;
     }
 }
 
 
-addCartLine = ( obj ) => {
+addCartLine = (obj) => {
 
     globals.fetch(
         "https://www.flormar.com.tr/webapi/v3/Cart/addCartLine",
         JSON.stringify({
             "productId": obj.id,
             "quantity": obj.quantity,
-        }), ( answer ) => {
-            
-            if( answer.status == 200){
+        }), (answer) => {
+
+            if (answer.status == 200) {
                 //do nothing
             }
-            else{
-                store.dispatch({type:ADD_CART_ITEM, value: {quantity:-obj.quantity} });
+            else {
+                store.dispatch({ type: ADD_CART_ITEM, value: { quantity: -obj.quantity } });
             }
-    });
+        });
 
 }
 
-addFavoriteProduct = ( obj ) => {
+addFavoriteProduct = (obj) => {
     globals.fetch(
         "https://www.flormar.com.tr/webapi/v3/User/addFavoriteProduct",
         JSON.stringify({
             "productId": obj.id,
-        }), ( answer ) => {
+        }), (answer) => {
             // do nothing
-    });
+        });
 }
 
-deleteFavoriteProduct = ( obj ) => {
+deleteFavoriteProduct = (obj) => {
     globals.fetch(
         "https://www.flormar.com.tr/webapi/v3/User/deleteFavoriteProduct",
         JSON.stringify({
             "productId": obj.id,
-        }), ( answer ) => {
+        }), (answer) => {
             // do nothing
-    });
+        });
 }
