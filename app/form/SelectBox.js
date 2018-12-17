@@ -3,6 +3,7 @@ import {
     View,
     StyleSheet,
     Image,
+    TouchableOpacity,
 } from 'react-native';
 import { Container, Minus99MultipleSelect } from './';
 import {
@@ -118,6 +119,12 @@ class SelectBox extends Component {
         _self.child._onReset();
     }
 
+    _open = () => {
+        const _self = this;
+        /* Minus99MultipleSelect componenti selectbox açmak */
+        _self.child._openSelectionBox();
+    }
+
     render() {
         const _self = this,
             { title, error = false, errorMsg = null, multiple = false, defaultTitle = '', ico = 'drpIco', icoStyle = { width: 12, height: 8 }, modalTitle = 'KAPAT' } = _self.props.data,
@@ -127,13 +134,30 @@ class SelectBox extends Component {
             _self._callback();
 
         return (
-            <Container showHeader={showHeader} containerStyle={{ ...containerStyle }} wrapperStyle={{ ...wrapperStyle }} titleShow={true} title={title} error={error} errorMsg={errorMsg}>
-                
-                <Minus99MultipleSelect name={modalTitle} onRef={ref => (_self.child = ref)} defaultTitleStyle={defaultTitleStyle} fontStyle={fontStyle} defaultTitle={defaultTitle} callback={_self._closed} selected={_self._getIndex()} multiple={multiple} items={_self._getItems()} />
-                
-                <Image source={ICONS[ico]} style={icoStyle} />
-
-            </Container>
+            <TouchableOpacity
+                activeOpacity={0.4}
+                onPress={_self._open}>
+                <Container
+                    showHeader={showHeader}
+                    containerStyle={{ ...containerStyle }}
+                    wrapperStyle={{ ...wrapperStyle }}
+                    titleShow={true}
+                    title={title}
+                    error={error}
+                    errorMsg={errorMsg}>
+                    <Minus99MultipleSelect
+                        name={modalTitle}
+                        onRef={ref => (_self.child = ref)}
+                        defaultTitleStyle={defaultTitleStyle}
+                        fontStyle={fontStyle}
+                        defaultTitle={defaultTitle}
+                        callback={_self._closed}
+                        selected={_self._getIndex()}
+                        multiple={multiple}
+                        items={_self._getItems()} />
+                    <Image source={ICONS[ico]} style={icoStyle} />
+                </Container>
+            </TouchableOpacity>
         );
     }
 }

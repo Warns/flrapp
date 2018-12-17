@@ -145,8 +145,8 @@ class AddressList extends Component {
         const _self = this,
             { data = {} } = _self.props,
             { addressId } = data,
-            { setCart = {} } = _self.props.cart,
-            { shipAddressId, differentAddress } = setCart;
+            { optin = {} } = _self.props.cart,
+            { shipAddressId, differentAddress } = optin;
         let { selectShipAddress, selectedShipAddress, select, selected } = Translation['address'] || {};
 
         if (!differentAddress) {
@@ -188,8 +188,8 @@ class AddressList extends Component {
         const _self = this,
             { data = {} } = _self.props,
             { addressId } = data,
-            { setCart = {} } = _self.props.cart,
-            { billAddressId, differentAddress } = setCart,
+            { optin = {} } = _self.props.cart,
+            { billAddressId, differentAddress } = optin,
             { selectBillAddress, selectedBillAddress } = Translation['address'] || {};
 
         let view = null;

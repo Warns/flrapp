@@ -3,6 +3,7 @@ import {
     View,
     StyleSheet,
     Image,
+    TouchableOpacity,
 } from 'react-native';
 import { Container, Minus99MultipleSelect } from './';
 import {
@@ -120,7 +121,7 @@ class CountryPicker extends Component {
     setAjx = ({ key, data = {} }, callback) => {
         const _self = this,
             { uri, rel, keys } = _self.config[key] || {};
-            console.log(data);
+        console.log(data);
         Globals.AJX({ _self: _self, uri: uri, data: data }, function (d) {
             let obj = {},
                 arr = d['data'][keys['arr']];
@@ -222,6 +223,22 @@ class CountryPicker extends Component {
 
     }
 
+    /* selectionbox opened */
+    _openCountry = () => {
+        const _self = this;
+        _self.childCountry._openSelectionBox();
+    }
+
+    _openCity = () => {
+        const _self = this;
+        _self.childCity._openSelectionBox();
+    }
+
+    _openDistrict = () => {
+        const _self = this;
+        _self.childDistrict._openSelectionBox();
+    }
+
     render() {
         const _self = this,
             { errorState = {} } = _self.props.data,
@@ -234,58 +251,76 @@ class CountryPicker extends Component {
 
         return (
             <View style={{ ..._self.props.style }}>
-                <Container
-                    containerStyle={{ ..._self.props.countryContainerStyle }}
-                    wrapperStyle={{ ..._self.props.countryWrapperStyle }}
-                    showHeader={countryHeaderShow}
-                    title={'Ülke'}
-                    error={countryId['error'] || false}
-                    errorMsg={countryId['errorMsg'] || null}
+                <TouchableOpacity
+                    activeOpacity={0.8}
+                    onPress={_self._openCountry}
+                    style={{ ..._self.props.countryContainerStyle }}
                 >
-                    <Minus99MultipleSelect
-                        slug={'country'}
-                        callback={_self._closed}
-                        selected={_self._getIndex({ key: 'country' })}
-                        multiple={false}
-                        items={_self._getItems({ key: 'country' })}
-                    />
-                    {ico}
-                </Container>
+                    <Container
+                        wrapperStyle={{ ..._self.props.countryWrapperStyle }}
+                        showHeader={countryHeaderShow}
+                        title={'Ülke'}
+                        error={countryId['error'] || false}
+                        errorMsg={countryId['errorMsg'] || null}
+                    >
+                        <Minus99MultipleSelect
+                            onRef={ref => (_self.childCountry = ref)}
+                            slug={'country'}
+                            callback={_self._closed}
+                            selected={_self._getIndex({ key: 'country' })}
+                            multiple={false}
+                            items={_self._getItems({ key: 'country' })}
+                        />
+                        {ico}
+                    </Container>
+                </TouchableOpacity>
 
-                <Container
-                    containerStyle={{ ..._self.props.cityContainerStyle }}
-                    wrapperStyle={{ ..._self.props.cityWrapperStyle }}
-                    showHeader={cityHeaderShow}
-                    title={'İl'}
-                    error={cityId['error'] || false}
-                    errorMsg={cityId['errorMsg'] || null}
+                <TouchableOpacity
+                    activeOpacity={0.8}
+                    onPress={_self._openCity}
+                    style={{ ..._self.props.cityContainerStyle }}
                 >
-                    <Minus99MultipleSelect
-                        slug={'city'}
-                        callback={_self._closed}
-                        selected={_self._getIndex({ key: 'city' })}
-                        multiple={false}
-                        items={_self._getItems({ key: 'city' })}
-                    />
-                    {ico}
-                </Container>
+                    <Container
+                        wrapperStyle={{ ..._self.props.cityWrapperStyle }}
+                        showHeader={cityHeaderShow}
+                        title={'İl'}
+                        error={cityId['error'] || false}
+                        errorMsg={cityId['errorMsg'] || null}
+                    >
+                        <Minus99MultipleSelect
+                            onRef={ref => (_self.childCity = ref)}
+                            slug={'city'}
+                            callback={_self._closed}
+                            selected={_self._getIndex({ key: 'city' })}
+                            multiple={false}
+                            items={_self._getItems({ key: 'city' })}
+                        />
+                        {ico}
+                    </Container>
+                </TouchableOpacity>
 
-                <Container
-                    containerStyle={{ ..._self.props.districtContainerStyle }}
-                    wrapperStyle={{ ..._self.props.districtWrapperStyle }}
-                    showHeader={districtHeaderShow}
-                    title={'İlçe'}
-                    error={districtId['error'] || false}
-                    errorMsg={districtId['errorMsg'] || null}
+                <TouchableOpacity
+                    activeOpacity={0.8}
+                    onPress={_self._openDistrict}
+                    style={{ ..._self.props.districtContainerStyle }}
                 >
-                    <Minus99MultipleSelect
-                        slug={'district'}
-                        callback={_self._closed}
-                        selected={_self._getIndex({ key: 'district' })}
-                        multiple={false}
-                        items={_self._getItems({ key: 'district' })} />
-                    {ico}
-                </Container>
+                    <Container
+                        wrapperStyle={{ ..._self.props.districtWrapperStyle }}
+                        showHeader={districtHeaderShow}
+                        title={'İlçe'}
+                        error={districtId['error'] || false}
+                        errorMsg={districtId['errorMsg'] || null}
+                    >
+                        <Minus99MultipleSelect
+                            onRef={ref => (_self.childDistrict = ref)}
+                            slug={'district'}
+                            callback={_self._closed}
+                            selected={_self._getIndex({ key: 'district' })}
+                            multiple={false}
+                            items={_self._getItems({ key: 'district' })} />
+                        {ico}
+                    </Container>
+                </TouchableOpacity>
             </View>
         );
     }

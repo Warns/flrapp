@@ -10,7 +10,8 @@ import {
     RESET_CART,
     ADD_TO_FAVORITES,
     REMOVE_FROM_FAVORITES,
-    SET_CART_PROGRESS
+    SET_CART_PROGRESS,
+    SET_INSTALLMENT,
 } from 'root/app/helper/Constant';
 
 const cartInitialState = {
@@ -19,8 +20,8 @@ const cartInitialState = {
     cartProductsNumber: 0,
     cartInfo: {},
     cartNoResult: false,
-    
-    setCart: {
+
+    optin: {
         differentAddress: false, /* farklı adrese gönder; false = teslimat, fatura aynı / true = farklı */
         shipAddressId: 0, /* teslimat adresi */
         billAddressId: 0, /* fatura adresi */
@@ -71,48 +72,55 @@ export default function cart(state = cartInitialState, action) {
         }
 
         case SET_CART_ADDRESS: {
-            const { setCart = {} } = state,
-                { differentAddress = false } = setCart,
+            const { optin = {} } = state,
+                { differentAddress = false } = optin,
                 { addressId, addressType = 'shipAddress' } = action.value;
 
             if (!differentAddress)
                 return {
                     ...state,
-                    setCart: { ...state.setCart, shipAddressId: addressId, billAddressId: addressId }
+                    optin: { ...state.optin, shipAddressId: addressId, billAddressId: addressId }
                 }
             else {
                 if (addressType == 'shipAddress')
                     return {
                         ...state,
-                        setCart: { ...state.setCart, shipAddressId: addressId }
+                        optin: { ...state.optin, shipAddressId: addressId }
                     }
                 else if (addressType == 'billAddress')
                     return {
                         ...state,
-                        setCart: { ...state.setCart, billAddressId: addressId }
+                        optin: { ...state.optin, billAddressId: addressId }
                     }
             }
         };
         case SET_DIFFERENT_ADDRESS: {
-            const { setCart = {} } = state,
-                { shipAddressId } = setCart,
+            const { optin = {} } = state,
+                { shipAddressId } = optin,
                 b = action.value;
 
             if (b)
                 return {
                     ...state,
-                    setCart: { ...state.setCart, differentAddress: b, billAddressId: 0 }
+                    optin: { ...state.optin, differentAddress: b, billAddressId: 0 }
                 }
             else
                 return {
                     ...state,
-                    setCart: { ...state.setCart, billAddressId: shipAddressId, differentAddress: b }
+                    optin: { ...state.optin, billAddressId: shipAddressId, differentAddress: b }
                 }
         };
         case SET_CART_CARGO: {
             return {
                 ...state,
-                setCart: { ...state.setCart, cargoId: action.value }
+                optin: { ...state.optin, cargoId: action.value }
+            }
+        };
+        case SET_INSTALLMENT: {
+            const { bankId = 0, installmentId = 0 } = action.value || {};
+            return {
+                ...state,
+                optin: { ...state.optin, bankId: bankId, installmentId: installmentId }
             }
         };
         case SET_CART_NO_RESULT: {
@@ -125,7 +133,7 @@ export default function cart(state = cartInitialState, action) {
             return {
                 ...state,
                 cartNoResult: false,
-                setCart: {
+                optin: {
                     differentAddress: false,
                     shipAddressId: 0,
                     billAddressId: 0,
@@ -135,7 +143,7 @@ export default function cart(state = cartInitialState, action) {
                     bankId: 0,
                     installmentId: 0,
                     usePoint: 0,
-                    useBankPoint: true,
+                    useBankPoint: false,
                     cartLocation: '',
                     paymentNote: '',
                     serviceId: 0

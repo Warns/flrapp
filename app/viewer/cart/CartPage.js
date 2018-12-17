@@ -94,6 +94,7 @@ const Cart = class Main extends Component {
         }
     }
 
+    /* redux cartInfo ve cartItems update */
     _response = ({ type, data }) => {
         const _self = this;
         if (type === DATA_LOADED) {

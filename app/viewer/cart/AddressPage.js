@@ -21,7 +21,7 @@ import {
     SET_CART_ADDRESS,
     CARGO_CLICKED,
     CART_FOOTER_MARGIN_BOTTOM,
-    CART_BACKGROUND_COLOR_1, 
+    CART_BACKGROUND_COLOR_1,
     CART_BACKGROUND_COLOR_2,
 } from 'root/app/helper/Constant';
 import { connect } from 'react-redux';
@@ -235,8 +235,8 @@ const Address = class Main extends Component {
     /* yapılan seçimlere göre cart tekrardan set etmek */
     _setCart = (obj, callback) => {
         const _self = this,
-            { setCart = {} } = _self.props.cart,
-            { shipAddressId = 0, billAddressId = 0 } = setCart,
+            { optin = {} } = _self.props.cart,
+            { shipAddressId = 0, billAddressId = 0 } = optin,
             { cargoId } = obj;
         _self.props.dispatch({ type: SET_CART_CARGO, value: cargoId });
         _self.setAjx({
@@ -292,8 +292,8 @@ const Address = class Main extends Component {
     _onPress = () => {
         const _self = this,
             { navigation, cart = {} } = _self.props,
-            { setCart = {} } = cart,
-            { shipAddressId = 0, billAddressId = 0, differentAddress = false, cargoId = 0 } = setCart,
+            { optin = {} } = cart,
+            { shipAddressId = 0, billAddressId = 0, differentAddress = false, cargoId = 0 } = optin,
             { errorShipAddress, errorBillAddress, errorCargo } = Translation['address'] || {};
 
         if (shipAddressId == 0) {
@@ -302,9 +302,9 @@ const Address = class Main extends Component {
         } else if (differentAddress && billAddressId == 0) {
             Alert.alert(errorBillAddress);
             return false;
-        }else if( cargoId == 0 ){
+        } else if (cargoId == 0) {
             Alert.alert(errorCargo);
-            return false;     
+            return false;
         }
 
         /*if (navigation)
@@ -326,12 +326,31 @@ const Address = class Main extends Component {
 
     _getCargoAjx = () => {
         const _self = this,
-            { setCart = {} } = _self.props.cart,
-            { shipAddressId = 0 } = setCart;
+            { optin = {} } = _self.props.cart,
+            { shipAddressId = 0 } = optin;
 
         _self.setAjx({ uri: Utils.getURL({ key: 'cart', subKey: 'getCargo' }), data: { shipAddressId: shipAddressId } }, (res) => {
             const { status, data = {} } = res,
                 { cargoes = [] } = data;
+
+            /*const cargoes = [
+                {
+                    " isPaymentAtDoor": false,
+                    "cargoIcon": "http://mcdn.flormar.com.tr/images/nakLogo/nakImg170.jpg",
+                    "cargoId": 170,
+                    "cargoName": "Yurt İçi Kargo",
+                    "isDefault": true,
+                    "price": 0,
+                },
+                {
+                    " isPaymentAtDoor": false,
+                    "cargoIcon": "http://mcdn.flormar.com.tr/images/nakLogo/nakImg170.jpg",
+                    "cargoId": 180,
+                    "cargoName": "Aras Kargo",
+                    "isDefault": false,
+                    "price": 0,
+                },
+            ];*/
 
             _self.setState({ cargoes: cargoes });
 
@@ -381,8 +400,8 @@ const Address = class Main extends Component {
 
     _differentAddressButton = () => {
         const _self = this,
-            { setCart = {} } = _self.props.cart,
-            { differentAddress = false } = setCart,
+            { optin = {} } = _self.props.cart,
+            { differentAddress = false } = optin,
             checkboxConfig = {
                 desc: 'Faturayı başka adrese gönder.',
                 value: differentAddress

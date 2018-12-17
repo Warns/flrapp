@@ -16,7 +16,8 @@ import {
     SET_CART_PROGRESS,
     CART_FOOTER_MARGIN_BOTTOM,
     CART_BACKGROUND_COLOR_1,
-    CART_BACKGROUND_COLOR_2
+    CART_BACKGROUND_COLOR_2,
+    SET_INSTALLMENT
 } from 'root/app/helper/Constant';
 import { connect } from 'react-redux';
 import Footer from './Footer';
@@ -28,7 +29,7 @@ import UnderSide from './UnderSide';
 import { createMaterialTopTabNavigator } from 'react-navigation';
 import { Minus99HorizontalTabs } from 'root/app/components';
 
-
+const Translation = require('root/app/helper/Translation.js');
 const Utils = require('root/app/helper/Global.js');
 const Globals = require('root/app/globals.js');
 
@@ -257,31 +258,11 @@ class CrediCart extends Component {
     _getInstallmentAjx = (val) => {
         const _self = this;
         setAjx({ _self: _self, uri: Utils.getURL({ key: 'cart', subKey: 'getInstallment' }), data: { bin: val } }, (res) => {
-            const { status, data = {} } = res,
+            let { status, data = {} } = res,
                 { creditCarts = [] } = data,
                 { installments = [] } = creditCarts[0];
 
-            if (status == 200)
-                _self.setState({ installments: installments })
-
-        });
-    }
-
-    _getInstallmentDsc = (item) => {
-        const { installmentCount = 1, monthlyPrice = '', Currency } = item;
-
-        return installmentCount == 1 ? 'Tek Çekim' : (installmentCount + ' taksit, aylık ' + monthlyPrice.toFixed(2) + ' ' + Currency);
-    }
-
-    _getInstallments = () => {
-        const _self = this,
-            { installments = [] } = _self.state;
-
-        let view = null;
-
-        if (installments.length > 0) {
-
-            const kkk = [
+            /*installments = [
                 {
                     "bankId": 231,
                     "installmentId": 1043,
@@ -312,23 +293,74 @@ class CrediCart extends Component {
                     "Currency": "TL",
                     "rate": "0"
                 }
-            ];
+            ];*/
+
+            /* tek bir taksit seçeneği varsa redux yazdır */
+            if (installments.length == 1)
+                _self._setInstallment(installments[0]);
+
+            if (status == 200)
+                _self.setState({ installments: installments })
+
+        });
+    }
+
+    _getInstallmentDsc = (item) => {
+        const { installmentCount = 1, monthlyPrice = '', Currency } = item;
+
+        return installmentCount == 1 ? 'Tek Çekim' : (installmentCount + ' taksit, aylık ' + monthlyPrice.toFixed(2) + ' ' + Currency);
+    }
 
 
+    _getInstallmentData = (value) => {
+        const _self = this,
+            { installments = [] } = _self.state;
+        return installments.filter((item) => {
+            const { installmentId } = item;
+            if (installmentId == value)
+                return item;
+        });
+    }
 
-            const values = kkk.map((item) => {
+    /* selectbox taksit seçeneği seçildikten sonra */
+    _onChangeInstallment = (obj) => {
+        const _self = this,
+            { value = -1 } = obj;
+        if (value != -1)
+            _self._setInstallment((_self._getInstallmentData(value) || [])[0]);
+        else
+            _self._setInstallment({ bankId: 0, installmentId: 0 });
+    }
+
+    _setInstallment = (data) => {
+        store.dispatch({ type: SET_INSTALLMENT, value: data });
+    }
+
+    _getInstallments = () => {
+        let _self = this,
+            { installments = [] } = _self.state;
+
+        let view = null;
+
+        if (installments.length > 0) {
+
+            const values = installments.map((item) => {
                 const { installmentId = '' } = item;
                 return { key: _self._getInstallmentDsc(item), value: installmentId };
-            }),
-                obj = { values: values, value: -1 };
+            });
+
+            if (values.length > 1)
+                values.unshift({ key: Translation['dropdown']['choose'], value: -1 });
+
+            const obj = { defaultTitle: 'Taksit:', values: values, value: -1, ico: 'rightArrow', icoStyle: { width: 40, height: 40 } };
 
             view = <SelectBox
-                fontStyle={{ fontSize: 12, fontFamily: 'RegularTyp2', }}
+                fontStyle={{ fontFamily: 'Bold', fontSize: 16 }}
                 showHeader={false}
-                wrapperStyle={{ width: 85, height: 30, borderRadius: 15 }}
-                containerStyle={{ marginBottom: 0 }}
+                containerStyle={{ marginLeft: 20, marginRight: 20, marginBottom: 0, }}
+                wrapperStyle={{ height: 60, borderWidth: 0, borderBottomColor: '#d8d8d8', borderBottomWidth: 1, paddingLeft: 0, paddingRight: 0, }}
                 closed={true}
-                callback={_self._onChange}
+                callback={_self._onChangeInstallment}
                 data={obj}
             />
         }
@@ -350,11 +382,11 @@ class CrediCart extends Component {
             if (count >= num && _self.cartControl) {
                 _self.cartControl = false;
                 _self._getInstallmentAjx(val.substr(0, num));
-            } else if (count < num && !_self.cartControl){
+            } else if (count < num && !_self.cartControl) {
                 _self.cartControl = true;
                 _self.setState({ installments: [] });
+                _self._setInstallment({ bankId: 0, installmentId: 0 });
             }
-                
         }
     }
 
@@ -549,7 +581,7 @@ const Payment = class Main extends Component {
     _getPayment = () => {
         const _self = this,
             { cart = {} } = _self.props,
-            { cargoId = 0 } = cart.setCart;
+            { cargoId = 0 } = cart.optin;
 
         setAjx({ _self: _self, uri: Utils.getURL({ key: 'cart', subKey: 'getPayment' }), data: { cargoId: cargoId } }, (res) => {
             const { status, data = {} } = res,
