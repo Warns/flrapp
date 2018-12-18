@@ -2,20 +2,19 @@
 import React from 'react';
 import {
   Text,
-  Image,
   View,
   TouchableOpacity,
 } from 'react-native';
 
-styles = require('../../app/styles.js');
+styles = require('root/app/styles.js');
 
-import TextButton from '../../app/UI/TextButton';
+import TextButton from 'root/app/UI/TextButton';
 
 // Let's go
 
-export default class BoxButton extends React.Component{
+class ReadMoreText extends React.Component {
 
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
 
@@ -29,19 +28,22 @@ export default class BoxButton extends React.Component{
     this.setState({ showMore: !current });
   }
 
-  render(){
+  render() {
 
-    const { more, less, numberOfLines } = this.props;
+    const { more, less, numberOfLines, style } = this.props;
 
-    var buttonLabel = this.state.showMore ? ( less || "SHOW LESS" ) : ( more || "SHOW MORE" );
+    var buttonLabel = this.state.showMore ? (less || "SHOW LESS") : (more || "SHOW MORE");
     var num = this.state.showMore ? null : (numberOfLines || null);
 
-    return(
+    return (
       <View>
-        <Text numberOfLines={num} style={[styles.normal, {lineHeight:24}]}>{this.props.children}</Text>
-        <View style={{height:10}} />
-        <TextButton name={buttonLabel} callback={this._onPress} />
+        <Text style={style} numberOfLines={num}>{this.props.children}</Text>
+        <TouchableOpacity callback={this._onPress}>
+          <Text style={style}>{buttonLabel}</Text>
+        </TouchableOpacity>
       </View>
     );
   }
 }
+
+export { ReadMoreText }

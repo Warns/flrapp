@@ -11,6 +11,7 @@ export * from './Buttons/LoadingButton';
 export * from './Buttons/RatingButton';
 export * from './Buttons/DoubleClickButton';
 export * from './Buttons/IconButton';
+export * from './ReadMoreText';
 
 // Other
 export * from './Item';

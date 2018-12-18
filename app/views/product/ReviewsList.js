@@ -21,11 +21,11 @@ class ProductReviewsList extends React.Component {
     }
 
     _onAddCommentPress = () => {
-
+        this.props.navigation.navigate('productReview', {});
     }
 
     componentDidMount() {
-        Utils.ajx({ uri: 'https://stg.api.bazaarvoice.com/data/reviews.json?apiversion=5.4&passkey=caB45h2jBqXFw1OE043qoMBD1gJC8EwFNCjktzgwncXY4&Filter=ProductId:data-gen-moppq9ekthfzbc6qff3bqokie&Sort=Rating:desc&Limit=10' }, (result) => {
+        Utils.ajx({ uri: 'https://stg.api.bazaarvoice.com/data/reviews.json?apiversion=5.4&passkey=caB45h2jBqXFw1OE043qoMBD1gJC8EwFNCjktzgwncXY4&Filter=ProductId:data-gen-moppq9ekthfzbc6qff3bqokie&Sort=Rating:desc&Limit=30' }, (result) => {
             if (result['type'] == 'success')
                 this.setState({ data: result.data });
         });
@@ -122,13 +122,13 @@ class ProductSkeleton extends React.Component {
         return (
             <View style={{ flex: 1, marginTop: 25, marginBottom: 25 }}>
                 <View style={{ width: 140, height: 16, backgroundColor: '#CFC1BE', }}></View>
-                <View style={{ width: 68, height: 12, position: 'relative', overflow: 'hidden', marginTop: 2, marginRight: 10 }}>
+                <View style={{ width: 68, height: 12, position: 'relative', overflow: 'hidden', marginTop: 2, marginRight: 10, zIndex: 1 }}>
                     <Image source={ICONS['stars']} style={{ width: 68, height: 72, position: 'absolute', top: 0 }} />
                 </View>
-                <View style={{ width: "100%", height: 12, marginTop: 5, backgroundColor: '#E6E0DF', }}></View>
-                <View style={{ width: "90%", height: 12, marginTop: 5, backgroundColor: '#E6E0DF', }}></View>
-                <View style={{ width: "95%", height: 12, marginTop: 5, backgroundColor: '#E6E0DF', }}></View>
-                <View style={{ width: "50%", height: 12, marginTop: 5, backgroundColor: '#E6E0DF', }}></View>
+                <View style={{ width: "100%", height: 12, marginTop: 7, backgroundColor: '#E6E0DF', }}></View>
+                <View style={{ width: "90%", height: 12, marginTop: 7, backgroundColor: '#E6E0DF', }}></View>
+                <View style={{ width: "95%", height: 12, marginTop: 7, backgroundColor: '#E6E0DF', }}></View>
+                <View style={{ width: "50%", height: 12, marginTop: 7, backgroundColor: '#E6E0DF', }}></View>
             </View>
         )
     }
@@ -148,7 +148,7 @@ class ProductRender extends React.Component {
             <View style={{ flex: 1 }}>
                 <Text style={{ fontSize: 16, fontWeight: 'bold', marginTop: 25 }}>{item.Title}</Text>
                 <View style={{ flexDirection: 'row', marginTop: 10, marginBottom: 10, }}>
-                    <View style={{ width: 68, height: 12, position: 'relative', overflow: 'hidden', marginTop: 2, marginRight: 10 }}>
+                    <View style={{ width: 68, height: 12, position: 'relative', overflow: 'hidden', marginTop: 2, marginRight: 10, zIndex: 1 }}>
                         <Image source={ICONS['stars']} style={{ width: 68, height: 72, position: 'absolute', top: _ratingTop }} />
                     </View>
                     <Text style={{ fontSize: 13, color: '#6C6C6C', }}>{item.Rating + "/" + item.RatingRange}</Text>
