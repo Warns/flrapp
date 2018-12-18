@@ -21,7 +21,7 @@ import {
     SET_CART_ADDRESS,
     CARGO_CLICKED,
     CART_FOOTER_MARGIN_BOTTOM,
-    CART_BACKGROUND_COLOR_1, 
+    CART_BACKGROUND_COLOR_1,
     CART_BACKGROUND_COLOR_2,
 } from 'root/app/helper/Constant';
 import { connect } from 'react-redux';
@@ -303,13 +303,13 @@ const Address = class Main extends Component {
         } else if (differentAddress && billAddress == 0) {
             Alert.alert(errorBillAddress);
             return false;
-        }else if( cargoId == 0 ){
+        } else if (cargoId == 0) {
             Alert.alert(errorCargo);
-            return false;     
+            return false;
         }
 
-        /*if (navigation)
-            navigation.navigate('Payment', {});*/
+        if (navigation)
+            navigation.navigate('Payment', {});
     }
 
     /* kargoları listele */

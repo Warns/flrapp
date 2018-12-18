@@ -24,6 +24,8 @@ import ListPage from '../app/views/List';
 import YoutubePlayer from 'root/app/sub-views/YoutubePlayer';
 import { CartHeader, DefaultHeader, MinimalHeader } from 'root/app/components/';
 
+import { ReviewsList } from '../app/views/product/ReviewsList';
+
 
 //import registerForPushNotificationsAsync from '../api/registerForPushNotificationsAsync';
 
