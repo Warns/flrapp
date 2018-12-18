@@ -9,6 +9,7 @@ module.exports = {
         exitButton: 'Çıkış yapmak istediğinize emin misiniz?'
     },
     dropdown:{
+        chooseInstallment: 'Taksit Seçiniz',
         choose: 'Seçiniz',
         countryChoose: 'Ülke Seçiniz',
         cityChoose: 'İl Seçiniz',
