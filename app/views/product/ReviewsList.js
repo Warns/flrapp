@@ -88,31 +88,34 @@ class ProductReviewsList extends React.Component {
 
 class ListItem extends React.Component {
 
-    state = {
-        item: null,
-    }
-
-    _onPress = () => {
-        //this.props.onPressItem(this.props.index, this.props.item);
-    }
-
     render() {
 
-        const { index, item } = this.props;
+        const { item } = this.props;
 
-        product = item ? <ProductRender item={item} /> : <ProductSkeleton item={item} />;
+        Moment.locale('tr-TR');
+        let _date = Moment(item.SubmissionTime).format('D MMM YYYY');
 
-        //let thumbnail = item.smallImageUrl.replace('mobile_image_1', 'mobile_texture').replace('http', 'https');
+        let _ratingTop = - Math.floor(item.Rating) * 12;
 
         return (
-            <TouchableOpacity
-                activeOpacity={0.9}
-                ref='Single'
-                onPress={this._onPress}>
-                <View style={{ marginRight: 20, marginLeft: 20, padding: 10, borderBottomWidth: 1, borderBottomColor: "#D8D8D8", flexDirection: 'column-reverse', }}>
-                    {product}
+
+            <View style={{ marginRight: 20, marginLeft: 20, padding: 10, borderBottomWidth: 1, borderBottomColor: "#D8D8D8", flexDirection: 'column-reverse', }}>
+                <Text style={{ fontSize: 16, fontWeight: 'bold', marginTop: 25 }}>{item.Title}</Text>
+                <View style={{ flexDirection: 'row', marginTop: 10, marginBottom: 10, }}>
+                    <View style={{ width: 68, height: 12, position: 'relative', overflow: 'hidden', marginTop: 2, marginRight: 10, zIndex: 1 }}>
+                        <Image source={ICONS['stars']} style={{ width: 68, height: 72, position: 'absolute', top: _ratingTop }} />
+                    </View>
+                    <Text style={{ fontSize: 13, color: '#6C6C6C', }}>{item.Rating + "/" + item.RatingRange}</Text>
+                    <Text style={{ flex: 1, fontSize: 13, color: '#6C6C6C', alignContent: 'flex-end', textAlign: 'right', }}>{_date}</Text>
                 </View>
-            </TouchableOpacity>
+
+                <Text style={{ fontSize: 15, color: '#6C6C6C' }}>{item.ReviewText}</Text>
+
+                <View style={{ flexDirection: 'row', marginTop: 15, marginBottom: 25 }}>
+                    <Text style={{ fontSize: 15, fontWeight: 'bold', }}>{item.UserNickname}</Text>
+                    <Text style={{ fontSize: 15, marginLeft: 10, color: '#6C6C6C' }}>{item.UserLocation}</Text>
+                </View>
+            </View>
         );
     }
 };
@@ -129,38 +132,6 @@ class ProductSkeleton extends React.Component {
                 <View style={{ width: "90%", height: 12, marginTop: 7, backgroundColor: '#E6E0DF', }}></View>
                 <View style={{ width: "95%", height: 12, marginTop: 7, backgroundColor: '#E6E0DF', }}></View>
                 <View style={{ width: "50%", height: 12, marginTop: 7, backgroundColor: '#E6E0DF', }}></View>
-            </View>
-        )
-    }
-}
-
-class ProductRender extends React.Component {
-    render() {
-
-        let { item } = this.props;
-
-        Moment.locale('tr-TR');
-        let _date = Moment(item.SubmissionTime).format('D MMM YYYY');
-
-        let _ratingTop = - Math.floor(item.Rating) * 12;
-
-        return (
-            <View style={{ flex: 1 }}>
-                <Text style={{ fontSize: 16, fontWeight: 'bold', marginTop: 25 }}>{item.Title}</Text>
-                <View style={{ flexDirection: 'row', marginTop: 10, marginBottom: 10, }}>
-                    <View style={{ width: 68, height: 12, position: 'relative', overflow: 'hidden', marginTop: 2, marginRight: 10, zIndex: 1 }}>
-                        <Image source={ICONS['stars']} style={{ width: 68, height: 72, position: 'absolute', top: _ratingTop }} />
-                    </View>
-                    <Text style={{ fontSize: 13, color: '#6C6C6C', }}>{item.Rating + "/" + item.RatingRange}</Text>
-                    <Text style={{ flex: 1, fontSize: 13, color: '#6C6C6C', alignContent: 'flex-end', textAlign: 'right', }}>{_date}</Text>
-                </View>
-
-                <Text style={{ fontSize: 15, color: '#6C6C6C' }}>{item.ReviewText}</Text>
-
-                <View style={{ flexDirection: 'row', marginTop: 15, marginBottom: 25 }}>
-                    <Text style={{ fontSize: 15, fontWeight: 'bold', }}>{item.UserNickname}</Text>
-                    <Text style={{ fontSize: 15, marginLeft: 10, color: '#6C6C6C' }}>{item.UserLocation}</Text>
-                </View>
             </View>
         )
     }

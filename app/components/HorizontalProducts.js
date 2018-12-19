@@ -16,24 +16,24 @@ import {
 
 globals = require('root/app/globals.js');
 
-class HorizontalProducts extends React.Component{
+class HorizontalProducts extends React.Component {
 
   state = {
     items: [],
   }
 
-  componentDidMount(){
+  componentDidMount() {
 
     let Ids = [];
-                
-    for( var i in this.props.items )
-        Ids.push(this.props.items[i].productId);
+
+    for (var i in this.props.items)
+      Ids.push(this.props.items[i].productId);
 
     this._fetchItems(Ids);
-    
+
   }
 
-  _fetchItems = ( Ids ) =>{
+  _fetchItems = (Ids) => {
 
     globals.fetch(
       "https://www.flormar.com.tr/webapi/v3/Product/getProductList",
@@ -46,35 +46,35 @@ class HorizontalProducts extends React.Component{
     );
   }
 
-  _handleFetchResults = ( answer ) =>{
+  _handleFetchResults = (answer) => {
 
-    if( answer.status == 200)
-    this.setState({
-      items: answer.data.products,
-    })
+    if (answer.status == 200)
+      this.setState({
+        items: answer.data.products,
+      })
   }
 
   _keyExtractor = (item, index) => index + 'k';
 
-  _renderItem = ({item, index}) => {
-    return(
+  _renderItem = ({ item, index }) => {
+    return (
       <ListItem item={item} index={index} onPressItem={this._onPressItem} />
     )
   }
 
-  _onPressItem = ( item ) => {
+  _onPressItem = (item) => {
 
-    console.log( item );
+    console.log(item);
 
-    this.props.onPress( item.productId );
+    this.props.onPress(item.productId);
 
   }
 
-  render(){
+  render() {
 
-   //console.log('render list');
+    //console.log('render list');
 
-    return(
+    return (
       <View>
         <FlatList
           //style={{borderWidth:1, borderColor:'red'}}
@@ -93,7 +93,7 @@ class HorizontalProducts extends React.Component{
 class ListItem extends React.Component {
 
   state = {
-      item: null,
+    item: null,
   }
 
   _onPress = () => {
@@ -103,22 +103,22 @@ class ListItem extends React.Component {
     })
   }
 
-  render(){
+  render() {
 
     const { index, item } = this.props;
-    
+
     product = item ? <ProductRender item={item} /> : <ProductSkeleton item={item} />;
 
     leftSpace = index == 0 ? 20 : 0;
 
     //let thumbnail = item.smallImageUrl.replace('mobile_image_1', 'mobile_texture').replace('http', 'https');
 
-    return(
+    return (
       <TouchableOpacity
         activeOpacity={0.9}
         ref='Single'
         onPress={this._onPress}>
-        <View style={{width:160, height:260, marginRight:10, marginLeft:leftSpace, flexDirection:'column-reverse',}}>
+        <View style={{ width: 160, height: 260, marginRight: 10, marginLeft: leftSpace, flexDirection: 'column-reverse', }}>
           {product}
         </View>
       </TouchableOpacity>
@@ -126,34 +126,37 @@ class ListItem extends React.Component {
   }
 };
 
-class ProductSkeleton extends React.Component{
-    render(){
-        return(
-           <View style={{flex:1, borderWidth:1, borderColor:"#eeeeee", borderRadius:3, padding:10 }}>
-               <View style={{width:140, height:175, backgroundColor:'#dddddd',}}></View>
-               <View style={{width:40, height:15, marginTop:5, backgroundColor:'#eee',}}></View>
-               <View style={{width:100, height:12, marginTop:5, backgroundColor:'#eee',}}></View>
-           </View>
-        )
-    }
+class ProductSkeleton extends React.Component {
+  render() {
+    return (
+      <View style={{ flex: 1, borderWidth: 1, borderColor: "#eeeeee", borderRadius: 3, padding: 10 }}>
+        <View style={{ width: 140, height: 175, backgroundColor: '#dddddd', }}></View>
+        <View style={{ width: 40, height: 15, marginTop: 5, backgroundColor: '#eee', }}></View>
+        <View style={{ width: 100, height: 12, marginTop: 5, backgroundColor: '#eee', }}></View>
+      </View>
+    )
+  }
 }
 
-class ProductRender extends React.Component{
-    render(){
-        return(
-            <View style={{flex:1, borderWidth:1, borderColor:"#eeeeee", borderRadius:3, padding:10, paddingTop:5}}>
-                <Image
-                    style={{width: 140, height: 175, resizeMode:'cover',}}
-                    source={{uri: this.props.item.smallImageUrl }}
-                />
-                <View>
-                    <Text style={{fontFamily:'Bold', fontSize:14}}>₺{this.props.item.salePrice}</Text>
-                </View>
-               <Text style={{fontSize:12}}>{this.props.item.productName}</Text>
-               <Text style={{fontSize:12, color:'#9B9B9B'}}>{this.props.item.productTypes.length} Renk</Text>
-           </View>
-        )
-    }
+class ProductRender extends React.Component {
+  render() {
+
+    console.log(this.props.item.smallImageUrl);
+
+    return (
+      <View style={{ flex: 1, borderWidth: 1, borderColor: "#eeeeee", borderRadius: 3, padding: 10, paddingTop: 5 }}>
+        <Image
+          style={{ width: 140, height: 175, resizeMode: 'cover', }}
+          source={{ uri: this.props.item.smallImageUrl }}
+        />
+        <View>
+          <Text style={{ fontFamily: 'Bold', fontSize: 14 }}>₺{this.props.item.salePrice}</Text>
+        </View>
+        <Text style={{ fontSize: 12 }}>{this.props.item.productName}</Text>
+        <Text style={{ fontSize: 12, color: '#9B9B9B' }}>{this.props.item.productTypes.length} Renk</Text>
+      </View>
+    )
+  }
 }
 
-export {HorizontalProducts};
+export { HorizontalProducts };

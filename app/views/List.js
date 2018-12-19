@@ -132,22 +132,22 @@ export default class List extends React.Component {
     filterValues = filterValues || '';
     const _self = this,
       { category = {} } = _self.props;
-      /*  
-        ex:
-        [{
-                title: name,
-                img: Utils.getImage(image),
-                utpId: utpCode
-            }]
+    /*  
+      ex:
+      [{
+              title: name,
+              img: Utils.getImage(image),
+              utpId: utpCode
+          }]
 
-            veya 
+          veya 
 
-            [{
-                title: name,
-                img: Utils.getImage(image),
-                id: id
-            }]
-      */
+          [{
+              title: name,
+              img: Utils.getImage(image),
+              id: id
+          }]
+    */
     globals.fetch(
       "https://www.flormar.com.tr/webapi/v3/Product/getProductList",
       JSON.stringify({

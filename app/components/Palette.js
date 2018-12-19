@@ -10,27 +10,27 @@ import {
 import { ICONS } from 'root/app/helper/Constant';
 import { Minus99MultipleSelect, SelectBox } from 'root/app/form';
 
-class Palette extends React.Component{
+class Palette extends React.Component {
 
   state = {
     selected: 0,
     items: [],
-    index:0,
+    index: 0,
     width: 50,
   }
 
-  componentWillMount(){
+  componentWillMount() {
     let index = 0;
-    let {items, selected, width} = this.props;
+    let { items, selected, width } = this.props;
 
-    for( i in items )
-      if(items[i].shortCode === selected)
+    for (i in items)
+      if (items[i].shortCode === selected)
         break;
-        index = i;
+    index = i;
 
-    if( items.length * this.state.width < width ){
+    if (items.length * this.state.width < width) {
       this.setState({
-        width: Math.ceil( width / items.length ),
+        width: Math.ceil(width / items.length),
       })
     }
 
@@ -43,9 +43,9 @@ class Palette extends React.Component{
 
   _keyExtractor = (item, index) => index + 'k';
 
-  _renderItem = ({item, index}) => {
+  _renderItem = ({ item, index }) => {
     let sel = item.shortCode === this.state.selected ? true : false;
-    return(
+    return (
       <ListItem isSelected={sel} width={this.state.width} item={item} index={index} onPressItem={this._onPressItem} />
     )
   }
@@ -84,16 +84,16 @@ class Palette extends React.Component{
     return { length: 50, offset: 50 * index, index }
   };
 
-  render(){
+  render() {
 
-    let {items, width} = this.props;
+    let { items, width } = this.props;
     let colorsArray = [];
 
     //console.log('palette', items.length);
 
-    if( items.length * this.state.width < width ){
+    if (items.length * this.state.width < width) {
       this.setState({
-        width: Math.ceil( width / items.length ),
+        width: Math.ceil(width / items.length),
       })
     }
 
@@ -109,8 +109,8 @@ class Palette extends React.Component{
 */
     //console.log('>>>..', this.state.selected);
 
-    return(
-      <View style={{flex:1, backgroundColor:'#ffffff', maxHeight:165, height:120, backgroundColor:'#dddddd'}}>
+    return (
+      <View style={{ flex: 1, backgroundColor: '#ffffff', maxHeight: 165, height: 120, backgroundColor: '#dddddd' }}>
         <FlatList
           //style={{borderWidth:1, borderColor:'red'}}
           scrollEnabled={true}
@@ -119,15 +119,15 @@ class Palette extends React.Component{
           renderItem={this._renderItem}
           horizontal={true}
           showsHorizontalScrollIndicator={false}
-          
+
           ref='flatList'
         />
-        <View style={{backgroundColor:'#ffffff', height:60, flexDirection:'row', alignItems:'center', paddingLeft:20, paddingRight:20, }}>
-          <Text style={{fontSize:13, marginRight:5}}>RENK</Text>
-          <Text style={{color:'#6C6C6C', fontSize:13,}}>{ items[this.state.selected[0]].shortCode + ' ' + items[this.state.selected[0]].name }</Text>
-          <View style={{height:28, borderWidth:1, borderColor:'#979797', borderRadius:14, paddingLeft:10, paddingRight:3, right:20, position:'absolute', flexDirection:'row', alignItems:'center'}}>
-            <Text style={{fontSize:12}}>{items.length}</Text>
-            <Image source={(ICONS['downArrow'])} style={{width:28, height:28, resizeMode:'contain'}} />
+        <View style={{ backgroundColor: '#ffffff', height: 60, flexDirection: 'row', alignItems: 'center', paddingLeft: 20, paddingRight: 20, }}>
+          <Text style={{ fontSize: 13, marginRight: 5 }}>RENK</Text>
+          <Text style={{ color: '#6C6C6C', fontSize: 13, }}>{items[this.state.selected[0]].shortCode + ' ' + items[this.state.selected[0]].name}</Text>
+          <View style={{ height: 28, borderWidth: 1, borderColor: '#979797', borderRadius: 14, paddingLeft: 10, paddingRight: 3, right: 20, position: 'absolute', flexDirection: 'row', alignItems: 'center' }}>
+            <Text style={{ fontSize: 12 }}>{items.length}</Text>
+            <Image source={(ICONS['downArrow'])} style={{ width: 28, height: 28, resizeMode: 'contain' }} />
           </View>
         </View>
         { /*
@@ -155,27 +155,27 @@ class ListItem extends React.Component {
     this.props.onPressItem(this.props.index, this.props.item);
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.setState({
-        isSelected: this.props.isSelected,
+      isSelected: this.props.isSelected,
     });
   }
 
-  render(){
+  render() {
 
     const { item, index, width } = this.props;
 
-    let thumbnail = item.smallImageUrl.replace('mobile_image_1', 'mobile_texture').replace('http', 'https');
+    let thumbnail = item.smallImageUrl.replace('mobile_image_1', 'mobile_texture');//.replace('http', 'https');
 
-    return(
+    return (
       <TouchableOpacity
         activeOpacity={0.9}
         ref='Single'
         onPress={this._onPress}>
-        <View style={{width:width, height:60, flexDirection:'column-reverse'}}>
+        <View style={{ width: width, height: 60, flexDirection: 'column-reverse' }}>
           <Image
-            style={{width: width, height: 60, resizeMode:'cover',}}
-            source={{uri: thumbnail }}
+            style={{ width: width, height: 60, resizeMode: 'cover', }}
+            source={{ uri: thumbnail }}
           />
         </View>
       </TouchableOpacity>
