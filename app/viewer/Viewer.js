@@ -1246,6 +1246,39 @@ class OpportunityListItem extends Component {
     }
 }
 
+class BankTransferListItem extends Component {
+    /* 
+    {
+        "accountNo": "0016618",
+        "bankCampaignNote": "",
+        "bankDescription": "İş Bankası ve Maximum kart anlaşmalı bankalar",
+        "bankId": 409,
+        "bankLogo": "https://mcdn.flormar.com.tr/images/banka_logo/maximum.gif",
+        "bankName": "İş Bankası",
+        "ibanNo": "TR19 0006 4000 0012 4400 0166 18 <br> KOSAN KOZMETİK PAZARLAMA VE TİC. A.Ş.",
+    }
+    */
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        const _self = this,
+            { bankLogo, bankName, accountNo, ibanNo } = _self.props.data;
+
+        return (
+            <View style={{ flexDirection: 'row' }}>
+                <Image
+                    style={{ width: 49, height: 60 }}
+                    source={{ uri: Utils.getImage(bankLogo), resizeMode: 'contain' }}
+                />
+                <Text>{bankName}</Text>
+                <Text>{accountNo}</Text>
+                <Text>{ibanNo}</Text>
+            </View>
+        );
+    }
+}
+
 class ContentPlaceHolder extends Component {
 
     constructor(props) {
@@ -1740,6 +1773,8 @@ class Viewers extends Component {
             return <ContentPlaceHolder key={key} type={itemType} />;
 
         switch (itemType) {
+            case ITEMTYPE['BANKTRANSFER']:
+                return <BankTransferListItem key={key} index={index} callback={_self._callback} data={item} />;
             case ITEMTYPE['CUSTOMDETAIL']:
                 return <CustomDetailListItem key={key} index={index} callback={_self._callback} data={item} />;
             case ITEMTYPE['OPPORTUNITY']:

@@ -75,7 +75,8 @@ module.exports = {
             getCargo: '/webapi/v3/Cart/getCargo',
             getPayment: '/webapi/v3/Cart/getPayment',
             getAgreement: '/webapi/v3/Cart/getAgreement',
-            getInstallment: '/webapi/v3/Cart/getInstallment'
+            getInstallment: '/webapi/v3/Cart/getInstallment',
+            getBankTransfer: '/webapi/v3/Cart/getBankTransfer'
         }
     },
     customURLs: {

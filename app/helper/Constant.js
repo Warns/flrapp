@@ -80,6 +80,7 @@ export const VIEWERTYPE = {
 
 /* VIEWER FLATLIST ITEM TYPE */
 export const ITEMTYPE = {
+    BANKTRANSFER: 'bank_transfer',
     ADDRESS: 'address',
     FAVORITE: 'favorite',
     ORDER: 'order',
@@ -175,6 +176,8 @@ export const SET_NAVIGATION = 'SET_NAVIGATION';
 export const NAVIGATE = 'NAVIGATE';
 
 /* cart */
+export const BANK_TRANSFER = 'bankTransfer';
+export const CREDIT_CART = 'creditCart';
 export const SET_CART_ADDRESS = 'SET_CART_ADDRESS';
 export const SET_DIFFERENT_ADDRESS = 'SET_DIFFERENT_ADDRESS';
 export const CARGO_CLICKED = 'CARGO_CLICKED';
@@ -182,6 +185,7 @@ export const SET_INSTALLMENT = 'SET_INSTALLMENT';
 export const SET_CART_INFO = 'SET_CART_INFO';
 export const SET_CART_CARGO = 'SET_CART_CARGO';
 export const SET_CART_ITEMS = 'SET_CART_ITEMS';
+export const SET_PAYMENT = 'SET_PAYMENT';
 export const ADD_CART_ITEM = 'ADD_CART_ITEM';
 export const SET_CART_NO_RESULT = 'SET_CART_NO_RESULT';
 export const RESET_CART = 'RESET_CART';

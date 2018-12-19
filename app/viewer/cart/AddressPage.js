@@ -196,7 +196,7 @@ const Address = class Main extends Component {
 
     onWillFocus = () => {
         const _self = this;
-        _self.props.dispatch({ type: SET_CART_PROGRESS, value: "2/3" });
+        _self.props.dispatch({ type: SET_CART_PROGRESS, value: { progress: '2/3', cartLocation: 'delivery' } });
     }
 
     componentDidMount() {
@@ -233,28 +233,9 @@ const Address = class Main extends Component {
     }
 
     /* yapılan seçimlere göre cart tekrardan set etmek */
-    _setCart = (obj, callback) => {
-        const _self = this,
-            { optin = {} } = _self.props.cart,
-            { shipAddressId = 0, billAddressId = 0 } = optin,
-            { cargoId } = obj;
+    _setCart = ({ cargoId }) => {
+        const _self = this;
         _self.props.dispatch({ type: SET_CART_CARGO, value: cargoId });
-        _self.setAjx({
-            uri: Utils.getURL({ key: 'cart', subKey: 'setCart' }),
-            data: {
-                'shipAddressId': shipAddressId,
-                'billAddressId': billAddressId,
-                'cargoId': cargoId,
-                'cartLocation': 'delivery'
-            }
-        }, (res) => {
-            const { status } = res;
-            if (status == 200)
-                console.log('BAŞARILI....', res);
-
-            if (typeof callback !== 'undefined')
-                callback();
-        });
     }
 
     /* tek bir adres varsa seçili gelsin */
@@ -307,8 +288,8 @@ const Address = class Main extends Component {
             return false;
         }
 
-        if (navigation)
-            navigation.navigate('Payment', {});
+        /*if (navigation)
+            navigation.navigate('Payment', {});*/
     }
 
     /* kargoları listele */
@@ -330,10 +311,10 @@ const Address = class Main extends Component {
             { shipAddressId = 0 } = optin;
 
         _self.setAjx({ uri: Utils.getURL({ key: 'cart', subKey: 'getCargo' }), data: { shipAddressId: shipAddressId } }, (res) => {
-            const { status, data = {} } = res,
+            let { status, data = {} } = res,
                 { cargoes = [] } = data;
 
-            /*const cargoes = [
+            /*cargoes = [
                 {
                     " isPaymentAtDoor": false,
                     "cargoIcon": "http://mcdn.flormar.com.tr/images/nakLogo/nakImg170.jpg",
