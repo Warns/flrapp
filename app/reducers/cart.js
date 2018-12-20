@@ -13,6 +13,8 @@ import {
     SET_CART_PROGRESS,
     SET_INSTALLMENT,
     SET_PAYMENT,
+    SET_BANK_TRANSFER,
+    RESET_PAYMENT
 } from 'root/app/helper/Constant';
 
 const cartInitialState = {
@@ -166,16 +168,53 @@ export default function cart(state = cartInitialState, action) {
 
             return data;
         };
+        case SET_BANK_TRANSFER: {
+            const data = {
+                ...state,
+                bankTransfer: { ...state.bankTransfer, bankId: action.value },
+                optin: { ...state.optin, bankId: action.value, }
+            };
+
+            setCart(data['optin']);
+
+            return data;
+        };
         case SET_CART_NO_RESULT: {
             return {
                 ...state,
                 cartNoResult: action.value
             }
         };
+        case RESET_PAYMENT: {
+            const data = {
+                ...state,
+                creditCart: {
+                    bankId: 0,
+                    installmentId: 0
+                },
+                bankTransfer: {
+                    bankId: 0,
+                    installmentId: 0
+                },
+                optin: { ...state.optin, bankId: 0, installmentId: 0 }
+            };
+
+            setCart(data['optin']);
+
+            return data;
+        };
         case RESET_CART: {
             return {
                 ...state,
                 cartNoResult: false,
+                creditCart: {
+                    bankId: 0,
+                    installmentId: 0
+                },
+                bankTransfer: {
+                    bankId: 0,
+                    installmentId: 0
+                },
                 optin: {
                     differentAddress: false,
                     shipAddressId: 0,

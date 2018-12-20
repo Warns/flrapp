@@ -1,32 +1,37 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {
   Text,
-  Image,
   View,
   TouchableOpacity,
 } from 'react-native';
 
-styles = require('root/app/styles.js');
-
-// Let's go
-
-export default class BoxButton extends React.Component{
-  _onPress = () => {
-    this.props.callback(this.props.name);
+class BoxButton extends Component {
+  constructor(props) {
+    super(props);
   }
-  render(){
 
-    const boxColorStyle = this.props.boxColor ? {backgroundColor: this.props.boxColor} : null;
-    const textColorStyle = this.props.textColor ? {color: this.props.textColor} : null;
+  _onPressButton = () => {
+    const { callback, item = {}, sequence = 0 } = this.props;
+    if (callback)
+      callback({ item, sequence });
+  }
 
-    console.log(boxColorStyle, textColorStyle)
+  _measureDimensions = (e) => {
+    const { onDimensions, sequence = 0 } = this.props;
+    if (onDimensions)
+      onDimensions({ layout: e.nativeEvent.layout, sequence });
+  }
 
-    return(
-      <TouchableOpacity activeOpacity={0.9} onPress={this._onPress}>
-        <View style={[styles.boxButton, boxColorStyle]}>
-          <Text style={[styles.bold, styles.white, styles.small, textColorStyle]}>{this.props.name}</Text>
+  render() {
+    const _self = this;
+    return (
+      <TouchableOpacity activeOpacity={0.8} onPress={_self._onPressButton} onLayout={e => _self._measureDimensions(e)}>
+        <View style={[{ alignItems: "center", justifyContent: "center", borderColor: '#666666', borderWidth: 1, backgroundColor: "#FFFFFF", borderRadius: 3, height: 36, paddingLeft: 30, paddingRight: 30 }, { ..._self.props.wrapperStyle }]}>
+          <Text style={[{ fontFamily: 'Bold', fontSize: 14 }, { ..._self.props.textStyle }]}>{_self.props.children}</Text>
         </View>
       </TouchableOpacity>
-    );
+    )
   }
 }
+
+export { BoxButton };

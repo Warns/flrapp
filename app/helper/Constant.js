@@ -192,6 +192,9 @@ export const RESET_CART = 'RESET_CART';
 export const ADD_TO_FAVORITES = 'ADD_TO_FAVORITES';
 export const REMOVE_FROM_FAVORITES = 'REMOVE_FROM_FAVORITES';
 export const SET_CART_PROGRESS = 'SET_CART_PROGRESS';
+export const SET_BANK_TRANSFER = 'SET_BANK_TRANSFER';
+export const RESET_PAYMENT = 'RESET_PAYMENT';
+   
 
 /* general */
 export const SET_CATEGORIES = 'SET_CATEGORIES';

@@ -21,7 +21,8 @@ import {
     SET_INSTALLMENT,
     SET_PAYMENT,
     CREDIT_CART,
-    BANK_TRANSFER
+    BANK_TRANSFER,
+    RESET_PAYMENT
 } from 'root/app/helper/Constant';
 import { connect } from 'react-redux';
 import Footer from './Footer';
@@ -637,6 +638,8 @@ const Payment = class Main extends Component {
             { navigation } = _self.props;
 
         _self._isMounted = false;
+
+        _self.props.dispatch({ type: RESET_PAYMENT });
 
         if (navigation)
             _self._Listener.remove();

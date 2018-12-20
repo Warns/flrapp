@@ -13,7 +13,6 @@ import {
     Easing,
     Platform,
 } from 'react-native';
-import HTML from 'react-native-render-html';
 import {
     ICONS,
     FEEDSTYPE,
@@ -49,16 +48,17 @@ import {
     ReadMoreText,
     ShareButton,
 } from 'root/app/components';
-import { RatingButton, DoubleClickButton, IconButton } from 'root/app/UI';
+import { RatingButton, DoubleClickButton, IconButton, BoxButton } from 'root/app/UI';
 import { CountryPicker, SelectBox } from 'root/app/form';
 import { connect } from 'react-redux';
-import { AddressListItem } from './';
+import { AddressListItem, BankTransferListItem } from './';
 import { store } from 'root/app/store';
-import Placeholder from 'rn-placeholder';
 import YoutubePlayer from 'root/app/sub-views/YoutubePlayer';
 import {
     ParserHTML
 } from 'root/app/helper/';
+import Placeholder from 'rn-placeholder';
+import HTML from 'react-native-render-html';
 
 const Translation = require('root/app/helper/Translation.js');
 const Utils = require('root/app/helper/Global.js');
@@ -78,35 +78,6 @@ const config = {
     }
 };
 */
-
-class BoxButton extends Component {
-    constructor(props) {
-        super(props);
-    }
-
-    _onPressButton = () => {
-        const { callback, item = {}, sequence = 0 } = this.props;
-        if (callback)
-            callback({ item, sequence });
-    }
-
-    _measureDimensions = (e) => {
-        const { onDimensions, sequence = 0 } = this.props;
-        if (onDimensions)
-            onDimensions({ layout: e.nativeEvent.layout, sequence });
-    }
-
-    render() {
-        const _self = this;
-        return (
-            <TouchableOpacity activeOpacity={0.8} onPress={_self._onPressButton} onLayout={e => _self._measureDimensions(e)}>
-                <View style={[{ alignItems: "center", justifyContent: "center", borderColor: '#666666', borderWidth: 1, backgroundColor: "#FFFFFF", borderRadius: 3, height: 36, paddingLeft: 30, paddingRight: 30 }, { ..._self.props.wrapperStyle }]}>
-                    <Text style={[{ fontFamily: 'Bold', fontSize: 16 }, { ..._self.props.textStyle }]}>{_self.props.children}</Text>
-                </View>
-            </TouchableOpacity>
-        )
-    }
-}
 
 /* https://medium.com/technoetics/adding-image-placeholders-in-react-native-the-right-way-9140e78ac5c2 */
 class progressiveImage extends Component {
@@ -1243,39 +1214,6 @@ class OpportunityListItem extends Component {
                 <ParserHTML style={{ fontSize: 15, lineHeight: 21 }} wrapperStyle={{ fontSize: 15, lineHeight: 21 }}>{desc}</ParserHTML>
             </View>
         )
-    }
-}
-
-class BankTransferListItem extends Component {
-    /* 
-    {
-        "accountNo": "0016618",
-        "bankCampaignNote": "",
-        "bankDescription": "İş Bankası ve Maximum kart anlaşmalı bankalar",
-        "bankId": 409,
-        "bankLogo": "https://mcdn.flormar.com.tr/images/banka_logo/maximum.gif",
-        "bankName": "İş Bankası",
-        "ibanNo": "TR19 0006 4000 0012 4400 0166 18 <br> KOSAN KOZMETİK PAZARLAMA VE TİC. A.Ş.",
-    }
-    */
-    constructor(props) {
-        super(props);
-    }
-    render() {
-        const _self = this,
-            { bankLogo, bankName, accountNo, ibanNo } = _self.props.data;
-
-        return (
-            <View style={{ flexDirection: 'row' }}>
-                <Image
-                    style={{ width: 49, height: 60 }}
-                    source={{ uri: Utils.getImage(bankLogo), resizeMode: 'contain' }}
-                />
-                <Text>{bankName}</Text>
-                <Text>{accountNo}</Text>
-                <Text>{ibanNo}</Text>
-            </View>
-        );
     }
 }
 
