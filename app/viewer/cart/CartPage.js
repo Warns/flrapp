@@ -60,7 +60,7 @@ const Cart = class Main extends Component {
 
     onWillFocus = () => {
         const _self = this;
-        _self.props.dispatch({ type: SET_CART_PROGRESS, value: "1/3" });
+        _self.props.dispatch({ type: SET_CART_PROGRESS,  value: { progress: '1/3', cartLocation: 'basket' } });
     }
 
     componentDidMount() {

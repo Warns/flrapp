@@ -10,6 +10,7 @@ export * from './cart/AddressPage';
 export * from './cart/PaymentPage';
 
 /* item */
+export * from './item/BankTransferListItem';
 export * from './item/AddressListItem';
 export * from './item/StoreList';
 export * from './item/InstagramDetail';

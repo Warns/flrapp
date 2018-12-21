@@ -7,6 +7,7 @@ import {
     Alert,
     ScrollView,
 } from 'react-native';
+import { Viewer } from 'root/app/viewer/';
 import {
     SET_CART_INFO,
     ICONS,
@@ -17,7 +18,11 @@ import {
     CART_FOOTER_MARGIN_BOTTOM,
     CART_BACKGROUND_COLOR_1,
     CART_BACKGROUND_COLOR_2,
-    SET_INSTALLMENT
+    SET_INSTALLMENT,
+    SET_PAYMENT,
+    CREDIT_CART,
+    BANK_TRANSFER,
+    RESET_PAYMENT
 } from 'root/app/helper/Constant';
 import { connect } from 'react-redux';
 import Footer from './Footer';
@@ -32,6 +37,21 @@ import { Minus99HorizontalTabs } from 'root/app/components';
 const Translation = require('root/app/helper/Translation.js');
 const Utils = require('root/app/helper/Global.js');
 const Globals = require('root/app/globals.js');
+
+/* banka havale config */
+const DATA = {
+    type: 'listViewer',
+    itemType: 'bank_transfer',
+    uri: {
+        key: 'cart',
+        subKey: 'getBankTransfer'
+    },
+    keys: {
+        id: 'bankId',
+        arr: 'banks'
+    },
+    data: {}
+};
 
 /* footer config */
 const CONFIG = {
@@ -416,8 +436,45 @@ class BankTransfer extends Component {
         super(props);
     }
 
+    onDidFocus = () => {
+        const _self = this,
+            { paymentId, paymentType } = _self.props.data;
+        store.dispatch({ type: SET_PAYMENT, value: { paymentId: paymentId, paymentType: paymentType } });
+    }
+
+    componentDidMount() {
+        const _self = this,
+            { navigation } = _self.props;
+
+        if (navigation)
+            _self._Listener = navigation.addListener('didFocus', _self.onDidFocus);
+        else
+            _self.onDidFocus();
+    }
+
+    componentWillUnmount() {
+        const _self = this,
+            { navigation } = _self.props;
+
+        if (navigation)
+            _self._Listener.remove();
+    }
+
+    _callback = () => {
+
+    }
+
     render() {
-        return <Text>banka havalesi</Text>;
+        const _self = this;
+        return (
+            <Viewer
+                onRef={ref => (_self.child = ref)}
+                style={{ flex: 0 }}
+                wrapperStyle={{ flex: 0 }}
+                config={DATA}
+                callback={_self._callback}
+            />
+        );
     }
 }
 
@@ -425,6 +482,30 @@ class BankTransfer extends Component {
 class CreditCart extends Component {
     constructor(props) {
         super(props);
+    }
+
+    onDidFocus = () => {
+        const _self = this,
+            { paymentId, paymentType } = _self.props.data;
+        store.dispatch({ type: SET_PAYMENT, value: { paymentId: paymentId, paymentType: paymentType } });
+    }
+
+    componentDidMount() {
+        const _self = this,
+            { navigation } = _self.props;
+
+        if (navigation)
+            _self._Listener = navigation.addListener('didFocus', _self.onDidFocus);
+        else
+            _self.onDidFocus();
+    }
+
+    componentWillUnmount() {
+        const _self = this,
+            { navigation } = _self.props;
+
+        if (navigation)
+            _self._Listener.remove();
     }
 
     render() {
@@ -490,10 +571,10 @@ class Navigator extends Component {
             { paymentType = '' } = item;
 
         switch (paymentType) {
-            case 'creditCart':
-                return <CreditCart data={item} />;
-            case 'bankTransfer':
-                return <BankTransfer data={item} />;
+            case CREDIT_CART:
+                return <CreditCart {...props} data={item} />;
+            case BANK_TRANSFER:
+                return <BankTransfer {...props} data={item} />;
             default:
                 return null;
         }
@@ -549,7 +630,7 @@ const Payment = class Main extends Component {
 
     onWillFocus = () => {
         const _self = this;
-        _self.props.dispatch({ type: SET_CART_PROGRESS, value: "3/3" });
+        _self.props.dispatch({ type: SET_CART_PROGRESS, value: { progress: '3/3', cartLocation: 'payment' } });
     }
 
     componentWillUnmount() {
@@ -557,6 +638,8 @@ const Payment = class Main extends Component {
             { navigation } = _self.props;
 
         _self._isMounted = false;
+
+        _self.props.dispatch({ type: RESET_PAYMENT });
 
         if (navigation)
             _self._Listener.remove();

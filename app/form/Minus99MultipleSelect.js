@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 
 import IconButton from 'root/app/UI/IconButton';
-import BoxButton from 'root/app/UI/Buttons/BoxButton';
+import BoxButton from 'root/app/UI/Buttons/ButtonBox';
 import get from 'lodash/get';
 import { MinimalHeader } from 'root/app/components';
 

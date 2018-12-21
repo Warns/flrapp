@@ -12,6 +12,9 @@ import {
     REMOVE_FROM_FAVORITES,
     SET_CART_PROGRESS,
     SET_INSTALLMENT,
+    SET_PAYMENT,
+    SET_BANK_TRANSFER,
+    RESET_PAYMENT
 } from 'root/app/helper/Constant';
 
 const cartInitialState = {
@@ -20,6 +23,16 @@ const cartInitialState = {
     cartProductsNumber: 0,
     cartInfo: {},
     cartNoResult: false,
+
+    /* kredi kartı ve havale değişimde bankid değerinin atanması */
+    creditCart: {
+        bankId: 0,
+        installmentId: 0
+    },
+    bankTransfer: {
+        bankId: 0,
+        installmentId: 0
+    },
 
     optin: {
         differentAddress: false, /* farklı adrese gönder; false = teslimat, fatura aynı / true = farklı */
@@ -31,10 +44,10 @@ const cartInitialState = {
         bankId: 0,
         installmentId: 0,
         usePoint: 0,
-        useBankPoint: true,
+        useBankPoint: false,
         cartLocation: '',
         paymentNote: '',
-        serviceId: 0
+        //serviceId: 0 /* mağazada öde kısmı için kullanılabilir */
     }
 };
 
@@ -76,52 +89,95 @@ export default function cart(state = cartInitialState, action) {
                 { differentAddress = false } = optin,
                 { addressId, addressType = 'shipAddress' } = action.value;
 
+            let data = {};
+
             if (!differentAddress)
-                return {
+                data = {
                     ...state,
                     optin: { ...state.optin, shipAddressId: addressId, billAddressId: addressId }
                 }
             else {
                 if (addressType == 'shipAddress')
-                    return {
+                    data = {
                         ...state,
                         optin: { ...state.optin, shipAddressId: addressId }
                     }
                 else if (addressType == 'billAddress')
-                    return {
+                    data = {
                         ...state,
                         optin: { ...state.optin, billAddressId: addressId }
                     }
             }
+
+            setCart(data['optin']);
+
+            return data;
         };
         case SET_DIFFERENT_ADDRESS: {
             const { optin = {} } = state,
                 { shipAddressId } = optin,
                 b = action.value;
 
+            let data = {};
             if (b)
-                return {
+                data = {
                     ...state,
                     optin: { ...state.optin, differentAddress: b, billAddressId: 0 }
                 }
             else
-                return {
+                data = {
                     ...state,
                     optin: { ...state.optin, billAddressId: shipAddressId, differentAddress: b }
                 }
+
+            setCart(data['optin']);
+
+            return data;
         };
         case SET_CART_CARGO: {
-            return {
+            const data = {
                 ...state,
                 optin: { ...state.optin, cargoId: action.value }
-            }
+            };
+
+            setCart(data['optin']);
+
+            return data;
         };
         case SET_INSTALLMENT: {
-            const { bankId = 0, installmentId = 0 } = action.value || {};
-            return {
+            const { bankId = 0, installmentId = 0 } = action.value || {},
+                data = {
+                    ...state,
+                    creditCart: { bankId: bankId, installmentId: installmentId },
+                    optin: { ...state.optin, bankId: bankId, installmentId: installmentId }
+                };
+
+            setCart(data['optin']);
+
+            return data;
+        };
+        case SET_PAYMENT: {
+            const { paymentId, paymentType } = action.value,
+                { bankId = 0, installmentId = 0 } = state[paymentType] || {};
+            data = {
                 ...state,
-                optin: { ...state.optin, bankId: bankId, installmentId: installmentId }
-            }
+                optin: { ...state.optin, paymentId: paymentId, bankId: bankId, installmentId: installmentId }
+            };
+
+            setCart(data['optin']);
+
+            return data;
+        };
+        case SET_BANK_TRANSFER: {
+            const data = {
+                ...state,
+                bankTransfer: { ...state.bankTransfer, bankId: action.value },
+                optin: { ...state.optin, bankId: action.value, }
+            };
+
+            setCart(data['optin']);
+
+            return data;
         };
         case SET_CART_NO_RESULT: {
             return {
@@ -129,10 +185,36 @@ export default function cart(state = cartInitialState, action) {
                 cartNoResult: action.value
             }
         };
+        case RESET_PAYMENT: {
+            const data = {
+                ...state,
+                creditCart: {
+                    bankId: 0,
+                    installmentId: 0
+                },
+                bankTransfer: {
+                    bankId: 0,
+                    installmentId: 0
+                },
+                optin: { ...state.optin, bankId: 0, installmentId: 0 }
+            };
+
+            setCart(data['optin']);
+
+            return data;
+        };
         case RESET_CART: {
             return {
                 ...state,
                 cartNoResult: false,
+                creditCart: {
+                    bankId: 0,
+                    installmentId: 0
+                },
+                bankTransfer: {
+                    bankId: 0,
+                    installmentId: 0
+                },
                 optin: {
                     differentAddress: false,
                     shipAddressId: 0,
@@ -151,9 +233,11 @@ export default function cart(state = cartInitialState, action) {
             }
         };
         case SET_CART_PROGRESS: {
+            const { progress, cartLocation } = action.value || {};
             return {
                 ...state,
-                progress: action.value
+                progress: progress,
+                optin: { ...state.optin, cartLocation: cartLocation }
             }
         };
 
@@ -161,6 +245,21 @@ export default function cart(state = cartInitialState, action) {
         default:
             return state;
     }
+}
+
+/* sepet adımlarında her bir seçimde setcart tetiklenmeli */
+setCart = async (data) => {
+    console.log('set cart', data);
+    globals.fetch(
+        "https://www.flormar.com.tr/webapi/v3/Cart/setCart",
+        JSON.stringify(data), (answer) => {
+            if (answer.status == 200) {
+                //nothing
+            } else
+                console.log('hata', answer.message);
+
+            console.log(answer);
+        });
 }
 
 
