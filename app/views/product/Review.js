@@ -1,9 +1,10 @@
 import React from 'react';
-import { View, Text, FlatList, TouchableOpacity, Image } from 'react-native';
+import { View, Text, SafeAreaView, TouchableOpacity, Image } from 'react-native';
 import { connect } from 'react-redux';
-import Moment from 'moment';
 import { MinimalHeader } from 'root/app/components';
-import { DefaultButton } from 'root/app/UI';
+import { Form } from 'root/app/form';
+import { FORMDATA } from 'root/app/helper/Constant';
+import { StarSelect } from 'root/app/UI';
 
 import { ICONS } from 'root/app/helper/Constant';
 
@@ -11,6 +12,10 @@ const Utils = require('root/app/helper/Global.js');
 
 
 class ProductReview extends React.Component {
+
+  state = {
+    message: ""
+  }
 
 
   componentDidMount() {
@@ -24,19 +29,26 @@ class ProductReview extends React.Component {
   render() {
 
     let { item } = this.props.product;
-    //let { items, selected } = this.props.navigation.state.params;
+    let { message } = this.state;
+
+    let error = message == '' ? null : <Text style={{ color: '#FF2B94', marginTop: 10, fontSize: 15 }}>{message}</Text>;
 
     let _title = item ? item.productName : '';
 
     return (
-      <View style={{ flex: 1 }}>
-        <MinimalHeader title={_title} onPress={this._onBackPress} title={_title} noMargin={this.props.SCREEN_DIMENSIONS.OS == 'android' ? true : false} />
+      <SafeAreaView style={{ flex: 1 }}>
+        <MinimalHeader title={_title} right={<View />} onPress={this._onBackPress} />
         <View style={{ flex: 1 }}>
-
-          <Text>Review form</Text>
-
+          <View style={{ padding: 40, paddingBottom: 20, paddingTop: 20 }}>
+            <Text style={{ color: '#000000', lineHeight: 18, fontSize: 15 }}>Email adresini yaz.</Text>
+            {error}
+          </View>
+          <Form callback={this._onSubmit} data={FORMDATA['review_submission']} />
+          <View>
+            <StarSelect style={{ padding: 50 }} callback={() => { }} />
+          </View>
         </View>
-      </View>
+      </SafeAreaView>
     )
   }
 }

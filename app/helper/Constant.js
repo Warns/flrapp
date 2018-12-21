@@ -49,6 +49,8 @@ export const ICONS = {
     plus: require('root/assets/icons/plus.png'),
     closedIco: require('root/assets/icons/closedIco.png'),
     stars: require('root/assets/icons/stars.png'),
+    starEmpty: require('root/assets/icons/star-empty.png'),
+    starFull: require('root/assets/icons/star-full.png'),
 };
 
 /* CARDS ICON */
@@ -145,6 +147,8 @@ export const FORMDATA = {
     optin_password: require('root/data/optin_password.js'),
     optin_signup: require('root/data/optin_signup.js'),
     optin_resetpassword: require('root/data/optin_resetpassword.js'),
+    //Review
+    review_submission: require('root/data/review_submission.js'),
 };
 
 /* form style, from->container.js */

@@ -99,7 +99,7 @@ class ListItem extends React.Component {
 
         return (
 
-            <View style={{ marginRight: 20, marginLeft: 20, padding: 10, borderBottomWidth: 1, borderBottomColor: "#D8D8D8", flexDirection: 'column-reverse', }}>
+            <View style={{ marginRight: 20, marginLeft: 20, padding: 10, borderBottomWidth: 1, borderBottomColor: "#D8D8D8" }}>
                 <Text style={{ fontSize: 16, fontWeight: 'bold', marginTop: 25 }}>{item.Title}</Text>
                 <View style={{ flexDirection: 'row', marginTop: 10, marginBottom: 10, }}>
                     <View style={{ width: 68, height: 12, position: 'relative', overflow: 'hidden', marginTop: 2, marginRight: 10, zIndex: 1 }}>
