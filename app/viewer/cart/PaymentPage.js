@@ -22,7 +22,8 @@ import {
     SET_PAYMENT,
     CREDIT_CART,
     BANK_TRANSFER,
-    RESET_PAYMENT
+    RESET_PAYMENT,
+    SET_CREDIT_CART
 } from 'root/app/helper/Constant';
 import { connect } from 'react-redux';
 import Footer from './Footer';
@@ -408,6 +409,14 @@ class CrediCart extends Component {
                 _self._setInstallment({ bankId: 0, installmentId: 0 });
             }
         }
+
+        /* kredi kart bilgilerini yollama  */
+        let data = {};
+        data[key] = value || '';
+        store.dispatch({
+            type: SET_CREDIT_CART,
+            value: data
+        });
     }
 
     render() {

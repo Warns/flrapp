@@ -14,8 +14,14 @@ import {
     SET_INSTALLMENT,
     SET_PAYMENT,
     SET_BANK_TRANSFER,
-    RESET_PAYMENT
+    RESET_PAYMENT,
+    SET_CREDIT_CART,
 } from 'root/app/helper/Constant';
+import {
+    cardType,
+    validateCardNumber,
+    validateCardCVC
+} from 'root/app/helper/CreditCard';
 
 const cartInitialState = {
     progress: '1/3',
@@ -27,7 +33,12 @@ const cartInitialState = {
     /* kredi kartı ve havale değişimde bankid değerinin atanması */
     creditCart: {
         bankId: 0,
-        installmentId: 0
+        installmentId: 0,
+        fullName: '',
+        creditCardNo: '',
+        cvcCode: '',
+        year: 0,
+        month: 0,
     },
     bankTransfer: {
         bankId: 0,
@@ -148,7 +159,7 @@ export default function cart(state = cartInitialState, action) {
             const { bankId = 0, installmentId = 0 } = action.value || {},
                 data = {
                     ...state,
-                    creditCart: { bankId: bankId, installmentId: installmentId },
+                    creditCart: { ...state.creditCart, bankId: bankId, installmentId: installmentId },
                     optin: { ...state.optin, bankId: bankId, installmentId: installmentId }
                 };
 
@@ -179,6 +190,16 @@ export default function cart(state = cartInitialState, action) {
 
             return data;
         };
+        case SET_CREDIT_CART: {
+            const data = {
+                ...state,
+                creditCart: { ...state.creditCart, ...action.value },
+            };
+
+            checkBankPoint(data['creditCart']);
+
+            return data;
+        };
         case SET_CART_NO_RESULT: {
             return {
                 ...state,
@@ -190,7 +211,12 @@ export default function cart(state = cartInitialState, action) {
                 ...state,
                 creditCart: {
                     bankId: 0,
-                    installmentId: 0
+                    installmentId: 0,
+                    fullName: '',
+                    creditCardNo: '',
+                    cvcCode: '',
+                    year: 0,
+                    month: 0,
                 },
                 bankTransfer: {
                     bankId: 0,
@@ -209,7 +235,12 @@ export default function cart(state = cartInitialState, action) {
                 cartNoResult: false,
                 creditCart: {
                     bankId: 0,
-                    installmentId: 0
+                    installmentId: 0,
+                    fullName: '',
+                    creditCardNo: '',
+                    cvcCode: '',
+                    year: 0,
+                    month: 0,
                 },
                 bankTransfer: {
                     bankId: 0,
@@ -245,6 +276,45 @@ export default function cart(state = cartInitialState, action) {
         default:
             return state;
     }
+}
+
+/* banka puan sorgulama */
+checkBankPoint = (obj) => {
+    const { bankId, fullName, creditCardNo = '', cvcCode = '' } = obj,
+        date = (obj['year'] || '0/0').split('/'),
+        month = date[0] || 0,
+        year = date[1] || 0,
+        cardValid = validateCardNumber(creditCardNo),
+        _cardType = cardType(creditCardNo),
+        cvcValid = validateCardCVC(cvcCode, _cardType);
+
+    if (cardValid && cvcValid && month != 0 && year != 0) {
+        const data = {
+            bankId: bankId,
+            creditCardNo: creditCardNo.replace(/\s+/g, ''),
+            cvcCode: cvcCode,
+            month: month,
+            year: '20' + year,
+        };
+
+        console.log(JSON.stringify(data));
+        globals.fetch(
+            "https://www.flormar.com.tr/webapi/v3/Cart/checkBankPoint",
+            JSON.stringify(data), (answer) => {
+                //alert(JSON.stringify(data) + JSON.stringify(answer));
+                if (answer.status == 200) {
+                    //nothing
+                } else
+                    console.log('hata', answer.message);
+
+                
+            });
+    }
+    /*
+    console.log('validateCardNumber', validateCardNumber(creditCardNo));
+    console.log('_cardType', _cardType);
+    console.log('validateCardCVC', validateCardCVC(cvcCode, _cardType));
+    */
 }
 
 /* sepet adımlarında her bir seçimde setcart tetiklenmeli */

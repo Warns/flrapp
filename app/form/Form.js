@@ -363,7 +363,7 @@ class Form extends Component {
             işleme dahil olmayacaksa kullanılıyor ve jsonda verilen valueyu kullanıyor.
         */
         if (!constantValue)
-            _self.totalCount = _self.totalCount + 1;
+            _self.totalCount = _self.totalCount + 1;            
 
         switch (type) {
             case 'creditCart':
@@ -384,6 +384,7 @@ class Form extends Component {
                     onRef={ref => (_self._formElement.push(ref))}
                     containerStyle={{ ...containerStyle }}
                     wrapperStyle={{ ...wrapperStyle }}
+                    onChangeText={_self._onChangeText}
                     theme={theme}
                     {...objCallback}
                     //callback={_callback}
