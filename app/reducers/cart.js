@@ -16,6 +16,7 @@ import {
     SET_BANK_TRANSFER,
     RESET_PAYMENT,
     SET_CREDIT_CART,
+    SET_BANK_POINT,
 } from 'root/app/helper/Constant';
 
 const cartInitialState = {
@@ -166,13 +167,15 @@ export default function cart(state = cartInitialState, action) {
         };
         case SET_PAYMENT: {
             const { paymentId, paymentType } = action.value,
-                { bankId = 0, installmentId = 0 } = state[paymentType] || {};
+                { bankId = 0, installmentId = 0, useBankPoint } = state[paymentType] || {};
             data = {
                 ...state,
-                optin: { ...state.optin, paymentId: paymentId, bankId: bankId, installmentId: installmentId }
+                optin: { ...state.optin, paymentId: paymentId, bankId: bankId, installmentId: installmentId, useBankPoint: useBankPoint }
             };
 
-            setCart(data['optin']);
+            setCart(data['optin'], () => {
+                getCart();
+            });
 
             return data;
         };
@@ -192,6 +195,20 @@ export default function cart(state = cartInitialState, action) {
                 ...state,
                 creditCart: { ...state.creditCart, ...action.value },
             };
+
+            return data;
+        };
+        case SET_BANK_POINT: {
+            const data = {
+                ...state,
+                creditCart: { ...state.creditCart, useBankPoint: action.value },
+                optin: { ...state.optin, useBankPoint: action.value }
+            };
+
+
+            setCart(data['optin'], () => {
+                getCart();
+            });
 
             return data;
         };
@@ -276,9 +293,27 @@ export default function cart(state = cartInitialState, action) {
     }
 }
 
+getCart = async () => {
+    const { optin } = store.getState().cart,
+        { cartLocation } = optin;
+
+        console.log(cartLocation)
+    globals.fetch(
+        "https://www.flormar.com.tr/webapi/v3/Cart/getCart",
+        JSON.stringify({ cartLocation: cartLocation }), (answer) => {
+            console.log(answer);
+            if (answer.status == 200) {
+                setTimeout(() => {
+                    store.dispatch({ type: SET_CART_INFO, value: answer.data });
+                }, 10);
+            }
+        });
+};
+
 /* sepet adımlarında her bir seçimde setcart tetiklenmeli */
 setCart = async (data, callback) => {
     console.log('set cart', data);
+
     globals.fetch(
         "https://www.flormar.com.tr/webapi/v3/Cart/setCart",
         JSON.stringify(data), (answer) => {

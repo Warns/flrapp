@@ -7,7 +7,8 @@ import {
 import {
     FORMDATA,
     SET_INSTALLMENT,
-    SET_CREDIT_CART
+    SET_CREDIT_CART,
+    SET_BANK_POINT
 } from 'root/app/helper/Constant';
 import { connect } from 'react-redux';
 import { Form, SelectBox, CheckBox } from 'root/app/form';
@@ -215,8 +216,6 @@ class CrediCard extends Component {
             _cardType = cardType(creditCardNo),
             cvcValid = validateCardCVC(cvcCode, _cardType);
 
-        console.log(month, year)
-
         if (bankId != 0 && cardValid && cvcValid && month != 0 && year != 0 && month.length == 2 && year.length == 2) {
             const data = {
                 bankId: bankId,
@@ -255,8 +254,11 @@ class CrediCard extends Component {
         return view;
     }
 
-    _onChangeBankPoint = () => {
-
+    _onChangeBankPoint = (obj) => {
+        store.dispatch({
+            type: SET_BANK_POINT,
+            value: obj['value']
+        });
     }
 
     /* formda yapılan her bir değişiklik bu fonk gönderilir */

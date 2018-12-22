@@ -372,10 +372,7 @@ const Payment = class Main extends Component {
         if (navigation)
             _self._Listener = navigation.addListener('willFocus', _self.onWillFocus);
 
-        setAjx({ _self: _self, uri: Utils.getURL({ key: 'cart', subKey: 'getCart' }), data: { cartLocation: 'payment' } }, (res) => {
-            _self.props.dispatch({ type: SET_CART_INFO, value: res.data });
-            setTimeout(() => { _self._getPayment(); }, 10);
-        });
+        _self._getPayment();
     }
 
     /* ödeme tiplerini çek ve oluştur */
@@ -399,7 +396,7 @@ const Payment = class Main extends Component {
         const _self = this,
             { loaded = false, payment = [] } = _self.state;
 
-        return loaded ? <Navigator payment={payment} /> : null;
+        return loaded ? ( <Navigator payment={payment} /> ) : null;
     }
 }
 
