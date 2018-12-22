@@ -58,7 +58,7 @@ class CheckBox extends Component {
 
         const _self = this,
             { error = false, errorMsg = null, desc = '', modal = '' } = _self.props.data,
-            { control = false } = _self.props,
+            { control = false, containerStyle = {}, wrapperStyle = {} } = _self.props,
             { value } = _self.state,
             { checkBox } = styles,
             active = value ? { borderColor: '#000000', backgroundColor: '#000000' } : {};
@@ -89,7 +89,7 @@ class CheckBox extends Component {
             );
 
         return (
-            <Container showErrorIco={false} titleShow={true} error={error} errorMsg={errorMsg} wrapperStyle={{ paddingLeft: 0, borderWidth: 0, height: 'auto' }}>
+            <Container showErrorIco={false} titleShow={true} error={error} errorMsg={errorMsg} containerStyle={{ ...containerStyle }} wrapperStyle={[{ paddingLeft: 0, borderWidth: 0, height: 'auto' }, { ...wrapperStyle }]}>
                 {view}
             </Container>
         )

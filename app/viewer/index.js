@@ -8,6 +8,7 @@ export * from './CustomModal';
 export * from './cart/CartPage';
 export * from './cart/AddressPage';
 export * from './cart/PaymentPage';
+export * from './cart/CrediCart';
 
 /* item */
 export * from './item/BankTransferListItem';

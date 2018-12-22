@@ -17,11 +17,6 @@ import {
     RESET_PAYMENT,
     SET_CREDIT_CART,
 } from 'root/app/helper/Constant';
-import {
-    cardType,
-    validateCardNumber,
-    validateCardCVC
-} from 'root/app/helper/CreditCard';
 
 const cartInitialState = {
     progress: '1/3',
@@ -39,10 +34,12 @@ const cartInitialState = {
         cvcCode: '',
         year: 0,
         month: 0,
+        useBankPoint: false,
     },
     bankTransfer: {
         bankId: 0,
-        installmentId: 0
+        installmentId: 0,
+        useBankPoint: false,
     },
 
     optin: {
@@ -59,7 +56,7 @@ const cartInitialState = {
         cartLocation: '',
         paymentNote: '',
         //serviceId: 0 /* mağazada öde kısmı için kullanılabilir */
-    }
+    },
 };
 
 export default function cart(state = cartInitialState, action) {
@@ -196,15 +193,7 @@ export default function cart(state = cartInitialState, action) {
                 creditCart: { ...state.creditCart, ...action.value },
             };
 
-            checkBankPoint(data['creditCart']);
-
             return data;
-        };
-        case SET_CART_NO_RESULT: {
-            return {
-                ...state,
-                cartNoResult: action.value
-            }
         };
         case RESET_PAYMENT: {
             const data = {
@@ -217,10 +206,12 @@ export default function cart(state = cartInitialState, action) {
                     cvcCode: '',
                     year: 0,
                     month: 0,
+                    useBankPoint: false,
                 },
                 bankTransfer: {
                     bankId: 0,
-                    installmentId: 0
+                    installmentId: 0,
+                    useBankPoint: false,
                 },
                 optin: { ...state.optin, bankId: 0, installmentId: 0 }
             };
@@ -241,10 +232,12 @@ export default function cart(state = cartInitialState, action) {
                     cvcCode: '',
                     year: 0,
                     month: 0,
+                    useBankPoint: false,
                 },
                 bankTransfer: {
                     bankId: 0,
-                    installmentId: 0
+                    installmentId: 0,
+                    useBankPoint: false,
                 },
                 optin: {
                     differentAddress: false,
@@ -271,54 +264,20 @@ export default function cart(state = cartInitialState, action) {
                 optin: { ...state.optin, cartLocation: cartLocation }
             }
         };
-
+        case SET_CART_NO_RESULT: {
+            return {
+                ...state,
+                cartNoResult: action.value
+            }
+        };
 
         default:
             return state;
     }
 }
 
-/* banka puan sorgulama */
-checkBankPoint = (obj) => {
-    const { bankId, fullName, creditCardNo = '', cvcCode = '' } = obj,
-        date = (obj['year'] || '0/0').split('/'),
-        month = date[0] || 0,
-        year = date[1] || 0,
-        cardValid = validateCardNumber(creditCardNo),
-        _cardType = cardType(creditCardNo),
-        cvcValid = validateCardCVC(cvcCode, _cardType);
-
-    if (cardValid && cvcValid && month != 0 && year != 0) {
-        const data = {
-            bankId: bankId,
-            creditCardNo: creditCardNo.replace(/\s+/g, ''),
-            cvcCode: cvcCode,
-            month: month,
-            year: '20' + year,
-        };
-
-        console.log(JSON.stringify(data));
-        globals.fetch(
-            "https://www.flormar.com.tr/webapi/v3/Cart/checkBankPoint",
-            JSON.stringify(data), (answer) => {
-                //alert(JSON.stringify(data) + JSON.stringify(answer));
-                if (answer.status == 200) {
-                    //nothing
-                } else
-                    console.log('hata', answer.message);
-
-                
-            });
-    }
-    /*
-    console.log('validateCardNumber', validateCardNumber(creditCardNo));
-    console.log('_cardType', _cardType);
-    console.log('validateCardCVC', validateCardCVC(cvcCode, _cardType));
-    */
-}
-
 /* sepet adımlarında her bir seçimde setcart tetiklenmeli */
-setCart = async (data) => {
+setCart = async (data, callback) => {
     console.log('set cart', data);
     globals.fetch(
         "https://www.flormar.com.tr/webapi/v3/Cart/setCart",
@@ -327,6 +286,9 @@ setCart = async (data) => {
                 //nothing
             } else
                 console.log('hata', answer.message);
+
+            if (typeof callback !== 'undefined')
+                callback();
 
             console.log(answer);
         });

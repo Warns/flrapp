@@ -4,38 +4,32 @@ import {
     TouchableOpacity,
     Image,
     View,
-    Alert,
     ScrollView,
 } from 'react-native';
-import { Viewer } from 'root/app/viewer/';
+import { Viewer, CrediCart } from 'root/app/viewer/';
 import {
     SET_CART_INFO,
     ICONS,
     SET_VIEWER,
     SHOW_CUSTOM_POPUP,
-    FORMDATA,
     SET_CART_PROGRESS,
     CART_FOOTER_MARGIN_BOTTOM,
     CART_BACKGROUND_COLOR_1,
     CART_BACKGROUND_COLOR_2,
-    SET_INSTALLMENT,
     SET_PAYMENT,
     CREDIT_CART,
     BANK_TRANSFER,
     RESET_PAYMENT,
-    SET_CREDIT_CART
 } from 'root/app/helper/Constant';
 import { connect } from 'react-redux';
 import Footer from './Footer';
-import { CheckBox, Form, SelectBox } from 'root/app/form';
+import { CheckBox } from 'root/app/form';
 import { store } from 'root/app/store';
-import creditCardType, { getTypeInfo, types as CardType } from 'credit-card-type';
 import UnderSide from './UnderSide';
 
 import { createMaterialTopTabNavigator } from 'react-navigation';
 import { Minus99HorizontalTabs } from 'root/app/components';
 
-const Translation = require('root/app/helper/Translation.js');
 const Utils = require('root/app/helper/Global.js');
 const Globals = require('root/app/globals.js');
 
@@ -152,292 +146,7 @@ class Foot extends Component {
     }
 }
 
-/* 
 
-olmayan cart tipleri
-
-case "visaelectron":
-    kktSprId = "4";
-    maxCvcLength = 3;
-    break;
-
-    case "forbrugsforeningen":
-    kktSprId = "6";
-    maxCvcLength = 3;
-    break;
-case "dankort":
-    kktSprId = "7";
-    maxCvcLength = 3;
-    break;
-
-case "troy":
-    kktSprId = "12";
-    maxCvcLength = 3;
-    break;    
-
-*/
-
-class CrediCart extends Component {
-    constructor(props) {
-        super(props);
-        const _self = this;
-        _self.state = {
-            srcCardImage: '',
-            installments: []
-        };
-        _self.cartControl = true;
-
-        /*
-        https://github.com/braintree/credit-card-type
-        https://github.com/kevva/credit-card-regex
-        https://github.com/sbycrosz/react-native-credit-card-input
-        
-
-        let visaCards = creditCardType('3588228280601429');
-        console.log(JSON.stringify(visaCards));
-
-        visaCards = creditCardType('38790546741937');
-        console.log(JSON.stringify(visaCards));
-
-        visaCards = creditCardType('370218180742397');
-        console.log(JSON.stringify(visaCards));
-        
-        visaCards = creditCardType('5536838507150030');
-        console.log(JSON.stringify(visaCards));*/
-    }
-
-    componentDidMount() {
-        const _self = this;
-        _self._isMounted = true;
-    }
-
-    componentWillUnmount() {
-        const _self = this;
-        _self._isMounted = false;
-    }
-
-    _cardType = {
-        'visa': {
-            src: '/scripts/keyboard/img/visa.png'
-        },
-        'mastercard': {
-            src: '/scripts/keyboard/img/mastercard.png'
-        },
-        'american-express': {
-            src: '/scripts/keyboard/img/amex.png'
-        },
-        'diners-club': {
-            src: '/scripts/keyboard/img/dinersclub.png'
-        },
-        'discover': {
-            src: '/scripts/keyboard/img/discover.png'
-        },
-        'jcb': {
-            src: '/scripts/keyboard/img/jcb.png'
-        },
-        'unionpay': {
-            src: '/scripts/keyboard/img/unionpay.png'
-        },
-        'maestro': {
-            src: '/scripts/keyboard/img/maestro.png'
-        }
-    };
-
-    _getCard = (value) => {
-        const _self = this,
-            card = (creditCardType(value) || [])[0] || {},
-            { type = '' } = card,
-            { src = '' } = _self._cardType[type] || {};
-
-        /* min. 2 karekter girişinden sonra kartı göster */
-        _self.setState({ srcCardImage: value.length >= 2 ? src : '' });
-    }
-
-    _getCardImage = () => {
-        const _self = this,
-            { srcCardImage = '' } = _self.state;
-        if (srcCardImage != '')
-            return (<Image
-                style={{
-                    position: 'absolute',
-                    right: 40,
-                    width: 30,
-                    height: 30,
-                    resizeMode: 'contain'
-                }}
-                source={{ uri: Utils.getImage(srcCardImage) }}
-            />);
-        else
-            return null;
-    }
-
-    _callback = () => {
-
-    }
-
-    /* taksit seçenekleri */
-    _getInstallmentAjx = (val) => {
-        const _self = this;
-        setAjx({ _self: _self, uri: Utils.getURL({ key: 'cart', subKey: 'getInstallment' }), data: { bin: val } }, (res) => {
-            let { status, data = {} } = res,
-                { creditCarts = [] } = data,
-                { installments = [] } = creditCarts[0];
-
-            /*installments = [
-                {
-                    "bankId": 231,
-                    "installmentId": 1043,
-                    "description": "",
-                    "installmentCount": 1,
-                    "monthlyPrice": 4399.01,
-                    "totalPrice": 4399.01,
-                    "Currency": "TL",
-                    "rate": "0"
-                },
-                {
-                    "bankId": 231,
-                    "installmentId": 1001,
-                    "description": "",
-                    "installmentCount": 3,
-                    "monthlyPrice": 1466.33666666667,
-                    "totalPrice": 4399.01,
-                    "Currency": "TL",
-                    "rate": "0"
-                },
-                {
-                    "bankId": 231,
-                    "installmentId": 987,
-                    "description": "",
-                    "installmentCount": 2,
-                    "monthlyPrice": 879.802,
-                    "totalPrice": 4399.01,
-                    "Currency": "TL",
-                    "rate": "0"
-                }
-            ];*/
-
-            /* tek bir taksit seçeneği varsa redux yazdır */
-            if (installments.length == 1)
-                _self._setInstallment(installments[0]);
-
-            if (status == 200)
-                _self.setState({ installments: installments })
-
-        });
-    }
-
-    _getInstallmentDsc = (item) => {
-        const { installmentCount = 1, monthlyPrice = '', Currency } = item;
-
-        return installmentCount == 1 ? 'Tek Çekim' : (installmentCount + ' taksit, aylık ' + monthlyPrice.toFixed(2) + ' ' + Currency);
-    }
-
-
-    _getInstallmentData = (value) => {
-        const _self = this,
-            { installments = [] } = _self.state;
-        return installments.filter((item) => {
-            const { installmentId } = item;
-            if (installmentId == value)
-                return item;
-        });
-    }
-
-    /* selectbox taksit seçeneği seçildikten sonra */
-    _onChangeInstallment = (obj) => {
-        const _self = this,
-            { value = -1 } = obj;
-        if (value != -1)
-            _self._setInstallment((_self._getInstallmentData(value) || [])[0]);
-        else
-            _self._setInstallment({ bankId: 0, installmentId: 0 });
-    }
-
-    _setInstallment = (data) => {
-        store.dispatch({ type: SET_INSTALLMENT, value: data });
-    }
-
-    _getInstallments = () => {
-        let _self = this,
-            { installments = [] } = _self.state;
-
-        let view = null;
-
-        if (installments.length > 0) {
-
-            const values = installments.map((item) => {
-                const { installmentId = '' } = item;
-                return { key: _self._getInstallmentDsc(item), value: installmentId };
-            });
-
-            if (values.length > 1)
-                values.unshift({ key: Translation['dropdown']['choose'], value: -1 });
-
-            const obj = { defaultTitle: 'Taksit:', values: values, value: -1, ico: 'rightArrow', icoStyle: { width: 40, height: 40 } };
-
-            view = <SelectBox
-                fontStyle={{ fontFamily: 'Bold', fontSize: 16 }}
-                showHeader={false}
-                containerStyle={{ marginLeft: 20, marginRight: 20, marginBottom: 0, }}
-                wrapperStyle={{ height: 60, borderWidth: 0, borderBottomColor: '#d8d8d8', borderBottomWidth: 1, paddingLeft: 0, paddingRight: 0, }}
-                closed={true}
-                callback={_self._onChangeInstallment}
-                data={obj}
-            />
-        }
-
-        return view;
-    }
-
-    _onChangeText = (obj) => {
-        const _self = this,
-            { key = '', value = '' } = obj;
-
-        if (key == 'creditCardNo') {
-            const val = Utils.cleanText(value),
-                count = val.length,
-                num = 6;
-
-            _self._getCard(val);
-
-            if (count >= num && _self.cartControl) {
-                _self.cartControl = false;
-                _self._getInstallmentAjx(val.substr(0, num));
-            } else if (count < num && !_self.cartControl) {
-                _self.cartControl = true;
-                _self.setState({ installments: [] });
-                _self._setInstallment({ bankId: 0, installmentId: 0 });
-            }
-        }
-
-        /* kredi kart bilgilerini yollama  */
-        let data = {};
-        data[key] = value || '';
-        store.dispatch({
-            type: SET_CREDIT_CART,
-            value: data
-        });
-    }
-
-    render() {
-        const _self = this,
-            installments = _self._getInstallments();
-
-        return (
-            <View style={{ flex: 1, paddingTop: 10 }}>
-                {_self._getCardImage()}
-                <Form
-                    style={{ paddingBottom: 0 }}
-                    onChangeText={_self._onChangeText}
-                    callback={_self._callback}
-                    data={FORMDATA['creditCart']}
-                />;
-                {installments}
-            </View>
-        );
-
-    }
-}
 
 /* navigator BankTransfer component */
 class BankTransfer extends Component {
