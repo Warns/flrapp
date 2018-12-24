@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import {
     Image,
     View,
-    Text
+    Text,
+    TouchableOpacity
 } from 'react-native';
 import {
     FORMDATA,
@@ -189,7 +190,7 @@ class CrediCard extends Component {
                 values.unshift({ key: Translation['dropdown']['choose'], value: -1 });
 
             const obj = { defaultTitle: 'Taksit:', values: values, value: -1, ico: 'rightArrow', icoStyle: { width: 40, height: 40 } };
-
+            
             view = <SelectBox
                 fontStyle={{ fontFamily: 'Bold', fontSize: 16 }}
                 showHeader={false}
@@ -293,7 +294,9 @@ class CrediCard extends Component {
         }
 
         /* banka puan bilgilerini sorgulama */
-        setTimeout(() => { _self._checkBankPoint(); }, 1);
+        console.log(key)
+        if( key !== 'fullName' )
+            setTimeout(() => { _self._checkBankPoint(); }, 1);
     }
 
     render() {
@@ -302,14 +305,14 @@ class CrediCard extends Component {
             bankPoint = _self._getBankPoint();
 
         return (
-            <View style={{ flex: 1, paddingTop: 10 }}>
+            <View  style={{ flex: 1, paddingTop: 10 }}>
                 {_self._getCardImage()}
                 <Form
                     style={{ paddingBottom: 0 }}
                     onChangeText={_self._onChangeText}
                     callback={_self._callback}
                     data={FORMDATA['creditCart']}
-                />;
+                />
                 {bankPoint}
                 {installments}
             </View>

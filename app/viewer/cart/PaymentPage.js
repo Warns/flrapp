@@ -1,17 +1,11 @@
 import React, { Component } from 'react';
 import {
-    Text,
-    TouchableOpacity,
-    Image,
     View,
     ScrollView,
+    WebView,
 } from 'react-native';
-import { Viewer, CrediCart } from 'root/app/viewer/';
+import { Viewer, CrediCart, Foot } from 'root/app/viewer/';
 import {
-    SET_CART_INFO,
-    ICONS,
-    SET_VIEWER,
-    SHOW_CUSTOM_POPUP,
     SET_CART_PROGRESS,
     CART_FOOTER_MARGIN_BOTTOM,
     CART_BACKGROUND_COLOR_1,
@@ -23,7 +17,6 @@ import {
 } from 'root/app/helper/Constant';
 import { connect } from 'react-redux';
 import Footer from './Footer';
-import { CheckBox } from 'root/app/form';
 import { store } from 'root/app/store';
 import UnderSide from './UnderSide';
 
@@ -54,42 +47,6 @@ const CONFIG = {
     coupon: false
 };
 
-const CONFIG_POPUP = {
-    "cart": {
-        "type": "scrollView",
-        "itemType": "cartList",
-        "viewType": "miniCart", /* viewType = minicart ise sepetteki remove ve update işlemleri gizlenecek */
-        "uri": { "key": "cart", "subKey": "getCart" },
-        "keys": {
-            "id": "cartItemId",
-            "arr": "products"
-        },
-        "refreshing": false,
-    },
-    "agreement1Html": {
-        "title": "MESAFELİ SATIŞ SÖZLEŞMESİ",
-        "type": "webViewer",
-        "uri": {
-            "key": "cart",
-            "subKey": "getAgreement"
-        },
-        "keys": {
-            "arr": "agreement1Html"
-        }
-    },
-    "agreement2Html": {
-        "title": "ÖN BİLGİLENDİRME FORMU",
-        "type": "webViewer",
-        "uri": {
-            "key": "cart",
-            "subKey": "getAgreement"
-        },
-        "keys": {
-            "arr": "agreement2Html"
-        }
-    }
-};
-
 const setAjx = ({ _self, uri, data }, callback) => {
     Globals.AJX({ _self: _self, uri: uri, data: data }, (res) => {
         const { status, message } = res;
@@ -97,56 +54,6 @@ const setAjx = ({ _self, uri, data }, callback) => {
             callback(res);
     });
 };
-
-class Foot extends Component {
-    constructor(props) {
-        super(props);
-    }
-
-    _onPress = (k) => {
-        const _self = this;
-        store.dispatch({
-            type: SHOW_CUSTOM_POPUP,
-            value: { visibility: true, type: SET_VIEWER, data: CONFIG_POPUP[k] || {} }
-        });
-    }
-
-    _getButton = ({ type, buttonName, chk = false }) => {
-        const _self = this,
-            checkbox = chk ? <CheckBox closed={true} callback={_self._onCheckBoxChange} data={{ desc: 'Okudum ve kabul ediyorum' }} /> : null;
-
-        return (
-            <View style={{ borderBottomColor: '#d8d8d8', borderBottomWidth: 1 }}>
-                <TouchableOpacity activeOpacity={.8} onPress={_self._onPress.bind(this, type)}>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', height: 60, justifyContent: 'space-between' }}>
-                        <Text style={{ fontFamily: 'Bold', fontSize: 16 }}>{buttonName}</Text>
-                        <Image
-                            style={{ width: 40, height: 40 }}
-                            source={ICONS['rightArrow']}
-                        />
-                    </View>
-                </TouchableOpacity>
-                {checkbox}
-            </View>
-        );
-    }
-
-    render() {
-        const _self = this,
-            cart = _self._getButton({ type: 'cart', buttonName: 'Sepet özetini göster' }),
-            agreement1 = _self._getButton({ type: 'agreement1Html', buttonName: 'Mesafeli satış sözleşmesi', chk: true }),
-            agreement2 = _self._getButton({ type: 'agreement2Html', buttonName: 'Üyelik sözleşmesi', chk: true });
-        return (
-            <View style={{ flex: 1, paddingLeft: 20, paddingRight: 20 }}>
-                {cart}
-                {agreement2}
-                {agreement1}
-            </View>
-        );
-    }
-}
-
-
 
 /* navigator BankTransfer component */
 class BankTransfer extends Component {
@@ -184,14 +91,32 @@ class BankTransfer extends Component {
 
     render() {
         const _self = this;
+
         return (
-            <Viewer
-                onRef={ref => (_self.child = ref)}
-                style={{ flex: 0 }}
-                wrapperStyle={{ flex: 0 }}
-                config={DATA}
-                callback={_self._callback}
-            />
+            <View style={{ flex: 1 }}>
+                <ScrollView
+                    contentContainerStyle={{
+                        flexGrow: 1,
+                    }}
+                    style={{
+                        flex: 1,
+                        marginBottom: CART_FOOTER_MARGIN_BOTTOM,
+                        backgroundColor: CART_BACKGROUND_COLOR_1,
+                    }}>
+                    <View style={{ flex: 1, backgroundColor: CART_BACKGROUND_COLOR_2, paddingTop: 20 }}>
+                        <Viewer
+                            onRef={ref => (_self.child = ref)}
+                            style={{ flex: 0 }}
+                            wrapperStyle={{ flex: 0 }}
+                            config={DATA}
+                            callback={_self._callback}
+                        />
+                        <Foot {..._self.props} />
+                    </View>
+                    <UnderSide wrapperStyle={{ backgroundColor: CART_BACKGROUND_COLOR_1 }} />
+                </ScrollView>
+                <Footer onPress={_self._onPress} data={CONFIG} />
+            </View>
         );
     }
 }
@@ -200,6 +125,9 @@ class BankTransfer extends Component {
 class CreditCart extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            frm: '<body onload="setTimeout(function() { document.frm.submit() }, 500)"><form name="frm" action="https://entegrasyon.asseco-see.com.tr/fim/est3Dgate" method="post"><input type="text" name="formName" value="pay_form">,<input type="text" name="okUrl" value="https://dev.flormar.com.tr/webapi/v3/orderProcessing/confirm3dTransaction?op=success&alv=65440">,<input type="text" name="failUrl" value="https://dev.flormar.com.tr/webapi/v3/orderProcessing/confirm3dTransaction?op=fail&alv=65440">,<input type="text" name="clientid" value="100100000">,,<input type="text" name="currency" value="949">,<input type="text" name="oid" value="">,<input type="text" name="storetype" value="3d">,<input type="text" name="lang" value="tr">,<input type="text" name="rnd" value="24.12.2018 16:40:46">,<input type="text" name="hash" value="oHgq66ntuGEHjJdsnWUGYaVyMs8=">,<input type="text" name="amount" value="27,99">,<input type="text" name="pan" value="5571135571135575">,<input type="text" name="cv3" value="000">,<input type="text" name="Ecom_Payment_Card_ExpDate_Year" value="2018">,<input type="text" name="Ecom_Payment_Card_ExpDate_Month" value="12">,<input type="text" name="cardType" value="2"><input type="submit" value="Submit"></form> </body>'
+        };
     }
 
     onDidFocus = () => {
@@ -226,11 +154,90 @@ class CreditCart extends Component {
             _self._Listener.remove();
     }
 
+    _template = {
+        form: '<body onload="setTimeout(function() { document.frm.submit() }, 500)"><form name="frm" action="{{action}}" method="post">{{input}}<input type="submit" value="Submit"></form> </body>',
+        input: '<input type="text" name="{{name}}" value="{{value}}">'
+    };
+
+    _getTemplate = (obj) => {
+        let formUrl = '';
+
+        const _self = this,
+            { posParameters = [] } = obj.data,
+            input = posParameters.map((item) => {
+                const { key, value } = item;
+                if (key != 'formUrl')
+                    return _self._template['input'].replace(/{{name}}/g, key).replace(/{{value}}/g, value);
+                else
+                    formUrl = value;
+            }),
+            htm = _self._template['form'].replace(/{{action}}/g, formUrl).replace(/{{input}}/g, input);
+
+        _self.setState({ frm: htm });
+        console.log('_getTemplate', htm);
+    }
+
+    _onPress = () => {
+        const _self = this,
+            { creditCart = {} } = store.getState().cart,
+            { bankId = 0, fullName = '', creditCardNo = '', cvcCode = '', installmentId } = creditCart,
+            date = (creditCart['year'] || '0/0').split('/'),
+            month = date[0] || 0,
+            year = date[1] || 0,
+            data = {
+                bankId: bankId,
+                fullName: fullName,
+                creditCardNo: creditCardNo.replace(/\s+/g, ''),
+                cvcCode: cvcCode,
+                year: '20' + year,
+                month: month,
+                installmentId: installmentId,
+                userClientIp: '0.0.0.0'
+                //"customRedirectUrl": "string"
+            };
+
+        globals.fetch(
+            Utils.getURL({ key: 'cart', subKey: 'getCart' }),
+            JSON.stringify({ cartLocation: 'payment' }), (answer) => {
+                console.log(data);
+                if (answer.status == 200) {
+                    globals.fetch(
+                        Utils.getURL({ key: 'cart', subKey: 'getPos3DParameter' }),
+                        JSON.stringify(data), (res) => {
+                            if (res.status == 200)
+                                _self._getTemplate(res);
+                        });
+                }
+            });
+    }
+
+    _getFrm = () => {
+        const _self = this,
+            { frm = '' } = _self.state;
+
+        let view = null;
+        if (frm != '') {
+            view = (
+                <View style={{ flex: 1, height: 300, backgroundColor: 'red' }}>
+                    <WebView
+                        scalesPageToFit={false}
+                        automaticallyAdjustContentInsets={false}
+                        source={{ html: frm }}
+                    />
+                </View>
+            );
+        }
+
+        return view;
+    }
+
     render() {
-        const _self = this;
+        const _self = this,
+            frm = _self._getFrm();
         return (
             <View style={{ flex: 1 }}>
                 <ScrollView
+                    keyboardShouldPersistTaps='handled'
                     contentContainerStyle={{
                         flexGrow: 1,
                     }}
@@ -239,6 +246,7 @@ class CreditCart extends Component {
                         marginBottom: CART_FOOTER_MARGIN_BOTTOM,
                         backgroundColor: CART_BACKGROUND_COLOR_1,
                     }}>
+                    {frm}
                     <View style={{ flex: 1, backgroundColor: CART_BACKGROUND_COLOR_2, paddingTop: 20 }}>
                         <CrediCart />
                         <Foot {..._self.props} />
@@ -396,7 +404,7 @@ const Payment = class Main extends Component {
         const _self = this,
             { loaded = false, payment = [] } = _self.state;
 
-        return loaded ? ( <Navigator payment={payment} /> ) : null;
+        return loaded ? (<Navigator payment={payment} />) : null;
     }
 }
 

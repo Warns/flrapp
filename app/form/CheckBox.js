@@ -25,6 +25,16 @@ class CheckBox extends Component {
         }
     }
 
+    /* 
+    updated: checkbox redux bağladığımızda yapılan değişikliğin yansıması için kullanırız. Diğer durumlar için çalıştırmamak gerekiyor.
+    */
+    componentWillReceiveProps(nextProps) {
+        const { value, updated = false } = nextProps.data;
+        if ( this.state.value != value && updated) {
+            this.setState({ value: value });
+        }
+    }
+
     _onPress = () => {
         const _self = this,
             { closed = false } = _self.props;
@@ -93,8 +103,6 @@ class CheckBox extends Component {
                 {view}
             </Container>
         )
-
-
     }
 }
 

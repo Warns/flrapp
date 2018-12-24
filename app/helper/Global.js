@@ -5,6 +5,7 @@ const Translation = require('root/app/helper/Translation.js');
 module.exports = {
     mapApiKey: 'AIzaSyAvSoqfCr4I9Vb11HtQ6cDEAMki6THBgrQ',
     prefix: 'https://www.flormar.com.tr',
+    //prefix: 'http://dev.flormar.com.tr',
     imagePrefix: 'flormar.com.tr',
     URLs: {
         style: {
@@ -76,7 +77,8 @@ module.exports = {
             getPayment: '/webapi/v3/Cart/getPayment',
             getAgreement: '/webapi/v3/Cart/getAgreement',
             getInstallment: '/webapi/v3/Cart/getInstallment',
-            getBankTransfer: '/webapi/v3/Cart/getBankTransfer'
+            getBankTransfer: '/webapi/v3/Cart/getBankTransfer',
+            getPos3DParameter: '/webapi/v3/Cart/getPos3DParameter'
         }
     },
     customURLs: {

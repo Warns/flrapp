@@ -9,6 +9,7 @@ export * from './cart/CartPage';
 export * from './cart/AddressPage';
 export * from './cart/PaymentPage';
 export * from './cart/CrediCart';
+export * from './cart/Foot';
 
 /* item */
 export * from './item/BankTransferListItem';

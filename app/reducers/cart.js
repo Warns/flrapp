@@ -17,6 +17,7 @@ import {
     RESET_PAYMENT,
     SET_CREDIT_CART,
     SET_BANK_POINT,
+    SET_AGREEMENT,
 } from 'root/app/helper/Constant';
 
 const cartInitialState = {
@@ -58,6 +59,10 @@ const cartInitialState = {
         paymentNote: '',
         //serviceId: 0 /* mağazada öde kısmı için kullanılabilir */
     },
+    agreements: {
+        agreement1: false,
+        agreement2: false
+    }
 };
 
 export default function cart(state = cartInitialState, action) {
@@ -174,7 +179,9 @@ export default function cart(state = cartInitialState, action) {
             };
 
             setCart(data['optin'], () => {
-                getCart();
+                setTimeout(() => {
+                    getCart();    
+                }, 333);
             });
 
             return data;
@@ -207,14 +214,31 @@ export default function cart(state = cartInitialState, action) {
 
 
             setCart(data['optin'], () => {
-                getCart();
+                setTimeout(() => {
+                    getCart();    
+                }, 333);
             });
+
+            return data;
+        };
+        case SET_AGREEMENT: {
+            const data = {
+                ...state,
+                agreements: {
+                    ...state.agreements,
+                    ...action.value
+                }
+            };
 
             return data;
         };
         case RESET_PAYMENT: {
             const data = {
                 ...state,
+                agreements: {
+                    agreement1: false,
+                    agreement2: false
+                },
                 creditCart: {
                     bankId: 0,
                     installmentId: 0,
@@ -271,6 +295,10 @@ export default function cart(state = cartInitialState, action) {
                     paymentNote: '',
                     serviceId: 0
                 },
+                agreements: {
+                    agreement1: false,
+                    agreement2: false
+                },
             }
         };
         case SET_CART_PROGRESS: {
@@ -297,11 +325,9 @@ getCart = async () => {
     const { optin } = store.getState().cart,
         { cartLocation } = optin;
 
-        console.log(cartLocation)
     globals.fetch(
         "https://www.flormar.com.tr/webapi/v3/Cart/getCart",
         JSON.stringify({ cartLocation: cartLocation }), (answer) => {
-            console.log(answer);
             if (answer.status == 200) {
                 setTimeout(() => {
                     store.dispatch({ type: SET_CART_INFO, value: answer.data });

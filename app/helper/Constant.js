@@ -200,6 +200,7 @@ export const SET_BANK_TRANSFER = 'SET_BANK_TRANSFER';
 export const RESET_PAYMENT = 'RESET_PAYMENT';
 export const SET_CREDIT_CART = 'SET_CREDIT_CART';
 export const SET_BANK_POINT = 'SET_BANK_POINT';
+export const SET_AGREEMENT = 'SET_AGREEMENT';
 
 /* general */
 export const SET_CATEGORIES = 'SET_CATEGORIES';
