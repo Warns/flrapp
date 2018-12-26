@@ -227,7 +227,7 @@ class CrediCard extends Component {
             };
             console.log(data)
             globals.fetch(
-                "https://www.flormar.com.tr/webapi/v3/Cart/checkBankPoint",
+                Utils.getURL({ key: 'cart', subKey: 'checkBankPoint' }),
                 JSON.stringify(data), (answer) => {
                     if (answer.status == 200) {
                         _self.setState({ ...(answer.data || {}) })

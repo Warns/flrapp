@@ -20,6 +20,8 @@ import {
     SET_AGREEMENT,
 } from 'root/app/helper/Constant';
 
+const Utils = require('root/app/helper/Global.js');
+
 const cartInitialState = {
     progress: '1/3',
     name: 'Cart',
@@ -326,7 +328,7 @@ getCart = async () => {
         { cartLocation } = optin;
 
     globals.fetch(
-        "https://www.flormar.com.tr/webapi/v3/Cart/getCart",
+        Utils.getURL({ key: 'cart', subKey: 'getCart' }),
         JSON.stringify({ cartLocation: cartLocation }), (answer) => {
             if (answer.status == 200) {
                 setTimeout(() => {
@@ -341,7 +343,7 @@ setCart = async (data, callback) => {
     console.log('set cart', data);
 
     globals.fetch(
-        "https://www.flormar.com.tr/webapi/v3/Cart/setCart",
+        Utils.getURL({ key: 'cart', subKey: 'setCart' }),
         JSON.stringify(data), (answer) => {
             if (answer.status == 200) {
                 //nothing
@@ -359,7 +361,7 @@ setCart = async (data, callback) => {
 addCartLine = (obj) => {
 
     globals.fetch(
-        "https://www.flormar.com.tr/webapi/v3/Cart/addCartLine",
+        Utils.getURL({ key: 'cart', subKey: 'addCartLine' }),
         JSON.stringify({
             "productId": obj.id,
             "quantity": obj.quantity,
@@ -377,7 +379,7 @@ addCartLine = (obj) => {
 
 addFavoriteProduct = (obj) => {
     globals.fetch(
-        "https://www.flormar.com.tr/webapi/v3/User/addFavoriteProduct",
+        Utils.getURL({ key: 'user', subKey: 'addFavoriteProduct' }),
         JSON.stringify({
             "productId": obj.id,
         }), (answer) => {
@@ -387,7 +389,7 @@ addFavoriteProduct = (obj) => {
 
 deleteFavoriteProduct = (obj) => {
     globals.fetch(
-        "https://www.flormar.com.tr/webapi/v3/User/deleteFavoriteProduct",
+        Utils.getURL({ key: 'user', subKey: 'deleteFavoriteProduct' }),
         JSON.stringify({
             "productId": obj.id,
         }), (answer) => {

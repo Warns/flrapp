@@ -126,7 +126,8 @@ class CreditCart extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            frm: '<body onload="setTimeout(function() { document.frm.submit() }, 500)"><form name="frm" action="https://entegrasyon.asseco-see.com.tr/fim/est3Dgate" method="post"><input type="text" name="formName" value="pay_form">,<input type="text" name="okUrl" value="https://dev.flormar.com.tr/webapi/v3/orderProcessing/confirm3dTransaction?op=success&alv=65440">,<input type="text" name="failUrl" value="https://dev.flormar.com.tr/webapi/v3/orderProcessing/confirm3dTransaction?op=fail&alv=65440">,<input type="text" name="clientid" value="100100000">,,<input type="text" name="currency" value="949">,<input type="text" name="oid" value="">,<input type="text" name="storetype" value="3d">,<input type="text" name="lang" value="tr">,<input type="text" name="rnd" value="24.12.2018 16:40:46">,<input type="text" name="hash" value="oHgq66ntuGEHjJdsnWUGYaVyMs8=">,<input type="text" name="amount" value="27,99">,<input type="text" name="pan" value="5571135571135575">,<input type="text" name="cv3" value="000">,<input type="text" name="Ecom_Payment_Card_ExpDate_Year" value="2018">,<input type="text" name="Ecom_Payment_Card_ExpDate_Month" value="12">,<input type="text" name="cardType" value="2"><input type="submit" value="Submit"></form> </body>'
+            injectScript: '',
+            frm: ''
         };
     }
 
@@ -211,15 +212,43 @@ class CreditCart extends Component {
             });
     }
 
+    _onMessage = (event) => {
+        const obj = JSON.parse(event.nativeEvent.data || '{}'),
+            { status, message = '', innerMessage = '', data = {} } = obj,
+            { orderNo, successText = '', url3ds } = data;
+
+        if (status == 200) {
+            // success
+            alert(successText);
+        } else {
+            // error
+            alert(message);
+        }
+
+
+        //const ornek = {"status":200,"message":null,"innerMessage":null,"data":{"orderNo":"SIP0151456440","successText":"Siparişiniz başarıyla alındı. Sipariş ettiğiniz ürünler en kısa sürede teslimat adresinize teslim edilecektir.","url3ds":null}}
+    }
+
+    _onNavigationStateChange(webViewState) {
+        const _self = this,
+            { url } = webViewState;
+        if (url.indexOf('orderProcessing/confirm3dTransaction') != -1)
+            _self.setState({ injectScript: 'window.parent.postMessage(document.body.innerText);' });
+    }
+
     _getFrm = () => {
         const _self = this,
-            { frm = '' } = _self.state;
+            { frm = '', injectScript = '' } = _self.state;
 
         let view = null;
         if (frm != '') {
             view = (
                 <View style={{ flex: 1, height: 300, backgroundColor: 'red' }}>
                     <WebView
+                        onMessage={this._onMessage}
+                        injectedJavaScript={injectScript}
+                        onNavigationStateChange={this._onNavigationStateChange.bind(this)}
+                        ref={component => (this.webview = component)}
                         scalesPageToFit={false}
                         automaticallyAdjustContentInsets={false}
                         source={{ html: frm }}
