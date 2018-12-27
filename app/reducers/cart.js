@@ -18,6 +18,7 @@ import {
     SET_CREDIT_CART,
     SET_BANK_POINT,
     SET_AGREEMENT,
+    SET_ORDER_SUCCESS_MESSAGE,
 } from 'root/app/helper/Constant';
 
 const Utils = require('root/app/helper/Global.js');
@@ -64,7 +65,8 @@ const cartInitialState = {
     agreements: {
         agreement1: false,
         agreement2: false
-    }
+    },
+    orderSuccessMessage: ''
 };
 
 export default function cart(state = cartInitialState, action) {
@@ -182,7 +184,7 @@ export default function cart(state = cartInitialState, action) {
 
             setCart(data['optin'], () => {
                 setTimeout(() => {
-                    getCart();    
+                    getCart();
                 }, 333);
             });
 
@@ -217,7 +219,7 @@ export default function cart(state = cartInitialState, action) {
 
             setCart(data['optin'], () => {
                 setTimeout(() => {
-                    getCart();    
+                    getCart();
                 }, 333);
             });
 
@@ -230,6 +232,14 @@ export default function cart(state = cartInitialState, action) {
                     ...state.agreements,
                     ...action.value
                 }
+            };
+
+            return data;
+        };
+        case SET_ORDER_SUCCESS_MESSAGE: {
+            const data = {
+                ...state,
+                orderSuccessMessage: action.value
             };
 
             return data;
@@ -301,6 +311,7 @@ export default function cart(state = cartInitialState, action) {
                     agreement1: false,
                     agreement2: false
                 },
+                orderSuccessMessage: '',
             }
         };
         case SET_CART_PROGRESS: {

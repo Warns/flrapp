@@ -78,7 +78,7 @@ module.exports = {
                     type: 'text',
                     placeholder: '',
                     value: '',
-                    mask: '0(599) 9999999',
+                    mask: '0599 9999999',
                     customFormat: (k) => {
                         return Utils.customPhoneFormat(k);
                     },

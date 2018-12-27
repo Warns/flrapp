@@ -3,6 +3,7 @@ import {
     View,
     ScrollView,
     WebView,
+    Modal,
 } from 'react-native';
 import { Viewer, CrediCart, Foot } from 'root/app/viewer/';
 import {
@@ -14,7 +15,10 @@ import {
     CREDIT_CART,
     BANK_TRANSFER,
     RESET_PAYMENT,
+    SET_ORDER_SUCCESS_MESSAGE,
+    SET_CART_ITEMS
 } from 'root/app/helper/Constant';
+import { MinimalHeader } from 'root/app/components';
 import { connect } from 'react-redux';
 import Footer from './Footer';
 import { store } from 'root/app/store';
@@ -89,6 +93,10 @@ class BankTransfer extends Component {
 
     }
 
+    _onPress = () => {
+        this.props.nav.navigate('OrderSuccess', {});
+    }
+
     render() {
         const _self = this;
 
@@ -127,7 +135,9 @@ class CreditCart extends Component {
         super(props);
         this.state = {
             injectScript: '',
-            frm: ''
+            frm: '',
+            isVisible: false,
+            //frm: '<body onload="setTimeout(function() { document.frm.submit() }, 500)"><form name="frm" action="https://entegrasyon.asseco-see.com.tr/fim/est3Dgate" method="post"><input type="text" name="formName" value="pay_form">,<input type="text" name="okUrl" value="https://dev.flormar.com.tr/webapi/v3/orderProcessing/confirm3dTransaction?op=success&alv=65440">,<input type="text" name="failUrl" value="https://dev.flormar.com.tr/webapi/v3/orderProcessing/confirm3dTransaction?op=fail&alv=65440">,<input type="text" name="clientid" value="100100000">,,<input type="text" name="currency" value="949">,<input type="text" name="oid" value="">,<input type="text" name="storetype" value="3d">,<input type="text" name="lang" value="tr">,<input type="text" name="rnd" value="24.12.2018 16:40:46">,<input type="text" name="hash" value="oHgq66ntuGEHjJdsnWUGYaVyMs8=">,<input type="text" name="amount" value="27,99">,<input type="text" name="pan" value="5571135571135575">,<input type="text" name="cv3" value="000">,<input type="text" name="Ecom_Payment_Card_ExpDate_Year" value="2018">,<input type="text" name="Ecom_Payment_Card_ExpDate_Month" value="12">,<input type="text" name="cardType" value="2"><input type="submit" value="Submit"></form> </body>'
         };
     }
 
@@ -174,11 +184,12 @@ class CreditCart extends Component {
             }),
             htm = _self._template['form'].replace(/{{action}}/g, formUrl).replace(/{{input}}/g, input);
 
-        _self.setState({ frm: htm });
+        _self.setState({ frm: htm, isVisible: true });
         console.log('_getTemplate', htm);
     }
 
     _onPress = () => {
+
         const _self = this,
             { creditCart = {} } = store.getState().cart,
             { bankId = 0, fullName = '', creditCardNo = '', cvcCode = '', installmentId } = creditCart,
@@ -213,18 +224,25 @@ class CreditCart extends Component {
     }
 
     _onMessage = (event) => {
-        const obj = JSON.parse(event.nativeEvent.data || '{}'),
+        const _self = this,
+            obj = JSON.parse(event.nativeEvent.data || '{}'),
             { status, message = '', innerMessage = '', data = {} } = obj,
-            { orderNo, successText = '', url3ds } = data;
+            { orderNo = '', successText = '', url3ds } = data;
+
+        /* işlem bitince 3d secure formunu gizleme */
+        _self._onCloseModal()
 
         if (status == 200) {
             // success
-            alert(successText);
+            store.dispatch({ type: SET_ORDER_SUCCESS_MESSAGE, value: (orderNo + " no'lu " + successText) });
+            store.dispatch({ type: SET_CART_ITEMS, value: 0 });
+            setTimeout(() => {
+                _self.props.nav.navigate('OrderSuccess', {});
+            }, 10);
         } else {
             // error
             alert(message);
         }
-
 
         //const ornek = {"status":200,"message":null,"innerMessage":null,"data":{"orderNo":"SIP0151456440","successText":"Siparişiniz başarıyla alındı. Sipariş ettiğiniz ürünler en kısa sürede teslimat adresinize teslim edilecektir.","url3ds":null}}
     }
@@ -260,9 +278,34 @@ class CreditCart extends Component {
         return view;
     }
 
+    _onCloseModal = () => {
+        const _self = this;
+        _self.setState({ frm: '', injectScript: '', isVisible: false })
+    }
+
+    _getModal = () => {
+        const _self = this,
+            frm = _self._getFrm(),
+            { isVisible = false } = _self.state;
+
+        /* 3d secure modal */
+        return (
+            <Modal
+                visible={isVisible}
+                onRequestClose={() => {
+
+                }}
+            >
+                <MinimalHeader onPress={_self._onCloseModal} title={'Sepetim'} right={<View />} />
+                {frm}
+            </Modal>
+        )
+    }
+
     render() {
         const _self = this,
-            frm = _self._getFrm();
+            modal = _self._getModal();
+
         return (
             <View style={{ flex: 1 }}>
                 <ScrollView
@@ -275,12 +318,14 @@ class CreditCart extends Component {
                         marginBottom: CART_FOOTER_MARGIN_BOTTOM,
                         backgroundColor: CART_BACKGROUND_COLOR_1,
                     }}>
-                    {frm}
+
                     <View style={{ flex: 1, backgroundColor: CART_BACKGROUND_COLOR_2, paddingTop: 20 }}>
                         <CrediCart />
                         <Foot {..._self.props} />
                     </View>
                     <UnderSide wrapperStyle={{ backgroundColor: CART_BACKGROUND_COLOR_1 }} />
+
+                    {modal}
                 </ScrollView>
                 <Footer onPress={_self._onPress} data={CONFIG} />
             </View>
@@ -327,9 +372,9 @@ class Navigator extends Component {
 
         switch (paymentType) {
             case CREDIT_CART:
-                return <CreditCart {...props} data={item} />;
+                return <CreditCart nav={_self.props.nav} {...props} data={item} />;
             case BANK_TRANSFER:
-                return <BankTransfer {...props} data={item} />;
+                return <BankTransfer nav={_self.props.nav} {...props} data={item} />;
             default:
                 return null;
         }
@@ -433,7 +478,7 @@ const Payment = class Main extends Component {
         const _self = this,
             { loaded = false, payment = [] } = _self.state;
 
-        return loaded ? (<Navigator payment={payment} />) : null;
+        return loaded ? (<Navigator nav={_self.props.navigation} payment={payment} />) : null;
     }
 }
 

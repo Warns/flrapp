@@ -1415,7 +1415,7 @@ class Viewers extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        if (!Utils.isArrEqual(this.state.data, nextState.data) || this.state.html !== nextState.html)
+        if (!Utils.isArrEqual(this.state.data, nextState.data) || this.state.html !== nextState.html || Utils.isArrEqual(this.props.style, nextProps.style) )
             return true;
         return false;
     }
@@ -2089,7 +2089,7 @@ class Viewers extends Component {
         return (
             <View style={[{ flex: 1 }, { ..._self.props.wrapperStyle }]}>
                 {_self._getFilter()}
-                <View style={[{ flex: 1, padding: 0 }, { ..._self.props.style }]}>
+                <View style={[{ flex: 1, padding: 0, }, { ..._self.props.style }]}>
                     {_self._getViewer()}
                 </View>
             </View >

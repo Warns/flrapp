@@ -51,22 +51,10 @@ export const ICONS = {
     stars: require('root/assets/icons/stars.png'),
     starEmpty: require('root/assets/icons/star-empty.png'),
     starFull: require('root/assets/icons/star-full.png'),
-};
-
-/* CARDS ICON */
-export const CARDS = {
-    'american-express': require('root/assets/icons/cards/americanexpress.png'),
-    'amex': require('root/assets/icons/cards/amex.png'),
-    'dankort': require('root/assets/icons/cards/dankort.png'),
-    'dinersclub': require('root/assets/icons/cards/dinersclub.png'),
-    'discover': require('root/assets/icons/cards/discover.png'),
-    'forbrugsforeningen': require('root/assets/icons/cards/forbrugsforeningen.png'),
-    'jcb': require('root/assets/icons/cards/jcb.png'),
-    'maestro': require('root/assets/icons/cards/maestro.png'),
-    'mastercard': require('root/assets/icons/cards/mastercard.png'),
-    'troy': require('root/assets/icons/cards/troy.png'),
-    'visa': require('root/assets/icons/cards/visa.png'),
-    'visaelectron': require('root/assets/icons/cards/visaelectron.png'),
+    orderSuccessImg: require('root/assets/images/order-success-img.png'),
+    orderSuccessRect: require('root/assets/images/order-success-rect.png'),
+    orderSuccessTxt: require('root/assets/images/order-success-txt.png'),
+    orderSuccessIcon: require('root/assets/images/order-success-icon.png'),
 };
 
 /* VIEWER SAYFA TİPLERİ */
@@ -201,6 +189,7 @@ export const RESET_PAYMENT = 'RESET_PAYMENT';
 export const SET_CREDIT_CART = 'SET_CREDIT_CART';
 export const SET_BANK_POINT = 'SET_BANK_POINT';
 export const SET_AGREEMENT = 'SET_AGREEMENT';
+export const SET_ORDER_SUCCESS_MESSAGE = 'SET_ORDER_SUCCESS_MESSAGE';
 
 /* general */
 export const SET_CATEGORIES = 'SET_CATEGORIES';
