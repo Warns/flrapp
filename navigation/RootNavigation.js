@@ -43,7 +43,7 @@ class CartPage extends React.Component {
 const RootStackNavigator = createStackNavigator(
   {
     Optin: {
-      screen: Review, //OptinNavigator,
+      screen: OptinNavigator,
       navigationOptions: {
         gesturesEnabled: false,
         header: null
@@ -79,16 +79,7 @@ const RootStackNavigator = createStackNavigator(
     Cart: {
       screen: props => <CartNavigation />,
       navigationOptions: {
-        header: (props) => {
-          const { cart } = store.getState(),
-            { progress = "1/3" } = cart,
-            _onBack = () => {
-              const { navigation } = props;
-              navigation.goBack(null);
-            };
-
-          return <MinimalHeader onPress={_onBack} title="Sepetim" progress={progress} />;
-        }
+        header: () => null,
       }
     },
 

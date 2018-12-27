@@ -16,7 +16,7 @@ import {
     NAVIGATE,
     CART_FOOTER_MARGIN_BOTTOM,
     CART_FOOTER_EXPAND_MARGIN_BOTTOM,
-    CART_BACKGROUND_COLOR_1, 
+    CART_BACKGROUND_COLOR_1,
     CART_BACKGROUND_COLOR_2
 } from 'root/app/helper/Constant';
 import { connect } from 'react-redux';
@@ -60,7 +60,7 @@ const Cart = class Main extends Component {
 
     onWillFocus = () => {
         const _self = this;
-        _self.props.dispatch({ type: SET_CART_PROGRESS,  value: { progress: '1/3', cartLocation: 'basket' } });
+        _self.props.dispatch({ type: SET_CART_PROGRESS, value: { progress: '1/3', cartLocation: 'basket' } });
     }
 
     componentDidMount() {
@@ -122,7 +122,7 @@ const Cart = class Main extends Component {
                 //--> sepet dolu logine git
                 _self.props.dispatch({ type: NAVIGATE, value: { item: { navigation: "Optin" } } });
             }
-            
+
         } else if (userId != '') { //--> login
             if (cartNoResult) {
                 //--> sepet boş anasayfaya dön

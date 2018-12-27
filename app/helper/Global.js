@@ -4,7 +4,8 @@ import {
 const Translation = require('root/app/helper/Translation.js');
 module.exports = {
     mapApiKey: 'AIzaSyAvSoqfCr4I9Vb11HtQ6cDEAMki6THBgrQ',
-    prefix: 'https://www.flormar.com.tr',
+    //prefix: 'https://www.flormar.com.tr',
+    prefix: 'https://dev.flormar.com.tr',
     imagePrefix: 'flormar.com.tr',
     URLs: {
         style: {
@@ -19,6 +20,8 @@ module.exports = {
             getProductVideos: 'https://www.flormar.com.tr/mobile-app-product-video-export.htm',
         },
         user: {
+            addFavoriteProduct: '/webapi/v3/User/addFavoriteProduct',
+            deleteFavoriteProduct: '/webapi/v3/User/deleteFavoriteProduct',
             getToken: '/webapi/v3/User/getToken',
             getUser: '/webapi/v3/User/getUser',
             setUser: '/webapi/v3/User/setUser',
@@ -68,6 +71,7 @@ module.exports = {
         cart: {
             getCart: '/webapi/v3/Cart/getCart',
             setCart: '/webapi/v3/Cart/setCart',
+            addCartLine: '/webapi/v3/Cart/addCartLine',
             updateCartLine: '/webapi/v3/Cart/updateCartLine',
             deleteCartLine: '/webapi/v3/Cart/deleteCartLine',
             useCoupon: '/webapi/v3/Cart/useCoupon',
@@ -76,7 +80,9 @@ module.exports = {
             getPayment: '/webapi/v3/Cart/getPayment',
             getAgreement: '/webapi/v3/Cart/getAgreement',
             getInstallment: '/webapi/v3/Cart/getInstallment',
-            getBankTransfer: '/webapi/v3/Cart/getBankTransfer'
+            getBankTransfer: '/webapi/v3/Cart/getBankTransfer',
+            getPos3DParameter: '/webapi/v3/Cart/getPos3DParameter',
+            checkBankPoint: '/webapi/v3/Cart/checkBankPoint'
         }
     },
     customURLs: {

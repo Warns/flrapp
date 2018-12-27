@@ -135,7 +135,7 @@ class SelectBox extends Component {
 
         return (
             <TouchableOpacity
-                activeOpacity={0.4}
+                activeOpacity={0.8}
                 onPress={_self._open}>
                 <Container
                     showHeader={showHeader}
