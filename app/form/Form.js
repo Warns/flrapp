@@ -10,7 +10,7 @@ import {
     TouchableOpacity,
     Text
 } from 'react-native';
-import { FormInput, SelectBox, CheckBox, RadioGroup, DateTimePicker, ErrorBox, CountryPicker, HiddenObject } from './';
+import { FormInput, SelectBox, CheckBox, RadioGroup, DateTimePicker, ErrorBox, CountryPicker, HiddenObject, StarSelect } from './';
 import { CustomKeyboard } from 'root/app/helper';
 import { DefaultButton } from 'root/app/UI';
 import {
@@ -192,6 +192,7 @@ class Form extends Component {
         const _t = this;
         _t.arr.push(obj);
         _t.count++;
+
         if (_t.count >= _t.totalCount) {
             _t._validation(_t.arr);
             _t.count = 0;
@@ -417,6 +418,8 @@ class Form extends Component {
                 return <HiddenObject callback={_callback} control={validation} key={id} data={obj} />;
             case 'button':
                 return <Button callback={_self._modalButtonClick} key={id} data={obj} />;
+            case 'stars':
+                return <StarSelect style={{ padding: 20, paddingBottom: 30 }} callback={_callback} control={validation} key={id} data={obj} />
             default:
                 return null;
         }

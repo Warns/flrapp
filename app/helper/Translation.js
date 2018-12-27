@@ -8,7 +8,7 @@ module.exports = {
         removeMessage: 'Silmek istediğinize emin misiniz?',
         exitButton: 'Çıkış yapmak istediğinize emin misiniz?'
     },
-    dropdown:{
+    dropdown: {
         chooseInstallment: 'Taksit Seçiniz',
         choose: 'Seçiniz',
         countryChoose: 'Ülke Seçiniz',
@@ -64,17 +64,18 @@ module.exports = {
         isEqual: '{{title}} alanı ile {{value}} eşit olmalıdır.',
         */
 
-       isEmpty: 'zorunlu alan',
-       isMin: 'min. karekter sayısı {{value}}',
-       isMax: 'maks. karekter sayısı {{value}}',
-       isSelection: 'seçim yap',
-       isChecked: 'seçim yap',
-       isMail: 'geçersiz format',
-       isDate: 'geçersiz format',
-       isPhone: 'eksik numara',
-       isPassword: 'zorunlu alan',
-       isTwo: 'en az iki kelime',
-       isEqual: '{{value}} ile eşit değil',
+        isEmpty: 'zorunlu alan',
+        isMin: 'min. karekter sayısı {{value}}',
+        isMax: 'maks. karekter sayısı {{value}}',
+        isSelection: 'seçim yap',
+        isChecked: 'seçim yap',
+        isMail: 'geçersiz format',
+        isDate: 'geçersiz format',
+        isPhone: 'eksik numara',
+        isPassword: 'zorunlu alan',
+        isTwo: 'en az iki kelime',
+        isEqual: '{{value}} ile eşit değil',
+        isStar: 'puan seç',
     },
     feeds: {
         instagramDetail: 'Instagram\'a git',

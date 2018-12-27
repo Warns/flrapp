@@ -13,7 +13,6 @@ export * from './Buttons/RatingButton';
 export * from './Buttons/DoubleClickButton';
 export * from './Buttons/IconButton';
 export * from './ReadMoreText';
-export * from './StarSelect';
 
 // Other
 export * from './Item';

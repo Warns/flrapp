@@ -4,7 +4,9 @@ import {
   Image,
   View,
   TouchableOpacity,
+  Text,
 } from 'react-native';
+import { Container } from './';
 
 class StarSelect extends React.Component {
 
@@ -18,16 +20,18 @@ class StarSelect extends React.Component {
   }
 
   _onPress = (index) => {
+    const { title, id, validation } = this.props.data;
     this.setState({
       selection: index
-    })
-    this.props.callback(index);
+    });
+    this.props.callback({ key: id, title: title, value: index, validation: validation });
   }
 
   render() {
 
     const { selection } = this.state;
     const { range = 5, style = { padding: 30 } } = this.props;
+    const { error = false, errorMsg = null } = this.props.data;
 
     let _stars = [];
     let n = range;
@@ -39,9 +43,11 @@ class StarSelect extends React.Component {
     }
 
     return (
-      <View style={[{ flexDirection: "row-reverse" }, style]}>
-        {_stars}
-      </View>
+      <Container showErrorIco={false} titleShow={true} error={error} errorMsg={errorMsg} wrapperStyle={{ backgroundColor: "transparent", paddingLeft: 0, borderWidth: 0, height: 'auto' }}>
+        <View style={[{ flexDirection: "row-reverse" }, style]}>
+          {_stars}
+        </View>
+      </Container>
     );
   }
 }

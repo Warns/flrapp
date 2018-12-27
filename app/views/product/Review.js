@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { MinimalHeader } from 'root/app/components';
 import { Form } from 'root/app/form';
 import { FORMDATA } from 'root/app/helper/Constant';
-import { StarSelect } from 'root/app/UI';
 
 import { ICONS } from 'root/app/helper/Constant';
 
@@ -26,6 +25,10 @@ class ProductReview extends React.Component {
     this.props.navigation.goBack();
   }
 
+  _onSubmit = (obj) => {
+    console.log(obj.data);
+  }
+
   render() {
 
     let { item } = this.props.product;
@@ -38,14 +41,14 @@ class ProductReview extends React.Component {
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <MinimalHeader title={_title} right={<View />} onPress={this._onBackPress} />
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, backgroundColor: '#F6F0EF' }}>
           <View style={{ padding: 40, paddingBottom: 20, paddingTop: 20 }}>
             <Text style={{ color: '#000000', lineHeight: 18, fontSize: 15 }}>Email adresini yaz.</Text>
             {error}
           </View>
           <Form callback={this._onSubmit} data={FORMDATA['review_submission']} />
           <View>
-            <StarSelect style={{ padding: 50 }} callback={() => { }} />
+
           </View>
         </View>
       </SafeAreaView>

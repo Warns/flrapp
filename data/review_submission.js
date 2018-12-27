@@ -23,6 +23,18 @@ module.exports = {
           placeholder: '',
           value: '',
           validation: [{ key: 'isEmpty' }],
+          css: {
+            wrapperStyle: {
+              height: 200,
+              alignItems: 'flex-start',
+            }
+          }
+        },
+        {
+          id: 'points',
+          title: 'Puan seçiniz',
+          type: 'stars',
+          validation: [{ key: 'isStar' }],
         }
       ]
     }

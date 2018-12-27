@@ -57,10 +57,13 @@ module.exports = {
                 if (tm['value'] == value)
                     b = true;
                 else
-                    title2 = tm['title'];    
+                    title2 = tm['title'];
                 return false;
             }
         });
         return b ? { state: true } : { state: false, msg: Translation.getErrorMsg({ key: 'isEqual', title: title, value: title2 }) };
+    },
+    isStar: ({ value = -1, title = '' }) => {
+        return value >= 0 ? { state: true } : { state: false, msg: Translation.getErrorMsg({ key: 'isStar', title: title }) }
     }
 };
