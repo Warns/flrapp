@@ -50,7 +50,7 @@ module.exports = {
                     title: 'Cep Telefonu',
                     type: 'text',
                     value: '',
-                    mask: '0 (999) 999 99 99',
+                    mask: '0999 999 99 99',
                     customFormat: (k) => {
                         return Utils.customPhoneFormat( k );
                     },
