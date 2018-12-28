@@ -160,7 +160,7 @@ const Cart = class Main extends Component {
             backgroundColor = loaded ? CART_BACKGROUND_COLOR_1 : CART_BACKGROUND_COLOR_2,
             underside = loaded ? <UnderSide opportunity={CONFIG['opportunity']} /> : null,
             { cartNoResult = false } = _self.props.cart,
-            flx = !loaded ? 1 : (cartNoResult ? 1 : 0);
+            flexible = !loaded ? true : (cartNoResult ? true : false);
 
         return (
             <View style={{ flex: 1 }}>
@@ -172,6 +172,7 @@ const Cart = class Main extends Component {
                         backgroundColor: backgroundColor,
                     }}>
                     <Viewer
+                        flexible={flexible}
                         noResult={_self._noResult}
                         onRef={ref => (_self.child = ref)}
                         {..._self.props}

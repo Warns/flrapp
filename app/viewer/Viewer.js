@@ -1415,7 +1415,7 @@ class Viewers extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        if (!Utils.isArrEqual(this.state.data, nextState.data) || this.state.html !== nextState.html || Utils.isArrEqual(this.props.style, nextProps.style) )
+        if (!Utils.isArrEqual(this.state.data, nextState.data) || this.state.html !== nextState.html || this.props.flexible != nextProps.flexible)
             return true;
         return false;
     }
@@ -2029,7 +2029,8 @@ class Viewers extends Component {
 
     _getViewer = () => {
         const _self = this,
-            { scrollEnabled = true } = _self.props,
+            { scrollEnabled = true, flexible = true } = _self.props,
+            flex = flexible ? { flex: 1 } : {},
             { type = VIEWERTYPE['LIST'], horizontal = false, showsHorizontalScrollIndicator = true } = _self.props.config,
             { noResult = false, loaded = false } = _self.state;
 
@@ -2056,13 +2057,13 @@ class Viewers extends Component {
                 view = preload();
             else if (type == VIEWERTYPE['HTML'])
                 view = (
-                    <ScrollView style={{ flex: 1, }}>
+                    <ScrollView style={{ ...flex }}>
                         <HTML {...HTML_DEFAULT_PROPS} html={_self.state.html} />
                     </ScrollView>
                 );
             else if (type == VIEWERTYPE['WEBVIEW'])
                 view = (
-                    <View style={{ flex: 1, }}>
+                    <View style={{ ...flex }}>
                         <WebView
                             scalesPageToFit={false}
                             automaticallyAdjustContentInsets={false}
@@ -2074,7 +2075,7 @@ class Viewers extends Component {
                 view = (
                     <ScrollView
                         scrollEnabled={scrollEnabled}
-                        style={{ flex: 1 }}
+                        style={{ ...flex }}
                     >
                         {_self._getItem()}
                     </ScrollView>
@@ -2085,11 +2086,14 @@ class Viewers extends Component {
     }
 
     render() {
-        const _self = this;
+        const _self = this,
+            { flexible = true } = _self.props,
+            flex = flexible ? { flex: 1 } : {};
+
         return (
-            <View style={[{ flex: 1 }, { ..._self.props.wrapperStyle }]}>
+            <View style={[{ ...flex }, { ..._self.props.wrapperStyle }]}>
                 {_self._getFilter()}
-                <View style={[{ flex: 1, padding: 0, }, { ..._self.props.style }]}>
+                <View style={[{ ...flex, padding: 0, }, { ..._self.props.style }]}>
                     {_self._getViewer()}
                 </View>
             </View >
