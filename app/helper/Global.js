@@ -82,7 +82,8 @@ module.exports = {
             getInstallment: '/webapi/v3/Cart/getInstallment',
             getBankTransfer: '/webapi/v3/Cart/getBankTransfer',
             getPos3DParameter: '/webapi/v3/Cart/getPos3DParameter',
-            checkBankPoint: '/webapi/v3/Cart/checkBankPoint'
+            checkBankPoint: '/webapi/v3/Cart/checkBankPoint',
+            setCartOrder: '/webapi/v3/Cart/setCartOrder'
         }
     },
     customURLs: {

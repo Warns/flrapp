@@ -352,7 +352,7 @@ class Form extends Component {
     addField = (obj) => {
         const _self = this,
             { id, type, css = {}, showHeader = true, constantValue = false } = obj,
-            { containerStyle = {}, wrapperStyle = {}, fontStyle = {}, defaultTitleStyle = {} } = css,
+            { errorMsgStyle = {}, containerStyle = {}, wrapperStyle = {}, fontStyle = {}, defaultTitleStyle = {} } = css,
             { theme = 'DARK' } = _self.props.data,
             validation = this.state.validation,
             _callback = this._callback,
@@ -370,6 +370,7 @@ class Form extends Component {
             case 'creditCart':
                 return <FormInput
                     onRef={ref => (_self._formElement.push(ref))}
+                    errorMsgStyle={{ ...errorMsgStyle }}
                     containerStyle={{ ...containerStyle }}
                     wrapperStyle={{ ...wrapperStyle }}
                     onChangeText={_self._onChangeText}
@@ -383,6 +384,7 @@ class Form extends Component {
             case 'text':
                 return <FormInput
                     onRef={ref => (_self._formElement.push(ref))}
+                    errorMsgStyle={{ ...errorMsgStyle }}
                     containerStyle={{ ...containerStyle }}
                     wrapperStyle={{ ...wrapperStyle }}
                     onChangeText={_self._onChangeText}

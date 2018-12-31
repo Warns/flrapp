@@ -76,6 +76,8 @@ module.exports = {
         isTwo: 'en az iki kelime',
         isEqual: '{{value}} ile eşit değil',
         isStar: 'puan seç',
+        isCreditCard: 'geçersiz kart',
+        isCvcCode: 'geçersiz cvc'
     },
     feeds: {
         instagramDetail: 'Instagram\'a git',

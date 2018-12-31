@@ -277,12 +277,15 @@ class Main extends Component {
   };
 
   render() {
-    const _self = this,
+    let _self = this,
       { buttonText = "" } = _self.props.data,
-      { cartNoResult = false } = _self.props.cart,
+      { cartNoResult = false, optin } = _self.props.cart,
+      { order3dButton = false } = optin || {},
       buttonStyle = cartNoResult
         ? { backgroundColor: "#999999" }
         : { backgroundColor: "#000000" };
+
+    buttonText = order3dButton ? 'ÖDEME YAP (3D)' : buttonText;
 
     return (
       <ElevatedView

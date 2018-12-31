@@ -4,9 +4,11 @@ import {
     ScrollView,
     WebView,
     Modal,
+    Image,
 } from 'react-native';
 import { Viewer, CrediCart, Foot } from 'root/app/viewer/';
 import {
+    ICONS,
     SET_CART_PROGRESS,
     CART_FOOTER_MARGIN_BOTTOM,
     CART_BACKGROUND_COLOR_1,
@@ -18,6 +20,11 @@ import {
     SET_ORDER_SUCCESS_MESSAGE,
     SET_CART_ITEMS
 } from 'root/app/helper/Constant';
+import {
+    cardType,
+    validateCardNumber,
+    validateCardCVC
+} from 'root/app/helper/CreditCard';
 import { MinimalHeader } from 'root/app/components';
 import { connect } from 'react-redux';
 import Footer from './Footer';
@@ -93,8 +100,41 @@ class BankTransfer extends Component {
 
     }
 
+    _onMessage = (obj) => {
+        const _self = this,
+            { status, message = '', innerMessage = '', data } = obj || {},
+            { orderNo = '', successText = '', url3ds } = data || {};
+
+        if (status == 200) {
+            // success
+            store.dispatch({ type: SET_ORDER_SUCCESS_MESSAGE, value: (orderNo + " no'lu " + successText) });
+            store.dispatch({ type: SET_CART_ITEMS, value: 0 });
+            setTimeout(() => {
+                _self.props.nav.navigate('OrderSuccess', {});
+            }, 10);
+        } else {
+            // error
+            setTimeout(() => {
+                alert(message);
+            }, 100);
+        }
+    }
+
     _onPress = () => {
-        this.props.nav.navigate('OrderSuccess', {});
+        const _self = this, 
+            data = {};
+        globals.fetch(
+            Utils.getURL({ key: 'cart', subKey: 'getCart' }),
+            JSON.stringify({ cartLocation: 'payment' }), (answer) => {
+                if (answer.status == 200) {
+                    globals.fetch(
+                        Utils.getURL({ key: 'cart', subKey: 'setCartOrder' }),
+                        JSON.stringify(data), (res) => {
+                            _self._onMessage(res);
+                        });
+                }
+            });
+
     }
 
     render() {
@@ -137,7 +177,7 @@ class CreditCart extends Component {
             injectScript: '',
             frm: '',
             isVisible: false,
-            //frm: '<body onload="setTimeout(function() { document.frm.submit() }, 500)"><form name="frm" action="https://entegrasyon.asseco-see.com.tr/fim/est3Dgate" method="post"><input type="text" name="formName" value="pay_form">,<input type="text" name="okUrl" value="https://dev.flormar.com.tr/webapi/v3/orderProcessing/confirm3dTransaction?op=success&alv=65440">,<input type="text" name="failUrl" value="https://dev.flormar.com.tr/webapi/v3/orderProcessing/confirm3dTransaction?op=fail&alv=65440">,<input type="text" name="clientid" value="100100000">,,<input type="text" name="currency" value="949">,<input type="text" name="oid" value="">,<input type="text" name="storetype" value="3d">,<input type="text" name="lang" value="tr">,<input type="text" name="rnd" value="24.12.2018 16:40:46">,<input type="text" name="hash" value="oHgq66ntuGEHjJdsnWUGYaVyMs8=">,<input type="text" name="amount" value="27,99">,<input type="text" name="pan" value="5571135571135575">,<input type="text" name="cv3" value="000">,<input type="text" name="Ecom_Payment_Card_ExpDate_Year" value="2018">,<input type="text" name="Ecom_Payment_Card_ExpDate_Month" value="12">,<input type="text" name="cardType" value="2"><input type="submit" value="Submit"></form> </body>'
+            loading: false,
         };
     }
 
@@ -166,7 +206,7 @@ class CreditCart extends Component {
     }
 
     _template = {
-        form: '<body onload="setTimeout(function() { document.frm.submit() }, 500)"><form name="frm" action="{{action}}" method="post">{{input}}<input type="submit" value="Submit"></form> </body>',
+        form: '<body onload="setTimeout(function() { document.frm.submit() }, 200)"><form style="visibility: hidden;" name="frm" action="{{action}}" method="post">{{input}}<input type="submit" value="Submit"></form> </body>',
         input: '<input type="text" name="{{name}}" value="{{value}}">'
     };
 
@@ -185,49 +225,13 @@ class CreditCart extends Component {
             htm = _self._template['form'].replace(/{{action}}/g, formUrl).replace(/{{input}}/g, input);
 
         _self.setState({ frm: htm, isVisible: true });
-        console.log('_getTemplate', htm);
-    }
-
-    _onPress = () => {
-
-        const _self = this,
-            { creditCart = {} } = store.getState().cart,
-            { bankId = 0, fullName = '', creditCardNo = '', cvcCode = '', installmentId } = creditCart,
-            date = (creditCart['year'] || '0/0').split('/'),
-            month = date[0] || 0,
-            year = date[1] || 0,
-            data = {
-                bankId: bankId,
-                fullName: fullName,
-                creditCardNo: creditCardNo.replace(/\s+/g, ''),
-                cvcCode: cvcCode,
-                year: '20' + year,
-                month: month,
-                installmentId: installmentId,
-                userClientIp: '0.0.0.0'
-                //"customRedirectUrl": "string"
-            };
-
-        globals.fetch(
-            Utils.getURL({ key: 'cart', subKey: 'getCart' }),
-            JSON.stringify({ cartLocation: 'payment' }), (answer) => {
-                console.log(data);
-                if (answer.status == 200) {
-                    globals.fetch(
-                        Utils.getURL({ key: 'cart', subKey: 'getPos3DParameter' }),
-                        JSON.stringify(data), (res) => {
-                            if (res.status == 200)
-                                _self._getTemplate(res);
-                        });
-                }
-            });
     }
 
     _onMessage = (event) => {
         const _self = this,
             obj = JSON.parse(event.nativeEvent.data || '{}'),
-            { status, message = '', innerMessage = '', data = {} } = obj,
-            { orderNo = '', successText = '', url3ds } = data;
+            { status, message = '', innerMessage = '', data } = obj || {},
+            { orderNo = '', successText = '', url3ds } = data || {};
 
         /* işlem bitince 3d secure formunu gizleme */
         _self._onCloseModal()
@@ -241,7 +245,10 @@ class CreditCart extends Component {
             }, 10);
         } else {
             // error
-            alert(message);
+            setTimeout(() => {
+                alert(message);
+            }, 100);
+
         }
 
         //const ornek = {"status":200,"message":null,"innerMessage":null,"data":{"orderNo":"SIP0151456440","successText":"Siparişiniz başarıyla alındı. Sipariş ettiğiniz ürünler en kısa sürede teslimat adresinize teslim edilecektir.","url3ds":null}}
@@ -254,15 +261,33 @@ class CreditCart extends Component {
             _self.setState({ injectScript: 'window.parent.postMessage(document.body.innerText);' });
     }
 
+    _onLoad = () => {
+    }
+
+    _onLoadEnd = () => {
+        const _self = this;
+        _self.setState({ loading: false });
+    }
+
+    _onLoadStart = () => {
+        const _self = this;
+        _self.setState({ loading: true });
+    }
+
     _getFrm = () => {
         const _self = this,
-            { frm = '', injectScript = '' } = _self.state;
+            { frm = '', injectScript = '', loading = false } = _self.state,
+            pre = loading ? <View style={{ backgroundColor: '#FFFFFF', zIndex: 2, position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center', }}><Image source={ICONS['loading']} style={{ resizeMode: 'cover', width: 60, height: 60, borderRadius: 30, }} /></View> : null;
 
         let view = null;
         if (frm != '') {
             view = (
-                <View style={{ flex: 1, height: 300, backgroundColor: 'red' }}>
+                <View style={{ flex: 1, backgroundColor: 'red' }}>
+                    {pre}
                     <WebView
+                        onLoad={_self._onLoad}
+                        onLoadEnd={_self._onLoadEnd}
+                        onLoadStart={_self._onLoadStart}
                         onMessage={this._onMessage}
                         injectedJavaScript={injectScript}
                         onNavigationStateChange={this._onNavigationStateChange.bind(this)}
@@ -302,6 +327,74 @@ class CreditCart extends Component {
         )
     }
 
+    _validation = () => {
+        const _self = this,
+            { creditCart, agreements } = store.getState().cart,
+            { agreement1, agreement2 } = agreements,
+            { bankId = 0, creditCardNo = '', cvcCode = '', fullName = '' } = creditCart,
+            date = (creditCart['year'] || '0/0').split('/'),
+            month = date[0] || 0,
+            year = date[1] || 0,
+            cardValid = validateCardNumber(creditCardNo),
+            _cardType = cardType(creditCardNo),
+            cvcValid = validateCardCVC(cvcCode, _cardType),
+            arr = [];
+
+        _self.child._validation();// kredi kart form validation    
+
+        if (!cardValid || !cvcValid || month == 0 || year == 0 || month.length < 2 || year.length < 2 || fullName == '')
+            arr.push('Lütfen kredi kartı Bilgilerini eksiksiz giriniz.');
+
+        if (!agreement1)
+            arr.push('Lütfen ön bilgilendirme formunu okuyup onaylayınız');
+
+        if (!agreement2)
+            arr.push('Lütfen satış sözleşmesini okuyup onaylayınız');
+
+        if (arr.length > 0)
+            alert(arr.join('\n'));
+
+        return arr.length > 0 ? false : true;
+    }
+
+    _onPress = () => {
+
+        const _self = this;
+
+        if (!_self._validation()) return;
+
+        const { creditCart = {} } = store.getState().cart,
+            { bankId = 0, fullName = '', creditCardNo = '', cvcCode = '', installmentId } = creditCart,
+            date = (creditCart['year'] || '0/0').split('/'),
+            month = date[0] || 0,
+            year = date[1] || 0,
+            data = {
+                bankId: bankId,
+                fullName: fullName,
+                creditCardNo: creditCardNo.replace(/\s+/g, ''),
+                cvcCode: cvcCode,
+                year: '20' + year,
+                month: month,
+                installmentId: installmentId,
+                userClientIp: '0.0.0.0'
+                //"customRedirectUrl": "string"
+            };
+
+        globals.fetch(
+            Utils.getURL({ key: 'cart', subKey: 'getCart' }),
+            JSON.stringify({ cartLocation: 'payment' }), (answer) => {
+                //console.log(data);
+                if (answer.status == 200) {
+                    globals.fetch(
+                        Utils.getURL({ key: 'cart', subKey: 'getPos3DParameter' }),
+                        JSON.stringify(data), (res) => {
+                            if (res.status == 200)
+                                _self._getTemplate(res);
+                        });
+                }
+            });
+    }
+
     render() {
         const _self = this,
             modal = _self._getModal();
@@ -320,7 +413,9 @@ class CreditCart extends Component {
                     }}>
 
                     <View style={{ flex: 1, backgroundColor: CART_BACKGROUND_COLOR_2, paddingTop: 20 }}>
-                        <CrediCart />
+                        <CrediCart
+                            onRef={ref => (_self.child = ref)}
+                        />
                         <Foot {..._self.props} />
                     </View>
                     <UnderSide wrapperStyle={{ backgroundColor: CART_BACKGROUND_COLOR_1 }} />

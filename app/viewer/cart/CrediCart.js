@@ -9,7 +9,8 @@ import {
     FORMDATA,
     SET_INSTALLMENT,
     SET_CREDIT_CART,
-    SET_BANK_POINT
+    SET_BANK_POINT,
+    SET_ORDER_3D_BUTTON
 } from 'root/app/helper/Constant';
 import { connect } from 'react-redux';
 import { Form, SelectBox, CheckBox } from 'root/app/form';
@@ -47,13 +48,23 @@ class CrediCard extends Component {
     }
 
     componentDidMount() {
-        const _self = this;
+        const _self = this,
+            { onRef } = _self.props;
+
         _self._isMounted = true;
+
+        if (onRef)
+            onRef(this);
     }
 
     componentWillUnmount() {
-        const _self = this;
+        const _self = this,
+            { onRef } = _self.props;
+
         _self._isMounted = false;
+
+        if (onRef)
+            onRef(null);
     }
 
     _getCard = (value) => {
@@ -190,7 +201,7 @@ class CrediCard extends Component {
                 values.unshift({ key: Translation['dropdown']['choose'], value: -1 });
 
             const obj = { defaultTitle: 'Taksit:', values: values, value: -1, ico: 'rightArrow', icoStyle: { width: 40, height: 40 } };
-            
+
             view = <SelectBox
                 fontStyle={{ fontFamily: 'Bold', fontSize: 16 }}
                 showHeader={false}
@@ -286,17 +297,32 @@ class CrediCard extends Component {
             if (count >= num && _self.cartControl) {
                 _self.cartControl = false;
                 _self._getInstallmentAjx(val.substr(0, num));
+                store.dispatch({
+                    type: SET_ORDER_3D_BUTTON,
+                    value: true
+                });
             } else if (count < num && !_self.cartControl) {
                 _self.cartControl = true;
                 _self.setState({ installments: [] });
                 _self._setInstallment({ bankId: 0, installmentId: 0 });
+                store.dispatch({
+                    type: SET_ORDER_3D_BUTTON,
+                    value: false
+                });
             }
         }
 
         /* banka puan bilgilerini sorgulama */
         console.log(key)
-        if( key !== 'fullName' )
+        if (key !== 'fullName')
             setTimeout(() => { _self._checkBankPoint(); }, 1);
+    }
+
+
+    /* kredi kart form validation */
+    _validation = () => {
+        const _self = this;
+        _self.child._onPress();
     }
 
     render() {
@@ -305,9 +331,10 @@ class CrediCard extends Component {
             bankPoint = _self._getBankPoint();
 
         return (
-            <View  style={{ flex: 1, paddingTop: 10 }}>
+            <View style={{ flex: 1, paddingTop: 10 }}>
                 {_self._getCardImage()}
                 <Form
+                    onRef={ref => (_self.child = ref)}
                     style={{ paddingBottom: 0 }}
                     onChangeText={_self._onChangeText}
                     callback={_self._callback}

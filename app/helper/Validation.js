@@ -1,3 +1,9 @@
+import {
+    cardType,
+    validateCardNumber,
+    validateCardCVC
+} from 'root/app/helper/CreditCard';
+
 const Utils = require('root/app/helper/Global.js');
 const Translation = require('root/app/helper/Translation.js');
 module.exports = {
@@ -64,6 +70,21 @@ module.exports = {
         return b ? { state: true } : { state: false, msg: Translation.getErrorMsg({ key: 'isEqual', title: title, value: title2 }) };
     },
     isStar: ({ value = -1, title = '' }) => {
-        return value >= 0 ? { state: true } : { state: false, msg: Translation.getErrorMsg({ key: 'isStar', title: title }) }
-    }
+        return value >= 0 ? { state: true } : { state: false, msg: Translation.getErrorMsg({ key: 'isStar', title: title }) };
+    },
+    isCreditCard: ({ value = '', title = '', rule = {} }) => {
+        return validateCardNumber(value) ? { state: true } : { state: false, msg: Translation.getErrorMsg({ key: 'isCreditCard' }) };
+    },
+    isCvcCode: ({ value = '', title = '', rule = {}, allData = {} }) => {
+        let creditCardNo = '';
+        Object.entries(allData).forEach(([ky, tm]) => {
+            if (tm['key'] == rule)
+                creditCardNo = tm['value'];
+        });
+
+        const _cardType = cardType(creditCardNo),
+            cvcValid = validateCardCVC(value, _cardType);
+
+        return cvcValid ? { state: true } : { state: false, msg: Translation.getErrorMsg({ key: 'isCvcCode' }) };
+    },
 };
