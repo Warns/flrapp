@@ -83,6 +83,7 @@ class Form extends Component {
             errMsg: [],
             defaultData: [],
             show: true, // form gizle-goster
+            control: true, // hata durumu için
         };
     }
 
@@ -283,6 +284,8 @@ class Form extends Component {
             _t.setState({ validation: false, errMsg: allErrMsg });
             if (control)
                 _t._send(success);
+
+            _t.setState({ control: control });
         }, 1);
     }
 
@@ -364,7 +367,7 @@ class Form extends Component {
             işleme dahil olmayacaksa kullanılıyor ve jsonda verilen valueyu kullanıyor.
         */
         if (!constantValue)
-            _self.totalCount = _self.totalCount + 1;            
+            _self.totalCount = _self.totalCount + 1;
 
         switch (type) {
             case 'creditCart':
@@ -490,6 +493,18 @@ class Form extends Component {
 
     _getAllErrMsg = () => {
         return <ErrorBox data={this.state.errMsg} />
+    }
+
+    /* public fonk. */
+    _formValidation = (callback) => {
+        const _self = this;
+        _self._onPress();
+        setTimeout(() => {
+            if (typeof callback !== 'undefined') {
+                const { control = true } = _self.state;
+                callback(control)
+            }
+        }, 100);
     }
 
     _onPress = () => {
