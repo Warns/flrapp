@@ -5,6 +5,7 @@ import {
     WebView,
     Modal,
     Image,
+    Text,
 } from 'react-native';
 import { Viewer, CrediCart, Foot } from 'root/app/viewer/';
 import {
@@ -120,8 +121,8 @@ class BankTransfer extends Component {
         }
     }
 
-    _onPress = () => {
-        const _self = this, 
+    _applyForm = () => {
+        const _self = this,
             data = {};
         globals.fetch(
             Utils.getURL({ key: 'cart', subKey: 'getCart' }),
@@ -137,8 +138,37 @@ class BankTransfer extends Component {
 
     }
 
+    _onPress = () => {
+        const _self = this,
+            { agreements, optin } = store.getState().cart,
+            { bankId } = optin,
+            { agreement1, agreement2 } = agreements,
+            arr = [];
+
+        if (bankId == 0)
+            arr.push('Havale yapmak istediğiniz bankayı seçerek devam ediniz.');
+
+        if (!agreement1)
+            arr.push('Lütfen ön bilgilendirme formunu okuyup onaylayınız');
+
+        if (!agreement2)
+            arr.push('Lütfen satış sözleşmesini okuyup onaylayınız');
+
+        if (arr.length > 0)
+            alert(arr.join('\n'));
+        else
+            _self._applyForm();
+    }
+
+    _getDsc = () => {
+        return (
+            <Text style={{ fontSize: 12, color: '#9b9b9b', padding: 10 }}>*Havale ile sipariş verdiğinizde en geç 3 iş günü içerisinde sayfada belirtilen banka hesaplarından birine ödeme yapılmalıdır. Ödemesi gerçekleştirilen siparişler 2 iş günü içerisinde kargoya teslim edilir. Ödemenizi yaparken tam tutarı aktardığınızdan ve açıklama kısmına sipariş numaranızı yazdığınızdan emin olmalısınız. ATM üzerinden yapılan havale işlemlerinde bazı bankalar işlem ücreti alabilmektedir. Tahsil edilen bu bedel Flormar’ın sorumluluğunda değildir, detaylar ile ilgili bankanız ile irtibata geçebilirsiniz.</Text>
+        );
+    }
+
     render() {
-        const _self = this;
+        const _self = this,
+            dsc = _self._getDsc();
 
         return (
             <View style={{ flex: 1 }}>
@@ -159,6 +189,7 @@ class BankTransfer extends Component {
                             config={DATA}
                             callback={_self._callback}
                         />
+                        {dsc}
                         <Foot {..._self.props} />
                     </View>
                     <UnderSide wrapperStyle={{ backgroundColor: CART_BACKGROUND_COLOR_1 }} />
@@ -327,43 +358,9 @@ class CreditCart extends Component {
         )
     }
 
-    _validation = () => {
+    _applyForm = () => {
         const _self = this,
-            { creditCart, agreements } = store.getState().cart,
-            { agreement1, agreement2 } = agreements,
-            { bankId = 0, creditCardNo = '', cvcCode = '', fullName = '' } = creditCart,
-            date = (creditCart['year'] || '0/0').split('/'),
-            month = date[0] || 0,
-            year = date[1] || 0,
-            cardValid = validateCardNumber(creditCardNo),
-            _cardType = cardType(creditCardNo),
-            cvcValid = validateCardCVC(cvcCode, _cardType),
-            arr = [];
-
-        _self.child._validation();// kredi kart form validation    
-
-        if (!cardValid || !cvcValid || month == 0 || year == 0 || month.length < 2 || year.length < 2 || fullName == '')
-            arr.push('Lütfen kredi kartı Bilgilerini eksiksiz giriniz.');
-
-        if (!agreement1)
-            arr.push('Lütfen ön bilgilendirme formunu okuyup onaylayınız');
-
-        if (!agreement2)
-            arr.push('Lütfen satış sözleşmesini okuyup onaylayınız');
-
-        if (arr.length > 0)
-            alert(arr.join('\n'));
-
-        return arr.length > 0 ? false : true;
-    }
-
-    _onPress = () => {
-
-        const _self = this;
-
-        if (!_self._validation()) return;
-
-        const { creditCart = {} } = store.getState().cart,
+            { creditCart = {} } = store.getState().cart,
             { bankId = 0, fullName = '', creditCardNo = '', cvcCode = '', installmentId } = creditCart,
             date = (creditCart['year'] || '0/0').split('/'),
             month = date[0] || 0,
@@ -392,6 +389,31 @@ class CreditCart extends Component {
                                 _self._getTemplate(res);
                         });
                 }
+            });
+    }
+
+    _onPress = () => {
+        const _self = this,
+            { agreements } = store.getState().cart,
+            { agreement1, agreement2 } = agreements,
+            arr = [];
+
+        _self
+            .child
+            ._validation((b) => {
+                if (!b)
+                    arr.push('Lütfen kredi kartı Bilgilerini eksiksiz giriniz.');
+
+                if (!agreement1)
+                    arr.push('Lütfen ön bilgilendirme formunu okuyup onaylayınız');
+
+                if (!agreement2)
+                    arr.push('Lütfen satış sözleşmesini okuyup onaylayınız');
+
+                if (arr.length > 0)
+                    alert(arr.join('\n'));
+                else
+                    _self._applyForm();
             });
     }
 

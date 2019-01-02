@@ -320,14 +320,12 @@ class CrediCard extends Component {
 
 
     /* kredi kart form validation */
-    _validation = () => {
+    _validation = (callback) => {
         const _self = this;
-
-        _self.child._formValidation((b)=>{
-            console.log('_formValidation', b);
-        });   
-
-        //_self.child._onPress();
+        _self.child._formValidation((b) => {
+            if (typeof callback !== 'undefined')
+                callback(b);
+        });
     }
 
     render() {

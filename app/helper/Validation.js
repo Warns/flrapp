@@ -87,4 +87,24 @@ module.exports = {
 
         return cvcValid ? { state: true } : { state: false, msg: Translation.getErrorMsg({ key: 'isCvcCode' }) };
     },
+    isCustomDate: ({ value = '', title = '', rule = {} }) => {
+        /* 
+            kredi kartı tarih için
+            value: 00/00
+        */
+        let d = new Date(),
+            nowYear = d.getFullYear(),
+            date = (value || '0/0').split('/'),
+            month = parseInt( date[0] || 0 ),
+            year = parseInt( '20' + ( date[1] || 0 ) ),
+            b = true;
+
+        if (month <= 0 || month > 12)
+            b = false;
+
+        if (year < nowYear || year > nowYear + 14)
+            b = false;
+
+        return b ? { state: true } : { state: false, msg: Translation.getErrorMsg({ key: 'isCustomDate' }) }
+    }
 };

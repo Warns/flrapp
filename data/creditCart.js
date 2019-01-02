@@ -37,7 +37,7 @@ module.exports = {
           type: 'text',
           placeholder: '00/00',
           mask: '99/99',
-          validation: [{ key: 'isEmpty' }],
+          validation: [{ key: 'isEmpty' }, { key: 'isCustomDate' }],
           css: {
             errorMsgStyle: {
               opacity: 0
@@ -71,7 +71,7 @@ module.exports = {
           id: 'fullName',
           title: 'Kart Üzerindeki İsim',
           type: 'text',
-          validation: [{ key: 'isEmpty' }],
+          validation: [{ key: 'isEmpty' }, /*{ key: 'isTwo', value: { first: 3, last: 2 } }*/],
           css: {
             errorMsgStyle: {
               opacity: 0
