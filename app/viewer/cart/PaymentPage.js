@@ -19,7 +19,8 @@ import {
     BANK_TRANSFER,
     RESET_PAYMENT,
     SET_ORDER_SUCCESS_MESSAGE,
-    SET_CART_ITEMS
+    SET_CART_ITEMS,
+    SHOW_PRELOADING
 } from 'root/app/helper/Constant';
 import {
     cardType,
@@ -37,6 +38,9 @@ import { Minus99HorizontalTabs } from 'root/app/components';
 
 const Utils = require('root/app/helper/Global.js');
 const Globals = require('root/app/globals.js');
+const PRELOAD = async(b) => {
+    store.dispatch({ type: SHOW_PRELOADING, value: b });
+}
 
 /* banka havale config */
 const DATA = {
@@ -124,6 +128,7 @@ class BankTransfer extends Component {
     _applyForm = () => {
         const _self = this,
             data = {};
+        PRELOAD(true);
         globals.fetch(
             Utils.getURL({ key: 'cart', subKey: 'getCart' }),
             JSON.stringify({ cartLocation: 'payment' }), (answer) => {
@@ -131,7 +136,10 @@ class BankTransfer extends Component {
                     globals.fetch(
                         Utils.getURL({ key: 'cart', subKey: 'setCartOrder' }),
                         JSON.stringify(data), (res) => {
-                            _self._onMessage(res);
+                            PRELOAD(false);
+                            setTimeout(() => {
+                                _self._onMessage(res);
+                            }, 10);
                         });
                 }
             });
@@ -377,6 +385,7 @@ class CreditCart extends Component {
                 //"customRedirectUrl": "string"
             };
 
+        PRELOAD(true);
         globals.fetch(
             Utils.getURL({ key: 'cart', subKey: 'getCart' }),
             JSON.stringify({ cartLocation: 'payment' }), (answer) => {
@@ -385,8 +394,12 @@ class CreditCart extends Component {
                     globals.fetch(
                         Utils.getURL({ key: 'cart', subKey: 'getPos3DParameter' }),
                         JSON.stringify(data), (res) => {
-                            if (res.status == 200)
-                                _self._getTemplate(res);
+                            PRELOAD(false);
+                            if (res.status == 200) {
+                                setTimeout(() => {
+                                    _self._getTemplate(res);
+                                }, 100);
+                            }
                         });
                 }
             });

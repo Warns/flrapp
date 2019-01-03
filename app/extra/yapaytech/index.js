@@ -21,84 +21,43 @@ const Globals = {
       data: {
         suggestions: [
           {
-            productId: 584654,
-            productName: "MATTE KISSES LIPSTICK",
-            productPageName: "/matte-kisses-lipstick-rose-up/",
-            smallPicture:
-              "/UPLOAD/Flormar/mobile_image_1/thumb/0313106-002_small.jpg",
-            thumbPicture: "/UPLOAD/Flormar/mobile_image_1/thumb/0313106-002.jpg"
-          },
-          {
-            productId: 584652,
-            productName: "DAZZLE UP LIP GLOSS",
-            productPageName: "/dazzle-up-lip-gloss-provocative-bronze/",
-            smallPicture:
-              "/UPLOAD/Flormar/mobile_image_1/thumb/0313107-002_small.jpg",
-            thumbPicture: "/UPLOAD/Flormar/mobile_image_1/thumb/0313107-002.jpg"
-          },
-          {
+            listPrice: 29.99,
+            productGroupsCount: 5,
             productId: 584519,
             productName: "CARING LIP COLOR",
             productPageName: "/caring-lip-color-center/",
+            salePrice: 15,
+            shortCode: "002",
+            shortName: "CENTER",
             smallPicture:
               "/UPLOAD/Flormar/mobile_image_1/thumb/0313103-002_small.jpg",
             thumbPicture: "/UPLOAD/Flormar/mobile_image_1/thumb/0313103-002.jpg"
           },
           {
-            productId: 584517,
-            productName: "CARING LIP PRIMER",
-            productPageName: "/caring-lip-primer/",
+            listPrice: 29.99,
+            productGroupsCount: 5,
+            productId: 584519,
+            productName: "CARING LIP COLOR",
+            productPageName: "/caring-lip-color-center/",
+            salePrice: 15,
+            shortCode: "002",
+            shortName: "CENTER",
             smallPicture:
-              "/UPLOAD/Flormar/mobile_image_1/thumb/0313104-000_small.jpg",
-            thumbPicture: "/UPLOAD/Flormar/mobile_image_1/thumb/0313104-000.jpg"
+              "/UPLOAD/Flormar/mobile_image_1/thumb/0313103-002_small.jpg",
+            thumbPicture: "/UPLOAD/Flormar/mobile_image_1/thumb/0313103-002.jpg"
           },
           {
-            productId: 584230,
-            productName: "LACQUER LIP TUBE",
-            productPageName: "/lacquer-lip-tube-peach-punch/",
+            listPrice: 29.99,
+            productGroupsCount: 5,
+            productId: 584519,
+            productName: "CARING LIP COLOR",
+            productPageName: "/caring-lip-color-center/",
+            salePrice: 15,
+            shortCode: "002",
+            shortName: "CENTER",
             smallPicture:
-              "/UPLOAD/Flormar/mobile_image_1/thumb/0313097-002_small.jpg",
-            thumbPicture: "/UPLOAD/Flormar/mobile_image_1/thumb/0313097-002.jpg"
-          },
-          {
-            productId: 581741,
-            productName: "METALLIC LIP CHARMER GLAZE",
-            productPageName: "/metallic-lip-charmer-glaze-invitation/",
-            smallPicture:
-              "/UPLOAD/Flormar/mobile_image_1/thumb/0313092-005_small.jpg",
-            thumbPicture: "/UPLOAD/Flormar/mobile_image_1/thumb/0313092-005.jpg"
-          },
-          {
-            productId: 581731,
-            productName: "METALLIC LIP CHARMER MATTE",
-            productPageName: "/metallic-lip-charmer-matte-charmer/",
-            smallPicture:
-              "/UPLOAD/Flormar/mobile_image_1/thumb/0313091-004_small.jpg",
-            thumbPicture: "/UPLOAD/Flormar/mobile_image_1/thumb/0313091-004.jpg"
-          },
-          {
-            productId: 581377,
-            productName: "HD WEIGHTLESS MATTE LIPSTICK",
-            productPageName: "/hd-weightless-lipstick-cool-purple/",
-            smallPicture:
-              "/UPLOAD/Flormar/mobile_image_1/thumb/0313084-012_small.jpg",
-            thumbPicture: "/UPLOAD/Flormar/mobile_image_1/thumb/0313084-012.jpg"
-          },
-          {
-            productId: 573087,
-            productName: "COLOR UP LIP CRAYON",
-            productPageName: "/color-up-lip-crayon-salmon/",
-            smallPicture:
-              "/UPLOAD/Flormar/mobile_image_1/thumb/0313079-002_small.jpg",
-            thumbPicture: "/UPLOAD/Flormar/mobile_image_1/thumb/0313079-002.jpg"
-          },
-          {
-            productId: 572727,
-            productName: "LIP BRUSH",
-            productPageName: "/lip-brush-056/",
-            smallPicture:
-              "/UPLOAD/Flormar/mobile_image_1/thumb/0911000-056_small.jpg",
-            thumbPicture: "/UPLOAD/Flormar/mobile_image_1/thumb/0911000-056.jpg"
+              "/UPLOAD/Flormar/mobile_image_1/thumb/0313103-002_small.jpg",
+            thumbPicture: "/UPLOAD/Flormar/mobile_image_1/thumb/0313103-002.jpg"
           }
         ]
       },
@@ -213,8 +172,11 @@ export default class DahiChat extends React.Component {
           for (let i = 0; i < suggestions.length; i++) {
             const it = suggestions[i];
             values.push({
-              title: it.productName,
-              //subtitle: "Soyulabilen bant ve tırnak koruyucusu.",
+              title:
+                (it.salePrice ? `**₺${it.salePrice}**\n` : "") + it.productName,
+              subtitle: it.productGroupsCount
+                ? `${it.productGroupsCount} Renk`
+                : "",
               image_url: "http://www.flormar.com.tr" + it.smallPicture,
               default_action: {
                 type: "web_url",
