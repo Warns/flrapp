@@ -14,6 +14,9 @@ import {
     Platform,
 } from 'react-native';
 import {
+    Asset,
+} from 'expo';
+import {
     ICONS,
     FEEDSTYPE,
     VIEWERTYPE,
@@ -1482,13 +1485,21 @@ class Viewers extends Component {
             .replace(/<\/td/g, '</div');
     }
 
-    _addStyle = ({ customClass, data }) => {
-        const uri = Utils.getURL({ key: 'style', subKey: 'main' }) + '?' + parseInt(Math.random() * new Date()),
-            opened = '<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"></head><body>',
+    _addStyle = () => {
+        const font = Asset.fromModule(require("root/assets/fonts/proximanova-regular.otf")).uri,
+            css = '<style type="text/css"> @font-face {font-family: Regular; src: url(' + font + ') format("truetype");} .ems-mobi-app-container *{font-family: Regular !important;font-size: 18px !important;}</style>';
+        return css;
+    }
+
+    _addHtmlWrapper = ({ customClass, data }) => { 
+        const _self = this,
+            uri = Utils.getURL({ key: 'style', subKey: 'main' }) + '?' + parseInt(Math.random() * new Date()),
+            style = _self._addStyle(),
+            opened = '<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">'+ style +'</head><body>',
             closed = '</body></html>',
             css = '<link href="' + uri + '" rel="stylesheet" type="text/css" />',
             htm = opened + '<div class="ems-mobi-app-container ' + customClass + '">' + (css + data) + '</div>' + closed;
-
+            
         return htm;
     }
 
@@ -1602,7 +1613,7 @@ class Viewers extends Component {
         const _self = this,
             { type = VIEWERTYPE['LIST'] } = _self.props.config;
 
-        Globals.AJX({ _self: _self, uri: uri, data: data }, function (res) {
+        Globals.AJX({ _self: _self, uri: uri, data: data }, function (res) { 
 
             const { keys, customClass = '', customFunc = '' } = _self.props.config,
                 keyArr = keys['arr'] || '',
@@ -1627,7 +1638,7 @@ class Viewers extends Component {
             } else if (type == VIEWERTYPE['LIST'] || type == VIEWERTYPE['HTMLTOJSON'] || type == VIEWERTYPE['SCROLLVIEW'])
                 _self.setState({ data: data, total: res.data[keyTotal] || data.length || 0, loaded: true, noResult: false });
             else if (type == VIEWERTYPE['WEBVIEW'])
-                _self.setState({ html: _self._addStyle({ customClass: customClass, data: data }), loaded: true, noResult: false });
+                _self.setState({ html: _self._addHtmlWrapper({ customClass: customClass, data: data }), loaded: true, noResult: false });
             else
                 _self.setState({ html: _self._clearTag(data), loaded: true, noResult: false });
 
