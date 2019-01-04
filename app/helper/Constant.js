@@ -51,6 +51,11 @@ export const ICONS = {
     stars: require('root/assets/icons/stars.png'),
     starEmpty: require('root/assets/icons/star-empty.png'),
     starFull: require('root/assets/icons/star-full.png'),
+    check: require('root/assets/icons/check.png'),
+    checkBig: require('root/assets/icons/check-big.png'),
+    comment: require('root/assets/icons/comment.png'),
+    thumbsUp: require('root/assets/icons/like.png'),
+    thumbsDown: require('root/assets/icons/dislike.png'),
 };
 
 /* CARDS ICON */

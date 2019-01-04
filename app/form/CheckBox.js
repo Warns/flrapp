@@ -4,11 +4,15 @@ import {
     Text,
     StyleSheet,
     TouchableOpacity,
+    Animated,
+    Easing,
+    Image,
 } from 'react-native';
 import { Container } from './';
 import {
     SHOW_CUSTOM_POPUP,
     SET_VIEWER,
+    ICONS,
 } from 'root/app/helper/Constant';
 import { store } from 'root/app/store';
 import {
@@ -21,7 +25,8 @@ class CheckBox extends Component {
         super(props);
         const { value = false } = this.props.data
         this.state = {
-            value: value
+            value: value,
+            anim: new Animated.Value(0),
         }
     }
 
@@ -30,7 +35,7 @@ class CheckBox extends Component {
     */
     componentWillReceiveProps(nextProps) {
         const { value, updated = false } = nextProps.data;
-        if ( this.state.value != value && updated) {
+        if (this.state.value != value && updated) {
             this.setState({ value: value });
         }
     }
@@ -41,13 +46,23 @@ class CheckBox extends Component {
 
         _self.setState((prevState) => ({
             value: !prevState.value
-        }));
+        }), this.onChange);
 
         setTimeout(() => {
             /* closed değeri true dönünce her bir tıklamada callback çalışsın */
             if (closed)
                 _self._callback();
         }, 10);
+    }
+
+    onChange = () => {
+        Animated.timing(
+            this.state.anim, {
+                toValue: this.state.value ? 1 : 0,
+                duration: 150,
+                easing: Easing.out(Easing.cubic),
+            }
+        ).start();
     }
 
     _callback = () => {
@@ -67,12 +82,31 @@ class CheckBox extends Component {
     render() {
 
         const _self = this,
-            { error = false, errorMsg = null, desc = '', modal = '' } = _self.props.data,
+            { error = false, errorMsg = null, desc = '', modal = '', switchStyle = true } = _self.props.data,
             { control = false, containerStyle = {}, wrapperStyle = {} } = _self.props,
-            { value } = _self.state,
+            { value, anim } = _self.state,
             { checkBox } = styles,
             active = value ? { borderColor: '#000000', backgroundColor: '#000000' } : {};
-        check = <View style={[checkBox, active]} />;
+
+        if (switchStyle) {
+            let _color = value ? '#3BC9A9' : '#ccc';
+            let _image = value ? <Image source={ICONS['checkBig']} style={{ width: 20, height: 20, resizeMode: 'contain' }} /> : null;
+
+            const _left = anim.interpolate({
+                inputRange: [0, 1],
+                outputRange: [0, 12],
+            });
+
+            check = (
+                <Animated.View style={{ position: 'relative', width: 36, height: 24, borderRadius: 12, backgroundColor: _color, marginRight: 8, }}>
+                    <Animated.View style={{ position: 'absolute', width: 20, height: 20, borderRadius: 10, margin: 2, backgroundColor: '#ffffff', left: _left, overflow: 'hidden' }}>
+                        {_image}
+                    </Animated.View>
+                </Animated.View>
+            );
+        }
+        else
+            check = <View style={[checkBox, active]} />;
 
         if (control)
             _self._callback();
@@ -114,7 +148,8 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#dddddd',
         backgroundColor: '#FFFFFF',
-        marginRight: 10
+        marginRight: 10,
+        marginTop: 3,
     }
 });
 

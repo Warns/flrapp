@@ -70,18 +70,18 @@ class Container extends Component {
         if (error) {
             errorMsg = <Text numberOfLines={1} style={[errorMsgSty, { color: ERROR_COLOR }]}>{errorMsg}</Text>
             color = ERROR_COLOR;
-            
-            if( showErrorIco )
+
+            if (showErrorIco)
                 errorIco = (
                     <Image
                         source={(ICONS['error'])}
-                        style={{ 
+                        style={{
                             position: 'absolute',
                             right: 10,
-                            width: 30, 
-                            height: 30, 
-                            resizeMode: 'contain', 
-                            backgroundColor: '#FFFFFF' 
+                            width: 30,
+                            height: 30,
+                            resizeMode: 'contain',
+                            backgroundColor: '#FFFFFF'
                         }}
                     />
                 );

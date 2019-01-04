@@ -32,7 +32,7 @@ const generalInitialState = {
         animate: false,
         item: null,
         screenshot: null,
-        videos:[],
+        videos: [],
     },
     preloading: false,
     video: {
@@ -79,14 +79,15 @@ export default function general(state = generalInitialState, action) {
                 measurements: {},
             }
         };
-        case 'UPDATE_PRODUCT_OBJECT':{
-            return{...state, product:{
-                ...state.product,
-                ...action.value,
+        case 'UPDATE_PRODUCT_OBJECT': {
+            return {
+                ...state, product: {
+                    ...state.product,
+                    ...action.value,
                 }
             };
         };
-        case OPEN_PRODUCT_DETAILS:{
+        case OPEN_PRODUCT_DETAILS: {
 
             if (action.value.id) {
                 fetchProductDetails(action.value.id);
@@ -103,10 +104,10 @@ export default function general(state = generalInitialState, action) {
         };
         case UPDATE_PRODUCT_DETAILS_ITEM: {
 
-            if(state.product.callback) state.product.callback();
-            
+            if (state.product.callback) state.product.callback();
+
             return {
-                ...state, product:{
+                ...state, product: {
                     ...state.product,
                     item: action.value.product,
                     colors: action.value.colors,
@@ -116,13 +117,13 @@ export default function general(state = generalInitialState, action) {
             }
         };
         case OPEN_VIDEO_PLAYER: return {
-            ...state, video:{
+            ...state, video: {
                 ...state.video,
                 ...action.value,
             }
         };
         case UPDATE_PRODUCT_VIDEOS: return {
-            ...state, product:{
+            ...state, product: {
                 ...state.product,
                 videos: action.value.videos,
             }
@@ -137,7 +138,7 @@ export default function general(state = generalInitialState, action) {
                 ...action.value
             }
         };
-        
+
         default:
             return state;
     }
@@ -147,11 +148,11 @@ export default function general(state = generalInitialState, action) {
 fetchProductDetails = (id) => {
 
     globals.fetch(
-        "https://www.flormar.com.tr/webapi/v3/Product/getProductDetail",
+        Utils.getURL({ key: 'product', subKey: 'getProductDetail' }),
         JSON.stringify({
             "productId": id,
-        }), ( answer ) => {
-            
+        }), (answer) => {
+
             //console.log('answer for detail', answer.status)
 
             if (answer.status == 200) {

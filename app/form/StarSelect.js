@@ -20,17 +20,23 @@ class StarSelect extends React.Component {
   }
 
   _onPress = (index) => {
-    const { title, id, validation } = this.props.data;
+
     this.setState({
       selection: index
     });
-    this.props.callback({ key: id, title: title, value: index, validation: validation });
+
+  }
+
+  _callback = () => {
+    const { title, id, validation } = this.props.data;
+    const { selection } = this.state;
+    this.props.callback({ key: id, title: title, value: selection, validation: validation });
   }
 
   render() {
 
     const { selection } = this.state;
-    const { range = 5, style = { padding: 30 } } = this.props;
+    const { range = 5, style = { padding: 10 }, control = false } = this.props;
     const { error = false, errorMsg = null } = this.props.data;
 
     let _stars = [];
@@ -41,6 +47,9 @@ class StarSelect extends React.Component {
         <Star style={n <= selection ? "full" : "empty"} key={"n" + n} index={n} callback={this._onPress} />
       );
     }
+
+    if (control)
+      this._callback();
 
     return (
       <Container showErrorIco={false} titleShow={true} error={error} errorMsg={errorMsg} wrapperStyle={{ backgroundColor: "transparent", paddingLeft: 0, borderWidth: 0, height: 'auto' }}>

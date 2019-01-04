@@ -364,7 +364,7 @@ class Form extends Component {
             işleme dahil olmayacaksa kullanılıyor ve jsonda verilen valueyu kullanıyor.
         */
         if (!constantValue)
-            _self.totalCount = _self.totalCount + 1;            
+            _self.totalCount = _self.totalCount + 1;
 
         switch (type) {
             case 'creditCart':
@@ -420,7 +420,7 @@ class Form extends Component {
             case 'button':
                 return <Button callback={_self._modalButtonClick} key={id} data={obj} />;
             case 'stars':
-                return <StarSelect style={{ padding: 20, paddingBottom: 30 }} callback={_callback} control={validation} key={id} data={obj} />
+                return <StarSelect callback={_callback} control={validation} key={id} data={obj} />
             default:
                 return null;
         }

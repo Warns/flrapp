@@ -41,7 +41,9 @@ class ParserHTML extends Component {
 
 const styles = StyleSheet.create({
     default: {
-        fontFamily: 'Regular'
+        //fontFamily: 'Regular',
+        fontSize: 16,
+        lineHeight: 22,
     },
     u: {
         textDecorationLine: 'underline',

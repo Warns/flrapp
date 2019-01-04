@@ -16,7 +16,6 @@ class ProductReview extends React.Component {
     message: ""
   }
 
-
   componentDidMount() {
 
   }
@@ -39,19 +38,20 @@ class ProductReview extends React.Component {
     let _title = item ? item.productName : '';
 
     return (
-      <SafeAreaView style={{ flex: 1 }}>
-        <MinimalHeader title={_title} right={<View />} onPress={this._onBackPress} />
-        <View style={{ flex: 1, backgroundColor: '#F6F0EF' }}>
-          <View style={{ padding: 40, paddingBottom: 20, paddingTop: 20 }}>
-            <Text style={{ color: '#000000', lineHeight: 18, fontSize: 15 }}>Email adresini yaz.</Text>
-            {error}
-          </View>
-          <Form callback={this._onSubmit} data={FORMDATA['review_submission']} />
-          <View>
+      <View style={{ flex: 1 }}>
+        <MinimalHeader title={_title} right={<View />} onPress={this._onBackPress} noMargin={this.props.SCREEN_DIMENSIONS.OS == 'android' ? true : false} />
+        <SafeAreaView style={{ flex: 1 }}>
+          <View style={{ flex: 1, backgroundColor: '#F6F0EF' }}>
+            <View style={{ padding: 40, paddingBottom: 5, paddingTop: 20 }}>
+              {error}
+            </View>
+            <Form callback={this._onSubmit} data={FORMDATA['review_submission']} />
+            <View>
 
+            </View>
           </View>
-        </View>
-      </SafeAreaView>
+        </SafeAreaView>
+      </View>
     )
   }
 }

@@ -4,6 +4,7 @@ import {
 const Translation = require('root/app/helper/Translation.js');
 module.exports = {
     mapApiKey: 'AIzaSyAvSoqfCr4I9Vb11HtQ6cDEAMki6THBgrQ',
+    bazaarVoiceApiKey: 'ca0fITp8PBeW9pf7e9vzn0BABaSeJVjOBqp6EWZVZCXsA',
     //prefix: 'https://www.flormar.com.tr',
     prefix: 'https://dev.flormar.com.tr',
     imagePrefix: 'flormar.com.tr',
@@ -17,7 +18,8 @@ module.exports = {
         product: {
             getSearchSuggestionList: '/webapi/v3/Product/getSearchSuggestionList',
             getProductList: '/webapi/v3/Product/getProductList',
-            getProductVideos: 'https://www.flormar.com.tr/mobile-app-product-video-export.htm',
+            getProductDetail: '/webapi/v3/Product/getProductDetail',
+            getProductVideos: '/mobile-app-product-video-export.htm',
         },
         user: {
             addFavoriteProduct: '/webapi/v3/User/addFavoriteProduct',
@@ -86,15 +88,26 @@ module.exports = {
         }
     },
     customURLs: {
-        location: 'https://maps.googleapis.com/maps/api/distancematrix/json?language={{lang}}&units=metric&origins={{origins}}&destinations={{destinations}}&key={{mapApikey}}'
+        location: 'https://maps.googleapis.com/maps/api/distancematrix/json?language={{lang}}&units=metric&origins={{origins}}&destinations={{destinations}}&key={{mapApiKey}}',
+        reviewsList:
+            'https://stg.api.bazaarvoice.com/data/reviews.json?apiversion=5.4' +
+            '&passkey={{bazaarApiKey}}' +
+            '&Filter=ProductId:{{id}}' +
+            '&Sort=Rating:desc' +
+            '&Limit={{limit}}',
+        submitReview: 'https://stg.api.bazaarvoice.com/', // to be added
     },
-    getCustomURL: function ({ key = '', lang = 'tr-TR', origins = '', destinations = '' }) {
+    getCustomURL: function ({ key = '', lang = 'tr-TR', origins = '', destinations = '', limit = '', id = '' }) {
         const _t = this;
+        console.log(_t.customURLs[key]);
         return (_t.customURLs[key] || '')
             .replace(/{{lang}}/g, lang)
             .replace(/{{origins}}/g, origins)
             .replace(/{{destinations}}/g, destinations)
-            .replace(/{{mapApikey}}/g, _t.mapApiKey);
+            .replace(/{{mapApiKey}}/g, _t.mapApiKey)
+            .replace(/{{bazaarApiKey}}/g, _t.bazaarVoiceApiKey)
+            .replace(/{{id}}/g, id)
+            .replace(/{{limit}}/g, limit);
     },
     getURL: function ({ key = '', subKey = '' }) {
         const _t = this;
@@ -250,8 +263,12 @@ module.exports = {
 
         return k.replace(/\(/g, '').replace(/\)/g, '').replace(/\s+/g, '');
     },
-    ajx: function ({ uri = '' }, callback) {
-        return fetch(uri)
+    ajx: function ({ uri = '', method = 'GET', headers = {} }, callback) {
+        console.log('zzzz', uri);
+        return fetch(uri, {
+            method: method,
+            headers: headers,
+        })
             .then((res) => res.json())
             .then((res) => {
                 if (typeof callback !== 'undefined')
@@ -342,7 +359,7 @@ module.exports = {
     },
     getCartCount: function (data) {
         let { products = [] } = data || {}, count = 0;
-        if( products != null )
+        if (products != null)
             products.forEach((item) => {
                 count = count + (item['quantity'] || 0)
             });

@@ -149,10 +149,10 @@ export default class List extends React.Component {
           }]
     */
     globals.fetch(
-      "https://www.flormar.com.tr/webapi/v3/Product/getProductList",
+      Utils.getURL({ key: 'product', subKey: 'getProductList' }),
       JSON.stringify({
         "page": 1,
-        "pageSize": 100,
+        "pageSize": 300,
         "filter": filterValues,
         "catId": category['id'] || '', //18775
         ...category
@@ -162,8 +162,6 @@ export default class List extends React.Component {
   }
 
   _listResultHandler = (answer) => {
-
-    //console.log( answer );
 
     let _items = answer.data.products;
 
