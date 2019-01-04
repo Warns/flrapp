@@ -18,6 +18,8 @@ import {
     SET_CREDIT_CART,
     SET_BANK_POINT,
     SET_AGREEMENT,
+    SET_ORDER_SUCCESS_MESSAGE,
+    SET_ORDER_3D_BUTTON,
 } from 'root/app/helper/Constant';
 
 const Utils = require('root/app/helper/Global.js');
@@ -39,14 +41,17 @@ const cartInitialState = {
         year: 0,
         month: 0,
         useBankPoint: false,
+        order3dButton: false,
     },
     bankTransfer: {
         bankId: 0,
         installmentId: 0,
         useBankPoint: false,
+        order3dButton: false,
     },
 
     optin: {
+        order3dButton: false, /* 3d sipariş butonu gizle goster */
         differentAddress: false, /* farklı adrese gönder; false = teslimat, fatura aynı / true = farklı */
         shipAddressId: 0, /* teslimat adresi */
         billAddressId: 0, /* fatura adresi */
@@ -64,7 +69,8 @@ const cartInitialState = {
     agreements: {
         agreement1: false,
         agreement2: false
-    }
+    },
+    orderSuccessMessage: ''
 };
 
 export default function cart(state = cartInitialState, action) {
@@ -174,15 +180,15 @@ export default function cart(state = cartInitialState, action) {
         };
         case SET_PAYMENT: {
             const { paymentId, paymentType } = action.value,
-                { bankId = 0, installmentId = 0, useBankPoint } = state[paymentType] || {};
+                { bankId = 0, installmentId = 0, useBankPoint, order3dButton } = state[paymentType] || {};
             data = {
                 ...state,
-                optin: { ...state.optin, paymentId: paymentId, bankId: bankId, installmentId: installmentId, useBankPoint: useBankPoint }
+                optin: { ...state.optin, paymentId: paymentId, bankId: bankId, installmentId: installmentId, useBankPoint: useBankPoint, order3dButton: order3dButton }
             };
 
             setCart(data['optin'], () => {
                 setTimeout(() => {
-                    getCart();    
+                    getCart();
                 }, 333);
             });
 
@@ -217,7 +223,7 @@ export default function cart(state = cartInitialState, action) {
 
             setCart(data['optin'], () => {
                 setTimeout(() => {
-                    getCart();    
+                    getCart();
                 }, 333);
             });
 
@@ -230,6 +236,23 @@ export default function cart(state = cartInitialState, action) {
                     ...state.agreements,
                     ...action.value
                 }
+            };
+
+            return data;
+        };
+        case SET_ORDER_SUCCESS_MESSAGE: {
+            const data = {
+                ...state,
+                orderSuccessMessage: action.value
+            };
+
+            return data;
+        };
+        case SET_ORDER_3D_BUTTON: {
+            const data = {
+                ...state,
+                creditCart: { ...state.creditCart, order3dButton: action.value },
+                optin: { ...state.optin, order3dButton: action.value }
             };
 
             return data;
@@ -250,13 +273,15 @@ export default function cart(state = cartInitialState, action) {
                     year: 0,
                     month: 0,
                     useBankPoint: false,
+                    order3dButton: false,
                 },
                 bankTransfer: {
                     bankId: 0,
                     installmentId: 0,
                     useBankPoint: false,
+                    order3dButton: false,
                 },
-                optin: { ...state.optin, bankId: 0, installmentId: 0 }
+                optin: { ...state.optin, bankId: 0, installmentId: 0, order3dButton: false, }
             };
 
             setCart(data['optin']);
@@ -276,13 +301,16 @@ export default function cart(state = cartInitialState, action) {
                     year: 0,
                     month: 0,
                     useBankPoint: false,
+                    order3dButton: false,
                 },
                 bankTransfer: {
                     bankId: 0,
                     installmentId: 0,
                     useBankPoint: false,
+                    order3dButton: false,
                 },
                 optin: {
+                    order3dButton: false,
                     differentAddress: false,
                     shipAddressId: 0,
                     billAddressId: 0,
@@ -301,6 +329,7 @@ export default function cart(state = cartInitialState, action) {
                     agreement1: false,
                     agreement2: false
                 },
+                orderSuccessMessage: '',
             }
         };
         case SET_CART_PROGRESS: {

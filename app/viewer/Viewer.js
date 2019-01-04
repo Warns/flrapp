@@ -14,6 +14,9 @@ import {
     Platform,
 } from 'react-native';
 import {
+    Asset,
+} from 'expo';
+import {
     ICONS,
     FEEDSTYPE,
     VIEWERTYPE,
@@ -1415,7 +1418,7 @@ class Viewers extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        if (!Utils.isArrEqual(this.state.data, nextState.data) || this.state.html !== nextState.html)
+        if (!Utils.isArrEqual(this.state.data, nextState.data) || this.state.html !== nextState.html || this.props.flexible != nextProps.flexible)
             return true;
         return false;
     }
@@ -1482,13 +1485,21 @@ class Viewers extends Component {
             .replace(/<\/td/g, '</div');
     }
 
-    _addStyle = ({ customClass, data }) => {
-        const uri = Utils.getURL({ key: 'style', subKey: 'main' }) + '?' + parseInt(Math.random() * new Date()),
-            opened = '<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"></head><body>',
+    _addStyle = () => {
+        const font = Asset.fromModule(require("root/assets/fonts/proximanova-regular.otf")).uri,
+            css = '<style type="text/css"> @font-face {font-family: Regular; src: url(' + font + ') format("truetype");} .ems-mobi-app-container *{font-family: Regular !important;font-size: 18px !important;}</style>';
+        return css;
+    }
+
+    _addHtmlWrapper = ({ customClass, data }) => { 
+        const _self = this,
+            uri = Utils.getURL({ key: 'style', subKey: 'main' }) + '?' + parseInt(Math.random() * new Date()),
+            style = _self._addStyle(),
+            opened = '<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">'+ style +'</head><body>',
             closed = '</body></html>',
             css = '<link href="' + uri + '" rel="stylesheet" type="text/css" />',
             htm = opened + '<div class="ems-mobi-app-container ' + customClass + '">' + (css + data) + '</div>' + closed;
-
+            
         return htm;
     }
 
@@ -1602,7 +1613,7 @@ class Viewers extends Component {
         const _self = this,
             { type = VIEWERTYPE['LIST'] } = _self.props.config;
 
-        Globals.AJX({ _self: _self, uri: uri, data: data }, function (res) {
+        Globals.AJX({ _self: _self, uri: uri, data: data }, function (res) { 
 
             const { keys, customClass = '', customFunc = '' } = _self.props.config,
                 keyArr = keys['arr'] || '',
@@ -1627,7 +1638,7 @@ class Viewers extends Component {
             } else if (type == VIEWERTYPE['LIST'] || type == VIEWERTYPE['HTMLTOJSON'] || type == VIEWERTYPE['SCROLLVIEW'])
                 _self.setState({ data: data, total: res.data[keyTotal] || data.length || 0, loaded: true, noResult: false });
             else if (type == VIEWERTYPE['WEBVIEW'])
-                _self.setState({ html: _self._addStyle({ customClass: customClass, data: data }), loaded: true, noResult: false });
+                _self.setState({ html: _self._addHtmlWrapper({ customClass: customClass, data: data }), loaded: true, noResult: false });
             else
                 _self.setState({ html: _self._clearTag(data), loaded: true, noResult: false });
 
@@ -2029,7 +2040,8 @@ class Viewers extends Component {
 
     _getViewer = () => {
         const _self = this,
-            { scrollEnabled = true } = _self.props,
+            { scrollEnabled = true, flexible = true } = _self.props,
+            flex = flexible ? { flex: 1 } : {},
             { type = VIEWERTYPE['LIST'], horizontal = false, showsHorizontalScrollIndicator = true } = _self.props.config,
             { noResult = false, loaded = false } = _self.state;
 
@@ -2056,13 +2068,13 @@ class Viewers extends Component {
                 view = preload();
             else if (type == VIEWERTYPE['HTML'])
                 view = (
-                    <ScrollView style={{ flex: 1, }}>
+                    <ScrollView style={{ ...flex }}>
                         <HTML {...HTML_DEFAULT_PROPS} html={_self.state.html} />
                     </ScrollView>
                 );
             else if (type == VIEWERTYPE['WEBVIEW'])
                 view = (
-                    <View style={{ flex: 1, }}>
+                    <View style={{ ...flex }}>
                         <WebView
                             scalesPageToFit={false}
                             automaticallyAdjustContentInsets={false}
@@ -2074,7 +2086,7 @@ class Viewers extends Component {
                 view = (
                     <ScrollView
                         scrollEnabled={scrollEnabled}
-                        style={{ flex: 1 }}
+                        style={{ ...flex }}
                     >
                         {_self._getItem()}
                     </ScrollView>
@@ -2085,11 +2097,14 @@ class Viewers extends Component {
     }
 
     render() {
-        const _self = this;
+        const _self = this,
+            { flexible = true } = _self.props,
+            flex = flexible ? { flex: 1 } : {};
+
         return (
-            <View style={[{ flex: 1 }, { ..._self.props.wrapperStyle }]}>
+            <View style={[{ ...flex }, { ..._self.props.wrapperStyle }]}>
                 {_self._getFilter()}
-                <View style={[{ flex: 1, padding: 0 }, { ..._self.props.style }]}>
+                <View style={[{ ...flex, padding: 0, }, { ..._self.props.style }]}>
                     {_self._getViewer()}
                 </View>
             </View >

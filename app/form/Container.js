@@ -50,7 +50,7 @@ class Container extends Component {
 
     render() {
         const _self = this,
-            { theme = 'DARK', containerStyle = {}, wrapperStyle = {}, showHeader = true, showErrorIco = true } = _self.props,
+            { theme = 'DARK', containerStyle = {}, wrapperStyle = {}, errorMsgStyle = {}, showHeader = true, showErrorIco = true } = _self.props,
             { container, wrapper, titleSty, errorMsgSty } = styles,
             { BORDER_WIDTH = 1, BORDER_COLOR = '#dddddd', TITLE_COLOR = '#9b9b9b', ERROR_COLOR = '#d3838d', BACKGROUND_COLOR = '#FFFFFF' } = FORMSTYLE[theme],
             children = _self.props.children,
@@ -68,7 +68,7 @@ class Container extends Component {
             color = BORDER_COLOR;
 
         if (error) {
-            errorMsg = <Text numberOfLines={1} style={[errorMsgSty, { color: ERROR_COLOR }]}>{errorMsg}</Text>
+            errorMsg = <Text numberOfLines={1} style={[errorMsgSty, { color: ERROR_COLOR }, errorMsgStyle]}>{errorMsg}</Text>
             color = ERROR_COLOR;
 
             if (showErrorIco)

@@ -5,8 +5,8 @@ const Translation = require('root/app/helper/Translation.js');
 module.exports = {
     mapApiKey: 'AIzaSyAvSoqfCr4I9Vb11HtQ6cDEAMki6THBgrQ',
     bazaarVoiceApiKey: 'ca0fITp8PBeW9pf7e9vzn0BABaSeJVjOBqp6EWZVZCXsA',
-    //prefix: 'https://www.flormar.com.tr',
-    prefix: 'https://dev.flormar.com.tr',
+    prefix: 'https://www.flormar.com.tr',
+    //prefix: 'https://dev.flormar.com.tr',
     imagePrefix: 'flormar.com.tr',
     URLs: {
         style: {
@@ -84,7 +84,8 @@ module.exports = {
             getInstallment: '/webapi/v3/Cart/getInstallment',
             getBankTransfer: '/webapi/v3/Cart/getBankTransfer',
             getPos3DParameter: '/webapi/v3/Cart/getPos3DParameter',
-            checkBankPoint: '/webapi/v3/Cart/checkBankPoint'
+            checkBankPoint: '/webapi/v3/Cart/checkBankPoint',
+            setCartOrder: '/webapi/v3/Cart/setCartOrder'
         }
     },
     customURLs: {

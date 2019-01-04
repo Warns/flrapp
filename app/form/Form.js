@@ -83,6 +83,7 @@ class Form extends Component {
             errMsg: [],
             defaultData: [],
             show: true, // form gizle-goster
+            control: true, // hata durumu için
         };
     }
 
@@ -283,6 +284,8 @@ class Form extends Component {
             _t.setState({ validation: false, errMsg: allErrMsg });
             if (control)
                 _t._send(success);
+
+            _t.setState({ control: control });
         }, 1);
     }
 
@@ -352,7 +355,7 @@ class Form extends Component {
     addField = (obj) => {
         const _self = this,
             { id, type, css = {}, showHeader = true, constantValue = false } = obj,
-            { containerStyle = {}, wrapperStyle = {}, fontStyle = {}, defaultTitleStyle = {} } = css,
+            { errorMsgStyle = {}, containerStyle = {}, wrapperStyle = {}, fontStyle = {}, defaultTitleStyle = {} } = css,
             { theme = 'DARK' } = _self.props.data,
             validation = this.state.validation,
             _callback = this._callback,
@@ -370,6 +373,7 @@ class Form extends Component {
             case 'creditCart':
                 return <FormInput
                     onRef={ref => (_self._formElement.push(ref))}
+                    errorMsgStyle={{ ...errorMsgStyle }}
                     containerStyle={{ ...containerStyle }}
                     wrapperStyle={{ ...wrapperStyle }}
                     onChangeText={_self._onChangeText}
@@ -383,6 +387,7 @@ class Form extends Component {
             case 'text':
                 return <FormInput
                     onRef={ref => (_self._formElement.push(ref))}
+                    errorMsgStyle={{ ...errorMsgStyle }}
                     containerStyle={{ ...containerStyle }}
                     wrapperStyle={{ ...wrapperStyle }}
                     onChangeText={_self._onChangeText}
@@ -488,6 +493,18 @@ class Form extends Component {
 
     _getAllErrMsg = () => {
         return <ErrorBox data={this.state.errMsg} />
+    }
+
+    /* public fonk. */
+    _formValidation = (callback) => {
+        const _self = this;
+        _self._onPress();
+        setTimeout(() => {
+            if (typeof callback !== 'undefined') {
+                const { control = true } = _self.state;
+                callback(control)
+            }
+        }, 100);
     }
 
     _onPress = () => {

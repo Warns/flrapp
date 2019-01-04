@@ -114,7 +114,7 @@ module.exports = {
                     type: 'text',
                     placeholder: '',
                     value: '',
-                    mask: '0(999) 9999999',
+                    mask: '0999 9999999',
                     customFormat: (k) => {
                         return Utils.customPhoneFormat(k);
                     },

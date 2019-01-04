@@ -57,6 +57,7 @@ class ChatView extends React.Component {
     this.web = React.createRef();
     this.randomId = Math.random();
     this.cache = [];
+    this.fontfamily = Asset.fromModule(require("../assets/proximanova-regular.otf")).uri;
   }
 
   get nav() {
@@ -110,7 +111,8 @@ class ChatView extends React.Component {
 					window.dahiDevice="dahiReact";
 					window.dahiUser=${JSON.stringify(user)};
 					if(window.dahiKeeper){
-					window.dahiKeeper.opt.lang='${I18n.currentLocale()}';
+          window.dahiKeeper.opt.lang='${I18n.currentLocale()}';
+          window.dahiKeeper.opt.fontfamily='${this.fontfamily}';
 					${pid}
 					window.dahiKeeper.normal();
 				}

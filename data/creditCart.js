@@ -14,8 +14,13 @@ module.exports = {
           id: 'creditCardNo',
           title: 'Kart Bilgileri',
           type: 'creditCart',
-          validation: [{ key: 'isEmpty' }],
+          validation: [{ key: 'isEmpty' }, { key: 'isCreditCard' }],
           keyboardType: 'numeric',
+          css: {
+            errorMsgStyle: {
+              opacity: 0
+            }
+          }
         }
       ]
     },
@@ -25,20 +30,6 @@ module.exports = {
         flex: 1
       },
       items: [
-        /*{
-          id: 'year',
-          title: 'Bitiş tarihi',
-          type: 'dataTimePicker',
-          //dateFormat: 'MM.YY',
-          maxDate: 14,
-          validation: [{ key: 'isEmpty' }, { key: 'isDate' },],
-          css: {
-            containerStyle: {
-              marginRight: 5,
-              flex: 1.2
-            }
-          },
-        },*/
         {
           showTitle: true,
           id: 'year',
@@ -46,7 +37,12 @@ module.exports = {
           type: 'text',
           placeholder: '00/00',
           mask: '99/99',
-          validation: [{ key: 'isEmpty' }],
+          validation: [{ key: 'isEmpty' }, { key: 'isCustomDate' }],
+          css: {
+            errorMsgStyle: {
+              opacity: 0
+            }
+          }
         },
         {
           showTitle: true,
@@ -54,9 +50,12 @@ module.exports = {
           title: 'CVC',
           type: 'text',
           mask: '9999',
-          validation: [{ key: 'isEmpty' }],
+          validation: [{ key: 'isEmpty' }, { key: 'isCvcCode', value: 'creditCardNo' }],
           keyboardType: 'numeric',
           css: {
+            errorMsgStyle: {
+              opacity: 0
+            },
             containerStyle: {
               marginLeft: 5,
               flex: .8
@@ -72,7 +71,12 @@ module.exports = {
           id: 'fullName',
           title: 'Kart Üzerindeki İsim',
           type: 'text',
-          validation: [{ key: 'isEmpty' }],
+          validation: [{ key: 'isEmpty' }, /*{ key: 'isTwo', value: { first: 3, last: 2 } }*/],
+          css: {
+            errorMsgStyle: {
+              opacity: 0
+            }
+          }
         }
       ]
     }

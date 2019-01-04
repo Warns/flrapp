@@ -17,9 +17,9 @@ class FormInput extends Component {
         super(props);
         const _self = this,
             {
-                placeholder = '', 
-                value = '', 
-                title, 
+                placeholder = '',
+                value = '',
+                title,
                 showTitle = false //-> bu deger true gelirse placeholder yapısı olmadan direk title gösterilecek
             } = _self.props.data;
 
@@ -152,7 +152,8 @@ class FormInput extends Component {
                 theme,
                 creditCart = false,
                 containerStyle = {},
-                wrapperStyle = {}
+                wrapperStyle = {},
+                errorMsgStyle = {}
             } = _self.props,
             { TITLE_COLOR = '#9b9b9b' } = FORMSTYLE[theme],
             {
@@ -251,6 +252,7 @@ class FormInput extends Component {
         return (
             <TouchableOpacity style={{ flex: 1 }} activeOpacity={0.7} onPress={this._onPress.bind(this)}>
                 <Container
+                    errorMsgStyle={{ ...errorMsgStyle }}
                     containerStyle={{ ...containerStyle }}
                     wrapperStyle={{ ...wrapperStyle }}
                     showHeader={showHeader}

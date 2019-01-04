@@ -1,3 +1,9 @@
+import {
+    cardType,
+    validateCardNumber,
+    validateCardCVC
+} from 'root/app/helper/CreditCard';
+
 const Utils = require('root/app/helper/Global.js');
 const Translation = require('root/app/helper/Translation.js');
 module.exports = {
@@ -64,6 +70,41 @@ module.exports = {
         return b ? { state: true } : { state: false, msg: Translation.getErrorMsg({ key: 'isEqual', title: title, value: title2 }) };
     },
     isStar: ({ value = -1, title = '' }) => {
-        return value >= 0 ? { state: true } : { state: false, msg: Translation.getErrorMsg({ key: 'isStar', title: title }) }
+        return value >= 0 ? { state: true } : { state: false, msg: Translation.getErrorMsg({ key: 'isStar', title: title }) };
+    },
+    isCreditCard: ({ value = '', title = '', rule = {} }) => {
+        return validateCardNumber(value) ? { state: true } : { state: false, msg: Translation.getErrorMsg({ key: 'isCreditCard' }) };
+    },
+    isCvcCode: ({ value = '', title = '', rule = {}, allData = {} }) => {
+        let creditCardNo = '';
+        Object.entries(allData).forEach(([ky, tm]) => {
+            if (tm['key'] == rule)
+                creditCardNo = tm['value'];
+        });
+
+        const _cardType = cardType(creditCardNo),
+            cvcValid = validateCardCVC(value, _cardType);
+
+        return cvcValid ? { state: true } : { state: false, msg: Translation.getErrorMsg({ key: 'isCvcCode' }) };
+    },
+    isCustomDate: ({ value = '', title = '', rule = {} }) => {
+        /* 
+            kredi kartı tarih için
+            value: 00/00
+        */
+        let d = new Date(),
+            nowYear = d.getFullYear(),
+            date = (value || '0/0').split('/'),
+            month = parseInt( date[0] || 0 ),
+            year = parseInt( '20' + ( date[1] || 0 ) ),
+            b = true;
+
+        if (month <= 0 || month > 12)
+            b = false;
+
+        if (year < nowYear || year > nowYear + 14)
+            b = false;
+
+        return b ? { state: true } : { state: false, msg: Translation.getErrorMsg({ key: 'isCustomDate' }) }
     }
 };

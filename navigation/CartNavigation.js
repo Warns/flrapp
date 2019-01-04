@@ -13,7 +13,7 @@ export default class CartNavigation extends Component {
         _self = this;
     }
 
-    _getHeader = ({ props, root = false }) => {
+    _getHeader = ({ props, type = 'normal', style = {}, root = false }) => {
         const _onClose = () => {
             const { navigation } = props;
             if (root)
@@ -21,10 +21,13 @@ export default class CartNavigation extends Component {
             else
                 navigation.goBack(null);
         },
-        { cart } = store.getState(),
-        { progress = "1/3" } = cart;
-        
-        return <MinimalHeader onPress={_onClose} title="Sepetim" progress={progress} />
+            { cart } = store.getState(),
+            { progress = "1/3" } = cart;
+
+        if (type == 'normal')
+            return <MinimalHeader onPress={_onClose} title="Sepetim" progress={progress} />
+        else if (type == 'order')
+            return <MinimalHeader wrapperStyle={style} title="" onPress={_onClose} />
     }
 
     navigator = createStackNavigator(
@@ -56,12 +59,12 @@ export default class CartNavigation extends Component {
             OrderSuccess: {
                 screen: props => <OrderSuccess {...props} />,
                 navigationOptions: {
-                    header: (props) => _self._getHeader({ props: props })
+                    header: (props) => _self._getHeader({ props: props, root: true, type: 'order', style: { backgroundColor: 'rgb(80, 227, 194)' } })
                 }
             }
         },
         {
-            //initialRouteName:'OrderSuccess',
+            //initialRouteName: 'OrderSuccess',
             navigationOptions: {
                 header: null
             },

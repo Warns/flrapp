@@ -17,13 +17,10 @@ const styles = StyleSheet.create({
   flexcenter: { flex: 1, justifyContent: "center", alignItems: "center" },
   textinput: {
     paddingLeft: 5,
-    flex: 1,
-    borderWidth: 1,
-    borderColor: "#d4d4d4",
-    borderRadius: 6
+    flex: 1
   },
-  sendbutton: { width: 50, fontSize: 15, textAlign: "center" },
-  micbutton: { width: 50, fontSize: 15, textAlign: "center" }
+  sendbutton: { width: 40, fontSize: 15, textAlign: "center" },
+  micbutton: { width: 40, fontSize: 15, textAlign: "center" }
 });
 
 export default class ChatInputLine extends React.Component {
@@ -121,7 +118,10 @@ export default class ChatInputLine extends React.Component {
       <View
         style={{
           flex: 1,
-          flexDirection: "row"
+          flexDirection: "row",
+          borderWidth: 1,
+          borderColor: "#d4d4d4",
+          borderRadius: 6
         }}
       >
         {this.state.s ? (
@@ -154,8 +154,8 @@ export default class ChatInputLine extends React.Component {
             <Text style={styles.sendbutton}>
               <MaterialIcons
                 name="send"
-                size={30}
-                color={this.props.text ? "#fc3394" : "#aaa"}
+                size={24}
+                color="#fc3394"
               />
             </Text>
           </TouchableOpacity>

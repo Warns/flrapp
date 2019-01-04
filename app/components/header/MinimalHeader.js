@@ -49,7 +49,7 @@ class MinimalHdr extends React.Component {
 
     return (
       <View>
-        <View style={_wrapperStyle}>
+        <View style={[_wrapperStyle, {...this.props.wrapperStyle}]}>
           <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
             <TouchableOpacity onPress={this._onBackPress}>
               <Image source={require('../../../assets/images/icons/back.png')} style={{ width: 40, height: 40, resizeMode: 'contain' }} />

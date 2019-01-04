@@ -3,9 +3,13 @@ import {
     View,
     ScrollView,
     WebView,
+    Modal,
+    Image,
+    Text,
 } from 'react-native';
 import { Viewer, CrediCart, Foot } from 'root/app/viewer/';
 import {
+    ICONS,
     SET_CART_PROGRESS,
     CART_FOOTER_MARGIN_BOTTOM,
     CART_BACKGROUND_COLOR_1,
@@ -14,7 +18,16 @@ import {
     CREDIT_CART,
     BANK_TRANSFER,
     RESET_PAYMENT,
+    SET_ORDER_SUCCESS_MESSAGE,
+    SET_CART_ITEMS,
+    SHOW_PRELOADING
 } from 'root/app/helper/Constant';
+import {
+    cardType,
+    validateCardNumber,
+    validateCardCVC
+} from 'root/app/helper/CreditCard';
+import { MinimalHeader } from 'root/app/components';
 import { connect } from 'react-redux';
 import Footer from './Footer';
 import { store } from 'root/app/store';
@@ -25,6 +38,9 @@ import { Minus99HorizontalTabs } from 'root/app/components';
 
 const Utils = require('root/app/helper/Global.js');
 const Globals = require('root/app/globals.js');
+const PRELOAD = async(b) => {
+    store.dispatch({ type: SHOW_PRELOADING, value: b });
+}
 
 /* banka havale config */
 const DATA = {
@@ -89,8 +105,78 @@ class BankTransfer extends Component {
 
     }
 
+    _onMessage = (obj) => {
+        const _self = this,
+            { status, message = '', innerMessage = '', data } = obj || {},
+            { orderNo = '', successText = '', url3ds } = data || {};
+
+        if (status == 200) {
+            // success
+            store.dispatch({ type: SET_ORDER_SUCCESS_MESSAGE, value: (orderNo + " no'lu " + successText) });
+            store.dispatch({ type: SET_CART_ITEMS, value: 0 });
+            setTimeout(() => {
+                _self.props.nav.navigate('OrderSuccess', {});
+            }, 10);
+        } else {
+            // error
+            setTimeout(() => {
+                alert(message);
+            }, 100);
+        }
+    }
+
+    _applyForm = () => {
+        const _self = this,
+            data = {};
+        PRELOAD(true);
+        globals.fetch(
+            Utils.getURL({ key: 'cart', subKey: 'getCart' }),
+            JSON.stringify({ cartLocation: 'payment' }), (answer) => {
+                if (answer.status == 200) {
+                    globals.fetch(
+                        Utils.getURL({ key: 'cart', subKey: 'setCartOrder' }),
+                        JSON.stringify(data), (res) => {
+                            PRELOAD(false);
+                            setTimeout(() => {
+                                _self._onMessage(res);
+                            }, 10);
+                        });
+                }
+            });
+
+    }
+
+    _onPress = () => {
+        const _self = this,
+            { agreements, optin } = store.getState().cart,
+            { bankId } = optin,
+            { agreement1, agreement2 } = agreements,
+            arr = [];
+
+        if (bankId == 0)
+            arr.push('Havale yapmak istediğiniz bankayı seçerek devam ediniz.');
+
+        if (!agreement1)
+            arr.push('Lütfen ön bilgilendirme formunu okuyup onaylayınız');
+
+        if (!agreement2)
+            arr.push('Lütfen satış sözleşmesini okuyup onaylayınız');
+
+        if (arr.length > 0)
+            alert(arr.join('\n'));
+        else
+            _self._applyForm();
+    }
+
+    _getDsc = () => {
+        return (
+            <Text style={{ fontSize: 12, color: '#9b9b9b', padding: 10 }}>*Havale ile sipariş verdiğinizde en geç 3 iş günü içerisinde sayfada belirtilen banka hesaplarından birine ödeme yapılmalıdır. Ödemesi gerçekleştirilen siparişler 2 iş günü içerisinde kargoya teslim edilir. Ödemenizi yaparken tam tutarı aktardığınızdan ve açıklama kısmına sipariş numaranızı yazdığınızdan emin olmalısınız. ATM üzerinden yapılan havale işlemlerinde bazı bankalar işlem ücreti alabilmektedir. Tahsil edilen bu bedel Flormar’ın sorumluluğunda değildir, detaylar ile ilgili bankanız ile irtibata geçebilirsiniz.</Text>
+        );
+    }
+
     render() {
-        const _self = this;
+        const _self = this,
+            dsc = _self._getDsc();
 
         return (
             <View style={{ flex: 1 }}>
@@ -111,6 +197,7 @@ class BankTransfer extends Component {
                             config={DATA}
                             callback={_self._callback}
                         />
+                        {dsc}
                         <Foot {..._self.props} />
                     </View>
                     <UnderSide wrapperStyle={{ backgroundColor: CART_BACKGROUND_COLOR_1 }} />
@@ -127,7 +214,9 @@ class CreditCart extends Component {
         super(props);
         this.state = {
             injectScript: '',
-            frm: ''
+            frm: '',
+            isVisible: false,
+            loading: false,
         };
     }
 
@@ -156,7 +245,7 @@ class CreditCart extends Component {
     }
 
     _template = {
-        form: '<body onload="setTimeout(function() { document.frm.submit() }, 500)"><form name="frm" action="{{action}}" method="post">{{input}}<input type="submit" value="Submit"></form> </body>',
+        form: '<body onload="setTimeout(function() { document.frm.submit() }, 200)"><form style="visibility: hidden;" name="frm" action="{{action}}" method="post">{{input}}<input type="submit" value="Submit"></form> </body>',
         input: '<input type="text" name="{{name}}" value="{{value}}">'
     };
 
@@ -174,11 +263,110 @@ class CreditCart extends Component {
             }),
             htm = _self._template['form'].replace(/{{action}}/g, formUrl).replace(/{{input}}/g, input);
 
-        _self.setState({ frm: htm });
-        console.log('_getTemplate', htm);
+        _self.setState({ frm: htm, isVisible: true });
     }
 
-    _onPress = () => {
+    _onMessage = (event) => {
+        const _self = this,
+            obj = JSON.parse(event.nativeEvent.data || '{}'),
+            { status, message = '', innerMessage = '', data } = obj || {},
+            { orderNo = '', successText = '', url3ds } = data || {};
+
+        /* işlem bitince 3d secure formunu gizleme */
+        _self._onCloseModal()
+
+        if (status == 200) {
+            // success
+            store.dispatch({ type: SET_ORDER_SUCCESS_MESSAGE, value: (orderNo + " no'lu " + successText) });
+            store.dispatch({ type: SET_CART_ITEMS, value: 0 });
+            setTimeout(() => {
+                _self.props.nav.navigate('OrderSuccess', {});
+            }, 10);
+        } else {
+            // error
+            setTimeout(() => {
+                alert(message);
+            }, 100);
+
+        }
+
+        //const ornek = {"status":200,"message":null,"innerMessage":null,"data":{"orderNo":"SIP0151456440","successText":"Siparişiniz başarıyla alındı. Sipariş ettiğiniz ürünler en kısa sürede teslimat adresinize teslim edilecektir.","url3ds":null}}
+    }
+
+    _onNavigationStateChange(webViewState) {
+        const _self = this,
+            { url } = webViewState;
+        if (url.indexOf('orderProcessing/confirm3dTransaction') != -1)
+            _self.setState({ injectScript: 'window.parent.postMessage(document.body.innerText);' });
+    }
+
+    _onLoad = () => {
+    }
+
+    _onLoadEnd = () => {
+        const _self = this;
+        _self.setState({ loading: false });
+    }
+
+    _onLoadStart = () => {
+        const _self = this;
+        _self.setState({ loading: true });
+    }
+
+    _getFrm = () => {
+        const _self = this,
+            { frm = '', injectScript = '', loading = false } = _self.state,
+            pre = loading ? <View style={{ backgroundColor: '#FFFFFF', zIndex: 2, position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center', }}><Image source={ICONS['loading']} style={{ resizeMode: 'cover', width: 60, height: 60, borderRadius: 30, }} /></View> : null;
+
+        let view = null;
+        if (frm != '') {
+            view = (
+                <View style={{ flex: 1, backgroundColor: 'red' }}>
+                    {pre}
+                    <WebView
+                        onLoad={_self._onLoad}
+                        onLoadEnd={_self._onLoadEnd}
+                        onLoadStart={_self._onLoadStart}
+                        onMessage={this._onMessage}
+                        injectedJavaScript={injectScript}
+                        onNavigationStateChange={this._onNavigationStateChange.bind(this)}
+                        ref={component => (this.webview = component)}
+                        scalesPageToFit={false}
+                        automaticallyAdjustContentInsets={false}
+                        source={{ html: frm }}
+                    />
+                </View>
+            );
+        }
+
+        return view;
+    }
+
+    _onCloseModal = () => {
+        const _self = this;
+        _self.setState({ frm: '', injectScript: '', isVisible: false })
+    }
+
+    _getModal = () => {
+        const _self = this,
+            frm = _self._getFrm(),
+            { isVisible = false } = _self.state;
+
+        /* 3d secure modal */
+        return (
+            <Modal
+                visible={isVisible}
+                onRequestClose={() => {
+
+                }}
+            >
+                <MinimalHeader onPress={_self._onCloseModal} title={'Sepetim'} right={<View />} />
+                {frm}
+            </Modal>
+        )
+    }
+
+    _applyForm = () => {
         const _self = this,
             { creditCart = {} } = store.getState().cart,
             { bankId = 0, fullName = '', creditCardNo = '', cvcCode = '', installmentId } = creditCart,
@@ -197,72 +385,55 @@ class CreditCart extends Component {
                 //"customRedirectUrl": "string"
             };
 
+        PRELOAD(true);
         globals.fetch(
             Utils.getURL({ key: 'cart', subKey: 'getCart' }),
             JSON.stringify({ cartLocation: 'payment' }), (answer) => {
-                console.log(data);
+                //console.log(data);
                 if (answer.status == 200) {
                     globals.fetch(
                         Utils.getURL({ key: 'cart', subKey: 'getPos3DParameter' }),
                         JSON.stringify(data), (res) => {
-                            if (res.status == 200)
-                                _self._getTemplate(res);
+                            PRELOAD(false);
+                            if (res.status == 200) {
+                                setTimeout(() => {
+                                    _self._getTemplate(res);
+                                }, 100);
+                            }
                         });
                 }
             });
     }
 
-    _onMessage = (event) => {
-        const obj = JSON.parse(event.nativeEvent.data || '{}'),
-            { status, message = '', innerMessage = '', data = {} } = obj,
-            { orderNo, successText = '', url3ds } = data;
-
-        if (status == 200) {
-            // success
-            alert(successText);
-        } else {
-            // error
-            alert(message);
-        }
-
-
-        //const ornek = {"status":200,"message":null,"innerMessage":null,"data":{"orderNo":"SIP0151456440","successText":"Siparişiniz başarıyla alındı. Sipariş ettiğiniz ürünler en kısa sürede teslimat adresinize teslim edilecektir.","url3ds":null}}
-    }
-
-    _onNavigationStateChange(webViewState) {
+    _onPress = () => {
         const _self = this,
-            { url } = webViewState;
-        if (url.indexOf('orderProcessing/confirm3dTransaction') != -1)
-            _self.setState({ injectScript: 'window.parent.postMessage(document.body.innerText);' });
-    }
+            { agreements } = store.getState().cart,
+            { agreement1, agreement2 } = agreements,
+            arr = [];
 
-    _getFrm = () => {
-        const _self = this,
-            { frm = '', injectScript = '' } = _self.state;
+        _self
+            .child
+            ._validation((b) => {
+                if (!b)
+                    arr.push('Lütfen kredi kartı Bilgilerini eksiksiz giriniz.');
 
-        let view = null;
-        if (frm != '') {
-            view = (
-                <View style={{ flex: 1, height: 300, backgroundColor: 'red' }}>
-                    <WebView
-                        onMessage={this._onMessage}
-                        injectedJavaScript={injectScript}
-                        onNavigationStateChange={this._onNavigationStateChange.bind(this)}
-                        ref={component => (this.webview = component)}
-                        scalesPageToFit={false}
-                        automaticallyAdjustContentInsets={false}
-                        source={{ html: frm }}
-                    />
-                </View>
-            );
-        }
+                if (!agreement1)
+                    arr.push('Lütfen ön bilgilendirme formunu okuyup onaylayınız');
 
-        return view;
+                if (!agreement2)
+                    arr.push('Lütfen satış sözleşmesini okuyup onaylayınız');
+
+                if (arr.length > 0)
+                    alert(arr.join('\n'));
+                else
+                    _self._applyForm();
+            });
     }
 
     render() {
         const _self = this,
-            frm = _self._getFrm();
+            modal = _self._getModal();
+
         return (
             <View style={{ flex: 1 }}>
                 <ScrollView
@@ -275,12 +446,16 @@ class CreditCart extends Component {
                         marginBottom: CART_FOOTER_MARGIN_BOTTOM,
                         backgroundColor: CART_BACKGROUND_COLOR_1,
                     }}>
-                    {frm}
+
                     <View style={{ flex: 1, backgroundColor: CART_BACKGROUND_COLOR_2, paddingTop: 20 }}>
-                        <CrediCart />
+                        <CrediCart
+                            onRef={ref => (_self.child = ref)}
+                        />
                         <Foot {..._self.props} />
                     </View>
                     <UnderSide wrapperStyle={{ backgroundColor: CART_BACKGROUND_COLOR_1 }} />
+
+                    {modal}
                 </ScrollView>
                 <Footer onPress={_self._onPress} data={CONFIG} />
             </View>
@@ -327,9 +502,9 @@ class Navigator extends Component {
 
         switch (paymentType) {
             case CREDIT_CART:
-                return <CreditCart {...props} data={item} />;
+                return <CreditCart nav={_self.props.nav} {...props} data={item} />;
             case BANK_TRANSFER:
-                return <BankTransfer {...props} data={item} />;
+                return <BankTransfer nav={_self.props.nav} {...props} data={item} />;
             default:
                 return null;
         }
@@ -433,7 +608,7 @@ const Payment = class Main extends Component {
         const _self = this,
             { loaded = false, payment = [] } = _self.state;
 
-        return loaded ? (<Navigator payment={payment} />) : null;
+        return loaded ? (<Navigator nav={_self.props.navigation} payment={payment} />) : null;
     }
 }
 
