@@ -471,7 +471,7 @@ class ListItem extends React.Component {
 
     let borderStyle = index % 2 == 0 ? { borderRightWidth: 1, borderRightColor: '#dddddd' } : {};
 
-    let numOfColors = item.productTypes.length;
+    let numOfColors = item.productGroups.length + 1;
 
     let newFlag = item.isNew == true ? null :
       <Text style={{ position: 'absolute', left: 15, top: 10, fontSize: 13, fontFamily: 'proxima' }}>Yeni</Text>;

@@ -140,8 +140,8 @@ class ProductSkeleton extends React.Component {
 
 class ProductRender extends React.Component {
   render() {
-
-    console.log(this.props.item.smallImageUrl);
+    const { productGroups = [] } = this.props.item || {},
+      numOfColors = productGroups.length + 1;
 
     return (
       <View style={{ flex: 1, borderWidth: 1, borderColor: "#eeeeee", borderRadius: 3, padding: 10, paddingTop: 5 }}>
@@ -153,7 +153,7 @@ class ProductRender extends React.Component {
           <Text style={{ fontFamily: 'Bold', fontSize: 14 }}>₺{this.props.item.salePrice}</Text>
         </View>
         <Text style={{ fontSize: 12 }}>{this.props.item.productName}</Text>
-        <Text style={{ fontSize: 12, color: '#9B9B9B' }}>{this.props.item.productTypes.length} Renk</Text>
+        <Text style={{ fontSize: 12, color: '#9B9B9B' }}>{numOfColors} Renk</Text>
       </View>
     )
   }
