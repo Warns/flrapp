@@ -72,6 +72,7 @@ module.exports = {
             getDataByUrl: '/webapi/v3/Content/getDataByUrl',
         },
         cart: {
+            validateCart: '/webapi/v3/Cart/validateCart',
             getCart: '/webapi/v3/Cart/getCart',
             setCart: '/webapi/v3/Cart/setCart',
             addCartLine: '/webapi/v3/Cart/addCartLine',
