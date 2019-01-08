@@ -5,8 +5,8 @@ const Translation = require('root/app/helper/Translation.js');
 module.exports = {
     mapApiKey: 'AIzaSyAvSoqfCr4I9Vb11HtQ6cDEAMki6THBgrQ',
     bazaarVoiceApiKey: 'ca0fITp8PBeW9pf7e9vzn0BABaSeJVjOBqp6EWZVZCXsA',
-    prefix: 'https://www.flormar.com.tr',
-    //prefix: 'https://dev.flormar.com.tr',
+    //prefix: 'https://www.flormar.com.tr',
+    prefix: 'https://dev.flormar.com.tr',
     imagePrefix: 'flormar.com.tr',
     URLs: {
         style: {
@@ -37,6 +37,7 @@ module.exports = {
             getAgreement: '/webapi/v3/User/getAgreement',
             getStockFollowUpList: '/webapi/v3/User/getStockFollowUpList', // takip listem - Stoğa Girenler
             getPriceFollowUpList: '/webapi/v3/User/getPriceFollowUpList', // takip listem - fiyatı düşenler
+            checkGuestMail: '/webapi/v3/User/checkGuestMail',
         },
         address: {
             country: '/webapi/v3/Address/getCountry',

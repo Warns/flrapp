@@ -23,36 +23,36 @@ import SignupPage from 'root/app/sub-views/Signup';
 import { CartHeader, DefaultHeader, MinimalHeader } from 'root/app/components/';
 
 
-class Loading extends React.Component{
-  render(){ return <LoadingPage {...this.props} /> }
+class Loading extends React.Component {
+  render() { return <LoadingPage {...this.props} /> }
 }
 
-class Splash extends React.Component{
-  render(){ return <SplashPage {...this.props} /> }
+class Splash extends React.Component {
+  render() { return <SplashPage {...this.props} /> }
 }
 
-class Phone extends React.Component{
-  render(){ return <PhonePage {...this.props} /> }
+class Phone extends React.Component {
+  render() { return <PhonePage {...this.props} /> }
 }
 
-class PhoneConfirmation extends React.Component{
-  render(){ return <PhoneConfirmationPage {...this.props} /> }
+class PhoneConfirmation extends React.Component {
+  render() { return <PhoneConfirmationPage {...this.props} /> }
 }
 
-class Email extends React.Component{
-  render(){ return <EmailPage {...this.props} /> }
+class Email extends React.Component {
+  render() { return <EmailPage {...this.props} /> }
 }
 
-class Password extends React.Component{
-  render(){ return <PasswordPage {...this.props} /> }
+class Password extends React.Component {
+  render() { return <PasswordPage {...this.props} /> }
 }
 
-class Signup extends React.Component{
-  render(){ return <SignupPage {...this.props} /> }
+class Signup extends React.Component {
+  render() { return <SignupPage {...this.props} /> }
 }
 
-class PasswordReset extends React.Component{
-  render(){ return <PasswordResetPage {...this.props} /> }
+class PasswordReset extends React.Component {
+  render() { return <PasswordResetPage {...this.props} /> }
 }
 
 const OptinNavigator = createStackNavigator(
@@ -67,16 +67,16 @@ const OptinNavigator = createStackNavigator(
     PasswordReset: { screen: PasswordReset },
   },
   {
-    index:0,
+    index: 0,
     lazy: true,
-    initialRouteName:'Loading',
+    initialRouteName: 'Loading',
     headerMode: 'none',
     navigationOptions: {
       gesturesEnabled: false,
     },
-    cardStyle:{
-      backgroundColor:'#ffffff',
-      elevation:0,
+    cardStyle: {
+      backgroundColor: '#ffffff',
+      elevation: 0,
     }
   }
 );

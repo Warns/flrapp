@@ -45,7 +45,7 @@ class CartPage extends React.Component {
 const RootStackNavigator = createStackNavigator(
   {
     Optin: {
-      screen: OptinNavigator,
+      screen: Review, //OptinNavigator,
       navigationOptions: {
         gesturesEnabled: false,
         header: null

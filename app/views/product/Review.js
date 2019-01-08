@@ -25,12 +25,17 @@ class ProductReview extends React.Component {
   }
 
   _onSubmit = (obj) => {
+
+
+
     console.log(obj.data);
   }
 
   render() {
 
-    let { item } = this.props.product;
+    //console.log(this.props.user);
+
+    let { item } = this.props.general.product;
     let { message } = this.state;
 
     let error = message == '' ? null : <Text style={{ color: '#FF2B94', marginTop: 10, fontSize: 15 }}>{message}</Text>;
@@ -39,7 +44,7 @@ class ProductReview extends React.Component {
 
     return (
       <View style={{ flex: 1 }}>
-        <MinimalHeader title={_title} right={<View />} onPress={this._onBackPress} noMargin={this.props.SCREEN_DIMENSIONS.OS == 'android' ? true : false} />
+        <MinimalHeader title={_title} right={<View />} onPress={this._onBackPress} noMargin={this.props.general.SCREEN_DIMENSIONS.OS == 'android' ? true : false} />
         <SafeAreaView style={{ flex: 1 }}>
           <View style={{ flex: 1, backgroundColor: '#F6F0EF' }}>
             <View style={{ padding: 40, paddingBottom: 5, paddingTop: 20 }}>
@@ -56,7 +61,7 @@ class ProductReview extends React.Component {
   }
 }
 
-function mapStateToProps(state) { return state.general; }
+function mapStateToProps(state) { return state; }
 const Review = connect(mapStateToProps)(ProductReview);
 
 export { Review }

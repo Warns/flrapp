@@ -19,7 +19,7 @@ module.exports = {
           title: 'Yorum başlığı',
           type: 'text',
           placeholder: '',
-          value: '',
+          value: 'Lorem ipsum dolor sit amet',
           validation: [{ key: 'isEmpty' }],
         },
         {
@@ -28,7 +28,7 @@ module.exports = {
           type: 'text',
           multiline: true,
           placeholder: '',
-          value: '',
+          value: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ',
           validation: [{ key: 'isEmpty' }, { key: 'isMin', value: 50 }],
           css: {
             wrapperStyle: {
@@ -48,7 +48,10 @@ module.exports = {
           value: false,
           css: {
             wrapperStyle: {
-              backgroundColor: 'transparent',
+              backgroundColor: '#ffffff',
+              padding: 15,
+              borderRadius: 5,
+              borderWidth: 1,
             }
           }
         },
@@ -58,7 +61,7 @@ module.exports = {
           desc: '<u>Üyelik ve Gizlilik Sözleşmesi</u> ve Kişisel Verilerin Korunması Maddesini kabul ediyorum.',
           type: 'chekbox',
           value: false,
-          //switchStyle: false,
+          switchStyle: false,
           validation: [{ key: 'isChecked' },],
           modal: {
             "title": "KULLANICI SÖZLEŞMESİ",

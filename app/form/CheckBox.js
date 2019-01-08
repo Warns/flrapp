@@ -86,11 +86,13 @@ class CheckBox extends Component {
             { control = false, containerStyle = {}, wrapperStyle = {} } = _self.props,
             { value, anim } = _self.state,
             { checkBox } = styles,
-            active = value ? { borderColor: '#000000', backgroundColor: '#000000' } : {};
+            active = value ? { borderColor: '#3BC9A9' } : {};
+
+        let _image = value ? <Image source={ICONS['checkBig']} style={{ width: 20, height: 20, resizeMode: 'contain' }} /> : null;
 
         if (switchStyle) {
             let _color = value ? '#3BC9A9' : '#ccc';
-            let _image = value ? <Image source={ICONS['checkBig']} style={{ width: 20, height: 20, resizeMode: 'contain' }} /> : null;
+
 
             const _left = anim.interpolate({
                 inputRange: [0, 1],
@@ -106,7 +108,11 @@ class CheckBox extends Component {
             );
         }
         else
-            check = <View style={[checkBox, active]} />;
+            check = (
+                <View style={[checkBox, active]}>
+                    {_image}
+                </View>
+            );
 
         if (control)
             _self._callback();
@@ -142,14 +148,14 @@ class CheckBox extends Component {
 
 const styles = StyleSheet.create({
     checkBox: {
-        width: 18,
-        height: 18,
+        width: 22,
+        height: 22,
         borderRadius: 3,
         borderWidth: 1,
-        borderColor: '#dddddd',
+        borderColor: '#aaaaaa',
         backgroundColor: '#FFFFFF',
         marginRight: 10,
-        marginTop: 3,
+        marginTop: 1,
     }
 });
 

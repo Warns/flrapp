@@ -9,19 +9,19 @@ import { DefaultButton } from 'root/app/UI';
 const Utils = require('root/app/helper/Global.js');
 const globals = require('root/app/globals.js');
 
-class PasswordReset extends React.Component{
-  
+class PasswordReset extends React.Component {
+
   state = {
-    email:null,
+    email: null,
     message: '',
     sent: true,
   };
 
-  _onBackPress = ()=>{
+  _onBackPress = () => {
     this.props.navigation.goBack();
   }
 
-  _onSubmit = ( obj )=>{
+  _onSubmit = (obj) => {
     this.setState({
       email: obj.data.email,
       message: '',
@@ -29,7 +29,7 @@ class PasswordReset extends React.Component{
     });
 
     globals.fetch(
-      "https://www.flormar.com.tr/webapi/v3/User/recoverPassword",
+      Utils.getURL({ key: 'user', subKey: 'recoverPassword' }),
       JSON.stringify({
         "email": obj.data.email
       }),
@@ -37,58 +37,58 @@ class PasswordReset extends React.Component{
     );
   }
 
-  _fetchResultHandler = ( answer )=>{
-    
-    if(answer.status == 200){
-      this.setState({sent: true})
-    }else{
-      this.setState({message: "Hata oluştu, lütfen tekrar dene!"})
+  _fetchResultHandler = (answer) => {
+
+    if (answer.status == 200) {
+      this.setState({ sent: true })
+    } else {
+      this.setState({ message: "Hata oluştu, lütfen tekrar dene!" })
     }
   }
 
-  _Continue = ()=>{
+  _Continue = () => {
     this.props.navigation.navigate("Home");
   }
 
-  render(){
+  render() {
     let { message, sent, email } = this.state;
     let formData = FORMDATA['optin_resetpassword'];
-        formData.fields[0].items[0].value = this.props.optin.email;
+    formData.fields[0].items[0].value = this.props.optin.email;
 
-    let error = message == '' ? null : <Text style={{color: '#FF2B94', marginTop:10, fontSize:15}}>{message}</Text>;
+    let error = message == '' ? null : <Text style={{ color: '#FF2B94', marginTop: 10, fontSize: 15 }}>{message}</Text>;
 
     let form = sent ? (
-        <View style={{flex:1}}>
-          <View style={{padding:40, paddingBottom:20, paddingTop:20}}>
-              <Text style={{color: '#000000', lineHeight:18, fontSize:15, marginBottom:30}}>Şifreni değiştirme linki {email} adresine gönderildi. Lütfen email adresini kontrol et.</Text>
-              <DefaultButton callback={()=> this.setState({sent:false})} name="TEKRAR DENE" boxColor="#ffffff" textColor="#000000" borderColor="#cccccc" />
-              <View style={{ height:10 }}></View>
-              <DefaultButton callback={this._Continue} name="DEVAM ET" boxColor="#000000" textColor="#ffffff" borderColor="#000000" />
-          </View>
+      <View style={{ flex: 1 }}>
+        <View style={{ padding: 40, paddingBottom: 20, paddingTop: 20 }}>
+          <Text style={{ color: '#000000', lineHeight: 18, fontSize: 15, marginBottom: 30 }}>Şifreni değiştirme linki {email} adresine gönderildi. Lütfen email adresini kontrol et.</Text>
+          <DefaultButton callback={() => this.setState({ sent: false })} name="TEKRAR DENE" boxColor="#ffffff" textColor="#000000" borderColor="#cccccc" />
+          <View style={{ height: 10 }}></View>
+          <DefaultButton callback={this._Continue} name="DEVAM ET" boxColor="#000000" textColor="#ffffff" borderColor="#000000" />
         </View>
-      ) : (
-        <View style={{flex:1}}>
-          <View style={{padding:40, paddingBottom:20, paddingTop:20}}>
-            <Text style={{color: '#000000', lineHeight:18, fontSize:15}}>Üyelikte kullandığın Email adresini yaz.</Text>
+      </View>
+    ) : (
+        <View style={{ flex: 1 }}>
+          <View style={{ padding: 40, paddingBottom: 20, paddingTop: 20 }}>
+            <Text style={{ color: '#000000', lineHeight: 18, fontSize: 15 }}>Üyelikte kullandığın Email adresini yaz.</Text>
             {error}
-            </View>
+          </View>
           <Form callback={this._onSubmit} data={formData} />
         </View>
       );
 
-    return(
-      <SafeAreaView style={{flex:1}}>
+    return (
+      <SafeAreaView style={{ flex: 1 }}>
         <MinimalHeader title="" right={<View />} onPress={this._onBackPress} />
-        
-          {form}
-        
+
+        {form}
+
       </SafeAreaView>
     )
   }
 }
 
 // filter state
-function mapStateToProps(state){
+function mapStateToProps(state) {
   return state.user;
 }
 

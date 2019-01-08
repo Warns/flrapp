@@ -173,15 +173,16 @@ class ListItem extends React.Component {
                 </View>
             );
         } else if (item.IsRecommended == false) {
+            _recommendation = null;
+            /*
             _recommendation = (
                 <View style={{ flexDirection: 'row', marginTop: 10, }}>
                     <Image source={ICONS['thumbsDown']} style={{ width: 30, height: 30, marginRight: 5 }} />
                     <Text style={{ fontSize: 15, lineHeight: 30, color: '#6C6C6C' }}>Önermiyorum</Text>
                 </View>
             );
+            */
         }
-
-        console.log(item);
 
         return (
 
