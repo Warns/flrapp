@@ -38,7 +38,7 @@ import { Minus99HorizontalTabs } from 'root/app/components';
 
 const Utils = require('root/app/helper/Global.js');
 const Globals = require('root/app/globals.js');
-const PRELOAD = async(b) => {
+const PRELOAD = async (b) => {
     store.dispatch({ type: SHOW_PRELOADING, value: b });
 }
 
@@ -407,7 +407,8 @@ class CreditCart extends Component {
 
     _onPress = () => {
         const _self = this,
-            { agreements } = store.getState().cart,
+            { agreements, creditCart } = store.getState().cart,
+            { installmentId = 0 } = creditCart,
             { agreement1, agreement2 } = agreements,
             arr = [];
 
@@ -416,6 +417,9 @@ class CreditCart extends Component {
             ._validation((b) => {
                 if (!b)
                     arr.push('Lütfen kredi kartı Bilgilerini eksiksiz giriniz.');
+
+                if (installmentId == 0)
+                    arr.push('Lütfen taksit seçeneğini seçiniz.');
 
                 if (!agreement1)
                     arr.push('Lütfen ön bilgilendirme formunu okuyup onaylayınız');

@@ -23,6 +23,7 @@ import {
     CART_FOOTER_MARGIN_BOTTOM,
     CART_BACKGROUND_COLOR_1,
     CART_BACKGROUND_COLOR_2,
+    RESET_CART
 } from 'root/app/helper/Constant';
 import { connect } from 'react-redux';
 import { CheckBox } from 'root/app/form';
@@ -218,6 +219,8 @@ const Address = class Main extends Component {
             { navigation } = _self.props;
 
         _self._isMounted = false;
+
+        _self.props.dispatch({ type: RESET_CART });
 
         if (navigation)
             _self._Listener.remove();
