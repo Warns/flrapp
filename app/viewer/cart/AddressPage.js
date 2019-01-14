@@ -50,6 +50,9 @@ const DATA = {
     data: {
         addressId: 0
     },
+    filterData: {
+        filtered: true
+    },
     refreshing: false,
 };
 
@@ -361,21 +364,6 @@ const Address = class Main extends Component {
         _self.props.navigation.navigate('Detail', obj);
     }
 
-    _newAddressButton = () => {
-        const _self = this;
-        return (
-            <View style={{ alignItems: 'flex-end', paddingTop: 15, marginLeft: 15, marginRight: 15 }}>
-                <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }} onPress={_self._onNewAddress}>
-                    <Text style={{ fontFamily: 'Bold', fontSize: 14 }}>YENİ ADRES EKLE</Text>
-                    <Image
-                        source={(ICONS['plus'])}
-                        style={{ width: 40, height: 40, resizeMode: 'contain' }}
-                    />
-                </TouchableOpacity>
-            </View>
-        );
-    }
-
     /* fatura farklı adres */
     _onCheckBoxChange = ({ value = false }) => {
         const _self = this;
@@ -418,7 +406,6 @@ const Address = class Main extends Component {
         const _self = this,
             { loaded = false } = _self.state,
             backgroundColor = loaded ? CART_BACKGROUND_COLOR_1 : CART_BACKGROUND_COLOR_2,
-            newAddressButton = loaded ? _self._newAddressButton() : null,
             foot = loaded ? _self._getFoot() : null,
             underside = loaded ? <UnderSide wrapperStyle={{ backgroundColor: CART_BACKGROUND_COLOR_1 }} /> : null;
 
@@ -432,7 +419,6 @@ const Address = class Main extends Component {
                         backgroundColor: backgroundColor,
                     }}>
                     <View style={{ flex: 1, backgroundColor: CART_BACKGROUND_COLOR_2 }}>
-                        {newAddressButton}
                         <Viewer
                             onRef={ref => (_self.child = ref)}
                             style={{ flex: 0 }}

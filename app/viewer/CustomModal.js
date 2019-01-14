@@ -71,7 +71,19 @@ class CustomModals extends Component {
 
   _onClose = () => {
     const _self = this;
-    _self.props.dispatch({ type: SHOW_CUSTOM_POPUP, value: { visibility: false, data: {}, type: '', itemType: '' } });
+    _self.props.dispatch({ type: SHOW_CUSTOM_POPUP, value: { visibility: false, data: {}, type: '', itemType: '', refreshing: '' } });
+  }
+
+  _formCallback = ({ type, data }) => {
+    const _self = this,
+      { refreshing = false } = _self.props.customModal;
+
+    if (refreshing)
+      refreshing();
+
+    setTimeout(() => {
+      _self._onClose();
+    }, 100);
   }
 
   _getViewer = () => {
@@ -82,7 +94,7 @@ class CustomModals extends Component {
     if (type == SET_VIEWER)
       view = <Viewer postData={postData} config={data} />;
     else if (type == SET_FORM)
-      view = <Form callback={_self._callback} postData={postData} data={FORMDATA[itemType]} />;
+      view = <Form callback={_self._formCallback} postData={postData} data={FORMDATA[itemType]} />;
     else if (type == SET_VIDEO_PLAYER) {
       const { items = [], selected = 0 } = data;
       view = <YoutubePlayer items={items} selected={selected} />;

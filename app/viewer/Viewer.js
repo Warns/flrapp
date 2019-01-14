@@ -44,6 +44,7 @@ import {
     SET_SELECTED_CATEGORY,
     NEW_ADDRESS_CLICKED,
     SET_INSTAGRAM,
+    FEEDS_IMAGE_RATE
 } from 'root/app/helper/Constant';
 import {
     HorizontalProducts,
@@ -1129,11 +1130,10 @@ class FeedsItem extends Component {
 
     _getImage = () => {
         const _self = this,
-            { image = '', type } = _self.props.data;
-
-        let h = 394;
-        if (type == FEEDSTYPE['VIDEO'] || type == FEEDSTYPE['COLLECTION'])
-            h = 300;
+            { image = '', labels = [] } = _self.props.data,
+            type = labels[0],
+            w = Dimensions.get('window').width,
+            h = w / FEEDS_IMAGE_RATE[type];
 
         return (
             <DoubleClickButton callback={_self._callback}>
@@ -1491,15 +1491,15 @@ class Viewers extends Component {
         return css;
     }
 
-    _addHtmlWrapper = ({ customClass, data }) => { 
+    _addHtmlWrapper = ({ customClass, data }) => {
         const _self = this,
             uri = Utils.getURL({ key: 'style', subKey: 'main' }) + '?' + parseInt(Math.random() * new Date()),
             style = _self._addStyle(),
-            opened = '<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">'+ style +'</head><body>',
+            opened = '<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">' + style + '</head><body>',
             closed = '</body></html>',
             css = '<link href="' + uri + '" rel="stylesheet" type="text/css" />',
             htm = opened + '<div class="ems-mobi-app-container ' + customClass + '">' + (css + data) + '</div>' + closed;
-            
+
         return htm;
     }
 
@@ -1613,7 +1613,7 @@ class Viewers extends Component {
         const _self = this,
             { type = VIEWERTYPE['LIST'] } = _self.props.config;
 
-        Globals.AJX({ _self: _self, uri: uri, data: data }, function (res) { 
+        Globals.AJX({ _self: _self, uri: uri, data: data }, function (res) {
 
             const { keys, customClass = '', customFunc = '' } = _self.props.config,
                 keyArr = keys['arr'] || '',
@@ -1692,12 +1692,15 @@ class Viewers extends Component {
     /* Viewer genel callback */
     _callback = (obj) => {
         const _self = this,
+            { showPopup = false } = obj,
             { callback, refreshing = false } = _self.props;
 
         if (refreshing)
             obj['refreshing'] = _self._refreshing;
 
-        if (callback)
+        if (showPopup)
+            store.dispatch({ type: SHOW_CUSTOM_POPUP, value: { visibility: true, ...obj } });
+        else if (callback)
             callback(obj);
     }
 
@@ -1803,6 +1806,14 @@ class Viewers extends Component {
             _self.setAjx({ uri: obj['uri'] || '', data: obj['data'] || {} }, () => {
                 _self._preload(false);
             });
+        } else if (itemType == ITEMTYPE['ADDRESS']) {
+            const data = {
+                type: SET_FORM,
+                itemType: 'createAddress',
+                refreshing: _self._onUpdateItem,
+                modalTitle: 'YENİ ADRES EKLE'
+            };
+            store.dispatch({ type: SHOW_CUSTOM_POPUP, value: { visibility: true, ...data } });
         }
     }
 
@@ -1813,6 +1824,20 @@ class Viewers extends Component {
 
         if (!filtered) return null;
         switch (itemType) {
+
+
+            case ITEMTYPE['ADDRESS']:
+                return (
+                    <View style={{ alignItems: 'flex-end', paddingTop: 15, marginLeft: 15, marginRight: 15 }}>
+                        <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }} onPress={_self._filtered}>
+                            <Text style={{ fontFamily: 'Bold', fontSize: 14 }}>YENİ ADRES EKLE</Text>
+                            <Image
+                                source={(ICONS['plus'])}
+                                style={{ width: 40, height: 40, resizeMode: 'contain' }}
+                            />
+                        </TouchableOpacity>
+                    </View>
+                );
             case ITEMTYPE['SERVICELIST']:
                 return (
                     <ElevatedView
@@ -2010,7 +2035,8 @@ class Viewers extends Component {
 
     _onNewAddress = () => {
         const _self = this;
-        _self._callback({ type: NEW_ADDRESS_CLICKED });
+        _self._filtered();
+        //_self._callback({ type: NEW_ADDRESS_CLICKED });
     }
 
     _noResultView = () => {
