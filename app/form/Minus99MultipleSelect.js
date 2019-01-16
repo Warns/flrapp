@@ -317,7 +317,7 @@ class SelectionBox extends React.Component {
 
         return (
             <Modal
-                animationType="slide"
+                animationType="none"
                 transparent={false}
                 visible={this.props.visible}
             >

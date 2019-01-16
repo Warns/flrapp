@@ -192,6 +192,7 @@ const Address = class Main extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            noResult: false,
             loaded: false,
             cargoes: []
         };
@@ -261,8 +262,9 @@ const Address = class Main extends Component {
             if (data.length > 0) {
                 _self._setSingleAddress(data);
                 _self._getCargoAjx();
-                _self.setState({ loaded: true });
-            }
+                _self.setState({ ..._self.state, loaded: true, noResult: false });
+            } else
+                _self.setState({ ..._self.state, noResult: true });
         } else if (type == NEW_ADDRESS_CLICKED)
             _self._onNewAddress();
         else if (type == SET_ADDRESS_ITEM_CLICK)
@@ -404,9 +406,10 @@ const Address = class Main extends Component {
     /* */
     _getView = () => {
         const _self = this,
-            { loaded = false } = _self.state,
+            { loaded = false, noResult = false } = _self.state,
             backgroundColor = loaded ? CART_BACKGROUND_COLOR_1 : CART_BACKGROUND_COLOR_2,
             foot = loaded ? _self._getFoot() : null,
+            flexible = !loaded ? true : (noResult ? true : false),
             underside = loaded ? <UnderSide wrapperStyle={{ backgroundColor: CART_BACKGROUND_COLOR_1 }} /> : null;
 
         return (
@@ -420,9 +423,10 @@ const Address = class Main extends Component {
                     }}>
                     <View style={{ flex: 1, backgroundColor: CART_BACKGROUND_COLOR_2 }}>
                         <Viewer
+                            flexible={flexible}
                             onRef={ref => (_self.child = ref)}
-                            style={{ flex: 0 }}
-                            wrapperStyle={{ flex: 0 }}
+                            //style={{ flex: 0 }}
+                            //wrapperStyle={{ flex: 0 }}
                             config={DATA}
                             callback={this._callback}
                             refreshing={true}

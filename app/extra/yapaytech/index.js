@@ -177,7 +177,7 @@ export default class DahiChat extends React.Component {
               subtitle: it.productGroupsCount
                 ? `${it.productGroupsCount} Renk`
                 : "",
-              image_url: "http://www.flormar.com.tr" + it.smallPicture,
+              image_url: Utils.prefix + it.smallPicture,
               default_action: {
                 type: "web_url",
                 title: "Ürünü Gör",

@@ -168,7 +168,6 @@ module.exports = {
 
   AJX: async function ({ _self, uri, data = {} }, callback) {
     const _t = this;
-    _self.setState({ loading: true });
     _t.fetch(uri, JSON.stringify(data), (answer) => {
       if (_self._isMounted) {
         if (answer === 'error') {
@@ -177,13 +176,12 @@ module.exports = {
         } else {
           if (answer.status == 200) {
             if (typeof callback !== 'undefined')
-              callback(answer);
+              callback(answer, 'success');
           } else {
             if (typeof callback !== 'undefined')
-              callback('error');
+              callback(answer, 'error');
           }
         }
-        _self.setState({ loading: false, refreshing: false });
       }
     });
   },
@@ -198,13 +196,14 @@ module.exports = {
   seg: function ({ data }, callback) {
     const _self = this,
       uri = 'https://dcetr9.segmentify.com/add/events/v1.json?apiKey=61c97507-5c1f-46c6-9b50-2aa9d1d73316',
+      origin = Utils.prefix,
       { user = {}, segmentify = {} } = store.getState(),
       obj = {
         "userId": user.userId || segmentify['userID'] || "XXXXXXXXXXXXXXXXX",
         // hic clinet olmayinca bu hata veriyor. bunu asagidaki ile degistirdim '_self.CLIENT.Auth.session'. ( _self.CLIENT.Auth ? _self.CLIENT.Auth.session : false )
         "sessionId": _self.CLIENT.Auth.session || segmentify['sessionID'] || "YYYYYYYYYYYYYYYY",
         "device": Platform.OS === 'ios' ? "IOS" : "ANDROID",
-        "pageUrl": "https://flormar.com.tr",
+        "pageUrl": origin,
       };
 
     Object.keys(data).map((key) => {
@@ -216,7 +215,7 @@ module.exports = {
     fetch(uri, {
       method: 'POST',
       headers: {
-        'origin': 'https://flormar.com.tr',
+        'origin': origin,
         'accept': 'application/json',
         'content-type': 'application/json'
       },

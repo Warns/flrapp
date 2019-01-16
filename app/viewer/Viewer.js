@@ -24,25 +24,19 @@ import {
     DATA_LOADED,
     SERVICE_LIST_CLICKED,
     ORDER_LIST_CLICKED,
-    ADDRESS_LIST_CLICKED,
-    CLICK,
     DOUBLE_CLICK,
     SET_FORM,
     UPDATE_CART,
     REMOVE_CART,
-    SET_CART_ADDRESS,
     SET_SEGMENTIFY_INSTANCEID,
     ADD_CART_ITEM,
     OPEN_PRODUCT_DETAILS,
-    SHOW_PRELOADING,
-    UPDATE_PRODUCT_VIDEOS,
     SET_VIDEO_PLAYER,
     SHOW_CUSTOM_POPUP,
     NAVIGATE,
     SET_VIEWER,
     SET_CATEGORIES,
     SET_SELECTED_CATEGORY,
-    NEW_ADDRESS_CLICKED,
     SET_INSTAGRAM,
     FEEDS_IMAGE_RATE
 } from 'root/app/helper/Constant';
@@ -210,10 +204,22 @@ class CartListItem extends Component {
         const _self = this,
             { data = {}, onUpdateItem } = _self.props,
             { cartItemId } = data;
-        Globals.AJX({ _self: _self, uri: Utils.getURL({ key: 'cart', subKey: 'updateCartLine' }), data: { cartItemId: cartItemId, quantity: value } }, (res) => {
-            const { status, message } = res;
+        Globals.AJX({
+            _self: _self,
+            uri: Utils.getURL({ key: 'cart', subKey: 'updateCartLine' }),
+            data: { cartItemId: cartItemId, quantity: value }
+        }, (res) => {
+            const { status, message = '' } = res;
             if (status == 200 && onUpdateItem)
                 onUpdateItem({ type: UPDATE_CART, data: res });
+            else
+                setTimeout(() => {
+                    Utils.alert({ message: message }, () => {
+                        if (onUpdateItem)
+                            onUpdateItem({ type: UPDATE_CART });
+                    });
+                }, 300);
+               
         });
     }
 
@@ -718,7 +724,7 @@ class CampaingItem extends Component {
                 title: name,
                 img: Utils.getImage(image),
                 utpId: utpCode
-            }]; console.log(data)
+            }]; 
         store.dispatch({ type: SET_CATEGORIES, value: data });
         store.dispatch({ type: SET_SELECTED_CATEGORY, value: name });
         store.dispatch({ type: NAVIGATE, value: { item: { navigation: 'Category' } } });
@@ -747,12 +753,15 @@ class CampaingItem extends Component {
 
     render() {
         const _self = this,
-            { image } = _self.props.data;
+            { image } = _self.props.data,
+            w = Dimensions.get('window').width,
+            h = w / FEEDS_IMAGE_RATE['promo'];
+
         return (
             <TouchableOpacity activeOpacity={0.8} onPress={_self._onPress}>
                 <View style={{ margin: 10, marginBottom: 20 }}>
                     <Image
-                        style={{ height: 300 }}
+                        style={{ height: h }}
                         source={{ uri: Utils.getImage(image) }}
                     />
                     {_self._getFooter()}
@@ -1554,7 +1563,6 @@ class Viewers extends Component {
 
     /* segmentify özel */
     _setSeg = (res) => {
-        //console.log(res);
         const _self = this;
         if (res['type'] == 'success') {
             let { responses = [] } = res.data,
@@ -1686,7 +1694,11 @@ class Viewers extends Component {
     /* tüm listeyi güncelle */
     _onUpdateItem = () => {
         const _self = this;
-        _self.onDidFocus();
+        _self.setState({ ..._self.state, loaded: false, data: [] });
+        setTimeout(() => {
+            _self.onDidFocus();
+        }, 10);
+
     }
 
     /* Viewer genel callback */
@@ -1820,12 +1832,12 @@ class Viewers extends Component {
     _getFilter = () => {
         const _self = this,
             { itemType, filterData = {} } = _self.props.config,
+            { noResult = false } = _self.state,
             { filtered = false } = filterData;
 
-        if (!filtered) return null;
+
+        if (!filtered || noResult) return null;
         switch (itemType) {
-
-
             case ITEMTYPE['ADDRESS']:
                 return (
                     <View style={{ alignItems: 'flex-end', paddingTop: 15, marginLeft: 15, marginRight: 15 }}>

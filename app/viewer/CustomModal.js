@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
   View,
   Modal,
+  KeyboardAvoidingView,
 } from 'react-native';
 import { connect } from 'react-redux';
 import { MinimalHeader, } from 'root/app/components';
@@ -94,7 +95,15 @@ class CustomModals extends Component {
     if (type == SET_VIEWER)
       view = <Viewer postData={postData} config={data} />;
     else if (type == SET_FORM)
-      view = <Form callback={_self._formCallback} postData={postData} data={FORMDATA[itemType]} />;
+      view = (<KeyboardAvoidingView
+        behavior={"padding"}
+        pointerEvents="box-none"
+        style={{
+          flex: 1
+        }}
+      >
+        <Form callback={_self._formCallback} postData={postData} data={FORMDATA[itemType]} />
+      </KeyboardAvoidingView>);
     else if (type == SET_VIDEO_PLAYER) {
       const { items = [], selected = 0 } = data;
       view = <YoutubePlayer items={items} selected={selected} />;

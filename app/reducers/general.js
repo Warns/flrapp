@@ -175,7 +175,7 @@ fetchProductDetails = (id) => {
                 store.dispatch({ type: UPDATE_PRODUCT_DETAILS_ITEM, value: { product: answer.data.product, colors: colors } });
 
                 // Fetch video
-                Utils.ajx({ uri: 'https://www.flormar.com.tr/mobile-app-product-video-export.html?urn=' + id }, (result) => {
+                Utils.ajx({ uri: Utils.getURL({ key: 'product', subKey: 'getProductVideos' }) + '?urn=' + id }, (result) => {
                     if (result['type'] == 'success')
                         store.dispatch({ type: UPDATE_PRODUCT_VIDEOS, value: { videos: result.data.data.videos } });
                 });
