@@ -6,13 +6,16 @@ import {
 } from 'react-native';
 import DatePicker from 'react-native-datepicker';
 import { Container } from './';
+
 const Utils = require('root/app/helper/Global.js');
 
 class DateTimePicker extends Component {
     constructor(props) {
         super(props);
+        let { value = '', maxDate = 0 } = this.props.data;
+        value = Utils.subtractDate({ year: maxDate })['dateFormat'] || '';
         this.state = {
-            value: this.props.data.value
+            value: value
         }
     }
 
