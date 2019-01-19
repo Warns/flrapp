@@ -197,7 +197,7 @@ class Splash extends React.Component {
         <Animated.View style={{ width:'100%', position:'absolute', bottom:0, flexDirection: "column-reverse", padding: 30, opacity: reverseFadeAnim }}>
           <DefaultButton
             callback={this._continueToHome}
-            name="ÜYELİKSİZ DEVAM ET"
+            name="GEÇ"
             boxColor="transparent"
             textColor="#ffffff"
             borderColor='rgba(0,0,0,0)'

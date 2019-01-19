@@ -3,6 +3,7 @@ import {
   View,
   Modal,
   KeyboardAvoidingView,
+  WebView,
 } from 'react-native';
 import { connect } from 'react-redux';
 import { MinimalHeader, } from 'root/app/components';
@@ -12,7 +13,8 @@ import {
   SET_FORM,
   SET_VIDEO_PLAYER,
   FORMDATA,
-  SET_INSTAGRAM
+  SET_INSTAGRAM,
+  SET_WEBVIEW,
 } from 'root/app/helper/Constant';
 import { Viewer, InstagramDetail } from 'root/app/viewer/';
 import { Form } from 'root/app/form';
@@ -109,6 +111,16 @@ class CustomModals extends Component {
       view = <YoutubePlayer items={items} selected={selected} />;
     } else if (type == SET_INSTAGRAM)
       view = <InstagramDetail data={data} />;
+    else if (type == SET_WEBVIEW)
+      view = (
+        <WebView
+          scalesPageToFit={false}
+          automaticallyAdjustContentInsets={false}
+          source={{ uri: data.url || '' }}
+        />
+      );
+
+
 
     return (
       <View style={{ flex: 1 }}>

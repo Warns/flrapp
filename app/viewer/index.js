@@ -3,6 +3,7 @@ export * from './OrderViewer';
 export * from './Extra';
 export * from './ExtraPageDetail';
 export * from './CustomModal';
+export * from './CampaingExtraHeader';
 
 /* sepet */
 export * from './cart/CartPage';

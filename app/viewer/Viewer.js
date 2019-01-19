@@ -219,7 +219,7 @@ class CartListItem extends Component {
                             onUpdateItem({ type: UPDATE_CART });
                     });
                 }, 300);
-               
+
         });
     }
 
@@ -719,12 +719,14 @@ class CampaingItem extends Component {
 
     _onPress = () => {
         const _self = this,
-            { name, utpCode, image } = _self.props.data,
+            { name, utpCode, image, desc = '', catCode = '' } = _self.props.data,
             data = [{
                 title: name,
                 img: Utils.getImage(image),
-                utpId: utpCode
-            }]; 
+                utpId: utpCode,
+                desc: desc,
+                id: catCode
+            }];
         store.dispatch({ type: SET_CATEGORIES, value: data });
         store.dispatch({ type: SET_SELECTED_CATEGORY, value: name });
         store.dispatch({ type: NAVIGATE, value: { item: { navigation: 'Category' } } });
@@ -1037,7 +1039,7 @@ class FeedsItem extends Component {
     _getLike = () => {
         const _self = this,
             { userLike, like } = _self.state;
-
+        return null; //--> like için kaldır 
         return <RatingButton onPress={_self._onRatingClicked} id="rating" value={like} userLike={userLike} style={{ position: 'absolute', top: 10, left: 10 }} />
     }
 
@@ -1086,6 +1088,7 @@ class FeedsItem extends Component {
 
     _heartAnim = () => {
         const _self = this;
+        return null; //--> like için kaldır 
         return (
             <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center' }}>
                 <Animated.Image
@@ -1117,7 +1120,7 @@ class FeedsItem extends Component {
             color = colorCount > 0 ? <Text style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#9b9b9b', marginBottom: 10 }}>{colorCount}{' Renk'}</Text> : null;
 
         return (
-            <DoubleClickButton callback={_self._callback}>
+            <TouchableOpacity activeOpacity={1} onPress={_self._onPress}>
                 <View style={{ flexDirection: 'row', borderWidth: 1, borderColor: '#dcdcdc' }}>
                     <View style={{ width: 175 }}>
                         <Image
@@ -1133,7 +1136,7 @@ class FeedsItem extends Component {
                     </View>
                 </View>
                 {_self._heartAnim()}
-            </DoubleClickButton>
+            </TouchableOpacity>
         );
     }
 
@@ -1145,13 +1148,13 @@ class FeedsItem extends Component {
             h = w / FEEDS_IMAGE_RATE[type];
 
         return (
-            <DoubleClickButton callback={_self._callback}>
+            <TouchableOpacity activeOpacity={1} onPress={_self._onPress}>
                 <Image
                     style={{ height: h }}
                     source={{ uri: image }}
                 />
                 {_self._heartAnim()}
-            </DoubleClickButton>
+            </TouchableOpacity>
         );
     }
 
@@ -1516,7 +1519,6 @@ class Viewers extends Component {
     _customFunc = (data) => {
         const _self = this,
             { customFunc = '' } = _self.props.config;
-
         if (customFunc == 'campaing') {
             const arr = [];
             Object
@@ -1527,13 +1529,21 @@ class Viewers extends Component {
                     Object
                         .entries(item['parameters'])
                         .forEach(([childInd, child]) => {
+                            const key = child['parameterKey'] || '',
+                                value = child['parameterValue'] || '';
+
                             obj['id'] = ind;
-                            if (child['parameterKey'] == 'prmCamImgMobile')
-                                obj['image'] = child['parameterValue'];
-                            else if (child['parameterKey'] == 'prmCamID')
-                                obj['utpCode'] = child['parameterValue'];
-                            else if (child['parameterKey'] == 'prmCamSlug')
-                                obj['slug'] = child['parameterValue'];
+
+                            if (key == 'prmCamImgMobile')
+                                obj['image'] = value;
+                            else if (key == 'prmCamID')
+                                obj['utpCode'] = value;
+                            else if (key == 'prmCamSlug')
+                                obj['slug'] = value;  
+                            else if (key == 'prmDesc')
+                                obj['desc'] = value; //--> kategori açıklaması 
+                            else if (key == 'prmCat')
+                                obj['catCode'] = value; //--> kategori id'si 
                         })
                     arr.push(obj);
                 });
