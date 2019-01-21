@@ -101,7 +101,7 @@ class CrediCard extends Component {
     /* taksit seçenekleri */
     _getInstallmentAjx = (val) => {
         const _self = this;
-        setAjx({ _self: _self, uri: Utils.getURL({ key: 'cart', subKey: 'getInstallment' }), data: { bin: val } }, (res) => {
+        setAjx({ _self: _self, uri: Utils.getURL({ key: 'cart', subKey: 'getInstallment' }), data: { bin: val } }, (res) => { console.log('_getInstallmentAjx', res);
             let { status, data = {} } = res,
                 { creditCarts = [] } = data,
                 { installments = [] } = creditCarts[0];

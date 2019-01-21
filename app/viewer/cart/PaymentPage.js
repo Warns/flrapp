@@ -368,7 +368,7 @@ class CreditCart extends Component {
 
     _applyForm = () => {
         const _self = this,
-            { creditCart = {} } = store.getState().cart,
+            { creditCart = {}, optin = {} } = store.getState().cart,
             { bankId = 0, fullName = '', creditCardNo = '', cvcCode = '', installmentId } = creditCart,
             date = (creditCart['year'] || '0/0').split('/'),
             month = date[0] || 0,
@@ -384,11 +384,11 @@ class CreditCart extends Component {
                 userClientIp: '0.0.0.0'
                 //"customRedirectUrl": "string"
             };
-
+console.log('_applyForm', optin);
         PRELOAD(true);
         globals.fetch(
-            Utils.getURL({ key: 'cart', subKey: 'getCart' }),
-            JSON.stringify({ cartLocation: 'payment' }), (answer) => {
+            Utils.getURL({ key: 'cart', subKey: 'setCart' }),
+            JSON.stringify(optin), (answer) => {
                 //console.log(data);
                 if (answer.status == 200) {
                     globals.fetch(
