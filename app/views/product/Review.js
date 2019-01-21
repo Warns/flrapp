@@ -26,8 +26,6 @@ class ProductReview extends React.Component {
 
   _onSubmit = (obj) => {
 
-
-
     console.log(obj.data);
   }
 

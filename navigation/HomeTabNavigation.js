@@ -113,7 +113,7 @@ class CampaingExtraHeader extends React.Component {
 }
 
 class Feeds extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
   }
   componentWillMount() { this.props.navigation.setParams({ title: 'YENİLER' }); }
@@ -124,7 +124,7 @@ class Feeds extends React.Component {
 };
 
 class Extra extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
   }
   componentWillMount() { this.props.navigation.setParams({ title: 'EKTRA FIRSAT', indicator: true }); }

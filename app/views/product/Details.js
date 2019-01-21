@@ -249,7 +249,7 @@ class ProductDetails extends React.Component {
               <Text style={styles.defautText}>{item.shortDescription}</Text>
               <ProductActionButton name="Ürün Detayı" expanded={detailIsOpen} onPress={this._showProductInfo} />
               {details}
-              <ProductActionButton name="Yorumlar" count={34} onPress={this._onReviewPress} />
+              <ProductActionButton name="Yorumlar" count={0} onPress={this._onReviewPress} />
               {videosButton}
             </View>
 

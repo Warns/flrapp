@@ -44,7 +44,7 @@ export default function user(state = userInitialState, action) {
             globals.setSecureStorage('__OPTIN__', optin_value);
             fetchCartDetails();
 
-            getUserToken();
+            //getUserToken();
 
             return {
                 ...state,

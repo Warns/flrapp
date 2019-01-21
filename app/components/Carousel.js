@@ -66,8 +66,8 @@ class Carousel extends Component {
     _callback = (o) => {
         const { callback } = this.props;
         if (callback)
-          callback(o);
-      }
+            callback(o);
+    }
 
     render() {
         const { data, itemWidth, width = Dimensions.get('window').width, offset = 0, threshold = 0 } = this.props;
