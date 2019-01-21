@@ -101,6 +101,15 @@ export const FEEDSTYPE = {
     COLLECTION: 'collection'
 };
 
+export const FEEDS_IMAGE_RATE = {
+    video: 1.7808, // 650x365
+    instagram: 1,
+    promo: 1.7808, // 650x365
+    product: .8, // 360x450
+    blog: 2.3791, // 1920X807
+    collection: 3, // 1500X500
+};
+
 
 export const CLICK = 'CLICK';
 export const DOUBLE_CLICK = 'DOUBLE_CLICK';
@@ -112,6 +121,7 @@ export const NEW_ADDRESS_CLICKED = 'NEW_ADDRESS_CLICKED';
 export const SET_FORM = 'SET_FORM';
 export const SET_VIEWER = 'SET_VIEWER';
 export const SET_INSTAGRAM = 'SET_INSTAGRAM';
+export const SET_WEBVIEW = 'SET_WEBVIEW';
 export const SET_ADDRESS_ITEM_CLICK = 'SET_ADDRESS_ITEM_CLICK';
 export const SET_VIDEO_PLAYER = 'SET_VIDEO_PLAYER';
 export const UPDATE_CART = 'UPDATE_CART';

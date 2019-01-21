@@ -59,6 +59,7 @@ export default class List extends React.Component {
     filters: [],
     totalProductCount: null,
     textureDisplay: false,
+    desc: ''
   }
 
   _animateImage = () => {
@@ -131,7 +132,10 @@ export default class List extends React.Component {
 
     filterValues = filterValues || '';
     const _self = this,
-      { category = {} } = _self.props;
+      { category = {} } = _self.props,
+      { desc = '' } = category;
+
+    _self.setState({ desc: desc });
     /*  
       ex:
       [{
@@ -165,6 +169,7 @@ export default class List extends React.Component {
 
     let _items = answer.data.products;
 
+console.log(answer);
 
     if (this.props.category.img && answer.data.filters.findIndex(obj => obj.isSelected == true) == -1) {
       _items.splice((answer.data.totalProductCount < 4 ? 0 : 4), 0,
@@ -272,6 +277,17 @@ export default class List extends React.Component {
 
   //_flatList = null;
 
+  _getDesc = () => {
+    const _self = this,
+      { desc = '' } = _self.state;
+
+    let view = null;
+    if (desc != '')
+      view = <Text>{desc}</Text>;
+
+    return view;
+  }
+
   render() {
 
     let { animatingUri, imageAnim, measurements, totalProductCount, filters, textureDisplay } = this.state;
@@ -318,9 +334,13 @@ export default class List extends React.Component {
 
     const detailContent = <ProductView imageMeasurements={{ width: width, height: height, top: pageY, left: pageX, type: textureDisplay ? 1 : 0 }} screenDimensions={SCREEN_DIMENSIONS} item={this.state.selectedDetail} onClose={this._closeDetail} />;
 
+
+    const desc = this._getDesc();
+
     return (
       <View ref={(c) => { this._listView = c; }} style={{ flex: 1, backgroundColor: '#ffffff' }}>
         <ListHeader onFiltersChange={this._onFiltersChange} totalProductCount={totalProductCount} filters={filters} onDisplayChange={this._onDisplayChange} textureDisplay={this.state.textureDisplay} />
+        {desc}
         <FlatList
           style={{ flex: 1, flexDirection: 'column' }}
           scrollEnabled={true}
@@ -471,9 +491,10 @@ class ListItem extends React.Component {
 
     let borderStyle = index % 2 == 0 ? { borderRightWidth: 1, borderRightColor: '#dddddd' } : {};
 
-    let numOfColors = item.productGroups.length + 1;
+    const { productGroups = [] } = item;
+    let numOfColors = productGroups.length + 1;
 
-    let newFlag = item.isNew == true ? null :
+    let newFlag = !item.isNew == true ? null :
       <Text style={{ position: 'absolute', left: 15, top: 10, fontSize: 13, fontFamily: 'proxima' }}>Yeni</Text>;
 
     let trigger = item.isCampaignFl == true ? item.stockStatus : null;

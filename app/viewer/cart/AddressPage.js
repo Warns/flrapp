@@ -23,6 +23,7 @@ import {
     CART_FOOTER_MARGIN_BOTTOM,
     CART_BACKGROUND_COLOR_1,
     CART_BACKGROUND_COLOR_2,
+    RESET_CART
 } from 'root/app/helper/Constant';
 import { connect } from 'react-redux';
 import { CheckBox } from 'root/app/form';
@@ -48,6 +49,9 @@ const DATA = {
     },
     data: {
         addressId: 0
+    },
+    filterData: {
+        filtered: true
     },
     refreshing: false,
 };
@@ -188,6 +192,7 @@ const Address = class Main extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            noResult: false,
             loaded: false,
             cargoes: []
         };
@@ -218,6 +223,8 @@ const Address = class Main extends Component {
             { navigation } = _self.props;
 
         _self._isMounted = false;
+
+        _self.props.dispatch({ type: RESET_CART });
 
         if (navigation)
             _self._Listener.remove();
@@ -255,8 +262,9 @@ const Address = class Main extends Component {
             if (data.length > 0) {
                 _self._setSingleAddress(data);
                 _self._getCargoAjx();
-                _self.setState({ loaded: true });
-            }
+                _self.setState({ ..._self.state, loaded: true, noResult: false });
+            } else
+                _self.setState({ ..._self.state, noResult: true });
         } else if (type == NEW_ADDRESS_CLICKED)
             _self._onNewAddress();
         else if (type == SET_ADDRESS_ITEM_CLICK)
@@ -358,21 +366,6 @@ const Address = class Main extends Component {
         _self.props.navigation.navigate('Detail', obj);
     }
 
-    _newAddressButton = () => {
-        const _self = this;
-        return (
-            <View style={{ alignItems: 'flex-end', paddingTop: 15, marginLeft: 15, marginRight: 15 }}>
-                <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }} onPress={_self._onNewAddress}>
-                    <Text style={{ fontFamily: 'Bold', fontSize: 14 }}>YENİ ADRES EKLE</Text>
-                    <Image
-                        source={(ICONS['plus'])}
-                        style={{ width: 40, height: 40, resizeMode: 'contain' }}
-                    />
-                </TouchableOpacity>
-            </View>
-        );
-    }
-
     /* fatura farklı adres */
     _onCheckBoxChange = ({ value = false }) => {
         const _self = this;
@@ -413,10 +406,10 @@ const Address = class Main extends Component {
     /* */
     _getView = () => {
         const _self = this,
-            { loaded = false } = _self.state,
+            { loaded = false, noResult = false } = _self.state,
             backgroundColor = loaded ? CART_BACKGROUND_COLOR_1 : CART_BACKGROUND_COLOR_2,
-            newAddressButton = loaded ? _self._newAddressButton() : null,
             foot = loaded ? _self._getFoot() : null,
+            flexible = !loaded ? true : (noResult ? true : false),
             underside = loaded ? <UnderSide wrapperStyle={{ backgroundColor: CART_BACKGROUND_COLOR_1 }} /> : null;
 
         return (
@@ -429,11 +422,11 @@ const Address = class Main extends Component {
                         backgroundColor: backgroundColor,
                     }}>
                     <View style={{ flex: 1, backgroundColor: CART_BACKGROUND_COLOR_2 }}>
-                        {newAddressButton}
                         <Viewer
+                            flexible={flexible}
                             onRef={ref => (_self.child = ref)}
-                            style={{ flex: 0 }}
-                            wrapperStyle={{ flex: 0 }}
+                            //style={{ flex: 0 }}
+                            //wrapperStyle={{ flex: 0 }}
                             config={DATA}
                             callback={this._callback}
                             refreshing={true}

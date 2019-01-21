@@ -57,6 +57,9 @@ module.exports = {
                         countryId: { error: false, errorMsg: null },
                         cityId: { error: false, errorMsg: null },
                         districtId: { error: false, errorMsg: null }
+                    },
+                    css: {
+                        countryContainerStyle: { width: 0, height: 0, marginBottom: 0, opacity: 0 }
                     }
                 },
             ]
@@ -96,7 +99,15 @@ module.exports = {
                     type: 'text',
                     value: '',
                     multiline: true,
-                    validation: [{ key: 'isEmpty' },{ key: 'isMin', value: 10 }],
+                    validation: [{ key: 'isEmpty' }, { key: 'isMin', value: 10 }],
+                    css: {
+                        wrapperStyle: {
+                            height: 200,
+                            alignItems: 'flex-start',
+                            paddingTop: 10,
+                            paddingBottom: 10,
+                        }
+                    }
                 },
             ]
         },

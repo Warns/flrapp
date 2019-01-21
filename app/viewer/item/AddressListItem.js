@@ -63,11 +63,10 @@ class AddressList extends Component {
             { callback, data = {} } = _self.props;
         if (callback)
             callback({
+                showPopup: true,
                 type: SET_FORM,
-                data: {
-                    itemType: 'setAddress',
-                    postData: { addressId: data['addressId'] || '' }
-                }
+                itemType: 'setAddress',
+                postData: { addressId: data['addressId'] || '' }
             });
     }
 

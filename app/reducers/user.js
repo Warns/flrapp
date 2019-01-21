@@ -92,9 +92,11 @@ fetchCartDetails = async () => {
         });
 }
 
-getUserToken = async () => {
+getUserToken = async (obj) => {
+    const { userId = '' } = obj || {};
     console.log('asking for token');
-    Utils.ajx({ uri: 'https://dev.flormar.com.tr/mobiapp-bazaarvoice.txt?uyekod=' + '1195509' }, (result) => {
+
+    Utils.ajx({ uri: Utils.getURL({ key: 'bazaarvoice', subKey: 'userCode' }) + userId }, (result) => {
         if (result['type'] == 'success')
             store.dispatch({ type: 'SET_USER_BAZAARVOICE_TOKEN', value: result.data });
     });

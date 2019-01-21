@@ -3,10 +3,10 @@ import {
 } from 'react-native';
 const Translation = require('root/app/helper/Translation.js');
 module.exports = {
-    mapApiKey: 'AIzaSyAvSoqfCr4I9Vb11HtQ6cDEAMki6THBgrQ',
+    mapApiKey: 'AIzaSyDktunNtvwuVvGEA6LSVfQoiRsptLStTgc',
     bazaarVoiceApiKey: 'ca0fITp8PBeW9pf7e9vzn0BABaSeJVjOBqp6EWZVZCXsA',
     prefix: 'https://www.flormar.com.tr',
-    //prefix: 'https://dev.flormar.com.tr',
+    //prefix: 'https://dev-facelift.flormar.com.tr',
     imagePrefix: 'flormar.com.tr',
     URLs: {
         style: {
@@ -19,7 +19,7 @@ module.exports = {
             getSearchSuggestionList: '/webapi/v3/Product/getSearchSuggestionList',
             getProductList: '/webapi/v3/Product/getProductList',
             getProductDetail: '/webapi/v3/Product/getProductDetail',
-            getProductVideos: '/mobile-app-product-video-export.htm',
+            getProductVideos: '/mobile-app-product-video-export.html',
         },
         user: {
             addFavoriteProduct: '/webapi/v3/User/addFavoriteProduct',
@@ -72,6 +72,7 @@ module.exports = {
             getDataByUrl: '/webapi/v3/Content/getDataByUrl',
         },
         cart: {
+            validateCart: '/webapi/v3/Cart/validateCart',
             getCart: '/webapi/v3/Cart/getCart',
             setCart: '/webapi/v3/Cart/setCart',
             addCartLine: '/webapi/v3/Cart/addCartLine',
@@ -87,6 +88,9 @@ module.exports = {
             getPos3DParameter: '/webapi/v3/Cart/getPos3DParameter',
             checkBankPoint: '/webapi/v3/Cart/checkBankPoint',
             setCartOrder: '/webapi/v3/Cart/setCartOrder'
+        },
+        bazaarvoice: {
+            userCode: '/mobiapp-bazaarvoice.txt?uyekod='
         }
     },
     customURLs: {
@@ -101,7 +105,7 @@ module.exports = {
     },
     getCustomURL: function ({ key = '', lang = 'tr-TR', origins = '', destinations = '', limit = '', id = '' }) {
         const _t = this;
-        console.log(_t.customURLs[key]);
+
         return (_t.customURLs[key] || '')
             .replace(/{{lang}}/g, lang)
             .replace(/{{origins}}/g, origins)
@@ -293,6 +297,25 @@ module.exports = {
                             callback({ type: 'cancel' });
                     }
                 },
+                {
+                    text: ok,
+                    onPress: () => {
+                        if (typeof callback !== 'undefined')
+                            callback({ type: 'ok' });
+                    }
+                }
+            ],
+            {
+                cancelable: false
+            }
+        )
+    },
+    alert: async function ({ title = 'Uyarı', message = '' }, callback) {
+        const { ok } = Translation['confirm'];
+        Alert.alert(
+            title,
+            message,
+            [
                 {
                     text: ok,
                     onPress: () => {

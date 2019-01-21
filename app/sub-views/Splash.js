@@ -25,6 +25,7 @@ import {
   OPEN_VIDEO_PLAYER,
 } from 'root/app/helper/Constant';
 
+const Utils = require('root/app/helper/Global.js');
 const DIMENSIONS = Dimensions.get('window');
 
 function mapStateToProps(state) {
@@ -44,9 +45,9 @@ class Splash extends React.Component {
     videoIsPlaying: true,
     localStorage: {},
     images:[
-      {thumb:"https://www.flormar.com.tr/UPLOAD/APP/assets/slider-1.png", title:'RENK DOLU DÜNYA', text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod.', video:false},
-      {thumb:"https://www.flormar.com.tr/UPLOAD/APP/assets/slider-2.png", title:'EKSTRA FIRSAT', text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod.'},
-      {thumb:"https://www.flormar.com.tr/UPLOAD/APP/assets/slider-3.png", title:'İLHAM VERİCİ', text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod.'}
+      {thumb: Utils.prefix + "/UPLOAD/APP/assets/slider-1.png", title:'RENK DOLU DÜNYA', text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod.', video:false},
+      {thumb: Utils.prefix + "/UPLOAD/APP/assets/slider-2.png", title:'EKSTRA FIRSAT', text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod.'},
+      {thumb: Utils.prefix + "/UPLOAD/APP/assets/slider-3.png", title:'İLHAM VERİCİ', text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod.'}
     ],
     activeSlide: 0,
   }
@@ -196,7 +197,7 @@ class Splash extends React.Component {
         <Animated.View style={{ width:'100%', position:'absolute', bottom:0, flexDirection: "column-reverse", padding: 30, opacity: reverseFadeAnim }}>
           <DefaultButton
             callback={this._continueToHome}
-            name="ÜYELİKSİZ DEVAM ET"
+            name="GEÇ"
             boxColor="transparent"
             textColor="#ffffff"
             borderColor='rgba(0,0,0,0)'

@@ -121,7 +121,7 @@ class CountryPicker extends Component {
     setAjx = ({ key, data = {} }, callback) => {
         const _self = this,
             { uri, rel, keys } = _self.config[key] || {};
-        console.log(data);
+
         Globals.AJX({ _self: _self, uri: uri, data: data }, function (d) {
             let obj = {},
                 arr = d['data'][keys['arr']];
@@ -241,7 +241,8 @@ class CountryPicker extends Component {
 
     render() {
         const _self = this,
-            { errorState = {} } = _self.props.data,
+            { errorState = {}, css = {} } = _self.props.data,
+            { countryContainerStyle = {}, countryWrapperStyle = {}, cityContainerStyle = {}, cityWrapperStyle = {}, districtContainerStyle = {}, districtWrapperStyle = {} } = css,
             { countryId = {}, cityId = {}, districtId = {} } = errorState,
             { control = false, countryHeaderShow = true, cityHeaderShow = true, districtHeaderShow = true, } = _self.props,
             ico = <Image source={ICONS['drpIco']} style={{ width: 12, height: 8 }} />;
@@ -254,10 +255,10 @@ class CountryPicker extends Component {
                 <TouchableOpacity
                     activeOpacity={0.8}
                     onPress={_self._openCountry}
-                    style={{ ..._self.props.countryContainerStyle }}
+                    style={[{ ..._self.props.countryContainerStyle }, countryContainerStyle]}
                 >
                     <Container
-                        wrapperStyle={{ ..._self.props.countryWrapperStyle }}
+                        wrapperStyle={[{ ..._self.props.countryWrapperStyle }, countryWrapperStyle]}
                         showHeader={countryHeaderShow}
                         title={'Ülke'}
                         error={countryId['error'] || false}
@@ -278,10 +279,10 @@ class CountryPicker extends Component {
                 <TouchableOpacity
                     activeOpacity={0.8}
                     onPress={_self._openCity}
-                    style={{ ..._self.props.cityContainerStyle }}
+                    style={[{ ..._self.props.cityContainerStyle }, cityContainerStyle]}
                 >
                     <Container
-                        wrapperStyle={{ ..._self.props.cityWrapperStyle }}
+                        wrapperStyle={[{ ..._self.props.cityWrapperStyle }, cityWrapperStyle]}
                         showHeader={cityHeaderShow}
                         title={'İl'}
                         error={cityId['error'] || false}
@@ -302,10 +303,10 @@ class CountryPicker extends Component {
                 <TouchableOpacity
                     activeOpacity={0.8}
                     onPress={_self._openDistrict}
-                    style={{ ..._self.props.districtContainerStyle }}
+                    style={[{ ..._self.props.districtContainerStyle }, districtContainerStyle]}
                 >
                     <Container
-                        wrapperStyle={{ ..._self.props.districtWrapperStyle }}
+                        wrapperStyle={[{ ..._self.props.districtWrapperStyle }, districtWrapperStyle]}
                         showHeader={districtHeaderShow}
                         title={'İlçe'}
                         error={districtId['error'] || false}

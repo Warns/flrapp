@@ -17,11 +17,13 @@ import {
     CART_FOOTER_MARGIN_BOTTOM,
     CART_FOOTER_EXPAND_MARGIN_BOTTOM,
     CART_BACKGROUND_COLOR_1,
-    CART_BACKGROUND_COLOR_2
+    CART_BACKGROUND_COLOR_2,
+    SHOW_PRELOADING
 } from 'root/app/helper/Constant';
 import { connect } from 'react-redux';
 import Footer from './Footer';
 import UnderSide from './UnderSide';
+import { store } from 'root/app/store';
 
 const DATA = {
     type: 'scrollView',
@@ -40,6 +42,11 @@ const CONFIG = {
     coupon: true,
     opportunity: true
 };
+
+/*  */
+const PRELOAD = async (b) => {
+    store.dispatch({ type: SHOW_PRELOADING, value: b });
+}
 
 /*
     NOT: 
@@ -113,7 +120,7 @@ const Cart = class Main extends Component {
             { navigation, user = {}, cart = {} } = _self.props,
             { userId = '' } = user['user'],
             { cartNoResult = false } = cart;
-
+    
         if (userId == '') { //--> logoff
             if (cartNoResult) {
                 //--> sepet boş anasayfaya dön
@@ -129,8 +136,23 @@ const Cart = class Main extends Component {
                 _self.props.dispatch({ type: NAVIGATE, value: { item: { navigation: "Home" } } });
             } else {
                 //--> sepet dolu bir sonraki aşama
-                if (navigation)
-                    navigation.navigate('Address', {});
+                PRELOAD(true);
+                globals.fetch(
+                    Utils.getURL({ key: 'cart', subKey: 'validateCart' }),
+                    JSON.stringify({}), (answer) => {
+                        const { status, message } = answer;
+                        setTimeout(() => {
+                            if (status == 400) {
+                                alert(message);
+                            } else {
+                                if (navigation)
+                                    navigation.navigate('Address', {});
+                            }
+                        }, 300);
+                        PRELOAD(false);
+                    });
+
+
             }
         }
     }

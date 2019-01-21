@@ -7,17 +7,17 @@ module.exports = {
         uri: Utils.getURL({ key: 'address', subKey: 'getAddress' }),
         keys: {
             arr: 'addresses',
-        }, 
+        },
     },
 
     /* uri: istek yapılacak url */
-    uri: Utils.getURL({ key: 'address', subKey: 'setAddress' }), 
+    uri: Utils.getURL({ key: 'address', subKey: 'setAddress' }),
 
     /* allErrMessage: true durumunda tüm hata mesajları sayfanın en üstünde, false durumunda ilgili elementin altında gösterilir */
-    allErrMessage: false, 
+    allErrMessage: false,
 
     /* işlem başarıyla gerçekleşmişse ve özel bir mesaj göstermek isteniliyorsa mesaj bu kısma yazılır */
-    successMessage: '', 
+    successMessage: '',
 
     fields: [
         {
@@ -105,7 +105,7 @@ module.exports = {
                     id: 'country',
                     title: 'Ülke/Şehir',
                     type: 'countryPicker',
-                    value: {  
+                    value: {
                         country: -1,
                         city: -1,
                         district: -1,
@@ -114,6 +114,9 @@ module.exports = {
                         countryId: { error: false, errorMsg: null },
                         cityId: { error: false, errorMsg: null },
                         districtId: { error: false, errorMsg: null }
+                    },
+                    css: {
+                        countryContainerStyle: { width: 0, height: 0, marginBottom: 0, opacity: 0 }
                     }
                 },
             ]
@@ -137,7 +140,7 @@ module.exports = {
                     value: '',
                     mask: '0599 9999999',
                     customFormat: (k) => {
-                        return Utils.customPhoneFormat( k );
+                        return Utils.customPhoneFormat(k);
                     },
                     validation: [{ key: 'isEmpty' }, { key: 'isPhone' },],
                     keyboardType: 'numeric',
@@ -153,7 +156,15 @@ module.exports = {
                     type: 'text',
                     value: '',
                     multiline: true,
-                    validation: [{ key: 'isEmpty' },],
+                    validation: [{ key: 'isEmpty' }, { key: 'isMin', value: 10 }],
+                    css: {
+                        wrapperStyle: {
+                            height: 200,
+                            alignItems: 'flex-start',
+                            paddingTop: 10,
+                            paddingBottom: 10,
+                        }
+                    }
                 },
             ]
         },

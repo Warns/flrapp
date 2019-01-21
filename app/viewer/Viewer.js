@@ -24,26 +24,21 @@ import {
     DATA_LOADED,
     SERVICE_LIST_CLICKED,
     ORDER_LIST_CLICKED,
-    ADDRESS_LIST_CLICKED,
-    CLICK,
     DOUBLE_CLICK,
     SET_FORM,
     UPDATE_CART,
     REMOVE_CART,
-    SET_CART_ADDRESS,
     SET_SEGMENTIFY_INSTANCEID,
     ADD_CART_ITEM,
     OPEN_PRODUCT_DETAILS,
-    SHOW_PRELOADING,
-    UPDATE_PRODUCT_VIDEOS,
     SET_VIDEO_PLAYER,
     SHOW_CUSTOM_POPUP,
     NAVIGATE,
     SET_VIEWER,
     SET_CATEGORIES,
     SET_SELECTED_CATEGORY,
-    NEW_ADDRESS_CLICKED,
     SET_INSTAGRAM,
+    FEEDS_IMAGE_RATE
 } from 'root/app/helper/Constant';
 import {
     HorizontalProducts,
@@ -209,10 +204,22 @@ class CartListItem extends Component {
         const _self = this,
             { data = {}, onUpdateItem } = _self.props,
             { cartItemId } = data;
-        Globals.AJX({ _self: _self, uri: Utils.getURL({ key: 'cart', subKey: 'updateCartLine' }), data: { cartItemId: cartItemId, quantity: value } }, (res) => {
-            const { status, message } = res;
+        Globals.AJX({
+            _self: _self,
+            uri: Utils.getURL({ key: 'cart', subKey: 'updateCartLine' }),
+            data: { cartItemId: cartItemId, quantity: value }
+        }, (res) => {
+            const { status, message = '' } = res;
             if (status == 200 && onUpdateItem)
                 onUpdateItem({ type: UPDATE_CART, data: res });
+            else
+                setTimeout(() => {
+                    Utils.alert({ message: message }, () => {
+                        if (onUpdateItem)
+                            onUpdateItem({ type: UPDATE_CART });
+                    });
+                }, 300);
+
         });
     }
 
@@ -712,12 +719,14 @@ class CampaingItem extends Component {
 
     _onPress = () => {
         const _self = this,
-            { name, utpCode, image } = _self.props.data,
+            { name, utpCode, image, desc = '', catCode = '' } = _self.props.data,
             data = [{
                 title: name,
                 img: Utils.getImage(image),
-                utpId: utpCode
-            }]; console.log(data)
+                utpId: utpCode,
+                desc: desc,
+                id: catCode
+            }];
         store.dispatch({ type: SET_CATEGORIES, value: data });
         store.dispatch({ type: SET_SELECTED_CATEGORY, value: name });
         store.dispatch({ type: NAVIGATE, value: { item: { navigation: 'Category' } } });
@@ -746,12 +755,15 @@ class CampaingItem extends Component {
 
     render() {
         const _self = this,
-            { image } = _self.props.data;
+            { image } = _self.props.data,
+            w = Dimensions.get('window').width,
+            h = w / FEEDS_IMAGE_RATE['promo'];
+
         return (
             <TouchableOpacity activeOpacity={0.8} onPress={_self._onPress}>
                 <View style={{ margin: 10, marginBottom: 20 }}>
                     <Image
-                        style={{ height: 300 }}
+                        style={{ height: h }}
                         source={{ uri: Utils.getImage(image) }}
                     />
                     {_self._getFooter()}
@@ -1027,7 +1039,7 @@ class FeedsItem extends Component {
     _getLike = () => {
         const _self = this,
             { userLike, like } = _self.state;
-
+        return null; //--> like için kaldır 
         return <RatingButton onPress={_self._onRatingClicked} id="rating" value={like} userLike={userLike} style={{ position: 'absolute', top: 10, left: 10 }} />
     }
 
@@ -1076,6 +1088,7 @@ class FeedsItem extends Component {
 
     _heartAnim = () => {
         const _self = this;
+        return null; //--> like için kaldır 
         return (
             <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center' }}>
                 <Animated.Image
@@ -1107,7 +1120,7 @@ class FeedsItem extends Component {
             color = colorCount > 0 ? <Text style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#9b9b9b', marginBottom: 10 }}>{colorCount}{' Renk'}</Text> : null;
 
         return (
-            <DoubleClickButton callback={_self._callback}>
+            <TouchableOpacity activeOpacity={1} onPress={_self._onPress}>
                 <View style={{ flexDirection: 'row', borderWidth: 1, borderColor: '#dcdcdc' }}>
                     <View style={{ width: 175 }}>
                         <Image
@@ -1123,26 +1136,25 @@ class FeedsItem extends Component {
                     </View>
                 </View>
                 {_self._heartAnim()}
-            </DoubleClickButton>
+            </TouchableOpacity>
         );
     }
 
     _getImage = () => {
         const _self = this,
-            { image = '', type } = _self.props.data;
-
-        let h = 394;
-        if (type == FEEDSTYPE['VIDEO'] || type == FEEDSTYPE['COLLECTION'])
-            h = 300;
+            { image = '', labels = [] } = _self.props.data,
+            type = labels[0],
+            w = Dimensions.get('window').width,
+            h = w / FEEDS_IMAGE_RATE[type];
 
         return (
-            <DoubleClickButton callback={_self._callback}>
+            <TouchableOpacity activeOpacity={1} onPress={_self._onPress}>
                 <Image
                     style={{ height: h }}
                     source={{ uri: image }}
                 />
                 {_self._heartAnim()}
-            </DoubleClickButton>
+            </TouchableOpacity>
         );
     }
 
@@ -1491,15 +1503,15 @@ class Viewers extends Component {
         return css;
     }
 
-    _addHtmlWrapper = ({ customClass, data }) => { 
+    _addHtmlWrapper = ({ customClass, data }) => {
         const _self = this,
             uri = Utils.getURL({ key: 'style', subKey: 'main' }) + '?' + parseInt(Math.random() * new Date()),
             style = _self._addStyle(),
-            opened = '<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">'+ style +'</head><body>',
+            opened = '<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">' + style + '</head><body>',
             closed = '</body></html>',
             css = '<link href="' + uri + '" rel="stylesheet" type="text/css" />',
             htm = opened + '<div class="ems-mobi-app-container ' + customClass + '">' + (css + data) + '</div>' + closed;
-            
+
         return htm;
     }
 
@@ -1507,7 +1519,6 @@ class Viewers extends Component {
     _customFunc = (data) => {
         const _self = this,
             { customFunc = '' } = _self.props.config;
-
         if (customFunc == 'campaing') {
             const arr = [];
             Object
@@ -1518,13 +1529,21 @@ class Viewers extends Component {
                     Object
                         .entries(item['parameters'])
                         .forEach(([childInd, child]) => {
+                            const key = child['parameterKey'] || '',
+                                value = child['parameterValue'] || '';
+
                             obj['id'] = ind;
-                            if (child['parameterKey'] == 'prmCamImgMobile')
-                                obj['image'] = child['parameterValue'];
-                            else if (child['parameterKey'] == 'prmCamID')
-                                obj['utpCode'] = child['parameterValue'];
-                            else if (child['parameterKey'] == 'prmCamSlug')
-                                obj['slug'] = child['parameterValue'];
+
+                            if (key == 'prmCamImgMobile')
+                                obj['image'] = value;
+                            else if (key == 'prmCamID')
+                                obj['utpCode'] = value;
+                            else if (key == 'prmCamSlug')
+                                obj['slug'] = value;  
+                            else if (key == 'prmDesc')
+                                obj['desc'] = value; //--> kategori açıklaması 
+                            else if (key == 'prmCat')
+                                obj['catCode'] = value; //--> kategori id'si 
                         })
                     arr.push(obj);
                 });
@@ -1554,7 +1573,6 @@ class Viewers extends Component {
 
     /* segmentify özel */
     _setSeg = (res) => {
-        //console.log(res);
         const _self = this;
         if (res['type'] == 'success') {
             let { responses = [] } = res.data,
@@ -1613,7 +1631,7 @@ class Viewers extends Component {
         const _self = this,
             { type = VIEWERTYPE['LIST'] } = _self.props.config;
 
-        Globals.AJX({ _self: _self, uri: uri, data: data }, function (res) { 
+        Globals.AJX({ _self: _self, uri: uri, data: data }, function (res) {
 
             const { keys, customClass = '', customFunc = '' } = _self.props.config,
                 keyArr = keys['arr'] || '',
@@ -1686,18 +1704,25 @@ class Viewers extends Component {
     /* tüm listeyi güncelle */
     _onUpdateItem = () => {
         const _self = this;
-        _self.onDidFocus();
+        _self.setState({ ..._self.state, loaded: false, data: [] });
+        setTimeout(() => {
+            _self.onDidFocus();
+        }, 10);
+
     }
 
     /* Viewer genel callback */
     _callback = (obj) => {
         const _self = this,
+            { showPopup = false } = obj,
             { callback, refreshing = false } = _self.props;
 
         if (refreshing)
             obj['refreshing'] = _self._refreshing;
 
-        if (callback)
+        if (showPopup)
+            store.dispatch({ type: SHOW_CUSTOM_POPUP, value: { visibility: true, ...obj } });
+        else if (callback)
             callback(obj);
     }
 
@@ -1803,16 +1828,38 @@ class Viewers extends Component {
             _self.setAjx({ uri: obj['uri'] || '', data: obj['data'] || {} }, () => {
                 _self._preload(false);
             });
+        } else if (itemType == ITEMTYPE['ADDRESS']) {
+            const data = {
+                type: SET_FORM,
+                itemType: 'createAddress',
+                refreshing: _self._onUpdateItem,
+                modalTitle: 'YENİ ADRES EKLE'
+            };
+            store.dispatch({ type: SHOW_CUSTOM_POPUP, value: { visibility: true, ...data } });
         }
     }
 
     _getFilter = () => {
         const _self = this,
             { itemType, filterData = {} } = _self.props.config,
+            { noResult = false } = _self.state,
             { filtered = false } = filterData;
 
-        if (!filtered) return null;
+
+        if (!filtered || noResult) return null;
         switch (itemType) {
+            case ITEMTYPE['ADDRESS']:
+                return (
+                    <View style={{ alignItems: 'flex-end', paddingTop: 15, marginLeft: 15, marginRight: 15 }}>
+                        <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }} onPress={_self._filtered}>
+                            <Text style={{ fontFamily: 'Bold', fontSize: 14 }}>YENİ ADRES EKLE</Text>
+                            <Image
+                                source={(ICONS['plus'])}
+                                style={{ width: 40, height: 40, resizeMode: 'contain' }}
+                            />
+                        </TouchableOpacity>
+                    </View>
+                );
             case ITEMTYPE['SERVICELIST']:
                 return (
                     <ElevatedView
@@ -2010,7 +2057,8 @@ class Viewers extends Component {
 
     _onNewAddress = () => {
         const _self = this;
-        _self._callback({ type: NEW_ADDRESS_CLICKED });
+        _self._filtered();
+        //_self._callback({ type: NEW_ADDRESS_CLICKED });
     }
 
     _noResultView = () => {

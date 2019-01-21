@@ -26,7 +26,8 @@ import {
   SET_CATEGORIES,
   SET_SELECTED_CATEGORY,
   NAVIGATE,
-  SET_VIEWER
+  SET_VIEWER,
+  SET_WEBVIEW,
 } from 'root/app/helper/Constant';
 import Dahi from 'root/app/extra/yapaytech';
 
@@ -96,10 +97,14 @@ class Assistant extends React.Component {
           const { id = '', labels = '', } = data;
           switch (type) {
             case "Webview": {
-              const { url = '' } = data;
-              if (url != '')
-                Linking.openURL(url);
-              break;
+              _self.props.dispatch({
+                type: SHOW_CUSTOM_POPUP,
+                value: {
+                  visibility: true,
+                  type: SET_WEBVIEW,
+                  data: data
+                }
+              });
             }
             case "external": {
 
@@ -164,16 +169,18 @@ class Assistant extends React.Component {
 
               } else if (FEEDSTYPE['CAMPAING'] == labels || FEEDSTYPE['COLLECTION'] == labels) {
 
-                const { title = '', utp = '', image_link = '' } = data,
+                const { title = '', utp = '', image_link = '', desc = '', catCode = '' } = data,
                   arr = [{
                     title: title,
                     img: Utils.getImage(image_link),
-                    utpId: utp
+                    utpId: utp,
+                    desc: desc,
+                    id: catCode  //--> kategori id'si 
                   }];
-                  
-                  _self.props.dispatch({ type: SET_CATEGORIES, value: arr });
-                  _self.props.dispatch({ type: SET_SELECTED_CATEGORY, value: title });
-                  _self.props.dispatch({ type: NAVIGATE, value: { item: { navigation: 'Category' } } });
+
+                _self.props.dispatch({ type: SET_CATEGORIES, value: arr });
+                _self.props.dispatch({ type: SET_SELECTED_CATEGORY, value: title });
+                _self.props.dispatch({ type: NAVIGATE, value: { item: { navigation: 'Category' } } });
               }
 
               break;

@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 
 globals = require('root/app/globals.js');
+const Utils = require('root/app/helper/Global.js');
 
 class HorizontalProducts extends React.Component {
 
@@ -36,7 +37,7 @@ class HorizontalProducts extends React.Component {
   _fetchItems = (Ids) => {
 
     globals.fetch(
-      "https://www.flormar.com.tr/webapi/v3/Product/getProductList",
+      Utils.getURL({ key: 'product', subKey: 'getProductList' }),
       JSON.stringify({
         "productIds": Ids,
         "pageSize": 10,

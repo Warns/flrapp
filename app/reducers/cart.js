@@ -161,8 +161,12 @@ export default function cart(state = cartInitialState, action) {
                 ...state,
                 optin: { ...state.optin, cargoId: action.value }
             };
-
-            setCart(data['optin']);
+            
+            setCart(data['optin'], () => {
+                setTimeout(() => {
+                    getCart('payment');
+                }, 333);
+            });
 
             return data;
         };
@@ -352,13 +356,13 @@ export default function cart(state = cartInitialState, action) {
     }
 }
 
-getCart = async () => {
+getCart = async (loc) => {
     const { optin } = store.getState().cart,
         { cartLocation } = optin;
 
     globals.fetch(
         Utils.getURL({ key: 'cart', subKey: 'getCart' }),
-        JSON.stringify({ cartLocation: cartLocation }), (answer) => {
+        JSON.stringify({ cartLocation: loc || cartLocation }), (answer) => {
             if (answer.status == 200) {
                 setTimeout(() => {
                     store.dispatch({ type: SET_CART_INFO, value: answer.data });

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import {
   View,
   Modal,
+  KeyboardAvoidingView,
+  WebView,
 } from 'react-native';
 import { connect } from 'react-redux';
 import { MinimalHeader, } from 'root/app/components';
@@ -11,7 +13,8 @@ import {
   SET_FORM,
   SET_VIDEO_PLAYER,
   FORMDATA,
-  SET_INSTAGRAM
+  SET_INSTAGRAM,
+  SET_WEBVIEW,
 } from 'root/app/helper/Constant';
 import { Viewer, InstagramDetail } from 'root/app/viewer/';
 import { Form } from 'root/app/form';
@@ -71,7 +74,19 @@ class CustomModals extends Component {
 
   _onClose = () => {
     const _self = this;
-    _self.props.dispatch({ type: SHOW_CUSTOM_POPUP, value: { visibility: false, data: {}, type: '', itemType: '' } });
+    _self.props.dispatch({ type: SHOW_CUSTOM_POPUP, value: { visibility: false, data: {}, type: '', itemType: '', refreshing: '' } });
+  }
+
+  _formCallback = ({ type, data }) => {
+    const _self = this,
+      { refreshing = false } = _self.props.customModal;
+
+    if (refreshing)
+      refreshing();
+
+    setTimeout(() => {
+      _self._onClose();
+    }, 100);
   }
 
   _getViewer = () => {
@@ -82,12 +97,30 @@ class CustomModals extends Component {
     if (type == SET_VIEWER)
       view = <Viewer postData={postData} config={data} />;
     else if (type == SET_FORM)
-      view = <Form callback={_self._callback} postData={postData} data={FORMDATA[itemType]} />;
+      view = (<KeyboardAvoidingView
+        behavior={"padding"}
+        pointerEvents="box-none"
+        style={{
+          flex: 1
+        }}
+      >
+        <Form callback={_self._formCallback} postData={postData} data={FORMDATA[itemType]} />
+      </KeyboardAvoidingView>);
     else if (type == SET_VIDEO_PLAYER) {
       const { items = [], selected = 0 } = data;
       view = <YoutubePlayer items={items} selected={selected} />;
     } else if (type == SET_INSTAGRAM)
       view = <InstagramDetail data={data} />;
+    else if (type == SET_WEBVIEW)
+      view = (
+        <WebView
+          scalesPageToFit={false}
+          automaticallyAdjustContentInsets={false}
+          source={{ uri: data.url || '' }}
+        />
+      );
+
+
 
     return (
       <View style={{ flex: 1 }}>
