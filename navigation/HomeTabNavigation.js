@@ -60,7 +60,7 @@ const CONFIG = {
       "arr": "banners",
     },
     "data": {
-      "bgrCode": "6764"
+      "bgrCode": "7259"
     },
     "customFunc": "campaing"
   }

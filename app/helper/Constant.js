@@ -104,10 +104,10 @@ export const FEEDSTYPE = {
 export const FEEDS_IMAGE_RATE = {
     video: 1.7808, // 650x365
     instagram: 1,
-    promo: 1.7808, // 650x365
-    product: .8, // 360x450
+    promo: 2.24, // 560X250
+    product: .8, // 435x544
     blog: 2.3791, // 1920X807
-    collection: 3, // 1500X500
+    collection: .55, // 330x600
 };
 
 

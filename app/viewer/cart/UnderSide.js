@@ -16,24 +16,23 @@ import { connect } from 'react-redux';
 /* Fırsatlar */
 const DATA = {
     "title": "FIRSATLAR",
-    "type": "htmlToJSON",
+    "type": "listViewer",
     "itemType": "opportunity",
     "uri": {
-        "key": "export",
-        "subKey": "getExport"
+        "key": "banner",
+        "subKey": "getBannerList"
     },
     "siteURI": "/mobiapp-opportunity.html",
     "keys": {
         "id": "id",
-        "arr": "html",
-        "obj": "data",
-        "objArr": "opportunity"
+        "arr": "banners",
     },
     "data": {
-        "exportType": "mobiAppOpportunity"
+        "bgrCode": "7255"
     },
     "horizontal": true,
-    "showsHorizontalScrollIndicator": false
+    "showsHorizontalScrollIndicator": false,
+    "customFunc": "opportunity"
 };
 
 const UnderSide = class Main extends Component {

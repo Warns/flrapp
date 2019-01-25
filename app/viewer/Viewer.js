@@ -963,6 +963,7 @@ class FeedsItem extends Component {
                     ]
                 }
             };
+            console.log('productId', productId);
 
             store.dispatch({
                 type: SHOW_CUSTOM_POPUP,
@@ -1116,8 +1117,9 @@ class FeedsItem extends Component {
     _getProduct = () => {
         const _self = this,
             { image = '', name, price, params = {} } = _self.props.data,
-            { colorCount = 0 } = params,
-            color = colorCount > 0 ? <Text style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#9b9b9b', marginBottom: 10 }}>{colorCount}{' Renk'}</Text> : null;
+            { colorCount = 0, stockQty = '' } = params,
+            color = colorCount > 0 ? <Text style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#9b9b9b', marginBottom: 10 }}>{colorCount}{' Renk'}</Text> : null,
+            stockState = stockQty <= 20 ? <Text style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#be1066' }}>{'Tükenmek üzere'}</Text> : null;
 
         return (
             <TouchableOpacity activeOpacity={1} onPress={_self._onPress}>
@@ -1125,14 +1127,14 @@ class FeedsItem extends Component {
                     <View style={{ width: 175 }}>
                         <Image
                             style={{ height: 218, resizeMode: 'contain' }}
-                            source={{ uri: image }}
+                            source={{ uri: Utils.getImage(image) }}
                         />
                     </View>
                     <View style={{ flex: 1, paddingTop: 30 }}>
                         <Text style={{ fontFamily: 'Bold', fontSize: 22, marginBottom: 10 }}>{Utils.getPriceFormat(price)}</Text>
                         <Text style={{ fontFamily: 'Medium', fontSize: 16 }}>{name}</Text>
                         {color}
-                        <Text style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#be1066' }}>{'Hızla tükeniyor'}</Text>
+                        {stockState}
                     </View>
                 </View>
                 {_self._heartAnim()}
@@ -1151,7 +1153,7 @@ class FeedsItem extends Component {
             <TouchableOpacity activeOpacity={1} onPress={_self._onPress}>
                 <Image
                     style={{ height: h }}
-                    source={{ uri: image }}
+                    source={{ uri: Utils.getImage(image) }}
                 />
                 {_self._heartAnim()}
             </TouchableOpacity>
@@ -1221,12 +1223,12 @@ class OpportunityListItem extends Component {
     render() {
         const _self = this,
             { index } = _self.props,
-            { desc } = _self.props.data,
+            { desc = '' } = _self.props.data,
             leftSpace = index == 0 ? 20 : 0;
 
         return (
             <View style={{ backgroundColor: '#FFFFFF', width: 220, minHeight: 130, marginRight: 10, marginLeft: leftSpace, padding: 15, }}>
-                <ParserHTML style={{ fontSize: 15, lineHeight: 21 }} wrapperStyle={{ fontSize: 15, lineHeight: 21 }}>{desc}</ParserHTML>
+                <HTML {...HTML_DEFAULT_PROPS} html={desc} />
             </View>
         )
     }
@@ -1498,8 +1500,9 @@ class Viewers extends Component {
     }
 
     _addStyle = () => {
-        const font = Asset.fromModule(require("root/assets/fonts/proximanova-regular.otf")).uri,
-            css = '<style type="text/css"> @font-face {font-family: Regular; src: url(' + font + ') format("truetype");} .ems-mobi-app-container *{font-family: Regular !important;font-size: 18px !important;}</style>';
+        const regular = Asset.fromModule(require("root/assets/fonts/proximanova-regular.otf")).uri,
+            bold = Asset.fromModule(require("root/assets/fonts/BrandonGrotesque-Medium.otf")).uri,
+            css = '<style type="text/css"> @font-face {font-family: Regular; src: url(' + regular + ') format("truetype");} @font-face {font-family: Bold; src: url(' + bold + ') format("truetype");}</style>';
         return css;
     }
 
@@ -1510,7 +1513,7 @@ class Viewers extends Component {
             opened = '<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">' + style + '</head><body>',
             closed = '</body></html>',
             css = '<link href="' + uri + '" rel="stylesheet" type="text/css" />',
-            htm = opened + '<div class="ems-mobi-app-container ' + customClass + '">' + (css + data) + '</div>' + closed;
+            htm = opened + '<div class="ems-mobi-app-container ' + customClass + '">' + (css + Utils.removeStyleTag( data )) + '</div>' + closed;
 
         return htm;
     }
@@ -1539,11 +1542,36 @@ class Viewers extends Component {
                             else if (key == 'prmCamID')
                                 obj['utpCode'] = value;
                             else if (key == 'prmCamSlug')
-                                obj['slug'] = value;  
+                                obj['slug'] = value;
                             else if (key == 'prmDesc')
                                 obj['desc'] = value; //--> kategori açıklaması 
                             else if (key == 'prmCat')
                                 obj['catCode'] = value; //--> kategori id'si 
+                        })
+                    arr.push(obj);
+                });
+            data = arr;
+        }else if (customFunc == 'opportunity') { 
+            const arr = [];
+            Object
+                .entries(data)
+                .forEach(([ind, item]) => {
+                    const { bannerName = '' } = item,
+                        obj = { name: bannerName };
+                    Object
+                        .entries(item['parameters'])
+                        .forEach(([childInd, child]) => {
+                            const key = child['parameterKey'] || '',
+                                value = child['parameterValue'] || '';
+
+                            obj['id'] = ind;
+
+                            if (key == 'prmUniqueKod')
+                                obj['id'] = value;
+                            else if (key == 'prmTitle')
+                                obj['title'] = value;
+                            else if (key == 'prmDesc')
+                                obj['desc'] = value;
                         })
                     arr.push(obj);
                 });

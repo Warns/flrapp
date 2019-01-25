@@ -185,6 +185,23 @@ module.exports = {
       }
     });
   },
+  _getSegData: function (data) {
+    let arr = [];
+    Object
+      .keys(data)
+      .map((key) => {
+        const k = data[key] || [];
+        if (k.length > 0) {
+          Object
+            .keys(k)
+            .map((m) => {
+              arr.push(k[m])
+            });
+        }
+
+      });
+    return arr;
+  },
   getSegKey: function (responses) {
     const { params = {} } = responses[0][0],
       { dynamicItems = '[]' } = params,
