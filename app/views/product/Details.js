@@ -37,6 +37,42 @@ const SCREEN_DIMENSIONS = Dimensions.get('screen');
 
 class ProductDetails extends React.Component {
 
+  constructor(props) {
+    super(props);
+  }
+
+  _setSeg = (res) => {
+    const _self = this;
+    if (res['type'] == 'success') {
+      let { responses = [] } = res.data,
+        { params = {} } = responses[0][0],
+        data = globals._getSegData(params['recommendedProducts'] || []),
+        arr = [];
+
+      Object.entries(data).forEach(([key, value]) => {
+        arr.push({ groupId: 1, productId: value['productId'] });
+      });
+
+      _self.setState({ productRecommends: arr });
+    }
+  }
+
+  _segAjx = () => {
+    /* segmentify product recomendation */
+    const _self = this,
+      { id, item } = this.props.product,
+      { integrationId = '' } = item || {},
+      data = {
+        "name": "PRODUCT_VIEW",
+        //"productId": integrationId.split('-')[0]
+        "productId": id
+      };
+
+    globals.seg({ data: data }, (res) => {
+      _self._setSeg(res);
+    });
+  }
+
   state = {
     anim: new Animated.Value(0),
     opacity: new Animated.Value(0),
@@ -47,11 +83,16 @@ class ProductDetails extends React.Component {
     videosIsOpen: false,
     canScroll: false,
     favoriteButton: { status: false, a: 'FAVORİME EKLE', b: 'FAVORİME EKLENDİ' },
+    productRecommends: []
   };
 
   componentDidMount() {
+    const _self = this;
+    setTimeout(() => {
+      _self._segAjx();
+    }, 1000);
 
-    //this.props.dispatch({ type: 'UPDATE_PRODUCT_OBJECT', value: { callback: this._initAnimation } });
+    this.props.dispatch({ type: 'UPDATE_PRODUCT_OBJECT', value: { callback: this._initAnimation } });
   }
 
   _initAnimation = () => {
@@ -168,10 +209,12 @@ class ProductDetails extends React.Component {
 
       let _videos = videosIsOpen && videos.length > 0 ? <VideosList items={videos} callback={this._onVideoPress} /> : null;
 
-      let recommendations = item.productRecommends.length > 0 ? (
+
+      const { productRecommends = [] } = this.state;
+      let recommendations = productRecommends.length > 0 ? (
         <View style={{ marginTop: 35 }}>
           <Text style={[styles.sectionHeader, { marginLeft: 20, marginBottom: 15, }]}>İLGİLİ ÜRÜNLER</Text>
-          <HorizontalProducts items={item.productRecommends} onPress={this._changeProduct} />
+          <HorizontalProducts items={productRecommends} onPress={this._changeProduct} />
         </View>
       ) : null;
 

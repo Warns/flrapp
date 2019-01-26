@@ -5,12 +5,12 @@ const Translation = require('root/app/helper/Translation.js');
 module.exports = {
     mapApiKey: 'AIzaSyDktunNtvwuVvGEA6LSVfQoiRsptLStTgc',
     bazaarVoiceApiKey: 'ca0fITp8PBeW9pf7e9vzn0BABaSeJVjOBqp6EWZVZCXsA',
-    prefix: 'https://www.flormar.com.tr',
-    //prefix: 'https://dev-facelift.flormar.com.tr',
+    //prefix: 'https://www.flormar.com.tr',
+    prefix: 'https://dev-facelift.flormar.com.tr',
     imagePrefix: 'flormar.com.tr',
     URLs: {
         style: {
-            main: '/styles/mobiApp.css'
+            main: '/upload/APP/styles/mobiApp.css'
         },
         banner: {
             getBannerList: '/webapi/v3/Banner/getBannerList'
@@ -150,6 +150,10 @@ module.exports = {
         /* https://css-tricks.com/snippets/javascript/strip-html-tags-in-javascript/ */
         k = k || '';
         return k.replace(/(<([^>]+)>)/ig, '');
+    },
+    removeStyleTag: function(k){
+        k = k || '';
+        return k.replace(/(style=".*")/g, '');
     },
     subtractDate: (o) => {
         var typ = o['typ'] || 'remove',

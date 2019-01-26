@@ -45,9 +45,9 @@ class Splash extends React.Component {
     videoIsPlaying: true,
     localStorage: {},
     images:[
-      {thumb: Utils.prefix + "/UPLOAD/APP/assets/slider-1.png", title:'RENK DOLU DÜNYA', text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod.', video:false},
-      {thumb: Utils.prefix + "/UPLOAD/APP/assets/slider-2.png", title:'EKSTRA FIRSAT', text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod.'},
-      {thumb: Utils.prefix + "/UPLOAD/APP/assets/slider-3.png", title:'İLHAM VERİCİ', text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod.'}
+      {thumb: Utils.prefix + "/UPLOAD/APP/assets/slider-1.png", title:'Hoş geldin!', text:'Flormar\'ın yeni uygulamasında seni neler bekliyor? Sana özel önerilerle mobil alışveriş keyfi!', video:false},
+      {thumb: Utils.prefix + "/UPLOAD/APP/assets/slider-2.png", title:'Neden extra üyesi olmalısın?', text:'Her siparişinde 5% ekstra TL kazan, Sana özel kampanyalar ile alışverişinin keyfini sür!'},
+      {thumb: Utils.prefix + "/UPLOAD/APP/assets/slider-3.png", title:'Neden şimdi üye olmalısın?', text:'İlk siparişinde online’a özel indirim ve bedava kargo imkanından yararlan!'}
     ],
     activeSlide: 0,
   }
