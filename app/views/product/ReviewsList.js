@@ -43,13 +43,15 @@ class ProductReviewsList extends React.Component {
 
     _updateList = () => {
 
+        let { integrationId } = this.props.product.item;
+
         let { sorting, limit } = this.state;
         Utils.ajx({
             uri:
                 'https://stg.api.bazaarvoice.com/data/reviews.json' +
                 '?apiversion=5.4' +
                 '&passkey=carF2u1HidJWt3HKndfcCctCD4pXmjz9vzavhSM7ldgPA' +
-                '&Filter=ProductId:0414001-22711' +
+                '&Filter=ProductId:' + integrationId +//'0414001-22711' +
                 '&Sort=' + sorting +
                 '&Limit=' + limit
         }, (result) => {
@@ -92,7 +94,7 @@ class ProductReviewsList extends React.Component {
         if (noComment) {
             _emptyItems.push(
                 <View key="a1" style={{ height: 300, justifyContent: 'center', alignItems: 'center', }}>
-                    <Image source={ICONS['comment']} style={{ width: 60, height: 60, resizeMode: 'contain', marginBottom: 30 }} />
+                    <Image source={ICONS['comment']} style={{ width: 60, height: 60, resizeMode: 'contain', marginBottom: 0 }} />
                     <Text style={{ fontSize: 16 }}>İlk yorumu sen yap.</Text>
                 </View>
             );
@@ -184,6 +186,13 @@ class ListItem extends React.Component {
             */
         }
 
+        let _badge = null;
+
+        if (item.Badges.top100Contributor)
+            _badge = <View style={{ flexDirection: 'row' }}><Image source={ICONS['top100Contributor']} style={{ width: 30, height: 30, marginLeft: 5 }} /><Text style={{ fontSize: 15, lineHeight: 30, color: '#6C6C6C' }}>İlk 100 katkıda bulunan</Text></View>;
+        else if (item.Badges.topContributor || item.Badges.top10Contributor)
+            _badge = <View style={{ flexDirection: 'row' }}><Image source={ICONS['top10Contributor']} style={{ width: 30, height: 30, marginLeft: 5 }} /><Text style={{ fontSize: 15, lineHeight: 30, color: '#6C6C6C' }}>İlk 10 katkıda bulunan</Text></View>;
+
         return (
 
             <View style={{ marginRight: 20, marginLeft: 20, padding: 10, borderBottomWidth: 1, borderBottomColor: "#D8D8D8" }}>
@@ -201,8 +210,8 @@ class ListItem extends React.Component {
                 {_recommendation}
 
                 <View style={{ flexDirection: 'row', marginTop: 15, marginBottom: 25 }}>
-                    <Text style={{ fontSize: 15, fontWeight: 'bold', }}>{item.UserNickname}</Text>
-                    <Text style={{ fontSize: 15, marginLeft: 10, color: '#6C6C6C' }}>{item.UserLocation}</Text>
+                    <Text style={{ fontSize: 15, fontWeight: 'bold', lineHeight: 30, }}>{item.UserNickname}</Text>
+                    {_badge}
                 </View>
             </View>
         );

@@ -169,7 +169,7 @@ export default class List extends React.Component {
 
     let _items = answer.data.products;
 
-console.log(answer);
+    console.log(answer);
 
     if (this.props.category.img && answer.data.filters.findIndex(obj => obj.isSelected == true) == -1) {
       _items.splice((answer.data.totalProductCount < 4 ? 0 : 4), 0,

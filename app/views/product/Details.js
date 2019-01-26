@@ -51,11 +51,12 @@ class ProductDetails extends React.Component {
 
   componentDidMount() {
 
-    this.props.dispatch({ type: 'UPDATE_PRODUCT_OBJECT', value: { callback: this._initAnimation } });
+    //this.props.dispatch({ type: 'UPDATE_PRODUCT_OBJECT', value: { callback: this._initAnimation } });
   }
 
   _initAnimation = () => {
 
+    /*
     let _self = this;
 
     Animated.timing(
@@ -65,6 +66,7 @@ class ProductDetails extends React.Component {
         onComplete: () => _self.setState({ showVeil: false }),
       }
     ).start();
+    */
   }
 
   _close = () => {
@@ -105,13 +107,11 @@ class ProductDetails extends React.Component {
   }
 
   _changeColor = (id) => {
-
     this.props.dispatch({ type: OPEN_PRODUCT_DETAILS, value: { id: id, measurements: {}, animate: false, sequence: 0 } });
     console.log('----->', id);
   }
 
   _changeProduct = (id) => {
-
     this.setState({ canScroll: true });
     this.props.dispatch({ type: OPEN_PRODUCT_DETAILS, value: { id: id, measurements: {}, animate: false, sequence: 0 } });
     console.log('p----->', id);
@@ -148,10 +148,6 @@ class ProductDetails extends React.Component {
     let { item, sequence, measurements, animate, colors, videos } = this.props.product;
 
     if (item) {
-
-      setTimeout(() => {
-        this.setState({ productRenderDone: true });
-      }, 1000);
 
       const images = [];
       for (var k in item.productImages) {
@@ -297,8 +293,6 @@ class ProductDetails extends React.Component {
             {this._renderProduct()
             }
             {//screenshot 
-            }
-            {_veil
             }
           </View>
         </ScrollView>

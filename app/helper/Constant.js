@@ -60,6 +60,10 @@ export const ICONS = {
     orderSuccessRect: require('root/assets/images/order-success-rect.png'),
     orderSuccessTxt: require('root/assets/images/order-success-txt.png'),
     orderSuccessIcon: require('root/assets/images/order-success-icon.png'),
+    top10Contributor: require('root/assets/icons/top10Contributor.png'),
+    top100Contributor: require('root/assets/icons/top100Contributor.png'),
+    reviewSuccess: require('root/assets/icons/review-success.png'),
+    reviewHeart: require('root/assets/icons/review-heart.png'),
 };
 
 /* VIEWER SAYFA TİPLERİ */

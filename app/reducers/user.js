@@ -26,7 +26,7 @@ const userInitialState = {
 
     user: {},
 
-    userBazaarvoiceToken: "46b1241da5c3b3df4875ed4c7330a44d4c0c965beaf6dc96ef8ab8d19b821637646174653d323031382d31322d3236267573657249443d3131393535303926656d61696c616464726573733d627572616b2e6b6172616b6179614070726f6a2d652e636f6d26757365726e616d653d627572616b6b266d61786167653d3330",
+    userBazaarvoiceToken: null,
 }
 
 export default function user(state = userInitialState, action) {
@@ -44,7 +44,7 @@ export default function user(state = userInitialState, action) {
             globals.setSecureStorage('__OPTIN__', optin_value);
             fetchCartDetails();
 
-            //getUserToken();
+            getUserToken(action.value);
 
             return {
                 ...state,
@@ -93,8 +93,7 @@ fetchCartDetails = async () => {
 }
 
 getUserToken = async (obj) => {
-    const { userId = '' } = obj || {};
-    console.log('asking for token');
+    const { userId = '' } = obj.user || {};
 
     Utils.ajx({ uri: Utils.getURL({ key: 'bazaarvoice', subKey: 'userCode' }) + userId }, (result) => {
         if (result['type'] == 'success')

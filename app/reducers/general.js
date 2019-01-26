@@ -80,6 +80,7 @@ export default function general(state = generalInitialState, action) {
             }
         };
         case 'UPDATE_PRODUCT_OBJECT': {
+            console.log('----add fx');
             return {
                 ...state, product: {
                     ...state.product,
@@ -88,6 +89,8 @@ export default function general(state = generalInitialState, action) {
             };
         };
         case OPEN_PRODUCT_DETAILS: {
+
+            console.log('----open');
 
             if (action.value.id) {
                 fetchProductDetails(action.value.id);
@@ -103,6 +106,8 @@ export default function general(state = generalInitialState, action) {
             };
         };
         case UPDATE_PRODUCT_DETAILS_ITEM: {
+
+            console.log('----update');
 
             if (state.product.callback) state.product.callback();
 
@@ -170,7 +175,7 @@ fetchProductDetails = (id) => {
                     name: answer.data.product.shortName
                 });
 
-                colors.sort(function (a, b) { return a.shortCode - b.shortCode });
+                colors.sort((a, b) => (a.shortCode > b.shortCode) ? 1 : ((b.shortCode > a.shortCode) ? -1 : 0));
 
                 store.dispatch({ type: UPDATE_PRODUCT_DETAILS_ITEM, value: { product: answer.data.product, colors: colors } });
 

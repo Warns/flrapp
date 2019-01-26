@@ -19,6 +19,39 @@ module.exports = {
           title: 'Yorum başlığı',
           type: 'text',
           placeholder: '',
+          value: '',
+          validation: [{ key: 'isEmpty' }],
+        },
+        {
+          id: 'comment',
+          title: 'Yorum içeriği',
+          type: 'text',
+          multiline: true,
+          placeholder: '',
+          value: '',
+          validation: [{ key: 'isEmpty' }, { key: 'isMin', value: 50 }],
+          css: {
+            wrapperStyle: {
+              height: 200,
+              alignItems: 'flex-start',
+              paddingTop: 10,
+              paddingBottom: 10,
+            }
+          }
+        },
+
+        /*
+         {
+          id: 'points',
+          title: 'Puan seçiniz',
+          type: 'stars',
+          validation: [{ key: 'isStar' }],
+        },
+        {
+          id: 'title',
+          title: 'Yorum başlığı',
+          type: 'text',
+          placeholder: '',
           value: 'Lorem ipsum dolor sit amet',
           validation: [{ key: 'isEmpty' }],
         },
@@ -39,13 +72,14 @@ module.exports = {
             }
           }
         },
+        */
 
         {
           id: 'recommends',
           title: 'Bu ürünü önerir misin?',
           desc: 'Bu ürünü başkasına önerir misin?',
           type: 'chekbox',
-          value: false,
+          value: true,
           css: {
             wrapperStyle: {
               backgroundColor: '#ffffff',
