@@ -93,7 +93,8 @@ export const ITEMTYPE = {
     TRIGGERBUTTON: 'triggerButton',
     EXITBUTTON: 'exitButton',
     OPPORTUNITY: 'opportunity', // SEPET SAYFASI FIRSATLAR
-    CUSTOMDETAIL: 'customDetail' // feeds blog, collection tıklananınca açılacak detay
+    CUSTOMDETAIL: 'customDetail', // feeds blog, collection tıklananınca açılacak detay
+    CUSTOMDETAILCONTENT: 'customDetailContent' // detal sayfası nasıl uygulanır kısmı
 };
 
 export const FEEDSTYPE = {
