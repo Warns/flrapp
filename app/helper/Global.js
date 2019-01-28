@@ -151,7 +151,7 @@ module.exports = {
         k = k || '';
         return k.replace(/(<([^>]+)>)/ig, '');
     },
-    removeStyleTag: function(k){
+    removeStyleTag: function (k) {
         k = k || '';
         return k.replace(/(style=".*")/g, '');
     },
