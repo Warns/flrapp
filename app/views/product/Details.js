@@ -31,6 +31,7 @@ import {
   Palette
 } from 'root/app/components';
 import { DefaultButton } from 'root/app/UI';
+import { Viewer } from 'root/app/viewer';
 
 globals = require('root/app/globals.js');
 const SCREEN_DIMENSIONS = Dimensions.get('screen');
@@ -39,6 +40,42 @@ class ProductDetails extends React.Component {
 
   constructor(props) {
     super(props);
+  }
+
+  state = {
+    anim: new Animated.Value(0),
+    opacity: new Animated.Value(0),
+    animationDone: false,
+    productRenderDone: false,
+    showVeil: true,
+    detailIsOpen: false,
+    videosIsOpen: false,
+    canScroll: false,
+    favoriteButton: { status: false, a: 'FAVORİME EKLE', b: 'FAVORİME EKLENDİ' },
+    productRecommends: []
+  };
+
+  componentDidMount() {
+    const _self = this;
+    this.props.dispatch({ type: 'UPDATE_PRODUCT_OBJECT', value: { callback: this._initAnimation } });
+  }
+
+  _initAnimation = () => {
+    const _self = this;
+    setTimeout(() => {
+      _self._segAjx();
+    }, 1);
+    /*
+    let _self = this;
+
+    Animated.timing(
+      this.state.opacity, {
+        toValue: 1,
+        duration: 300,
+        onComplete: () => _self.setState({ showVeil: false }),
+      }
+    ).start();
+    */
   }
 
   _setSeg = (res) => {
@@ -71,43 +108,6 @@ class ProductDetails extends React.Component {
     globals.seg({ data: data }, (res) => {
       _self._setSeg(res);
     });
-  }
-
-  state = {
-    anim: new Animated.Value(0),
-    opacity: new Animated.Value(0),
-    animationDone: false,
-    productRenderDone: false,
-    showVeil: true,
-    detailIsOpen: false,
-    videosIsOpen: false,
-    canScroll: false,
-    favoriteButton: { status: false, a: 'FAVORİME EKLE', b: 'FAVORİME EKLENDİ' },
-    productRecommends: []
-  };
-
-  componentDidMount() {
-    const _self = this;
-    setTimeout(() => {
-      _self._segAjx();
-    }, 1000);
-
-    this.props.dispatch({ type: 'UPDATE_PRODUCT_OBJECT', value: { callback: this._initAnimation } });
-  }
-
-  _initAnimation = () => {
-
-    /*
-    let _self = this;
-
-    Animated.timing(
-      this.state.opacity, {
-        toValue: 1,
-        duration: 300,
-        onComplete: () => _self.setState({ showVeil: false }),
-      }
-    ).start();
-    */
   }
 
   _close = () => {
@@ -184,6 +184,32 @@ class ProductDetails extends React.Component {
     }
   }
 
+  _getDetailContent = () => {
+    const _self = this,
+      { id = '' } = this.props.product,
+      data = {
+        "title": "ÜRÜN DETAY NASIL UYGULANIR",
+        "type": "listViewer",
+        "itemType": "customDetailContent",
+        "uri": {
+          "key": "banner",
+          "subKey": "getBannerList"
+        },
+        "keys": {
+          "id": "id",
+          "arr": "banners",
+        },
+        "data": {
+          "bgrCode": "7244",
+          //"productId": id
+        },
+        "customFunc": "customDetailContent",
+
+      };
+
+    return <Viewer scrollEnabled={false} config={data} refreshing={false} />
+  }
+
   _renderProduct = () => {
     let { anim, detailIsOpen, opacity, canScroll, videosIsOpen, favoriteButton, animationDone } = this.state;
     let { item, sequence, measurements, animate, colors, videos } = this.props.product;
@@ -239,6 +265,7 @@ class ProductDetails extends React.Component {
           </View>
           <Text style={styles.defautText}>{desc}</Text>
           <Text style={[styles.defautText, { marginTop: 15, fontSize: 14 }]}>Ürün kodu: {item.integrationId}</Text>
+          {this._getDetailContent()}
         </View>
       ) : null;
 

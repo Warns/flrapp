@@ -773,6 +773,55 @@ class CampaingItem extends Component {
     }
 }
 
+// ürün detay nasıl uygulanır kısmı
+class CustomDetailContentItem extends Component {
+    constructor(props) {
+        super(props);
+    }
+
+    CUSTOM_STYLE = {
+        tagsStyles: { p: { fontSize: 16, color: '#6c6c6c', lineHeight: 24, fontFamily: 'RegularTyp2' }, b: { fontSize: 16, color: '#000000', lineHeight: 24, fontFamily: 'Bold' } },
+        imagesMaxWidth: Dimensions.get('window').width,
+        onLinkPress: (evt, href) => { Linking.openURL(href); },
+        debug: false
+    };
+
+    _getView = () => {
+        const _self = this,
+            { content = [] } = _self.props.data;
+
+        return content
+            .map((item, order) => {
+                const { title = '', content = '<i></i>', img = '', video = '' } = item;
+                if (title != '')
+                    return <Text style={{ fontFamily: 'Bold', fontSize: 16, marginTop: 15 }} key={order}>{title}</Text>
+                else if (video != '')
+                    return null;
+                else return (
+                    <View key={order} style={{ marginBottom: 15 }}>
+                        <HTML {..._self.CUSTOM_STYLE} html={content} />
+                        <Image
+                            style={{ height: 250, resizeMode: 'cover' }}
+                            source={{ uri: Utils.getImage(img) }}
+                        />
+                    </View>
+                );
+            });
+            /*
+            fontSize: 16,
+    color: '#6c6c6c',
+    lineHeight: 24,
+            */
+    }
+
+    render() {
+        const _self = this;
+        return _self._getView();
+    }
+}
+
+
+// feeds sayfası blog, collection detayı
 class CustomDetailListItem extends Component {
     constructor(props) {
         super(props);
@@ -963,7 +1012,6 @@ class FeedsItem extends Component {
                     ]
                 }
             };
-            console.log('productId', productId);
 
             store.dispatch({
                 type: SHOW_CUSTOM_POPUP,
@@ -1513,7 +1561,7 @@ class Viewers extends Component {
             opened = '<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">' + style + '</head><body>',
             closed = '</body></html>',
             css = '<link href="' + uri + '" rel="stylesheet" type="text/css" />',
-            htm = opened + '<div class="ems-mobi-app-container ' + customClass + '">' + (css + Utils.removeStyleTag( data )) + '</div>' + closed;
+            htm = opened + '<div class="ems-mobi-app-container ' + customClass + '">' + (css + Utils.removeStyleTag(data)) + '</div>' + closed;
 
         return htm;
     }
@@ -1551,7 +1599,7 @@ class Viewers extends Component {
                     arr.push(obj);
                 });
             data = arr;
-        }else if (customFunc == 'opportunity') { 
+        } else if (customFunc == 'opportunity') {
             const arr = [];
             Object
                 .entries(data)
@@ -1576,6 +1624,37 @@ class Viewers extends Component {
                     arr.push(obj);
                 });
             data = arr;
+        } else if (customFunc == 'customDetailContent') {
+            const arr = [];
+            Object
+                .entries(data)
+                .forEach(([ind, item]) => {
+                    const { bannerName = '' } = item,
+                        obj = { name: bannerName };
+                    Object
+                        .entries(item['parameters'])
+                        .forEach(([childInd, child]) => {
+                            const key = child['parameterKey'] || '',
+                                value = child['parameterValue'] || '';
+
+                            obj['id'] = ind;
+
+                            if (key == 'prmTitle')
+                                obj['title'] = value;
+                            else if (key == 'prmContent')
+                                obj['content'] = value;
+                            else if (key == 'prmImg')
+                                obj['img'] = value;
+                            else if (key == 'prmVideoID')
+                                obj['video'] = value;
+                            else if (key == 'prmLayout')
+                                obj['layout'] = value;
+                            else if (key == 'prmType')
+                                obj['type'] = value;
+                        })
+                    arr.push(obj);
+                });
+            data = [{ content: arr }];
         }
         return data;
     }
@@ -1704,7 +1783,8 @@ class Viewers extends Component {
     _keyExtractor = (item, index) => {
         const _self = this,
             { keys } = _self.props.config;
-        return (keys['arr'] + '-' + item[keys['id']] + '-' + index).toString();
+
+        return (keys['arr'] + '-' + (item[keys['id']] || '0') + '-' + index).toString();
     }
 
     _onGotoDetail = (o) => {
@@ -1777,6 +1857,8 @@ class Viewers extends Component {
         switch (itemType) {
             case ITEMTYPE['BANKTRANSFER']:
                 return <BankTransferListItem key={key} index={index} callback={_self._callback} data={item} />;
+            case ITEMTYPE['CUSTOMDETAILCONTENT']:
+                return <CustomDetailContentItem key={key} index={index} callback={_self._callback} data={item} />;
             case ITEMTYPE['CUSTOMDETAIL']:
                 return <CustomDetailListItem key={key} index={index} callback={_self._callback} data={item} />;
             case ITEMTYPE['OPPORTUNITY']:
