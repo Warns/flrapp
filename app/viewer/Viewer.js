@@ -807,11 +807,11 @@ class CustomDetailContentItem extends Component {
                     </View>
                 );
             });
-            /*
-            fontSize: 16,
-    color: '#6c6c6c',
-    lineHeight: 24,
-            */
+        /*
+        fontSize: 16,
+color: '#6c6c6c',
+lineHeight: 24,
+        */
     }
 
     render() {
@@ -1571,90 +1571,40 @@ class Viewers extends Component {
         const _self = this,
             { customFunc = '' } = _self.props.config;
         if (customFunc == 'campaing') {
-            const arr = [];
-            Object
-                .entries(data)
-                .forEach(([ind, item]) => {
-                    const { bannerName = '' } = item,
-                        obj = { name: bannerName };
-                    Object
-                        .entries(item['parameters'])
-                        .forEach(([childInd, child]) => {
-                            const key = child['parameterKey'] || '',
-                                value = child['parameterValue'] || '';
-
-                            obj['id'] = ind;
-
-                            if (key == 'prmCamImgMobile')
-                                obj['image'] = value;
-                            else if (key == 'prmCamID')
-                                obj['utpCode'] = value;
-                            else if (key == 'prmCamSlug')
-                                obj['slug'] = value;
-                            else if (key == 'prmDesc')
-                                obj['desc'] = value; //--> kategori açıklaması 
-                            else if (key == 'prmCat')
-                                obj['catCode'] = value; //--> kategori id'si 
-                        })
-                    arr.push(obj);
-                });
-            data = arr;
+            data = Utils.objectMapping({
+                data: data,
+                mapping: {
+                    prmLPImg: 'image',
+                    prmCamID: 'utpCode',
+                    prmCamSlug: 'slug',
+                    prmDesc: 'desc',
+                    prmCat: 'catCode',
+                    prmTitle: 'title'
+                }
+            });
         } else if (customFunc == 'opportunity') {
-            const arr = [];
-            Object
-                .entries(data)
-                .forEach(([ind, item]) => {
-                    const { bannerName = '' } = item,
-                        obj = { name: bannerName };
-                    Object
-                        .entries(item['parameters'])
-                        .forEach(([childInd, child]) => {
-                            const key = child['parameterKey'] || '',
-                                value = child['parameterValue'] || '';
-
-                            obj['id'] = ind;
-
-                            if (key == 'prmUniqueKod')
-                                obj['id'] = value;
-                            else if (key == 'prmTitle')
-                                obj['title'] = value;
-                            else if (key == 'prmDesc')
-                                obj['desc'] = value;
-                        })
-                    arr.push(obj);
-                });
-            data = arr;
+            data = Utils.objectMapping({
+                data: data,
+                mapping: {
+                    prmUniqueKod: 'id',
+                    prmTitle: 'title',
+                    prmDesc: 'desc'
+                }
+            });
         } else if (customFunc == 'customDetailContent') {
-            const arr = [];
-            Object
-                .entries(data)
-                .forEach(([ind, item]) => {
-                    const { bannerName = '' } = item,
-                        obj = { name: bannerName };
-                    Object
-                        .entries(item['parameters'])
-                        .forEach(([childInd, child]) => {
-                            const key = child['parameterKey'] || '',
-                                value = child['parameterValue'] || '';
-
-                            obj['id'] = ind;
-
-                            if (key == 'prmTitle')
-                                obj['title'] = value;
-                            else if (key == 'prmContent')
-                                obj['content'] = value;
-                            else if (key == 'prmImg')
-                                obj['img'] = value;
-                            else if (key == 'prmVideoID')
-                                obj['video'] = value;
-                            else if (key == 'prmLayout')
-                                obj['layout'] = value;
-                            else if (key == 'prmType')
-                                obj['type'] = value;
-                        })
-                    arr.push(obj);
-                });
-            data = [{ content: arr }];
+            data = [{
+                content: Utils.objectMapping({
+                    data: data,
+                    mapping: {
+                        prmTitle: 'title',
+                        prmContent: 'content',
+                        prmImg: 'img',
+                        prmVideoID: 'video',
+                        prmLayout: 'layout',
+                        prmType: 'type'
+                    }
+                })
+            }];
         }
         return data;
     }

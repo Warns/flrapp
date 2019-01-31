@@ -78,6 +78,7 @@ class ProductDetails extends React.Component {
     */
   }
 
+  /* segmentify product recomendation */
   _setSeg = (res) => {
     const _self = this;
     if (res['type'] == 'success') {
@@ -184,6 +185,7 @@ class ProductDetails extends React.Component {
     }
   }
 
+  /* nasıl uygulanır */
   _getDetailContent = () => {
     const _self = this,
       { id = '' } = this.props.product,
@@ -208,6 +210,19 @@ class ProductDetails extends React.Component {
       };
 
     return <Viewer scrollEnabled={false} config={data} refreshing={false} />
+  }
+
+  /* yerli üretim */
+  _domesticProduction = (data) => {
+    let b = false;
+    Object
+      .entries(data)
+      .forEach(([key, value]) => {
+        if (value['productTypeId'] == 272)
+          b = true;
+      });
+
+      return b ? <Image source={{ uri: 'https://mcdn.flormar.com.tr/images/frontend/yerli-uretim.png' }} style={{ width: 80, height: 33, resizeMode: 'cover' }} /> : null;
   }
 
   _renderProduct = () => {
@@ -273,6 +288,13 @@ class ProductDetails extends React.Component {
         (<DefaultButton callback={this._addToFavorites} name={favoriteButton.b} borderColor="#FF2B94" />) :
         (<DefaultButton callback={this._addToFavorites} name={favoriteButton.a} />);
 
+
+      let discountRate = item.discountRate > 0 ? <Text style={{ fontSize: 13, fontFamily: 'proxima', color: '#BE1066' }}>%{item.discountRate} İNDİRİM</Text> : null;
+
+      let stockQty = item.stockQty <= 20 ? <Text style={{ fontSize: 13, fontFamily: 'proxima', color: '#BE1066' }}>{'Tükenmek Üzere'}</Text> : null;
+
+      let domesticProduction = this._domesticProduction(item.productTypes);
+
       return (
         <View>
           <View>
@@ -290,6 +312,9 @@ class ProductDetails extends React.Component {
           </View>
           {palette}
           <View style={{ padding: 20, paddingBottom: 0, paddingTop: 0, borderTopWidth: 1, borderTopColor: '#d8d8d8' }}>
+            {discountRate}
+            {stockQty}
+            {domesticProduction}
             <View style={{ flexDirection: 'row', height: 55, alignItems: 'center' }}>
               <Text style={{ fontSize: 18, fontFamily: 'brandon', fontWeight: 'bold' }}>₺{item.salePrice}</Text>
               {listPrice}
