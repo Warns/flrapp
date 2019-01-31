@@ -5,7 +5,6 @@ import {
 } from 'react-native';
 import { Viewer } from 'root/app/viewer/';
 import {
-    UPDATE_CART,
     SET_CART_INFO,
     DATA_LOADED,
     SET_CART_NO_RESULT,
@@ -15,7 +14,6 @@ import {
     SET_CART_ITEMS,
     NAVIGATE,
     CART_FOOTER_MARGIN_BOTTOM,
-    CART_FOOTER_EXPAND_MARGIN_BOTTOM,
     CART_BACKGROUND_COLOR_1,
     CART_BACKGROUND_COLOR_2,
     SHOW_PRELOADING
@@ -53,7 +51,7 @@ const PRELOAD = async (b) => {
     
     1- <Viewer config={DATA} response={this._response} />; sepet silme ve update işlemlerinde her seferinde içeriği update ediyoruz içerik update oldukça response ile son hali dönüyor ve reduxa bağlı cart refresh ediyoruz.  
 
-    2- Kullanıcı eğer footerdaki kupon kodunu girmişse viewer update ediyoruz. böylece sepet güncelleniyor ve redux cart güncelleniyor.
+    2- Kullanıcı eğer UnderSide içerisindeki kupon kodunu girmişse viewer update ediyoruz. böylece sepet güncelleniyor ve redux cart güncelleniyor.
 */
 
 const Cart = class Main extends Component {
@@ -65,9 +63,17 @@ const Cart = class Main extends Component {
         };
     }
 
+    _begining = false;
     onWillFocus = () => {
         const _self = this;
         _self.props.dispatch({ type: SET_CART_PROGRESS, value: { progress: '1/3', cartLocation: 'basket' } });
+
+        /* 
+            NOT: ilk açılışta sepetin 2 kere tetiklenmemesi için kontrol ekliyoruz. Böylece kullanıcı bir sonraki sayfada kargo seçimi yapınca fiyat güncelleneceği için tekrar buraya döndüğünde sepetin tekrardan update edilmesi lazım. 
+        */
+        if (_self._begining)
+            _self._onUpdate();
+        _self._begining = true;
     }
 
     componentDidMount() {
@@ -120,7 +126,7 @@ const Cart = class Main extends Component {
             { navigation, user = {}, cart = {} } = _self.props,
             { userId = '' } = user['user'],
             { cartNoResult = false } = cart;
-    
+
         if (userId == '') { //--> logoff
             if (cartNoResult) {
                 //--> sepet boş anasayfaya dön
@@ -170,23 +176,25 @@ const Cart = class Main extends Component {
     }
 
     _onExpand = (b) => {
-        const _self = this,
-            paddingBottom = b ? CART_FOOTER_EXPAND_MARGIN_BOTTOM : CART_FOOTER_MARGIN_BOTTOM;
+        const _self = this;
 
-        _self.setState({ paddingBottom: paddingBottom });
+        /* PROMOSYON KODU AÇILINCA SAYFA SCROLL */
+        _self.scrollView.scrollTo({ y: 360 });
     }
 
     render() {
         const _self = this,
             { paddingBottom, loaded = false } = _self.state,
             backgroundColor = loaded ? CART_BACKGROUND_COLOR_1 : CART_BACKGROUND_COLOR_2,
-            underside = loaded ? <UnderSide opportunity={CONFIG['opportunity']} /> : null,
+            underside = loaded ? <UnderSide expand={_self._onExpand} data={CONFIG} onCouponCallback={_self._onCouponCallback} opportunity={CONFIG['opportunity']} /> : null,
             { cartNoResult = false } = _self.props.cart,
             flexible = !loaded ? true : (cartNoResult ? true : false);
 
         return (
             <View style={{ flex: 1 }}>
                 <ScrollView
+                    keyboardShouldPersistTaps='handled'
+                    ref={ref => (_self.scrollView = ref)}
                     contentContainerStyle={{ flexGrow: 1 }}
                     style={{
                         flex: 1,
@@ -206,7 +214,7 @@ const Cart = class Main extends Component {
                     />
                     {underside}
                 </ScrollView>
-                <Footer expand={_self._onExpand} onCouponCallback={_self._onCouponCallback} onPress={_self._onPress} data={CONFIG} />
+                <Footer onPress={_self._onPress} data={CONFIG} />
             </View>
         )
     }
