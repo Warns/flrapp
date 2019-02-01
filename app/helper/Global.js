@@ -232,6 +232,7 @@ module.exports = {
 
     },
     getImage: function (k) {
+        k = k || '';
         const _t = this;
         /* favori ürünlerde resmin tam yolu gelmiyor o durumu çözmek için kullanılacak */
         if (k.indexOf(_t.imagePrefix) == -1)
@@ -239,10 +240,12 @@ module.exports = {
         return k;
     },
     getPriceFormat: function (k) {
+        k = k || '';
         /* fiyat formatlama */
         return '₺' + k;
     },
     getDateFormat: function (k) {
+        k = k || '';
         /* date formatlama, "orderDate": "02012017 17:48:00" */
         k = k.split(' ')[0];
         return (k.slice(0, 2) + '.' + k.slice(2, 4) + '.' + k.slice(4, 8));
@@ -392,5 +395,37 @@ module.exports = {
                 count = count + (item['quantity'] || 0)
             });
         return count;
+    },
+    objectMapping: function ({ data = {}, mapping = {} }) {
+        /*
+            NOT:
+            örneğin kampanyalar sayfası 
+
+            mapping: {
+                prmLPImg -> api dan donen alan ismi
+                image -> app içerisinde olması gereken alan ismi
+            }
+
+            { prmLPImg: 'image', prmCamID: 'utpCode', prmCamSlug: 'slug', prmDesc: 'desc', prmCat: 'catCode', prmTitle: 'title' }
+        */
+        const arr = [];
+        Object
+            .entries(data)
+            .forEach(([ind, item]) => {
+                const { bannerName = '' } = item,
+                    obj = { name: bannerName };
+                Object
+                    .entries(item['parameters'])
+                    .forEach(([childInd, child]) => {
+                        const key = child['parameterKey'] || '',
+                            value = child['parameterValue'] || '';
+
+                        obj['id'] = ind;
+                        obj[mapping[key] || ''] = value;
+                    })
+                arr.push(obj);
+            });
+
+        return arr;
     }
 };

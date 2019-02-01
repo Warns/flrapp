@@ -497,10 +497,13 @@ class ListItem extends React.Component {
     let newFlag = !item.isNew == true ? null :
       <Text style={{ position: 'absolute', left: 15, top: 10, fontSize: 13, fontFamily: 'proxima' }}>Yeni</Text>;
 
-    let trigger = item.isCampaignFl == true ? item.stockStatus : null;
+    let trigger = item.salesCount <= 20 ? 'Tükenmek Üzere' : null;
 
     let thumbnail = textureDisplay ? item.mediumImageUrl.replace('mobile_image_1', 'mobile_image_2') : item.mediumImageUrl;
 
+    let listPrice = item.discountRate > 0 ? <Text style={{ fontSize: 18, color: '#989898', fontFamily: 'brandon', fontWeight: 'bold', marginLeft: 15, textDecorationLine: 'line-through' }}>₺{item.listPrice}</Text> : null;
+
+    let listDiscount = item.discountRate > 0 ? <Text style={{ fontSize: 13, fontFamily: 'proxima', color: '#BE1066' }}>%{item.discountRate} İNDİRİM</Text> : null;
 
     return (
       <TouchableOpacity
@@ -521,7 +524,11 @@ class ListItem extends React.Component {
           {newFlag}
 
           <View style={{ padding: 15, paddingTop: 5, paddingBottom: 10, height: 105, flexDirection: 'column' }}>
-            <Text style={{ fontSize: 18, fontFamily: 'brandon', fontWeight: 'bold' }}>₺{item.salePrice}</Text>
+            {listDiscount}
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Text style={{ fontSize: 18, fontFamily: 'brandon', fontWeight: 'bold' }}>₺{item.salePrice}</Text>
+              {listPrice}
+            </View>
             <Text numberOfLines={2} style={{ marginTop: 5, width: _width - 30, fontSize: 13, fontFamily: 'proxima' }}>{item.productName}</Text>
             <Text style={{ position: 'absolute', left: 15, bottom: 23, fontSize: 13, fontFamily: 'proxima', color: '#9B9B9B' }}>{numOfColors} Renk</Text>
             <Text style={{ position: 'absolute', left: 15, bottom: 7, fontSize: 13, fontFamily: 'proxima', color: '#BE1066' }}>{trigger}</Text>
