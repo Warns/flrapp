@@ -44,7 +44,7 @@ class AddressDetail extends Component {
 
     setAjx = async () => {
         const _self = this,
-            { permission, location } = _self.props,
+            { permission, location } = store.getState().location || {},
             { serviceLatitude = '', serviceLongitude = '' } = _self.props.data;
 
         if (serviceLatitude != '' && serviceLongitude != '' && permission) {
@@ -62,11 +62,26 @@ class AddressDetail extends Component {
         }
     }
 
-    _onPress = () => {
+    _callToStore = () => {
         const _self = this,
             { phoneNo = '' } = _self.props.data;
 
-        Linking.openURL('tel:' + phoneNo);
+        if (phoneNo != '')
+            Linking.openURL('tel:' + Utils.cleanText(phoneNo));
+    }
+
+    _directions = () => {
+        const _self = this,
+            { location = {}, } = store.getState() || {},
+            { latitude = '', longitude = '' } = location.location.coords || {},
+            { serviceLatitude = '', serviceLongitude = '' } = _self.props.data;
+
+        if (serviceLatitude != '' && serviceLongitude != '') {
+            let uri = 'https://www.google.com/maps/dir/?api=1&origin={{origin}}&destination={{destination}}&travelmode=driving';
+            uri = uri.replace(/{{destination}}/g, (serviceLatitude + ',' + serviceLongitude)).replace(/{{origin}}/g, (latitude + ',' + longitude));
+    
+            Linking.openURL(uri);
+        }
     }
 
     _getPhoneButton = () => {
@@ -77,9 +92,21 @@ class AddressDetail extends Component {
 
         if (phoneNo != '')
             view = (
-                <View style={{ flex: 1, maxWidth:240 }}>
-                    <DefaultButton callback={_self._onPress} name={'MAĞAZAYI ARA'} />
-                </View>
+                <DefaultButton wrapperStyle={{ marginLeft: 5, flex: 1 }} callback={_self._callToStore} name={'MAĞAZAYI ARA'} />
+            );
+
+        return view;
+    }
+
+    _getDirections = () => {
+        const _self = this,
+            { serviceLatitude = '', serviceLongitude = '' } = _self.props.data;
+
+        let view = null;
+
+        if (serviceLatitude != '' && serviceLongitude != '')
+            view = (
+                <DefaultButton wrapperStyle={{ marginRight: 5, flex: 1 }} callback={_self._directions} name={'YOL TARİFİ'} />
             );
 
         return view;
@@ -89,14 +116,15 @@ class AddressDetail extends Component {
         const _self = this,
             { serviceName, address, } = _self.props.data;
 
-        const distanceInfo = _self.state.distance ? <Text style={{ fontSize: 15, marginRight:30 }}>{_self.state.distance}   {_self.state.duration}</Text> : null;
+        const distanceInfo = _self.state.distance ? <Text style={{ fontSize: 15, marginRight: 30, marginBottom: 12 }}>{_self.state.distance}   {_self.state.duration}</Text> : null;
 
         return (
             <Animated.View style={{ position: 'absolute', bottom: 0, zIndex: 2, backgroundColor: '#FFFFFF', width: '100%', minHeight: 100, paddingLeft: 30, paddingBottom: 20, paddingTop: 30, paddingRight: 30 }}>
                 <Text style={{ fontFamily: 'Medium', fontSize: 16, marginBottom: 10 }}>{serviceName.toUpperCase()}</Text>
                 <Text style={{ fontSize: 15, marginBottom: 12 }}>{address}</Text>
+                {distanceInfo}
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    {distanceInfo}
+                    {_self._getDirections()}
                     {_self._getPhoneButton()}
                 </View>
             </Animated.View>
@@ -243,6 +271,7 @@ class Detail extends React.Component {
     }
 }
 
+/* permissions */
 _getLocationAsync = async (success, error) => {
     const { Location, Permissions } = Expo;
     let { status } = await Permissions.askAsync(Permissions.LOCATION);

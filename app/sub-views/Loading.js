@@ -48,6 +48,9 @@ class Loading extends React.Component {
     });
 
     this._loadInitialState();
+
+    /* registered push notification */
+    globals.registerForPushNotificationsAsync();
   }
 
   _loadInitialState = async () => {

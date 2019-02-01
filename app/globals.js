@@ -8,7 +8,7 @@ const Utils = require('root/app/helper/Global.js');
 
 module.exports = {
   // Constants
-  //API_KEY: '033a85ae-9662-ba87-296f-100ecfc50a66', // polo 
+  exponentPushToken: '',
   API_KEY: '1b9b737f-5582-c8d7-f535-b9750bdeeb90',
   CLIENT: {
     Auth: {},
@@ -52,6 +52,7 @@ module.exports = {
     // if there is token use headers with token info.
     let HEADERS = this.CLIENT.Auth != null ?
       {
+        'UDID': _this.exponentPushToken || '',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Session': this.CLIENT.Auth.session,
@@ -165,7 +166,46 @@ module.exports = {
       console.log(error + 'hola');
     }
   },
+  registerForPushNotificationsAsync: async function () {
+    const { status: existingStatus } = await Expo.Permissions.getAsync(
+      Expo.Permissions.NOTIFICATIONS
+    );
+    let finalStatus = existingStatus;
+    if (existingStatus !== 'granted') {
+      const { status } = await Expo.Permissions.askAsync(Expo.Permissions.NOTIFICATIONS);
+      finalStatus = status;
+    }
 
+    if (finalStatus !== 'granted') {
+      return;
+    }
+
+    this.exponentPushToken = await Expo.Notifications.getExpoPushTokenAsync();
+
+    return fetch('https://exp.host/--/api/v2/push/send', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        "to": this.exponentPushToken,
+        "title":"hello",
+        "body": "world dsfsdfsdf dsfsdklfjsdklfjsfj",
+        "badge": 0
+      })
+    });
+    /*.then((response) => {
+      return response.json();
+    })
+    .then(function (res) {
+      alert('success'+JSON.stringify(res));
+    })
+    .catch((res) => {
+      alert('hata' + JSON.stringify(res));
+    });*/
+
+  },
   AJX: async function ({ _self, uri, data = {} }, callback) {
     const _t = this;
     _t.fetch(uri, JSON.stringify(data), (answer) => {
