@@ -72,14 +72,19 @@ class AddressDetail extends Component {
 
     _directions = () => {
         const _self = this,
-            { location = {}, } = store.getState() || {},
-            { latitude = '', longitude = '' } = location.location.coords || {},
+            { permission = false, location = {} } = store.getState().location || {},
+            { latitude = '', longitude = '' } = ( location || {} )['coords'] || {},
             { serviceLatitude = '', serviceLongitude = '' } = _self.props.data;
 
         if (serviceLatitude != '' && serviceLongitude != '') {
-            let uri = 'https://www.google.com/maps/dir/?api=1&origin={{origin}}&destination={{destination}}&travelmode=driving';
-            uri = uri.replace(/{{destination}}/g, (serviceLatitude + ',' + serviceLongitude)).replace(/{{origin}}/g, (latitude + ',' + longitude));
-    
+            let uri = 'https://www.google.com/maps/dir/?api=1&origin={{origin}}&destination={{destination}}&travelmode=driving',
+                destination = (serviceLatitude + ',' + serviceLongitude),
+                origin = (latitude + ',' + longitude);
+            if (!permission)
+                uri = 'http://maps.google.com/maps?q={{destination}}';
+
+            uri = uri.replace(/{{destination}}/g, destination).replace(/{{origin}}/g, origin);
+
             Linking.openURL(uri);
         }
     }
