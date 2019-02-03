@@ -72,6 +72,7 @@ module.exports = {
             getDataByUrl: '/webapi/v3/Content/getDataByUrl',
         },
         cart: {
+            checkCreditCard: '/webapi/v3/Cart/checkCreditCard',
             validateCart: '/webapi/v3/Cart/validateCart',
             getCart: '/webapi/v3/Cart/getCart',
             setCart: '/webapi/v3/Cart/setCart',
@@ -240,7 +241,7 @@ module.exports = {
         return k;
     },
     getPriceFormat: function (k) {
-        k = k || '';
+        k = k || '0';
         /* fiyat formatlama */
         return '₺' + k;
     },

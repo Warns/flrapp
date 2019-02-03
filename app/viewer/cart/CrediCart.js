@@ -101,7 +101,8 @@ class CrediCard extends Component {
     /* taksit seçenekleri */
     _getInstallmentAjx = (val) => {
         const _self = this;
-        setAjx({ _self: _self, uri: Utils.getURL({ key: 'cart', subKey: 'getInstallment' }), data: { bin: val } }, (res) => { console.log('_getInstallmentAjx', res);
+        setAjx({ _self: _self, uri: Utils.getURL({ key: 'cart', subKey: 'getInstallment' }), data: { bin: val } }, (res) => {
+            console.log('_getInstallmentAjx', res);
             let { status, data = {} } = res,
                 { creditCarts = [] } = data,
                 { installments = [] } = creditCarts[0];
@@ -251,6 +252,23 @@ class CrediCard extends Component {
         } else
             _self.setState({ bankPoint: 0, extraBonusText: '' });
 
+
+        /*if (cardValid)
+            _self._checkCreditCard({ creditCardNo: creditCardNo.replace(/\s+/g, '') });*/
+
+    }
+
+    /* kredi kartı 3d açık veya değil */
+    _checkCreditCard = (data) => {
+        const _self = this;
+        globals.fetch(
+            Utils.getURL(data),
+            JSON.stringify({ creditCardNo: creditCardNo.replace(/\s+/g, '') }), (answer) => {
+                /*if (answer.status == 200) {
+                    _self.setState({ ...(answer.data || {}) })
+                } else
+                    _self.setState({ bankPoint: 0, extraBonusText: '' });*/
+            });
     }
 
     _getBankPoint = () => {

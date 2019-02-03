@@ -179,7 +179,7 @@ const Cart = class Main extends Component {
         const _self = this;
 
         /* PROMOSYON KODU AÇILINCA SAYFA SCROLL */
-        _self.scrollView.scrollTo({ y: 360 });
+        //_self.scrollView.scrollTo({ y: 360 });
     }
 
     render() {
