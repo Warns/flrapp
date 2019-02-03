@@ -336,9 +336,25 @@ module.exports = {
             }
         )
     },
-    filterToSelectObject: function (filters) {
+    filterToSelectObject: function ({ filters = [], sorts = [] }) {
         const obj = {}, filter = { sendAjx: false, buttonText: 'UYGULA', showButton: false, fields: [] };
 
+        /* sorts */
+        if (sorts.length > 0) {
+            const selected = [],
+                ttl = 'SIRALAMA',
+                srt = Object.entries(sorts).map(([key, val]) => {
+                    if (val['isSelected'])
+                        selected.push(val['sortType']);
+                    return { key: val['sortName'], value: val['sortType'] };
+                });
+
+            srt.unshift({ key: 'Seçiniz', value: -1 });
+
+            filter['fields'].push({ items: [{ id: 'sorts', modalTitle: ttl, defaultTitle: ttl, multiple: false, type: 'select', showHeader: false, values: srt, value: selected.length > 0 ? selected : -1, ico: 'rightArrow', icoStyle: { width: 40, height: 40 }, css: { defaultTitleStyle: { fontWeight: 'bold', fontSize: 16, color: '#000000' }, fontStyle: { fontSize: 12, color: "#afafaf", }, containerStyle: { marginBottom: 0 }, wrapperStyle: { borderRadius: 0, height: 60, borderLeftWidth: 0, borderTopWidth: 0, borderRightWidth: 0, paddingLeft: 10, paddingRight: 10, } } }] });
+        }
+
+        /* filters */
         Object.entries(filters).forEach(([ind, value]) => {
             const key = value['filterGroupName'] || '';
             if (typeof obj[key] == 'undefined')

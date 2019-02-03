@@ -145,7 +145,8 @@ class Minus99MultipleSelect extends React.Component {
 
     /* multiple select reset */
     _onReset = () => {
-        this._closeSelectionBox([]);
+        const { multiple = true } = this.props;
+        this._closeSelectionBox(multiple ? [] : [0]);
     }
 
     render() {

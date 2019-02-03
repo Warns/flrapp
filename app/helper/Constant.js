@@ -3,7 +3,6 @@ export const ICONS = {
     rightArrow: require('root/assets/icons/rightArrow.png'),
     rightArrowGrey: require('root/assets/icons/rightArrowGrey.png'),
     rightArrowWhite: require('root/assets/icons/rightArrowWhite.png'),
-    downArrow: require('root/assets/icons/downArrow.png'),
     storeLocation: require('root/assets/icons/storeLocation.png'),
     location: require('root/assets/icons/location.png'),
     feedInstagram: require('root/assets/icons/feedInstagram.png'),
