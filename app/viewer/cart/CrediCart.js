@@ -252,22 +252,46 @@ class CrediCard extends Component {
         } else
             _self.setState({ bankPoint: 0, extraBonusText: '' });
 
-
-        /*if (cardValid)
-            _self._checkCreditCard({ creditCardNo: creditCardNo.replace(/\s+/g, '') });*/
-
+        setTimeout(() => {
+            if (cardValid)
+                _self._checkCreditCard({ creditCardNo: creditCardNo.replace(/\s+/g, '') });
+            else
+                store.dispatch({
+                    type: SET_ORDER_3D_BUTTON,
+                    value: false
+                });
+        }, 1);
     }
 
     /* kredi kartı 3d açık veya değil */
     _checkCreditCard = (data) => {
+        /* 
+        {
+            "data": Object {
+                "is3DPosValid": true,
+                "isDebitCard": false,
+                "isPosValid": true,
+            },
+            "innerMessage": null,
+            "message": null,
+            "status": 200,
+            }
+        */
         const _self = this;
         globals.fetch(
-            Utils.getURL(data),
-            JSON.stringify({ creditCardNo: creditCardNo.replace(/\s+/g, '') }), (answer) => {
-                /*if (answer.status == 200) {
-                    _self.setState({ ...(answer.data || {}) })
+            Utils.getURL({ key: 'cart', subKey: 'checkCreditCard' }),
+            JSON.stringify(data), (answer) => {
+                if (answer.status == 200) {
+                    const { is3DPosValid = false } = answer.data || {}
+                    store.dispatch({
+                        type: SET_ORDER_3D_BUTTON,
+                        value: is3DPosValid
+                    });
                 } else
-                    _self.setState({ bankPoint: 0, extraBonusText: '' });*/
+                    store.dispatch({
+                        type: SET_ORDER_3D_BUTTON,
+                        value: false
+                    });
             });
     }
 
@@ -315,18 +339,10 @@ class CrediCard extends Component {
             if (count >= num && _self.cartControl) {
                 _self.cartControl = false;
                 _self._getInstallmentAjx(val.substr(0, num));
-                store.dispatch({
-                    type: SET_ORDER_3D_BUTTON,
-                    value: true
-                });
             } else if (count < num && !_self.cartControl) {
                 _self.cartControl = true;
                 _self.setState({ installments: [] });
                 _self._setInstallment({ bankId: 0, installmentId: 0 });
-                store.dispatch({
-                    type: SET_ORDER_3D_BUTTON,
-                    value: false
-                });
             }
         }
 
