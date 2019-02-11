@@ -17,7 +17,7 @@ import { TabNavigator, TabBarBottom } from 'react-navigation';
 import { Form } from 'root/app/form';
 import { LoadingButton } from 'root/app/UI';
 
-import { ICONS, SET_TEXTURE_DISPLAY, OPEN_PRODUCT_DETAILS } from 'root/app/helper/Constant';
+import { ICONS, SET_TEXTURE_DISPLAY, OPEN_PRODUCT_DETAILS, FEEDS_IMAGE_RATE } from 'root/app/helper/Constant';
 import { store } from '../../app/store';
 import { MinimalHeader } from 'root/app/components';
 
@@ -34,6 +34,72 @@ const HEADER_HEIGHT = Platform.OS === 'android' ? 80 : 65;
 const TOP = Platform.OS === 'android' ? 10 : 0;
 const DETAIL_HEADER_HEIGHT = Platform.OS === 'android' ? 52 : 65;
 
+
+/* kategori açıklaması */
+class CategoryDesc extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      expand: false
+    }
+
+  }
+  _onExpand = () => {
+    const _self = this,
+      { expand } = _self.state;
+    _self.setState({ expand: !expand })
+  }
+
+  _getDesc = () => {
+    const _self = this,
+      { desc = '', title = '' } = _self.props.data || {},
+      { expand = false } = _self.state;
+
+    let view = null;
+    if (expand)
+      view = (
+        <View style={{ paddingLeft: 20, paddingRight: 20, paddingTop: 30, paddingBottom: 30 }}>
+          <Text style={{ color: '#6c6c6c', fontSize: 16, fontFamily: 'Bold' }}>
+            {title}
+          </Text>
+          <Text style={{ color: '#6c6c6c', fontSize: 16, fontFamily: 'RegularTyp2' }}>
+            {desc}
+          </Text>
+        </View>
+      );
+
+    return view;
+  }
+
+  render() {
+    const _self = this,
+      { desc = '', img = '' } = _self.props.data || {},
+      w = Dimensions.get('window').width,
+      h = w / FEEDS_IMAGE_RATE['promo'];
+
+    if (desc == '') return null;
+    else return (
+      <View>
+        <View style={{ position: 'relative' }}>
+          <Image
+            source={{ uri: Utils.getImage(img) }}
+            style={{ height: h }}
+          />
+          <TouchableOpacity activeOpacity={0.8} onPress={_self._onExpand}>
+            <View style={{ position: 'absolute', right: 0, bottom: 0, flexDirection: 'row', paddingLeft: 15, backgroundColor: 'rgba(255, 255, 255, 0.7)', alignItems: 'center' }}>
+              <Text style={{ fontFamily: 'RegularTyp2', fontSize: 16, color: '#4a4a4a' }}>Kampanya koşulları</Text>
+              <Image
+                style={{ width: 40, height: 40 }}
+                source={ICONS['downArrow']}
+              />
+            </View>
+          </TouchableOpacity>
+        </View>
+        {_self._getDesc()}
+      </View>
+    );
+  }
+}
 
 export default class List extends React.Component {
 
@@ -117,25 +183,30 @@ export default class List extends React.Component {
 
   _onFiltersChange = (obj) => {
 
-    let opfs = [];
+    let opfs = [],
+      sorts = '';
     for (i in obj.data) {
-      if (obj.data[i] != -1)
-        opfs = [...opfs, obj.data[i]];
+      if (obj.data[i] != -1) {
+        if (i == 'sorts')
+          sorts = obj.data[i];
+        else
+          opfs = [...opfs, obj.data[i]];
+      }
     }
 
-    this._updateList(opfs.toString());
+    this._updateList({ filters: opfs.toString(), sorts: sorts });
   }
 
-  _updateList = (filterValues) => {
+  _updateList = (obj) => {
 
     //console.log(store.getState().general.selectedCategory, store.getState().general.categories, this.props.category);
 
-    filterValues = filterValues || '';
+    obj = obj || {};
     const _self = this,
-      { category = {} } = _self.props,
-      { desc = '' } = category;
+      filters = obj['filters'] || '',
+      sorts = obj['sorts'] || '',
+      { category = {} } = _self.props;
 
-    _self.setState({ desc: desc });
     /*  
       ex:
       [{
@@ -152,12 +223,14 @@ export default class List extends React.Component {
               id: id
           }]
     */
+
     globals.fetch(
       Utils.getURL({ key: 'product', subKey: 'getProductList' }),
       JSON.stringify({
         "page": 1,
         "pageSize": 300,
-        "filter": filterValues,
+        "filter": filters,
+        "sortType": sorts,
         "catId": category['id'] || '', //18775
         ...category
       }),
@@ -169,7 +242,7 @@ export default class List extends React.Component {
 
     let _items = answer.data.products;
 
-    console.log(answer);
+    //console.log(answer);
 
     if (this.props.category.img && answer.data.filters.findIndex(obj => obj.isSelected == true) == -1) {
       _items.splice((answer.data.totalProductCount < 4 ? 0 : 4), 0,
@@ -183,6 +256,7 @@ export default class List extends React.Component {
     this.setState({
       itemsAll: answer.data.products,
       filters: answer.data.filters,
+      sorts: answer.data.sorts || [],
       totalProductCount: answer.data.totalProductCount,
     });
     this._updateItems();
@@ -290,7 +364,7 @@ export default class List extends React.Component {
 
   render() {
 
-    let { animatingUri, imageAnim, measurements, totalProductCount, filters, textureDisplay } = this.state;
+    let { animatingUri, imageAnim, measurements, totalProductCount, filters, sorts, textureDisplay } = this.state;
 
     let { width, height, pageY, pageX } = measurements;
 
@@ -339,8 +413,7 @@ export default class List extends React.Component {
 
     return (
       <View ref={(c) => { this._listView = c; }} style={{ flex: 1, backgroundColor: '#ffffff' }}>
-        <ListHeader onFiltersChange={this._onFiltersChange} totalProductCount={totalProductCount} filters={filters} onDisplayChange={this._onDisplayChange} textureDisplay={this.state.textureDisplay} />
-        {desc}
+        <ListHeader onFiltersChange={this._onFiltersChange} totalProductCount={totalProductCount} sorts={sorts} filters={filters} onDisplayChange={this._onDisplayChange} textureDisplay={this.state.textureDisplay} />
         <FlatList
           style={{ flex: 1, flexDirection: 'column' }}
           scrollEnabled={true}
@@ -352,6 +425,7 @@ export default class List extends React.Component {
           onRefresh={this._onRefresh}
           onEndReached={this._handleOnEndReached}
           ref={(list) => this.myFlatList = list}
+          ListHeaderComponent={<CategoryDesc data={this.props.category} />}
         />
         {vail}
         {animatingImage}
@@ -410,7 +484,7 @@ class ListHeader extends React.Component {
 
   render() {
     const _self = this;
-    let { totalProductCount, textureDisplay, filters } = this.props;
+    let { totalProductCount, textureDisplay, filters, sorts } = this.props;
 
     if (textureDisplay) {
       productOpacity = .2;
@@ -436,7 +510,7 @@ class ListHeader extends React.Component {
           <TouchableOpacity activeOpacity={0.8} onPress={this._onFilterButton} style={{ marginRight: 10 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 20 }}>
               {indicator}
-              <Text style={{ fontSize: 16 }}>Filters</Text>
+              <Text style={{ fontSize: 16 }}>Düzenle</Text>
               <Image source={ICONS['filters']} style={{ width: 40, height: 40 }} />
             </View>
           </TouchableOpacity>
@@ -460,7 +534,7 @@ class ListHeader extends React.Component {
           <MinimalHeader onPress={this._close} title="KAPAT" right={<Text style={{ color: "#afafaf", fontSize: 14, marginRight: 10 }}>{totalProductCount} ürün</Text>} noMargin={store.getState().general.SCREEN_DIMENSIONS.OS == 'android' ? true : false} />
 
           <View style={{ flex: 1, paddingLeft: 20, paddingRight: 20 }}>
-            <Form onRef={ref => (_self.child = ref)} style={{ flex: 1, paddingLeft: 0, paddingRight: 0, paddingBottom: 0 }} callback={this._filterCallback} data={Utils.filterToSelectObject(filters)} />
+            <Form onRef={ref => (_self.child = ref)} style={{ flex: 1, paddingLeft: 0, paddingRight: 0, paddingBottom: 0 }} callback={this._filterCallback} data={Utils.filterToSelectObject({ filters: filters, sorts: sorts })} />
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingBottom: 20, }}>
               <LoadingButton style={{ borderWidth: 1, borderColor: '#000000' }} fontStyle={{ fontFamily: 'Bold', fontSize: 16 }} onPress={_self._onFormApply} contentStyle={{ flex: 1, marginRight: 5 }}>{'UYGULA'}</LoadingButton>
               <LoadingButton style={{ backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#666666' }} fontStyle={{ fontFamily: 'Bold', fontSize: 16, color: '#000000' }} onPress={_self._onFormReset} contentStyle={{ flex: 1, marginLeft: 5 }}>{'TEMİZLE'}</LoadingButton>

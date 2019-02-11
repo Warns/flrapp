@@ -223,7 +223,7 @@ const UnderSide = class Main extends Component {
     _getCartInfo = () => {
         const _self = this,
             { cartInfo = {} } = _self.props.cart,
-            { subTotal = 0, discountTotal = 0, shippingTotal = 0, taxTotal = 0 } = cartInfo,
+            { subTotal = 0, discountTotal = 0, shippingTotal = 0, taxTotal = 0 } = cartInfo || {},
             form = _self._getForm(),
             formButton = _self._getFormButton();
 
