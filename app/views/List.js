@@ -571,7 +571,7 @@ class ListItem extends React.Component {
     let newFlag = !item.isNew == true ? null :
       <Text style={{ position: 'absolute', left: 15, top: 10, fontSize: 13, fontFamily: 'proxima' }}>Yeni</Text>;
 
-    let trigger = item.salesCount <= 20 ? 'Tükenmek Üzere' : null;
+    let trigger = item.stockQty <= 20 ? 'Tükenmek Üzere' : null;
 
     let thumbnail = textureDisplay ? item.mediumImageUrl.replace('mobile_image_1', 'mobile_image_2') : item.mediumImageUrl;
 

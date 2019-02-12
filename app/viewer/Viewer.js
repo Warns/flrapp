@@ -855,7 +855,10 @@ class CustomDetailListItem extends Component {
 
     _getDsc = () => {
         let _self = this,
-            { dsc = '', shortDsc = '', shortDesc = '', link = '', title = '' } = _self.props.data;
+            { dsc = '', shortDesc = '', link = '', title = '' } = _self.props.data;
+
+        if (shortDesc == '')
+            shortDesc = dsc.substr(0, 100);
 
         return (
             <View style={{ margin: 20, paddingBottom: 30, marginBottom: 30, marginTop: 10, borderBottomColor: 'rgb(216, 216, 216)', borderBottomWidth: 1 }}>
