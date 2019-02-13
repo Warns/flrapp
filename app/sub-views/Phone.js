@@ -11,23 +11,37 @@ import { store } from 'root/app/store';
 
 const Utils = require('root/app/helper/Global.js');
 
-class Phone extends React.Component{
-  
+class Phone extends React.Component {
+
   state = {
     mobileNumber: '',
     verificationNumber: '',
   };
 
-  _onBackPress = ()=>{
+  _onBackPress = () => {
     this.props.navigation.navigate('Splash');
-    this.props.dispatch({type:'UPDATE_OPTIN', value:{phone: null, phone_formatted: null, phone_verification: null}});
+    this.props.dispatch({ type: 'UPDATE_OPTIN', value: { phone: null, phone_formatted: null, phone_verification: null } });
   }
 
-  _onSubmit = ( obj )=>{
-
+  _onSubmit = (obj) => {
     let formattedMobileNumber = obj.data.mobilePhone.replace(/\)/g, '').replace(/\(/g, '').replace(/\ /g, '').substr(1);
     let verificationNumber = Utils.generateSMSVerificationCode(5);
 
+    /*
+
+    console.log(formattedMobileNumber, Utils.getURL({ key: 'user', subKey: 'CheckUserPhoneNumber' }));
+
+    globals.fetch(
+      Utils.getURL({ key: 'user', subKey: 'CheckUserPhoneNumber' }),
+      JSON.stringify({
+        "phoneNumber": '' + formattedMobileNumber,
+      }),
+      (result) => { console.log(result); }
+      //this._fetchResultHandler
+    );
+
+    
+*/
     this.setState({
       mobileNumber: obj.data.mobilePhone,
       formattedMobileNumber: formattedMobileNumber,
@@ -37,33 +51,34 @@ class Phone extends React.Component{
     let data = ""
       + "?user=flormarapp"
       + "&password=flormarapp456"
-      + "&gsm="+formattedMobileNumber
-      + "&text=" + escape(verificationNumber+" koduyla FLORMAR'a giris yapabilirsin.");
+      + "&gsm=" + formattedMobileNumber
+      + "&text=" + escape(verificationNumber + " koduyla FLORMAR'a giris yapabilirsin.");
 
-      sendVerificationSMS(data, this._Continue);
+    sendVerificationSMS(data, this._Continue);
+
   }
 
-  _Continue = ()=>{
+  _Continue = () => {
 
     let { mobileNumber, formattedMobileNumber, verificationNumber } = this.state;
 
-    this.props.dispatch({type:'UPDATE_OPTIN', value:{phone: mobileNumber, phone_formatted: formattedMobileNumber, phone_verification: verificationNumber}});
+    this.props.dispatch({ type: 'UPDATE_OPTIN', value: { phone: mobileNumber, phone_formatted: formattedMobileNumber, phone_verification: verificationNumber } });
     this.props.navigation.navigate('PhoneConfirmation');
 
   }
 
-  render(){
+  render() {
 
     let formData = FORMDATA['optin_phone'];
-        formData.fields[0].items[0].value = this.props.optin.phone_formatted;
+    formData.fields[0].items[0].value = this.props.optin.phone_formatted;
 
-    return(
-      <SafeAreaView style={{flex:1}}>
+    return (
+      <SafeAreaView style={{ flex: 1 }}>
         <MinimalHeader title="" right={<View />} onPress={this._onBackPress} />
-        <View style={{flex:1}}>
-          <View style={{padding:40, paddingBottom:20, paddingTop:20}}>
-          <Text style={{fontFamily:'Bold', fontSize:20}}>MERHABA</Text>
-          <Text style={{color: '#000000', lineHeight:18, fontSize:15}}>Cep telefonunu gir, üyelik onay kodunu hemen gönderelim.</Text>
+        <View style={{ flex: 1 }}>
+          <View style={{ padding: 40, paddingBottom: 20, paddingTop: 20 }}>
+            <Text style={{ fontFamily: 'Bold', fontSize: 20 }}>MERHABA</Text>
+            <Text style={{ color: '#000000', lineHeight: 18, fontSize: 15 }}>Cep telefonunu gir, üyelik onay kodunu hemen gönderelim.</Text>
           </View>
           <Form callback={this._onSubmit} data={formData} />
         </View>
@@ -72,25 +87,25 @@ class Phone extends React.Component{
   }
 }
 
-async function sendVerificationSMS(data, callback){
+async function sendVerificationSMS(data, callback) {
   store.dispatch({ type: SHOW_PRELOADING, value: true });
   return fetch('http://www.postaguvercini.com/api_http/sendsms.asp' + data)
     .then((response) => {
-        return response.text();
+      return response.text();
     })
     .then((responseJson) => {
-        console.log(responseJson);
-        callback();
-        store.dispatch({ type: SHOW_PRELOADING, value: false });
+      console.log(responseJson);
+      callback();
+      store.dispatch({ type: SHOW_PRELOADING, value: false });
     })
     .catch((error) => {
-        console.error(error);
-        store.dispatch({ type: SHOW_PRELOADING, value: false });
+      console.error(error);
+      store.dispatch({ type: SHOW_PRELOADING, value: false });
     });
 }
 
 // filter state
-function mapStateToProps(state){
+function mapStateToProps(state) {
   return state.user;
 }
 

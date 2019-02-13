@@ -561,7 +561,7 @@ class ListItem extends React.Component {
 
     let _width = Math.floor(SCREEN_DIMENSIONS.width * .5);
     let _height = Math.floor(_width * 5 / 4);
-    let _boxHeight = _height + 107;
+    let _boxHeight = _height + 110;
 
     let borderStyle = index % 2 == 0 ? { borderRightWidth: 1, borderRightColor: '#dddddd' } : {};
 
@@ -575,9 +575,17 @@ class ListItem extends React.Component {
 
     let thumbnail = textureDisplay ? item.mediumImageUrl.replace('mobile_image_1', 'mobile_image_2') : item.mediumImageUrl;
 
-    let listPrice = item.discountRate > 0 ? <Text style={{ fontSize: 18, color: '#989898', fontFamily: 'brandon', fontWeight: 'bold', marginLeft: 15, textDecorationLine: 'line-through' }}>₺{item.listPrice}</Text> : null;
-
-    let listDiscount = item.discountRate > 0 ? <Text style={{ fontSize: 13, fontFamily: 'proxima', color: '#BE1066' }}>%{item.discountRate} İNDİRİM</Text> : null;
+    let price = item.discountRate > 0 ? (
+      <View style={{ flexDirection: 'row', alignItems: 'center', position: 'relative' }}>
+        <Text style={{ fontSize: 18, fontFamily: 'brandon', fontWeight: 'bold', color: '#BE1066' }}>₺{item.salePrice}</Text>
+        <Text style={{ fontSize: 18, fontFamily: 'brandon', fontWeight: 'bold', marginLeft: 10, textDecorationLine: 'line-through' }}>₺{item.listPrice}</Text>
+        <Text style={{ fontSize: 13, fontFamily: 'proxima', right: 0, position: "absolute" }}>%{item.discountRate}</Text>
+      </View>
+    ) : (
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Text style={{ fontSize: 18, fontFamily: 'brandon', fontWeight: 'bold' }}>₺{item.salePrice}</Text>
+        </View>
+      );
 
     return (
       <TouchableOpacity
@@ -598,11 +606,8 @@ class ListItem extends React.Component {
           {newFlag}
 
           <View style={{ padding: 15, paddingTop: 5, paddingBottom: 10, height: 105, flexDirection: 'column' }}>
-            {listDiscount}
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Text style={{ fontSize: 18, fontFamily: 'brandon', fontWeight: 'bold' }}>₺{item.salePrice}</Text>
-              {listPrice}
-            </View>
+
+            {price}
             <Text numberOfLines={2} style={{ marginTop: 5, width: _width - 30, fontSize: 13, fontFamily: 'proxima' }}>{item.productName}</Text>
             <Text style={{ position: 'absolute', left: 15, bottom: 23, fontSize: 13, fontFamily: 'proxima', color: '#9B9B9B' }}>{numOfColors} Renk</Text>
             <Text style={{ position: 'absolute', left: 15, bottom: 7, fontSize: 13, fontFamily: 'proxima', color: '#BE1066' }}>{trigger}</Text>

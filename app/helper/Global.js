@@ -38,6 +38,7 @@ module.exports = {
       getStockFollowUpList: '/webapi/v3/User/getStockFollowUpList', // takip listem - Stoğa Girenler
       getPriceFollowUpList: '/webapi/v3/User/getPriceFollowUpList', // takip listem - fiyatı düşenler
       checkGuestMail: '/webapi/v3/User/checkGuestMail',
+      CheckUserPhoneNumber: '/webapi/v3/User/CheckUserPhoneNumber',
     },
     address: {
       country: '/webapi/v3/Address/getCountry',
