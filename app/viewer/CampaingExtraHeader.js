@@ -9,6 +9,8 @@ import {
 } from 'root/app/helper/Constant';
 import { connect } from 'react-redux';
 
+const Utils = require('root/app/helper/Global.js');
+
 class Main extends React.Component {
     constructor(props) {
         super(props);
@@ -16,8 +18,8 @@ class Main extends React.Component {
 
     render() {
         const _self = this,
-            { user } = this.props.user,
-            { userId = '' } = user;
+            { user = {} } = _self.props.user || {},
+            { points = '0', userId = '' } = user;
 
         if (userId == '') return null;
 
@@ -35,7 +37,7 @@ class Main extends React.Component {
                     />
                     <View style={{ borderColor: '#FFFFFF', borderWidth: 3, backgroundColor: '#4acacf', width: 101, height: 101, borderRadius: 101, alignItems: 'center', justifyContent: 'center' }}>
                         <Text style={{ fontSize: 16, color: '#FFFFFF', fontFamily: 'RegularTyp2' }}>Bakiyeniz</Text>
-                        <Text style={{ fontSize: 30, color: '#FFFFFF', fontFamily: 'Regular' }}>₺23</Text>
+                        <Text style={{ fontSize: 30, color: '#FFFFFF', fontFamily: 'Regular' }}>{Utils.getPriceFormat(points)}</Text>
                     </View>
                 </View>
                 <Image

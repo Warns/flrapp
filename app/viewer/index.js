@@ -4,6 +4,7 @@ export * from './Extra';
 export * from './ExtraPageDetail';
 export * from './CustomModal';
 export * from './CampaingExtraHeader';
+export * from './ExtraButton';
 
 /* sepet */
 export * from './cart/CartPage';
