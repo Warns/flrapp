@@ -65,7 +65,7 @@ class Navigation extends Component {
             const { fontStyle = {}, ico = '', showMenu = true, type } = item;
             if (showMenu) {
                 if (type == 'flormarExtra')
-                    return <ExtraButton key={'btn-' + ind} />
+                    return <ExtraButton onPress={this._onPress} key={'btn-' + ind} />
                 else
                     return <LineButton ico={ico} fontStyle={fontStyle} sequence={ind} item={item} key={'btn-' + ind} onPress={this._onPress}>{item.title}</LineButton>
             } else
@@ -144,6 +144,8 @@ class Menu extends Component {
                     });
                 }
             });
+        else  if (type == ITEMTYPE['TRIGGERBUTTON'] && itemType == ITEMTYPE['EXTRABUTTON'])
+            console.log('extra buton tıklayınca');
         else
             _self._animate({ typ: 'hide' }, () => {
                 if (onMenuClicked)

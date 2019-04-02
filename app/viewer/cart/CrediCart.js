@@ -10,6 +10,7 @@ import {
     SET_INSTALLMENT,
     SET_CREDIT_CART,
     SET_BANK_POINT,
+    SET_EXTRA_POINT,
     SET_ORDER_3D_BUTTON
 } from 'root/app/helper/Constant';
 import { connect } from 'react-redux';
@@ -315,6 +316,38 @@ class CrediCard extends Component {
         });
     }
 
+    /* extra puan */
+    _getPoints = () => {
+        const _self = this,
+            { user } = _self.props.user || {},
+            { points = 0 } = user;
+        return points - (points % 5);
+    }
+    _getExtraPoint = () => {
+        const _self = this,
+            { cartInfo = {} } = _self.props.cart || {},
+            { netTotal = 0 } = cartInfo,
+            points = _self._getPoints();
+
+        let view = null;
+        if (points != 0 && points <= netTotal) {
+            const txt = points + ' TL Ekstra Puanımı Kullanmak İstiyorum';
+            view = <CheckBox containerStyle={{ marginLeft: 20, marginRight: 20, marginBottom: 0, }} closed={true} callback={_self._onChangeExtraPoint} data={{ desc: txt }} />;
+        }
+
+        return view;
+    }
+
+    _onChangeExtraPoint = (obj) => {
+        const _self = this,
+            points = obj['value'] ? _self._getPoints() : 0;
+
+        store.dispatch({
+            type: SET_EXTRA_POINT,
+            value: points
+        });
+    }
+
     /* formda yapılan her bir değişiklik bu fonk gönderilir */
     _onChangeText = (obj) => {
         const _self = this,
@@ -365,7 +398,8 @@ class CrediCard extends Component {
     render() {
         const _self = this,
             installments = _self._getInstallments(),
-            bankPoint = _self._getBankPoint();
+            bankPoint = _self._getBankPoint(),
+            extraPoint = _self._getExtraPoint();
 
         return (
             <View style={{ flex: 1, paddingTop: 10 }}>
@@ -377,6 +411,7 @@ class CrediCard extends Component {
                     callback={_self._callback}
                     data={FORMDATA['creditCart']}
                 />
+                {extraPoint}
                 {bankPoint}
                 {installments}
             </View>

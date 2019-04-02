@@ -93,7 +93,8 @@ export const ITEMTYPE = {
     EXITBUTTON: 'exitButton',
     OPPORTUNITY: 'opportunity', // SEPET SAYFASI FIRSATLAR
     CUSTOMDETAIL: 'customDetail', // feeds blog, collection tıklananınca açılacak detay
-    CUSTOMDETAILCONTENT: 'customDetailContent' // detal sayfası nasıl uygulanır kısmı
+    CUSTOMDETAILCONTENT: 'customDetailContent', // detal sayfası nasıl uygulanır kısmı
+    EXTRABUTTON: 'extraButton'
 };
 
 export const FEEDSTYPE = {
@@ -207,6 +208,7 @@ export const SET_BANK_TRANSFER = 'SET_BANK_TRANSFER';
 export const RESET_PAYMENT = 'RESET_PAYMENT';
 export const SET_CREDIT_CART = 'SET_CREDIT_CART';
 export const SET_BANK_POINT = 'SET_BANK_POINT';
+export const SET_EXTRA_POINT = 'SET_EXTRA_POINT';
 export const SET_AGREEMENT = 'SET_AGREEMENT';
 export const SET_ORDER_SUCCESS_MESSAGE = 'SET_ORDER_SUCCESS_MESSAGE';
 export const SET_ORDER_3D_BUTTON = 'SET_ORDER_3D_BUTTON';

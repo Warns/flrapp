@@ -17,6 +17,7 @@ import {
     RESET_PAYMENT,
     SET_CREDIT_CART,
     SET_BANK_POINT,
+    SET_EXTRA_POINT,
     SET_AGREEMENT,
     SET_ORDER_SUCCESS_MESSAGE,
     SET_ORDER_3D_BUTTON,
@@ -42,12 +43,14 @@ const cartInitialState = {
         month: 0,
         useBankPoint: false,
         order3dButton: false,
+        usePoint: 0,
     },
     bankTransfer: {
         bankId: 0,
         installmentId: 0,
         useBankPoint: false,
         order3dButton: false,
+        usePoint: 0,
     },
 
     optin: {
@@ -184,10 +187,10 @@ export default function cart(state = cartInitialState, action) {
         };
         case SET_PAYMENT: {
             const { paymentId, paymentType } = action.value,
-                { bankId = 0, installmentId = 0, useBankPoint, order3dButton } = state[paymentType] || {};
+                { bankId = 0, installmentId = 0, useBankPoint, order3dButton, usePoint = 0 } = state[paymentType] || {};
             data = {
                 ...state,
-                optin: { ...state.optin, paymentId: paymentId, bankId: bankId, installmentId: installmentId, useBankPoint: useBankPoint, order3dButton: order3dButton }
+                optin: { ...state.optin, paymentId: paymentId, bankId: bankId, installmentId: installmentId, useBankPoint: useBankPoint, order3dButton: order3dButton, usePoint: usePoint }
             };
 
             setCart(data['optin'], () => {
@@ -224,6 +227,23 @@ export default function cart(state = cartInitialState, action) {
                 optin: { ...state.optin, useBankPoint: action.value }
             };
 
+
+            setCart(data['optin'], () => {
+                setTimeout(() => {
+                    getCart();
+                }, 333);
+            });
+
+            return data;
+        };
+        case SET_EXTRA_POINT: {
+            const data = {
+                ...state,
+                creditCart: { ...state.creditCart, usePoint: action.value },
+                optin: { ...state.optin, usePoint: action.value }
+            };
+
+            console.log('extra point', data['optin']);
 
             setCart(data['optin'], () => {
                 setTimeout(() => {

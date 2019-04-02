@@ -6,7 +6,7 @@ import {
     Text,
 } from 'react-native';
 import { connect } from 'react-redux';
-import { ICONS } from 'root/app/helper/Constant';
+import { ICONS, ITEMTYPE } from 'root/app/helper/Constant';
 
 const Utils = require('root/app/helper/Global.js');
 
@@ -15,12 +15,15 @@ class ExtraBtn extends Component {
         super(props);
     }
     _onPress = () => {
-        console.log('dfsdfsdf');
+        const _self = this,
+            { onPress } = _self.props;
+        if (onPress)
+            onPress({ item: { type: ITEMTYPE['TRIGGERBUTTON'], itemType: ITEMTYPE['EXTRABUTTON'] } });
     }
     render() {
         const _self = this,
-        {user = {}} = _self.props.user || {},
-        { points = '0' } = user;
+            { user = {} } = _self.props.user || {},
+            { points = '0' } = user;
 
         return (
             <TouchableOpacity activeOpacity={1} onPress={_self._onPress}>
