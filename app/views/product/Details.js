@@ -270,7 +270,7 @@ class ProductDetails extends React.Component {
         );
       }
 
-      const desc = Entities.decode(item.description.replace(/<[^>]*>/g, ""));
+      const desc = Entities.decode((item.description || '' ).replace(/<[^>]*>/g, ""));
 
       let details = detailIsOpen ? (
         <View style={{ borderBottomWidth: 1, borderColor: '#D8D8D8', paddingBottom: 50 }}>
