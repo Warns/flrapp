@@ -15,8 +15,13 @@ import {
   FORMDATA,
   SET_INSTAGRAM,
   SET_WEBVIEW,
+  ORDER_LIST_CLICKED,
 } from 'root/app/helper/Constant';
-import { Viewer, InstagramDetail } from 'root/app/viewer/';
+import {
+  Viewer,
+  InstagramDetail,
+  OrderViewer,
+} from 'root/app/viewer/';
 import { Form } from 'root/app/form';
 import YoutubePlayer from 'root/app/sub-views/YoutubePlayer';
 
@@ -94,7 +99,9 @@ class CustomModals extends Component {
       { type, itemType, data = {}, postData = {}, modalTitle = 'KAPAT' } = _self.props.customModal;
 
     let view = null;
-    if (type == SET_VIEWER)
+    if (type == ORDER_LIST_CLICKED)
+      view = <OrderViewer data={data} />;
+    else if (type == SET_VIEWER)
       view = <Viewer postData={postData} config={data} />;
     else if (type == SET_FORM)
       view = (<KeyboardAvoidingView
@@ -137,6 +144,7 @@ class CustomModals extends Component {
         animationType='slide'
         transparent={false}
         visible={_self.props.customModal.visibility}
+        onRequestClose={() => { }}
       >
         {_self._getViewer()}
       </Modal>
