@@ -8,6 +8,10 @@ import DiscoverPage from '../app/views/Discover';
 import { MoreButton } from 'root/app/UI';
 import { Viewer, CampaingExtraHeader } from 'root/app/viewer';
 import { ScrollView } from 'react-native-gesture-handler';
+import {
+  SET_MAIN_NAVIGATION, 
+} from 'root/app/helper/Constant';
+import { store } from 'root/app/store';
 
 class CustomHorizontalTabs extends React.Component {
 
@@ -70,7 +74,15 @@ class Feeds extends React.Component {
   constructor(props) {
     super(props);
   }
-  componentWillMount() { this.props.navigation.setParams({ title: 'YENİLER' }); }
+
+  componentDidMount() {
+    store.dispatch({ type: SET_MAIN_NAVIGATION, value: this.props.navigation });
+  }
+
+  componentWillMount() {
+    this.props.navigation.setParams({ title: 'YENİLER' });
+  }
+
   render() {
     let props = this.props;
     return <Viewer {...props} config={CONFIG['feeds']} refreshing={false} />

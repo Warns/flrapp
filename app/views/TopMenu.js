@@ -15,7 +15,7 @@ import { connect } from 'react-redux';
 import { ExtraButton } from 'root/app/viewer';
 import { LineButton, IconButton } from 'root/app/UI';
 import { GestureRecognizer } from 'root/app/helper';
-import { NAVIGATE, HIDE_MENU, ITEMTYPE, REMOVE_USER, ICONS } from 'root/app/helper/Constant';
+import { NAVIGATE, MAIN_NAVIGATE, HIDE_MENU, ITEMTYPE, REMOVE_USER, ICONS } from 'root/app/helper/Constant';
 import { store } from 'root/app/store';
 
 const Utils = require('root/app/helper/Global.js');
@@ -144,8 +144,11 @@ class Menu extends Component {
                     });
                 }
             });
-        else  if (type == ITEMTYPE['TRIGGERBUTTON'] && itemType == ITEMTYPE['EXTRABUTTON'])
-            console.log('extra buton tıklayınca');
+        else if (type == ITEMTYPE['TRIGGERBUTTON'] && itemType == ITEMTYPE['EXTRABUTTON'])
+            _self._animate({ typ: 'hide' }, () => {
+                store.dispatch({ type: HIDE_MENU });/* modal komple kapatıyor */
+                store.dispatch({ type: MAIN_NAVIGATE, value: { item: { navigation: 'Promo' } } });
+            });
         else
             _self._animate({ typ: 'hide' }, () => {
                 if (onMenuClicked)

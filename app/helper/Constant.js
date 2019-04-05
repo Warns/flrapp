@@ -184,6 +184,8 @@ export const FORMSTYLE = {
 export const SET_SETTINGS = 'SET_SETTINGS';
 
 /* root navigation */
+export const MAIN_NAVIGATE = 'MAIN_NAVIGATE';
+export const SET_MAIN_NAVIGATION = 'SET_MAIN_NAVIGATION';
 export const SET_NAVIGATION = 'SET_NAVIGATION';
 export const NAVIGATE = 'NAVIGATE';
 
