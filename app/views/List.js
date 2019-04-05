@@ -238,6 +238,38 @@ export default class List extends React.Component {
     );
   }
 
+  _getSorts = (data) => {
+    const _self = this,
+      arr = [],
+      sorts = {
+        newDesc: {
+          "sortName": "En Yeniler"
+        },
+        discDesc: {
+          "sortName": "İndirimliler"
+        },
+        bestSellers: {
+          "sortName": "En Çok Satanlar"
+        },
+        priceAsc: {
+          "sortName": "En Düşük Fiyatlılar"
+        }
+      };
+
+    Object
+      .entries(data)
+      .forEach(([key, item]) => {
+        const sortType = item['sortType'],
+          k = sorts[sortType] || '';
+        if (k != '') {
+          item['sortName'] = k['sortName'] || '';
+          arr.push(item);
+        }
+      });
+
+    return arr;
+  }
+
   _listResultHandler = (answer) => {
 
     let _items = answer.data.products;
@@ -251,12 +283,11 @@ export default class List extends React.Component {
     }
     //console.log('list loaded', answer);
 
-    //console.log(answer.data);
-
     this.setState({
       itemsAll: answer.data.products,
       filters: answer.data.filters,
-      sorts: answer.data.sorts || [],
+      sorts: this._getSorts(answer.data.sorts || {}),
+      //sorts: answer.data.sorts || [],
       totalProductCount: answer.data.totalProductCount,
     });
     this._updateItems();

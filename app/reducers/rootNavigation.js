@@ -25,7 +25,6 @@ export default function rootNavigation(state = initialState, action) {
                 navigation = data.item['navigation'] || 'Extra';/* settings.json içerisinde navigation alanı ile root navigationda hangi route gidilecekse o belirlenir. */
 
             setTimeout(() => {
-                console.log('NAVIGATENAVIGATENAVIGATENAVIGATENAVIGATENAVIGATENAVIGATE');
                 state['root'].navigate(navigation, data);
             }, 1);
         };

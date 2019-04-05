@@ -202,8 +202,8 @@ class ProductDetails extends React.Component {
           "arr": "banners",
         },
         "data": {
-          "bgrCode": "7244",
-          //"productId": id
+          //"bgrCode": "7244",
+          "productId": id
         },
         "customFunc": "customDetailContent",
 
@@ -322,11 +322,11 @@ class ProductDetails extends React.Component {
           </View>
           {palette}
           <View style={{ padding: 20, paddingBottom: 0, paddingTop: 0, borderTopWidth: 1, borderTopColor: '#d8d8d8' }}>
-            {stockQty}
+            
             {domesticProduction}
             <View style={{ flexDirection: 'row', height: 55, alignItems: 'center' }}>
               {price}
-              <Text style={{ fontSize: 16, color: '#4A4A4A', position: 'absolute', right: 0 }}>Hızla tükeniyor</Text>
+              <View style={{ position: 'absolute', right: 0 }}>{stockQty}</View>
             </View>
 
             <View style={{ flexDirection: 'row', height: 80 }}>

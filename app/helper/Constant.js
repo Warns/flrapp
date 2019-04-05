@@ -107,12 +107,12 @@ export const FEEDSTYPE = {
 };
 
 export const FEEDS_IMAGE_RATE = {
-    video: 1.7808, // 650x365
+    video: 1.7857, // 750X420
     instagram: 1,
-    promo: 2.24, // 560X250
+    promo: 1.2295, // 750x610
     product: .8, // 435x544
-    blog: 2.3791, // 1920X807
-    collection: .55, // 330x600
+    blog: 1.2295, // 750x610
+    collection: 1.2295, // 750X610
 };
 
 
