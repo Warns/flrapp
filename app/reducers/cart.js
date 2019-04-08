@@ -298,14 +298,16 @@ export default function cart(state = cartInitialState, action) {
                     month: 0,
                     useBankPoint: false,
                     order3dButton: false,
+                    usePoint: 0
                 },
                 bankTransfer: {
                     bankId: 0,
                     installmentId: 0,
                     useBankPoint: false,
                     order3dButton: false,
+                    usePoint: 0
                 },
-                optin: { ...state.optin, bankId: 0, installmentId: 0, order3dButton: false, }
+                optin: { ...state.optin, usePoint: 0, bankId: 0, installmentId: 0, order3dButton: false, }
             };
 
             setCart(data['optin']);
@@ -326,12 +328,14 @@ export default function cart(state = cartInitialState, action) {
                     month: 0,
                     useBankPoint: false,
                     order3dButton: false,
+                    usePoint: 0
                 },
                 bankTransfer: {
                     bankId: 0,
                     installmentId: 0,
                     useBankPoint: false,
                     order3dButton: false,
+                    usePoint: 0
                 },
                 optin: {
                     order3dButton: false,
@@ -347,7 +351,7 @@ export default function cart(state = cartInitialState, action) {
                     useBankPoint: false,
                     cartLocation: '',
                     paymentNote: '',
-                    serviceId: 0
+                    serviceId: 0,
                 },
                 agreements: {
                     agreement1: false,
