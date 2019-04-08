@@ -121,6 +121,12 @@ module.exports = {
                     validation: [{ key: 'isEmpty' }, { key: 'isPhone' },],
                     keyboardType: 'numeric',
                     regex: 'typ5',
+                    disabled: true,
+                    css: {
+                        wrapperStyle: {
+                            backgroundColor: '#f6f6f6'
+                        }
+                    }
                 },
             ]
         },

@@ -37,7 +37,8 @@ const CONFIG_POPUP = {
         },
         "keys": {
             "arr": "agreement1Html"
-        }
+        },
+        "customClass": "ems-page-payment",
     },
     "agreement2": {
         "title": "ÖN BİLGİLENDİRME FORMU",
@@ -48,7 +49,8 @@ const CONFIG_POPUP = {
         },
         "keys": {
             "arr": "agreement2Html"
-        }
+        },
+        "customClass": "ems-page-payment",
     }
 };
 

@@ -146,7 +146,15 @@ class Menu extends Component {
                 }
             });
         else if (type == ITEMTYPE['TRIGGERBUTTON'] && itemType == ITEMTYPE['EXTRABUTTON'])
-            console.log('extra buton tıklayınca');
+            _self._animate({ typ: 'hide' }, () => {
+                store.dispatch({ type: HIDE_MENU });/* modal komple kapatıyor */
+
+                const { rootNavigation = {} } = store.getState() || {},
+                    { mainNav } = rootNavigation;
+
+                mainNav.navigate('Promo', {});
+
+            });
         else
             _self._animate({ typ: 'hide' }, () => {
                 if (onMenuClicked)

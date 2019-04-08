@@ -112,12 +112,12 @@ export const FEEDSTYPE = {
 };
 
 export const FEEDS_IMAGE_RATE = {
-  video: 1.7808, // 650x365
+  video: 1.7857, // 750X420
   instagram: 1,
-  promo: 2.24, // 560X250
-  product: 0.8, // 435x544
-  blog: 2.3791, // 1920X807
-  collection: 0.55 // 330x600
+  promo: 1.2295, // 750x610
+  product: .8, // 435x544
+  blog: 1.2295, // 750x610
+  collection: 1.2295, // 750X610
 };
 
 export const CLICK = "CLICK";
@@ -188,8 +188,9 @@ export const FORMSTYLE = {
 export const SET_SETTINGS = "SET_SETTINGS";
 
 /* root navigation */
-export const SET_NAVIGATION = "SET_NAVIGATION";
-export const NAVIGATE = "NAVIGATE";
+export const SET_MAIN_NAVIGATION = 'SET_MAIN_NAVIGATION';
+export const SET_NAVIGATION = 'SET_NAVIGATION';
+export const NAVIGATE = 'NAVIGATE';
 
 /* cart */
 export const BANK_TRANSFER = "bankTransfer";

@@ -230,9 +230,9 @@ class ProductDetails extends React.Component {
           id: "id",
           arr: "banners"
         },
-        data: {
-          bgrCode: "7244"
-          //"productId": id
+        "data": {
+          //"bgrCode": "7244",
+          "productId": id
         },
         customFunc: "customDetailContent"
       };

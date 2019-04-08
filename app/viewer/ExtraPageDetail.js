@@ -45,7 +45,6 @@ class ExtraDetail extends Component {
             obj = _self._getParams(),
             { type, data = {} } = obj,
             { itemType, postData = {} } = data;
-
         switch (type) {
             case ORDER_LIST_CLICKED:
                 return <OrderViewer data={obj} />;

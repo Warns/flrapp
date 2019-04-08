@@ -233,7 +233,7 @@ const UnderSide = class Main extends Component {
                 {form}
                 <View style={{ paddingLeft: 10, paddingRight: 10 }}>
                     {_self._getCartItem({ key: 'Ara toplam', value: Utils.getPriceFormat(subTotal) })}
-                    {_self._getCartItem({ key: 'KDV', value: Utils.getPriceFormat(taxTotal) })}
+                    {/*_self._getCartItem({ key: 'KDV', value: Utils.getPriceFormat(taxTotal) })*/}
                     {_self._getCartItem({ key: 'Kargo', value: shippingTotal == 0 ? 'ücretsiz' : Utils.getPriceFormat(shippingTotal) })}
                     {_self._getCartItem({ key: 'İndirim', value: Utils.getPriceFormat(discountTotal) })}
                 </View>

@@ -61,6 +61,15 @@ import HTML from 'react-native-render-html';
 const Translation = require('root/app/helper/Translation.js');
 const Utils = require('root/app/helper/Global.js');
 const Globals = require('root/app/globals.js');
+const injectScript = `
+  (function () {
+    window.onclick = function(e) {
+      e.preventDefault();
+      window.postMessage(e.target.href);
+      e.stopPropagation()
+    }
+  }());
+`;
 
 /*
 const config = {
@@ -452,10 +461,14 @@ class OrderListItem extends Component {
     }
 
     _onPress = () => {
+
         const _self = this,
             { callback, data } = _self.props;
-        if (callback)
-            callback({ type: ORDER_LIST_CLICKED, data: data });
+
+        /*    if (callback)
+            callback({ type: ORDER_LIST_CLICKED, data: data });*/
+
+        store.dispatch({ type: SHOW_CUSTOM_POPUP, value: { visibility: true, type: ORDER_LIST_CLICKED, data: { data: data } } });
     }
 
     render() {
@@ -1483,7 +1496,7 @@ class Viewers extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        if (!Utils.isArrEqual(this.state.data, nextState.data) || this.state.html !== nextState.html || this.props.flexible != nextProps.flexible)
+        if (!Utils.isArrEqual(this.state.data, nextState.data) || this.state.noResult != nextState.noResult || this.state.html !== nextState.html || this.props.flexible != nextProps.flexible)
             return true;
         return false;
     }
@@ -1909,9 +1922,9 @@ class Viewers extends Component {
             { filtered = false } = filterData;
 
 
-        if (!filtered || noResult) return null;
         switch (itemType) {
-            case ITEMTYPE['ADDRESS']:
+            case ITEMTYPE['ADDRESS']: {
+                if (!filtered || noResult) return null;
                 return (
                     <View style={{ alignItems: 'flex-end', paddingTop: 15, marginLeft: 15, marginRight: 15 }}>
                         <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }} onPress={_self._filtered}>
@@ -1923,7 +1936,9 @@ class Viewers extends Component {
                         </TouchableOpacity>
                     </View>
                 );
-            case ITEMTYPE['SERVICELIST']:
+            }
+            case ITEMTYPE['SERVICELIST']: {
+                if (!filtered || noResult) return null;
                 return (
                     <ElevatedView
                         elevation={0}
@@ -1954,6 +1969,7 @@ class Viewers extends Component {
                         />
                     </ElevatedView>
                 );
+            }
             case ITEMTYPE['COUPON']: {
                 const _config = [
                     {
@@ -2149,6 +2165,16 @@ class Viewers extends Component {
         return view;
     }
 
+    /* 
+        webview içerisine tıklananınca callback döndürmek
+    */
+    onMessage = ({ nativeEvent }) => {
+        const data = nativeEvent.data;
+
+        if (data !== undefined && data !== null)
+            Linking.openURL(data);
+    };
+
     _getViewer = () => {
         const _self = this,
             { scrollEnabled = true, flexible = true } = _self.props,
@@ -2190,6 +2216,8 @@ class Viewers extends Component {
                             scalesPageToFit={false}
                             automaticallyAdjustContentInsets={false}
                             source={{ html: _self.state.html }}
+                            injectedJavaScript={injectScript}
+                            onMessage={_self.onMessage}
                         />
                     </View>
                 );

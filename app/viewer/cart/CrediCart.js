@@ -321,8 +321,11 @@ class CrediCard extends Component {
         const _self = this,
             { user } = _self.props.user || {},
             { points = 0 } = user;
-        return points - (points % 5);
+
+        return points;
+        //return points - (points % 5);
     }
+
     _getExtraPoint = () => {
         const _self = this,
             { cartInfo = {} } = _self.props.cart || {},
@@ -330,7 +333,7 @@ class CrediCard extends Component {
             points = _self._getPoints();
 
         let view = null;
-        if (points != 0 && points <= netTotal) {
+        if (points != 0 /*&& points <= netTotal*/) {
             const txt = points + ' TL Ekstra Puanımı Kullanmak İstiyorum';
             view = <CheckBox containerStyle={{ marginLeft: 20, marginRight: 20, marginBottom: 0, }} closed={true} callback={_self._onChangeExtraPoint} data={{ desc: txt }} />;
         }
@@ -340,7 +343,7 @@ class CrediCard extends Component {
 
     _onChangeExtraPoint = (obj) => {
         const _self = this,
-            points = obj['value'] ? _self._getPoints() : 0;
+            points = obj['value'] ? 1 : 0;
 
         store.dispatch({
             type: SET_EXTRA_POINT,
