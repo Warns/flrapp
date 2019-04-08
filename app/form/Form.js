@@ -133,7 +133,7 @@ class Form extends Component {
             /* default value varsa formu gizleriz serverdan default dataları çektikten sonra formu tekrardan gösteririz. */
             const { postData = {} } = _self.props;
             _self.setState({ show: false });
-            _self.ajx({ uri: defValue.uri || '', data: postData }, function ({ type, d }) {
+            _self.ajx({ uri: defValue.uri || '', data: postData }, function ({ type, d }) { 
                 if (type == 'success') {
                     const keys = defValue['keys'] || '';
                     let data = [];
