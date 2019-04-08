@@ -73,6 +73,7 @@ class ProductView extends React.Component {
         animationType='none'
         transparent={true}
         visible={this.props.product.visibility}
+        onRequestClose={() => { alert('zizpzpzz'); }}
       >
         <ProductNavigator {...this.props} />
       </Modal>

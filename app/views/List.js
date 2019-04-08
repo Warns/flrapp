@@ -21,8 +21,6 @@ import { ICONS, SET_TEXTURE_DISPLAY, OPEN_PRODUCT_DETAILS, FEEDS_IMAGE_RATE } fr
 import { store } from '../../app/store';
 import { MinimalHeader } from 'root/app/components';
 
-var RCTUIManager = require('NativeModules').UIManager;
-
 import ProductView from './Product';
 
 styles = require('../../app/styles.js');
@@ -242,7 +240,7 @@ export default class List extends React.Component {
 
     let _items = answer.data.products;
 
-    //console.log(answer);
+    //console.log(answer.data.products[0]);
 
     if (this.props.category.img && answer.data.filters.findIndex(obj => obj.isSelected == true) == -1) {
       _items.splice((answer.data.totalProductCount < 4 ? 0 : 4), 0,
@@ -433,6 +431,7 @@ export default class List extends React.Component {
           animationType="none"
           transparent={true}
           visible={this.state.detailIsVisible}
+          onRequestClose={() => { }}
         >
           {detailContent}
         </Modal>
@@ -530,6 +529,7 @@ class ListHeader extends React.Component {
         <Modal
           visible={this.state.filterIsOpen}
           animationType="slide"
+          onRequestClose={() => { }}
         >
           <MinimalHeader onPress={this._close} title="KAPAT" right={<Text style={{ color: "#afafaf", fontSize: 14, marginRight: 10 }}>{totalProductCount} ürün</Text>} noMargin={store.getState().general.SCREEN_DIMENSIONS.OS == 'android' ? true : false} />
 
@@ -566,7 +566,7 @@ class ListItem extends React.Component {
     let borderStyle = index % 2 == 0 ? { borderRightWidth: 1, borderRightColor: '#dddddd' } : {};
 
     const { productGroups = [] } = item;
-    let numOfColors = productGroups.length + 1;
+    let numOfColors = productGroups.length > 0 ? (productGroups.length + 1) + " Renk" : "";
 
     let newFlag = !item.isNew == true ? null :
       <Text style={{ position: 'absolute', left: 15, top: 10, fontSize: 13, fontFamily: 'proxima' }}>Yeni</Text>;
@@ -578,7 +578,7 @@ class ListItem extends React.Component {
     let price = item.discountRate > 0 ? (
       <View style={{ flexDirection: 'row', alignItems: 'center', position: 'relative' }}>
         <Text style={{ fontSize: 18, fontFamily: 'brandon', fontWeight: 'bold', color: '#BE1066' }}>₺{item.salePrice}</Text>
-        <Text style={{ fontSize: 18, fontFamily: 'brandon', fontWeight: 'bold', marginLeft: 10, textDecorationLine: 'line-through' }}>₺{item.listPrice}</Text>
+        <Text style={{ fontSize: 14, fontFamily: 'brandon', marginLeft: 7, textDecorationLine: 'line-through' }}>₺{item.listPrice}</Text>
         <Text style={{ fontSize: 13, fontFamily: 'proxima', right: 0, position: "absolute" }}>%{item.discountRate}</Text>
       </View>
     ) : (
@@ -609,8 +609,8 @@ class ListItem extends React.Component {
 
             {price}
             <Text numberOfLines={2} style={{ marginTop: 5, width: _width - 30, fontSize: 13, fontFamily: 'proxima' }}>{item.productName}</Text>
-            <Text style={{ position: 'absolute', left: 15, bottom: 23, fontSize: 13, fontFamily: 'proxima', color: '#9B9B9B' }}>{numOfColors} Renk</Text>
-            <Text style={{ position: 'absolute', left: 15, bottom: 7, fontSize: 13, fontFamily: 'proxima', color: '#BE1066' }}>{trigger}</Text>
+            <Text style={{ position: 'absolute', left: 15, bottom: 23, fontSize: 13, fontFamily: 'proxima', color: '#9B9B9B' }}>{numOfColors}</Text>
+            <Text style={{ position: 'absolute', left: 15, bottom: 5, fontSize: 13, fontFamily: 'proxima', color: '#BE1066' }}>{trigger}</Text>
           </View>
         </View>
       </TouchableOpacity>

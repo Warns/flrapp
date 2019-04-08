@@ -93,6 +93,9 @@ module.exports = {
     },
     bazaarvoice: {
       userCode: '/mobiapp-bazaarvoice.txt?uyekod='
+    },
+    cegid: {
+      checkPhoneNumber: '/exp-cegid-user/?phone=',
     }
   },
   customURLs: {

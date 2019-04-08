@@ -30,6 +30,7 @@ module.exports = {
           placeholder: '',
           value: '',
           validation: [{ key: 'isEmpty' }, { key: 'isMin', value: 50 }],
+          counter: 50,
           css: {
             wrapperStyle: {
               height: 200,

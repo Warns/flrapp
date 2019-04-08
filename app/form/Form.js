@@ -354,7 +354,7 @@ class Form extends Component {
 
     addField = (obj) => {
         const _self = this,
-            { id, type, css = {}, showHeader = true, constantValue = false } = obj,
+            { id, type, css = {}, showHeader = true, constantValue = false, counter = null } = obj,
             { errorMsgStyle = {}, containerStyle = {}, wrapperStyle = {}, fontStyle = {}, defaultTitleStyle = {} } = css,
             { theme = 'DARK' } = _self.props.data,
             validation = this.state.validation,
@@ -392,6 +392,7 @@ class Form extends Component {
                     wrapperStyle={{ ...wrapperStyle }}
                     onChangeText={_self._onChangeText}
                     theme={theme}
+                    counter={counter}
                     {...objCallback}
                     //callback={_callback}
                     control={validation}

@@ -356,9 +356,7 @@ class CreditCart extends Component {
         return (
             <Modal
                 visible={isVisible}
-                onRequestClose={() => {
-
-                }}
+                onRequestClose={() => { }}
             >
                 <MinimalHeader onPress={_self._onCloseModal} title={'Sepetim'} right={<View />} />
                 {frm}
@@ -384,7 +382,7 @@ class CreditCart extends Component {
                 userClientIp: '0.0.0.0'
                 //"customRedirectUrl": "string"
             };
-console.log('_applyForm', optin);
+        console.log('_applyForm', optin);
         PRELOAD(true);
         globals.fetch(
             Utils.getURL({ key: 'cart', subKey: 'setCart' }),

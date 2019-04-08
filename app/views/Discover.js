@@ -374,6 +374,7 @@ class NavigationModal extends React.Component {
                 animationType="slide"
                 transparent={false}
                 visible={visible}
+                onRequestClose={() => {}}
             >
                 <SafeAreaView style={{ flex: 1, }}>
                     <View style={{flex: 1, }}>

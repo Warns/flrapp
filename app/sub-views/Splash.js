@@ -44,10 +44,10 @@ class Splash extends React.Component {
     loginIsVisible: false,
     videoIsPlaying: true,
     localStorage: {},
-    images:[
-      {thumb: Utils.prefix + "/UPLOAD/APP/assets/slider-1.png", title:'Hoş geldin!', text:'Flormar\'ın yeni uygulamasında seni neler bekliyor? Sana özel önerilerle mobil alışveriş keyfi!', video:false},
-      {thumb: Utils.prefix + "/UPLOAD/APP/assets/slider-2.png", title:'Neden extra üyesi olmalısın?', text:'Her siparişinde 5% ekstra TL kazan, Sana özel kampanyalar ile alışverişinin keyfini sür!'},
-      {thumb: Utils.prefix + "/UPLOAD/APP/assets/slider-3.png", title:'Neden şimdi üye olmalısın?', text:'İlk siparişinde online’a özel indirim ve bedava kargo imkanından yararlan!'}
+    images: [
+      { thumb: Utils.prefix + "/UPLOAD/APP/assets/slider-1.png", title: 'Hoş geldin!', text: 'Flormar\'ın yeni uygulamasında seni neler bekliyor? Sana özel önerilerle mobil alışveriş keyfi!', video: false },
+      { thumb: Utils.prefix + "/UPLOAD/APP/assets/slider-2.png", title: 'Neden extra üyesi olmalısın?', text: 'Her siparişinde 5% ekstra TL kazan, Sana özel kampanyalar ile alışverişinin keyfini sür!' },
+      { thumb: Utils.prefix + "/UPLOAD/APP/assets/slider-3.png", title: 'Neden şimdi üye olmalısın?', text: 'İlk siparişinde online’a özel indirim ve bedava kargo imkanından yararlan!' }
     ],
     activeSlide: 0,
   }
@@ -85,68 +85,68 @@ class Splash extends React.Component {
     this.props.navigation.navigate('Signup');
   };
 
-  _renderItem = ( obj, parallaxProps )=>{
+  _renderItem = (obj, parallaxProps) => {
     let media = obj.item.video ? (
       <Video
-          source={require('../../assets/loop.mp4')}
-          rate={1.0}
-          volume={1.0}
-          isMuted={true}
-          resizeMode="cover"
-          shouldPlay={this.state.videoIsPlaying}
-          isLooping={this.state.videoIsPlaying}
-          style={styles.backgroundImage}
-        />
+        source={require('../../assets/loop.mp4')}
+        rate={1.0}
+        volume={1.0}
+        isMuted={true}
+        resizeMode="cover"
+        shouldPlay={this.state.videoIsPlaying}
+        isLooping={this.state.videoIsPlaying}
+        style={styles.backgroundImage}
+      />
     ) : (
-      <ParallaxImage
-          source={{uri: obj.item.thumb }}
+        <ParallaxImage
+          source={{ uri: obj.item.thumb }}
           parallaxFactor={0.3}
-          containerStyle={{flex:1}}
-          style={{resizeMode:'cover'}}
+          containerStyle={{ flex: 1 }}
+          style={{ resizeMode: 'cover' }}
           showSpinner={true}
           {...parallaxProps}
-         />
-    );
+        />
+      );
 
-    return(
-      <View style={{flex:1, width:DIMENSIONS.width, height:DIMENSIONS.height}}>
+    return (
+      <View style={{ flex: 1, width: DIMENSIONS.width, height: DIMENSIONS.height }}>
         {media}
-        <View style={{position:'absolute', bottom:220, left:DIMENSIONS.width*.1, alignItems:'center', width:DIMENSIONS.width*.8}}>
-            <Text style={{fontSize:20, fontFamily:'Bold', color:'#ffffff'}}>{obj.item.title}</Text>
-            <Text style={{color:'#ffffff', fontSize:15, textAlign: 'center',}}>{obj.item.text}</Text>
-          </View>
+        <View style={{ position: 'absolute', bottom: 220, left: DIMENSIONS.width * .1, alignItems: 'center', width: DIMENSIONS.width * .8 }}>
+          <Text style={{ fontSize: 20, fontFamily: 'Bold', color: '#ffffff' }}>{obj.item.title}</Text>
+          <Text style={{ color: '#ffffff', fontSize: 15, textAlign: 'center', }}>{obj.item.text}</Text>
+        </View>
       </View>
     );
   }
 
-  _onCarouselSnap = ( index )=> {
-    this.setState({ 
+  _onCarouselSnap = (index) => {
+    this.setState({
       activeSlide: index,
       videoIsPlaying: this.state.images[index].video != true ? false : true,
     });
   }
 
-  get pagination () {
-      const { images, activeSlide } = this.state;
-      return (
-          <Pagination
-            dotsLength={images.length}
-            activeDotIndex={activeSlide}
-            containerStyle={{ position:'absolute', width:'100%', bottom:160 }}
-            dotStyle={{
-                width: 10,
-                height: 10,
-                borderRadius: 5,
-                marginHorizontal: 0,
-                backgroundColor: 'rgba(255, 255, 255, 0.92)'
-            }}
-            inactiveDotStyle={{
-                // Define styles for inactive dots here
-            }}
-            inactiveDotOpacity={0.4}
-            inactiveDotScale={0.6}
-          />
-      );
+  get pagination() {
+    const { images, activeSlide } = this.state;
+    return (
+      <Pagination
+        dotsLength={images.length}
+        activeDotIndex={activeSlide}
+        containerStyle={{ position: 'absolute', width: '100%', bottom: 160 }}
+        dotStyle={{
+          width: 10,
+          height: 10,
+          borderRadius: 5,
+          marginHorizontal: 0,
+          backgroundColor: 'rgba(255, 255, 255, 0.92)'
+        }}
+        inactiveDotStyle={{
+          // Define styles for inactive dots here
+        }}
+        inactiveDotOpacity={0.4}
+        inactiveDotScale={0.6}
+      />
+    );
   }
 
   render() {
@@ -176,34 +176,34 @@ class Splash extends React.Component {
     return (
       <View style={{ backgroundColor: "#FF2B94", flex: 1 }}>
         <Carousel
-                  ref={(c) => {this._carousel = c;}}
-                  data={images}
-                  onSnapToItem={this._onCarouselSnap}
-                  renderItem={this._renderItem}
-                  sliderWidth={DIMENSIONS.width}
-                  sliderHeight={DIMENSIONS.height}
-                  itemWidth={DIMENSIONS.width}
-                  itemHeight={DIMENSIONS.height}
-                  inactiveSlideScale={1}
-                  inactiveSlideOpacity={.5}
-                  activeSlideAlignment='center'
-                  hasParallaxImages={true}
-                  layoutCardOffset={0}
-                  enableSnap={true}
-                  />
-                  {this.pagination}
-        <Image style={{ width: 180, position: 'absolute', top: 30, resizeMode: 'contain', alignSelf: 'center', zIndex:1 }} source={require('../../assets/images/logo-w.png')} />
-        
-        <Animated.View style={{ width:'100%', position:'absolute', bottom:0, flexDirection: "column-reverse", padding: 30, opacity: reverseFadeAnim }}>
+          ref={(c) => { this._carousel = c; }}
+          data={images}
+          onSnapToItem={this._onCarouselSnap}
+          renderItem={this._renderItem}
+          sliderWidth={DIMENSIONS.width}
+          sliderHeight={DIMENSIONS.height}
+          itemWidth={DIMENSIONS.width}
+          itemHeight={DIMENSIONS.height}
+          inactiveSlideScale={1}
+          inactiveSlideOpacity={.5}
+          activeSlideAlignment='center'
+          hasParallaxImages={true}
+          layoutCardOffset={0}
+          enableSnap={true}
+        />
+        {this.pagination}
+        <Image style={{ width: 180, position: 'absolute', top: 30, resizeMode: 'contain', alignSelf: 'center', zIndex: 1 }} source={require('../../assets/images/logo-w.png')} />
+
+        <Animated.View style={{ width: '100%', position: 'absolute', bottom: 0, flexDirection: "column-reverse", padding: 30, opacity: reverseFadeAnim }}>
           <DefaultButton
             callback={this._continueToHome}
             name="GEÇ"
             boxColor="transparent"
             textColor="#ffffff"
             borderColor='rgba(0,0,0,0)'
-            
+
           />
-          <View style={{ flex: 1, maxHeight: 70, flexDirection: 'row', marginBottom:5 }}>
+          <View style={{ flex: 1, maxHeight: 70, flexDirection: 'row', marginBottom: 5 }}>
             <View style={{ flex: 1, marginRight: 5 }}>
               <DefaultButton
                 callback={this._onLoginPressed}
@@ -229,6 +229,7 @@ class Splash extends React.Component {
           animationType="none"
           transparent={true}
           visible={this.state.loginIsVisible}
+          onRequestClose={() => { }}
         >
           <SplashHeader onCloseLogin={this._onCloseLogin} />
           <Animated.View style={{ flex: 1, padding: 30, paddingTop: boxPadding, opacity: 1 /*fadeAnim*/ }}>

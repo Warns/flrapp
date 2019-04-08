@@ -187,7 +187,7 @@ class ProductReview extends React.Component {
             this.props.general.SCREEN_DIMENSIONS.OS == "android" ? true : false
           }
         />
-        <SafeAreaView style={{ flex: 1 }}>
+        <SafeAreaView forceInset={{ bottom: 'always' }} style={{ flex: 1 }}>
           <View style={{ flex: 1, backgroundColor: "#F6F0EF" }}>
             <View style={{ padding: 40, paddingBottom: 5, paddingTop: 20 }}>
               {error}

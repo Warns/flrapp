@@ -26,7 +26,8 @@ class FormInput extends Component {
         _self.state = {
             value: value,
             placeholder: showTitle ? placeholder : (value != '' ? '' : title),
-            titleShow: showTitle ? true : (value != '' ? true : false)
+            titleShow: showTitle ? true : (value != '' ? true : false),
+            counter: null,
         }
     }
 
@@ -153,7 +154,8 @@ class FormInput extends Component {
                 creditCart = false,
                 containerStyle = {},
                 wrapperStyle = {},
-                errorMsgStyle = {}
+                errorMsgStyle = {},
+                counter,
             } = _self.props,
             { TITLE_COLOR = '#9b9b9b' } = FORMSTYLE[theme],
             {
@@ -164,6 +166,8 @@ class FormInput extends Component {
         let disabledObj = {};
         if (disabled)
             disabledObj = { editable: false, selectTextOnFocus: false };
+
+        let _counter = counter ? <View style={{ position: 'absolute', right: 5, bottom: 5, }}><Text style={{ fontSize: 12, color: '#cccccc' }}>{_self.state.value.length}/{counter}</Text></View> : null;
 
         let input = null;
 
@@ -263,6 +267,7 @@ class FormInput extends Component {
                     errorMsg={errorMsg}
                 >
                     {input}
+                    {_counter}
                 </Container>
             </TouchableOpacity>
         );

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   View,
   Text,
@@ -10,11 +10,12 @@ import {
   Dimensions,
   Modal,
   ScrollView,
-} from 'react-native';
-import { connect } from 'react-redux';
-import Carousel from 'react-native-snap-carousel';
+  BackHandler,
+} from "react-native";
+import { connect } from "react-redux";
+import Carousel from "react-native-snap-carousel";
 //this is to clean up html content
-const Entities = require('html-entities').AllHtmlEntities;
+const Entities = require("html-entities").AllHtmlEntities;
 import {
   ICONS,
   CLOSE_PRODUCT_DETAILS,
@@ -22,22 +23,21 @@ import {
   ADD_CART_ITEM,
   ADD_TO_FAVORITES,
   REMOVE_FROM_FAVORITES,
-  OPEN_VIDEO_PLAYER,
-} from 'root/app/helper/Constant';
+  OPEN_VIDEO_PLAYER
+} from "root/app/helper/Constant";
 import {
   HorizontalProducts,
   VideosList,
   MinimalHeader,
   Palette
-} from 'root/app/components';
-import { DefaultButton } from 'root/app/UI';
-import { Viewer } from 'root/app/viewer';
+} from "root/app/components";
+import { DefaultButton } from "root/app/UI";
+import { Viewer } from "root/app/viewer";
 
-globals = require('root/app/globals.js');
-const SCREEN_DIMENSIONS = Dimensions.get('screen');
+globals = require("root/app/globals.js");
+const SCREEN_DIMENSIONS = Dimensions.get("screen");
 
 class ProductDetails extends React.Component {
-
   constructor(props) {
     super(props);
   }
@@ -51,13 +51,20 @@ class ProductDetails extends React.Component {
     detailIsOpen: false,
     videosIsOpen: false,
     canScroll: false,
-    favoriteButton: { status: false, a: 'FAVORİME EKLE', b: 'FAVORİME EKLENDİ' },
+    favoriteButton: {
+      status: false,
+      a: "FAVORİME EKLE",
+      b: "FAVORİME EKLENDİ"
+    },
     productRecommends: []
   };
 
   componentDidMount() {
     const _self = this;
-    this.props.dispatch({ type: 'UPDATE_PRODUCT_OBJECT', value: { callback: this._initAnimation } });
+    this.props.dispatch({
+      type: "UPDATE_PRODUCT_OBJECT",
+      value: { callback: this._initAnimation }
+    });
   }
 
   _initAnimation = () => {
@@ -76,43 +83,42 @@ class ProductDetails extends React.Component {
       }
     ).start();
     */
-  }
+  };
 
   /* segmentify product recomendation */
-  _setSeg = (res) => {
+  _setSeg = res => {
     const _self = this;
-    if (res['type'] == 'success') {
+    if (res["type"] == "success") {
       let { responses = [] } = res.data,
         { params = {} } = responses[0][0],
-        data = globals._getSegData(params['recommendedProducts'] || []),
+        data = globals._getSegData(params["recommendedProducts"] || []),
         arr = [];
 
       Object.entries(data).forEach(([key, value]) => {
-        arr.push({ groupId: 1, productId: value['productId'] });
+        arr.push({ groupId: 1, productId: value["productId"] });
       });
 
       _self.setState({ productRecommends: arr });
     }
-  }
+  };
 
   _segAjx = () => {
     /* segmentify product recomendation */
     const _self = this,
       { id, item } = this.props.product,
-      { integrationId = '' } = item || {},
+      { integrationId = "" } = item || {},
       data = {
-        "name": "PRODUCT_VIEW",
+        name: "PRODUCT_VIEW",
         //"productId": integrationId.split('-')[0]
-        "productId": id
+        productId: id
       };
 
-    globals.seg({ data: data }, (res) => {
+    globals.seg({ data: data }, res => {
       _self._setSeg(res);
     });
-  }
+  };
 
   _close = () => {
-
     this.props.dispatch({ type: CLOSE_PRODUCT_DETAILS, Value: {} });
 
     this.setState({
@@ -123,193 +129,349 @@ class ProductDetails extends React.Component {
       opacity: new Animated.Value(0),
       detailIsOpen: false,
       videosIsOpen: false,
-      favoriteButton: { ...this.state.favoriteButton, status: false },
+      favoriteButton: { ...this.state.favoriteButton, status: false }
     });
-  }
+  };
 
   _renderItem({ item, index }) {
     return (
       <View>
-        <Image source={{ uri: item.mediumImageUrl }} style={{ width: 270, height: 337, resizeMode: 'cover' }} />
+        <Image
+          source={{ uri: item.mediumImageUrl }}
+          style={{ width: 270, height: 337, resizeMode: "cover" }}
+        />
       </View>
     );
   }
 
   _showProductInfo = () => {
     this.setState({
-      detailIsOpen: !this.state.detailIsOpen,
-    })
+      detailIsOpen: !this.state.detailIsOpen
+    });
     this.productScrollView.scrollTo({ y: 360 });
-  }
+  };
 
   _showVideos = () => {
     this.setState({
-      videosIsOpen: !this.state.videosIsOpen,
-    })
-  }
+      videosIsOpen: !this.state.videosIsOpen
+    });
+  };
 
-  _changeColor = (id) => {
-    this.props.dispatch({ type: OPEN_PRODUCT_DETAILS, value: { id: id, measurements: {}, animate: false, sequence: 0 } });
-    console.log('----->', id);
-  }
+  _changeColor = id => {
+    this.props.dispatch({
+      type: OPEN_PRODUCT_DETAILS,
+      value: { id: id, measurements: {}, animate: false, sequence: 0 }
+    });
+    console.log("----->", id);
+  };
 
-  _changeProduct = (id) => {
+  _changeProduct = id => {
     this.setState({ canScroll: true });
-    this.props.dispatch({ type: OPEN_PRODUCT_DETAILS, value: { id: id, measurements: {}, animate: false, sequence: 0 } });
-    console.log('p----->', id);
-  }
+    this.props.dispatch({
+      type: OPEN_PRODUCT_DETAILS,
+      value: { id: id, measurements: {}, animate: false, sequence: 0 }
+    });
+    console.log("p----->", id);
+  };
 
   _addToCart = () => {
-    this.props.dispatch({ type: ADD_CART_ITEM, value: { id: this.props.product.item.productId, quantity: 1 } });
-    console.log('add');
-  }
+    this.props.dispatch({
+      type: ADD_CART_ITEM,
+      value: { id: this.props.product.item.productId, quantity: 1 }
+    });
+    console.log("add");
+  };
 
   _onVideoPress = (index, item) => {
-    this.props.navigation.navigate('productVideos', { selected: index, items: this.props.product.videos });
-  }
+    this.props.navigation.navigate("productVideos", {
+      selected: index,
+      items: this.props.product.videos
+    });
+  };
 
   _onReviewPress = () => {
-    this.props.navigation.navigate('productReviewsList', {});
-  }
+    this.props.navigation.navigate("productReviewsList", {});
+  };
 
   _addToFavorites = () => {
     this.setState({
-      favoriteButton: { ...this.state.favoriteButton, status: !this.state.favoriteButton.status },
+      favoriteButton: {
+        ...this.state.favoriteButton,
+        status: !this.state.favoriteButton.status
+      }
     });
 
     if (this.state.favoriteButton.status) {
-      this.props.dispatch({ type: ADD_TO_FAVORITES, value: { id: this.props.product.item.productId } });
+      this.props.dispatch({
+        type: ADD_TO_FAVORITES,
+        value: { id: this.props.product.item.productId }
+      });
+    } else {
+      this.props.dispatch({
+        type: REMOVE_FROM_FAVORITES,
+        value: { id: this.props.product.item.productId }
+      });
     }
-    else {
-      this.props.dispatch({ type: REMOVE_FROM_FAVORITES, value: { id: this.props.product.item.productId } });
-    }
-  }
+  };
 
   /* nasıl uygulanır */
   _getDetailContent = () => {
     const _self = this,
-      { id = '' } = this.props.product,
+      { id = "" } = this.props.product,
       data = {
-        "title": "ÜRÜN DETAY NASIL UYGULANIR",
-        "type": "listViewer",
-        "itemType": "customDetailContent",
-        "uri": {
-          "key": "banner",
-          "subKey": "getBannerList"
+        title: "ÜRÜN DETAY NASIL UYGULANIR",
+        type: "listViewer",
+        itemType: "customDetailContent",
+        uri: {
+          key: "banner",
+          subKey: "getBannerList"
         },
-        "keys": {
-          "id": "id",
-          "arr": "banners",
+        keys: {
+          id: "id",
+          arr: "banners"
         },
-        "data": {
-          "bgrCode": "7244",
+        data: {
+          bgrCode: "7244"
           //"productId": id
         },
-        "customFunc": "customDetailContent",
-
+        customFunc: "customDetailContent"
       };
 
-    return <Viewer scrollEnabled={false} config={data} refreshing={false} />
-  }
+    return <Viewer scrollEnabled={false} config={data} refreshing={false} />;
+  };
 
   /* yerli üretim */
-  _domesticProduction = (data) => {
+  _domesticProduction = data => {
     let b = false;
-    Object
-      .entries(data)
-      .forEach(([key, value]) => {
-        if (value['productTypeId'] == 272)
-          b = true;
-      });
+    Object.entries(data).forEach(([key, value]) => {
+      if (value["productTypeId"] == 272) b = true;
+    });
 
-    return b ? <Image source={{ uri: 'https://mcdn.flormar.com.tr/images/frontend/yerli-uretim.png' }} style={{ width: 80, height: 33, resizeMode: 'cover' }} /> : null;
-  }
+    return b ? (
+      <Image
+        source={ICONS["domesticProduct"]}
+        style={{ width: 80, height: 34, resizeMode: "cover" }}
+      />
+    ) : null;
+  };
 
   _renderProduct = () => {
-    let { anim, detailIsOpen, opacity, canScroll, videosIsOpen, favoriteButton, animationDone } = this.state;
-    let { item, sequence, measurements, animate, colors, videos } = this.props.product;
+    let {
+      anim,
+      detailIsOpen,
+      opacity,
+      canScroll,
+      videosIsOpen,
+      favoriteButton,
+      animationDone
+    } = this.state;
+    let {
+      item,
+      sequence,
+      measurements,
+      animate,
+      colors,
+      videos
+    } = this.props.product;
 
     if (item) {
-
       const images = [];
       for (var k in item.productImages) {
-        if (item.productImages[k].imageUrl.indexOf('mobile_texture') < 0) {
+        if (item.productImages[k].imageUrl.indexOf("mobile_texture") < 0) {
           images.push(item.productImages[k]);
         }
       }
 
       if (animate && !this.state.animationDone) {
-
       }
 
       //console.log(';;;', colors.length)
 
-      let palette = colors.length > 1 ? <Palette width={SCREEN_DIMENSIONS.width} items={colors} selected={item.shortCode} onPress={this._changeColor} /> : null;
+      let palette =
+        colors.length > 1 ? (
+          <Palette
+            width={SCREEN_DIMENSIONS.width}
+            items={colors}
+            selected={item.shortCode}
+            onPress={this._changeColor}
+          />
+        ) : null;
 
-      let videosButton = videos.length > 0 ? <ProductActionButton name="Videolar" count={videos.length} expanded={videosIsOpen} onPress={this._showVideos} /> : null;
+      let videosButton =
+        videos.length > 0 ? (
+          <ProductActionButton
+            name="Videolar"
+            count={videos.length}
+            expanded={videosIsOpen}
+            onPress={this._showVideos}
+          />
+        ) : null;
 
-      let _videos = videosIsOpen && videos.length > 0 ? <VideosList items={videos} callback={this._onVideoPress} /> : null;
-
+      let _videos =
+        videosIsOpen && videos.length > 0 ? (
+          <VideosList items={videos} callback={this._onVideoPress} />
+        ) : null;
 
       const { productRecommends = [] } = this.state;
-      let recommendations = productRecommends.length > 0 ? (
-        <View style={{ marginTop: 35 }}>
-          <Text style={[styles.sectionHeader, { marginLeft: 20, marginBottom: 15, }]}>İLGİLİ ÜRÜNLER</Text>
-          <HorizontalProducts items={productRecommends} onPress={this._changeProduct} />
-        </View>
-      ) : null;
+      let recommendations =
+        productRecommends.length > 0 ? (
+          <View style={{ marginTop: 35 }}>
+            <Text
+              style={[
+                styles.sectionHeader,
+                { marginLeft: 20, marginBottom: 15 }
+              ]}
+            >
+              İLGİLİ ÜRÜNLER
+            </Text>
+            <HorizontalProducts
+              items={productRecommends}
+              onPress={this._changeProduct}
+            />
+          </View>
+        ) : null;
 
-      let listPrice = item.discountRate > 0 ? <Text style={{ fontSize: 18, color: '#989898', fontFamily: 'brandon', fontWeight: 'bold', marginLeft: 15, textDecorationLine: 'line-through' }}>₺{item.listPrice}</Text> : null;
+      let listPrice =
+        item.discountRate > 0 ? (
+          <Text
+            style={{
+              fontSize: 18,
+              color: "#989898",
+              fontFamily: "brandon",
+              fontWeight: "bold",
+              marginLeft: 15,
+              textDecorationLine: "line-through"
+            }}
+          >
+            ₺{item.listPrice}
+          </Text>
+        ) : null;
 
       let productTags = [];
       for (var i in item.productAttributes) {
         productTags.push(
-          <View key={i} style={{ backgroundColor: '#eeeeee', borderRadius: 10, marginRight: 5, marginBottom: 5, height: 36, justifyContent: 'center', alignItems: 'center', paddingRight: 10, paddingLeft: 10, borderRadius: 10 }}>
-            <Text style={{ color: '#4A4A4A' }}>{item.productAttributes[i].value}</Text>
+          <View
+            key={i}
+            style={{
+              backgroundColor: "#eeeeee",
+              borderRadius: 10,
+              marginRight: 5,
+              marginBottom: 5,
+              height: 36,
+              justifyContent: "center",
+              alignItems: "center",
+              paddingRight: 10,
+              paddingLeft: 10,
+              borderRadius: 10
+            }}
+          >
+            <Text style={{ color: "#4A4A4A" }}>
+              {item.productAttributes[i].value}
+            </Text>
           </View>
         );
       }
 
-      const desc = Entities.decode((item.description || '' ).replace(/<[^>]*>/g, ""));
+      const desc = Entities.decode(
+        (item.description || "").replace(/<[^>]*>/g, "")
+      );
+
+      let domesticProduction = this._domesticProduction(item.productTypes);
 
       let details = detailIsOpen ? (
-        <View style={{ borderBottomWidth: 1, borderColor: '#D8D8D8', paddingBottom: 50 }}>
-          <Text style={{ fontSize: 13, color: '#A9A9A9' }}>Bu ürün</Text>
-          <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 10, marginBottom: 20 }}>
+        <View
+          style={{
+            borderBottomWidth: 1,
+            borderColor: "#D8D8D8",
+            paddingBottom: 50
+          }}
+        >
+          <Text style={{ fontSize: 13, color: "#A9A9A9" }}>Bu ürün</Text>
+          <View
+            style={{
+              flexDirection: "row",
+              flexWrap: "wrap",
+              marginTop: 10,
+              marginBottom: 20
+            }}
+          >
             {productTags}
           </View>
+          {domesticProduction}
           <Text style={styles.defautText}>{desc}</Text>
-          <Text style={[styles.defautText, { marginTop: 15, fontSize: 14 }]}>Ürün kodu: {item.integrationId}</Text>
+          <Text style={[styles.defautText, { marginTop: 15, fontSize: 14 }]}>
+            Ürün kodu: {item.integrationId}
+          </Text>
           {this._getDetailContent()}
         </View>
       ) : null;
 
-      let _favoriteButton = favoriteButton.status ?
-        (<DefaultButton callback={this._addToFavorites} name={favoriteButton.b} borderColor="#FF2B94" />) :
-        (<DefaultButton callback={this._addToFavorites} name={favoriteButton.a} />);
-
-
-      let price = item.discountRate > 0 ? (
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Text style={{ fontSize: 18, fontFamily: 'brandon', fontWeight: 'bold', color: '#BE1066' }}>₺{item.salePrice}</Text>
-          <Text style={{ fontSize: 18, fontFamily: 'brandon', fontWeight: 'bold', marginLeft: 10, textDecorationLine: 'line-through' }}>₺{item.listPrice}</Text>
-          <Text style={{ fontSize: 13, fontFamily: 'proxima', marginLeft: 10, }}>%{item.discountRate}</Text>
-        </View>
+      let _favoriteButton = favoriteButton.status ? (
+        <DefaultButton
+          callback={this._addToFavorites}
+          name={favoriteButton.b}
+          borderColor="#FF2B94"
+        />
       ) : (
-          <View style={{ flexDirection: 'row' }}>
-            <Text style={{ fontSize: 18, fontFamily: 'brandon', fontWeight: 'bold' }}>₺{item.salePrice}</Text>
-          </View>
+          <DefaultButton
+            callback={this._addToFavorites}
+            name={favoriteButton.a}
+          />
         );
 
-      let stockQty = item.stockQty <= 20 ? <Text style={{ fontSize: 13, fontFamily: 'proxima', color: '#BE1066' }}>{'Tükenmek Üzere'}</Text> : null;
+      let price =
+        item.discountRate > 0 ? (
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <Text
+              style={{
+                fontSize: 18,
+                fontFamily: "brandon",
+                fontWeight: "bold",
+                color: "#BE1066"
+              }}
+            >
+              ₺{item.salePrice}
+            </Text>
+            <Text
+              style={{
+                fontSize: 18,
+                fontFamily: "brandon",
+                fontWeight: "bold",
+                marginLeft: 10,
+                textDecorationLine: "line-through"
+              }}
+            >
+              ₺{item.listPrice}
+            </Text>
+            <Text
+              style={{ fontSize: 13, fontFamily: "proxima", marginLeft: 10 }}
+            >
+              %{item.discountRate}
+            </Text>
+          </View>
+        ) : (
+            <View style={{ flexDirection: "row" }}>
+              <Text
+                style={{
+                  fontSize: 18,
+                  fontFamily: "brandon",
+                  fontWeight: "bold"
+                }}
+              >
+                ₺{item.salePrice}
+              </Text>
+            </View>
+          );
 
-      let domesticProduction = this._domesticProduction(item.productTypes);
+      let stockQty = item.stockQty <= 20 ? "Tükenmek Üzere" : null;
 
       return (
         <View>
           <View>
             <Carousel
-              ref={(c) => { this._carousel = c; }}
+              ref={c => {
+                this._carousel = c;
+              }}
               data={images}
               renderItem={this._renderItem}
               sliderWidth={SCREEN_DIMENSIONS.width}
@@ -317,19 +479,36 @@ class ProductDetails extends React.Component {
               itemWidth={270}
               inactiveSlideScale={1}
               inactiveSlideOpacity={1}
-              activeSlideAlignment='start'
+              activeSlideAlignment="start"
             />
           </View>
           {palette}
-          <View style={{ padding: 20, paddingBottom: 0, paddingTop: 0, borderTopWidth: 1, borderTopColor: '#d8d8d8' }}>
-            {stockQty}
-            {domesticProduction}
-            <View style={{ flexDirection: 'row', height: 55, alignItems: 'center' }}>
+          <View
+            style={{
+              padding: 20,
+              paddingBottom: 0,
+              paddingTop: 0,
+              borderTopWidth: 1,
+              borderTopColor: "#d8d8d8"
+            }}
+          >
+            <View
+              style={{ flexDirection: "row", height: 55, alignItems: "center" }}
+            >
               {price}
-              <Text style={{ fontSize: 16, color: '#4A4A4A', position: 'absolute', right: 0 }}>Hızla tükeniyor</Text>
+              <Text
+                style={{
+                  fontSize: 16,
+                  color: "#BE1066",
+                  position: "absolute",
+                  right: 0
+                }}
+              >
+                {stockQty}
+              </Text>
             </View>
 
-            <View style={{ flexDirection: 'row', height: 80 }}>
+            <View style={{ flexDirection: "row", height: 80 }}>
               <View style={{ flex: 1, marginRight: 5, height: 50 }}>
                 <DefaultButton
                   callback={this._addToCart}
@@ -337,54 +516,74 @@ class ProductDetails extends React.Component {
                   boxColor="#000000"
                   textColor="#ffffff"
                   borderColor="#000000"
+                  animateOnTap={true}
+                  endName="EKLENDİ"
                 />
               </View>
-              <View style={{ flex: 1, marginLeft: 5 }}>
-                {_favoriteButton}
-              </View>
+              <View style={{ flex: 1, marginLeft: 5 }}>{_favoriteButton}</View>
             </View>
 
             <View>
               <Text style={styles.defautText}>{item.shortDescription}</Text>
-              <ProductActionButton name="Ürün Detayı" expanded={detailIsOpen} onPress={this._showProductInfo} />
+              <ProductActionButton
+                name="Ürün Detayı"
+                expanded={detailIsOpen}
+                onPress={this._showProductInfo}
+              />
               {details}
-              <ProductActionButton name="Yorumlar" count={0} onPress={this._onReviewPress} />
+              <ProductActionButton
+                name="Yorumlar"
+                count={0}
+                onPress={this._onReviewPress}
+              />
               {videosButton}
             </View>
-
           </View>
           {_videos}
           {recommendations}
           <View style={{ height: 60 }} />
         </View>
-      )
-    }
-    else
-      null;
-  }
-
+      );
+    } else null;
+  };
 
   render() {
-
     let { item, screenshot, sequence, measurements } = this.props.product;
     let { width, height, pageY, pageX } = measurements;
     let { canScroll, opacity, anim, productRenderDone, showVeil } = this.state;
 
-    let _title = item ? item.productName : '';
+    let _title = item ? item.productName : "";
 
     const _opacity = opacity.interpolate({
       inputRange: [0, 1],
-      outputRange: [1, 0],
+      outputRange: [1, 0]
     });
 
-    let _veil = showVeil ? <Animated.View style={{ width: SCREEN_DIMENSIONS.width, height: SCREEN_DIMENSIONS.height, top: 0, left: 0, position: 'absolute', zIndex: 1, opacity: _opacity, backgroundColor: '#ffffff' }} /> : null;
+    let _veil = showVeil ? (
+      <Animated.View
+        style={{
+          width: SCREEN_DIMENSIONS.width,
+          height: SCREEN_DIMENSIONS.height,
+          top: 0,
+          left: 0,
+          position: "absolute",
+          zIndex: 1,
+          opacity: _opacity,
+          backgroundColor: "#ffffff"
+        }}
+      />
+    ) : null;
 
     return (
       <View style={{ flex: 1 }}>
-        <MinimalHeader onPress={this._close} title={_title} noMargin={this.props.SCREEN_DIMENSIONS.OS == 'android' ? true : false} />
+        <MinimalHeader
+          onPress={this._close}
+          title={_title}
+          noMargin={this.props.SCREEN_DIMENSIONS.OS == "android" ? true : false}
+        />
         <ScrollView
           style={{ flex: 1 }}
-          ref={ref => this.productScrollView = ref}
+          ref={ref => (this.productScrollView = ref)}
           onContentSizeChange={() => {
             if (canScroll) {
               this.productScrollView.scrollTo({ y: 0 });
@@ -393,64 +592,95 @@ class ProductDetails extends React.Component {
           }}
         >
           <View style={{ flex: 1, minHeight: SCREEN_DIMENSIONS.height }}>
-            {this._renderProduct()
-            }
-            {//screenshot 
+            {this._renderProduct()}
+            {
+              //screenshot
             }
           </View>
         </ScrollView>
       </View>
-    )
+    );
   }
 }
 
-function mapStateToProps(state) { return state.general; }
+function mapStateToProps(state) {
+  return state.general;
+}
 const Details = connect(mapStateToProps)(ProductDetails);
 
-export { Details }
+export { Details };
 
 class ProductActionButton extends React.Component {
-
   _onPress = () => {
     this.props.onPress();
   };
 
   render() {
-
     let count = this.props.count ? (
-      <View style={{ padding: 5, backgroundColor: '#dddddd', borderRadius: 20, height: 24, minWidth: 24, marginLeft: 10, justifyContent: 'center', alignItems: 'center' }}>
-        <Text style={{ fontSize: 12, }}>{this.props.count}</Text>
+      <View
+        style={{
+          padding: 5,
+          backgroundColor: "#dddddd",
+          borderRadius: 20,
+          height: 24,
+          minWidth: 24,
+          marginLeft: 10,
+          justifyContent: "center",
+          alignItems: "center"
+        }}
+      >
+        <Text style={{ fontSize: 12 }}>{this.props.count}</Text>
       </View>
     ) : null;
 
-    let icon = ICONS['rightArrow'],
-      borderColor = '#D8D8D8';
+    let icon = ICONS["rightArrow"],
+      borderColor = "#D8D8D8";
 
     if (this.props.expanded) {
-      icon = ICONS['downArrow'];
-      borderColor = '#ffffff';
+      icon = ICONS["downArrow"];
+      borderColor = "#ffffff";
     }
 
     return (
-      <TouchableOpacity activeOpacity={.8} onPress={this._onPress}>
-        <View style={{ flexDirection: 'row', borderBottomWidth: 1, borderColor: borderColor, height: 60, alignItems: 'center' }}>
-          <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{this.props.name}</Text>
+      <TouchableOpacity activeOpacity={0.8} onPress={this._onPress}>
+        <View
+          style={{
+            flexDirection: "row",
+            borderBottomWidth: 1,
+            borderColor: borderColor,
+            height: 60,
+            alignItems: "center"
+          }}
+        >
+          <Text style={{ fontSize: 16, fontWeight: "bold" }}>
+            {this.props.name}
+          </Text>
           {count}
-          <Image source={icon} style={{ width: 40, height: 40, resizeMode: 'contain', position: 'absolute', right: 0, top: 10, }} />
+          <Image
+            source={icon}
+            style={{
+              width: 40,
+              height: 40,
+              resizeMode: "contain",
+              position: "absolute",
+              right: 0,
+              top: 10
+            }}
+          />
         </View>
       </TouchableOpacity>
-    )
+    );
   }
 }
 
 const styles = StyleSheet.create({
   defautText: {
     fontSize: 16,
-    color: '#6c6c6c',
-    lineHeight: 24,
+    color: "#6c6c6c",
+    lineHeight: 24
   },
   sectionHeader: {
     fontSize: 16,
-    fontFamily: 'Bold',
+    fontFamily: "Bold"
   }
 });

@@ -34,6 +34,7 @@ class CustomModal extends Component {
                 animationType={animationType}
                 transparent={transparent}
                 visible={visible}
+                onRequestClose={() => { }}
             >
                 <SafeAreaView style={{ flex: 1 }}>
                     {_self.props.children}
@@ -144,7 +145,7 @@ class Menu extends Component {
                     });
                 }
             });
-        else  if (type == ITEMTYPE['TRIGGERBUTTON'] && itemType == ITEMTYPE['EXTRABUTTON'])
+        else if (type == ITEMTYPE['TRIGGERBUTTON'] && itemType == ITEMTYPE['EXTRABUTTON'])
             console.log('extra buton tıklayınca');
         else
             _self._animate({ typ: 'hide' }, () => {

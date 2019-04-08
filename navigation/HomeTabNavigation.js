@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   View,
+  BackHandler,
 } from 'react-native';
 import { createMaterialTopTabNavigator } from 'react-navigation';
 import { Minus99HorizontalTabs } from '../app/components';
@@ -71,6 +72,7 @@ class Feeds extends React.Component {
     super(props);
   }
   componentWillMount() { this.props.navigation.setParams({ title: 'YENİLER' }); }
+
   render() {
     let props = this.props;
     return <Viewer {...props} config={CONFIG['feeds']} refreshing={false} />

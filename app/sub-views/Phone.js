@@ -27,21 +27,6 @@ class Phone extends React.Component {
     let formattedMobileNumber = obj.data.mobilePhone.replace(/\)/g, '').replace(/\(/g, '').replace(/\ /g, '').substr(1);
     let verificationNumber = Utils.generateSMSVerificationCode(5);
 
-    /*
-
-    console.log(formattedMobileNumber, Utils.getURL({ key: 'user', subKey: 'CheckUserPhoneNumber' }));
-
-    globals.fetch(
-      Utils.getURL({ key: 'user', subKey: 'CheckUserPhoneNumber' }),
-      JSON.stringify({
-        "phoneNumber": '' + formattedMobileNumber,
-      }),
-      (result) => { console.log(result); }
-      //this._fetchResultHandler
-    );
-
-    
-*/
     this.setState({
       mobileNumber: obj.data.mobilePhone,
       formattedMobileNumber: formattedMobileNumber,
@@ -55,7 +40,7 @@ class Phone extends React.Component {
       + "&text=" + escape(verificationNumber + " koduyla FLORMAR'a giris yapabilirsin.");
 
     sendVerificationSMS(data, this._Continue);
-
+    //setTimeout(() => { this._Continue(); }, 222);
   }
 
   _Continue = () => {
