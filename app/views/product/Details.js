@@ -34,6 +34,7 @@ import {
 import { DefaultButton } from "root/app/UI";
 import { Viewer } from "root/app/viewer";
 
+const Utils = require('root/app/helper/Global.js');
 globals = require("root/app/globals.js");
 const SCREEN_DIMENSIONS = Dimensions.get("screen");
 
@@ -343,7 +344,7 @@ class ProductDetails extends React.Component {
               textDecorationLine: "line-through"
             }}
           >
-            ₺{item.listPrice}
+            {Utils.getPriceFormat(item.listPrice)}
           </Text>
         ) : null;
 
@@ -430,7 +431,7 @@ class ProductDetails extends React.Component {
                 color: "#BE1066"
               }}
             >
-              ₺{item.salePrice}
+              {Utils.getPriceFormat(item.salePrice)}
             </Text>
             <Text
               style={{
@@ -441,7 +442,7 @@ class ProductDetails extends React.Component {
                 textDecorationLine: "line-through"
               }}
             >
-              ₺{item.listPrice}
+              {Utils.getPriceFormat(item.listPrice)}
             </Text>
             <Text
               style={{ fontSize: 13, fontFamily: "proxima", marginLeft: 10 }}
@@ -458,7 +459,7 @@ class ProductDetails extends React.Component {
                   fontWeight: "bold"
                 }}
               >
-                ₺{item.salePrice}
+                {Utils.getPriceFormat(item.salePrice)}
               </Text>
             </View>
           );

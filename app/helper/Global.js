@@ -39,6 +39,8 @@ module.exports = {
       getPriceFollowUpList: '/webapi/v3/User/getPriceFollowUpList', // takip listem - fiyatı düşenler
       checkGuestMail: '/webapi/v3/User/checkGuestMail',
       CheckUserPhoneNumber: '/webapi/v3/User/CheckUserPhoneNumber',
+      deleteStockFollowUpProduct: '/webapi/v3/User/deleteStockFollowUpProduct',
+      deletePriceFollowUpProduct: '/webapi/v3/User/deletePriceFollowUpProduct'
     },
     address: {
       country: '/webapi/v3/Address/getCountry',
@@ -244,10 +246,14 @@ module.exports = {
       k = _t.prefix + k;
     return k;
   },
-  getPriceFormat: function (k) {
+  getNumberFormat: function( k ){
     k = k || '0';
+    return parseFloat( k.replace(/\./g, '').replace(/\,/g, '.') );
+  },
+  getPriceFormat: function (k) {
+    k = ( k || '0' );
     /* fiyat formatlama */
-    return '₺' + k;
+    return '₺' + k.toString().replace(/\./g, ',');
   },
   getDateFormat: function (k) {
     k = k || '';

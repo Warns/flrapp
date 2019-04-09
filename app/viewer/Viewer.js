@@ -571,11 +571,40 @@ class FollowListItem extends Component {
         super(props);
     }
 
+    componentDidMount() {
+        const _self = this;
+        _self._isMounted = true;
+    }
+
+    componentWillUnmount() {
+        const _self = this;
+        _self._isMounted = false;
+    }
+
     _onAddToCart = () => {
         const _self = this,
             { data = {} } = _self.props,
             { productId } = data;
         store.dispatch({ type: ADD_CART_ITEM, value: { id: productId, quantity: 1 } });
+    }
+
+    _onRemove = () => {
+        const _self = this,
+            { data = {}, onRemove, config = {} } = _self.props;
+        Utils.confirm({ message: Translation['confirm']['removeMessage'] }, ({ type }) => {
+            if (type == 'ok') {
+                const { productId } = data; 
+                Globals.AJX({ _self: _self, uri: Utils.getURL(config['deleteURI']), data: { productId: productId } }, (res) => { 
+                    const { status, message } = res;
+                    if (onRemove && status == 200)
+                        setTimeout(() => {
+                            onRemove({ key: 'productId', value: productId });
+                        }, 100);
+
+                })
+
+            }
+        });
     }
 
     render() {
@@ -593,7 +622,10 @@ class FollowListItem extends Component {
                 </View>
                 <View style={{ flex: 1 }}>
                     <View>
-                        <Text numberOfLines={1} style={{ fontFamily: 'Medium', fontSize: 15 }}>{productName}</Text>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <Text numberOfLines={1} style={{ fontFamily: 'Medium', fontSize: 15, width: '90%' }}>{productName}</Text>
+                            <IconButton ico={'closedIco'} callback={_self._onRemove} />
+                        </View>
                         <Text numberOfLines={1} style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#555555' }}>{shortName}</Text>
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 21 }}>
@@ -868,10 +900,10 @@ class CustomDetailListItem extends Component {
 
     _getDsc = () => {
         let _self = this,
-            { dsc = '', shortDesc = '', link = '', title = '' } = _self.props.data;
+            { desc = '', shortDesc = '', link = '', title = '' } = _self.props.data;
 
         if (shortDesc == '')
-            shortDesc = dsc.substr(0, 100);
+            shortDesc = desc.substr(0, 100);
 
         return (
             <View style={{ margin: 20, paddingBottom: 30, marginBottom: 30, marginTop: 10, borderBottomColor: 'rgb(216, 216, 216)', borderBottomWidth: 1 }}>
@@ -879,7 +911,7 @@ class CustomDetailListItem extends Component {
                     <Text numberOfLines={2} style={{ fontFamily: 'Bold', fontSize: 16, flex: 1, paddingRight: 10 }}>{title}</Text>
                     <ShareButton style={{ paddingTop: 2 }} url={Utils.getImage(link)} title={title} />
                 </View>
-                <ReadMoreText lessText={shortDesc} moreText={dsc} />
+                <ReadMoreText lessText={shortDesc} moreText={desc} />
             </View>
         );
     }
@@ -1082,12 +1114,13 @@ class FeedsItem extends Component {
                 }
             });
         } else if (FEEDSTYPE['CAMPAING'] == labels[0] || FEEDSTYPE['COLLECTION'] == labels[0]) {
-            const { title = '', utp = '', image = '' } = params,
+            const { title = '', utp = '', galleryImage = '' } = params,
                 data = [{
-                    title: title,
-                    img: Utils.getImage(image),
+                    title: name,
+                    img: Utils.getImage(galleryImage),
                     utpId: utp
                 }];
+
             store.dispatch({ type: SET_CATEGORIES, value: data });
             store.dispatch({ type: SET_SELECTED_CATEGORY, value: name });
             store.dispatch({ type: NAVIGATE, value: { item: { navigation: 'Category' } } });
@@ -1180,10 +1213,48 @@ class FeedsItem extends Component {
 
     _getProduct = () => {
         const _self = this,
-            { image = '', name, price, params = {} } = _self.props.data,
-            { colorCount = 0, stockQty = '' } = params,
+            { image = '', name, params = {} } = _self.props.data,
+            { colorCount = 0, stockQty = '', discountPrice = 0, salesPrice = 0, discountRate = 0 } = params,
             color = colorCount > 0 ? <Text style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#9b9b9b', marginBottom: 10 }}>{colorCount}{' Renk'}</Text> : null,
             stockState = stockQty <= 20 ? <Text style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#be1066' }}>{'Tükenmek üzere'}</Text> : null;
+
+        let price = null;
+        if (discountPrice == salesPrice) {
+            price = <Text style={{ fontFamily: 'Bold', fontSize: 20 }}>{Utils.getPriceFormat(salesPrice)}</Text>;
+        } else {
+            const discountRate = 100 - Math.round((Utils.getNumberFormat(discountPrice) / Utils.getNumberFormat(salesPrice)) * 100);
+            price = (
+                <View>
+                    <Text style={{
+                        color: "#BE1066",
+                        fontFamily: 'Regular',
+                        fontSize: 12
+                    }}>
+                        {`%${discountRate} İNDİRİM`}
+                    </Text>
+                    <View style={{ flexDirection: "row", alignItems: "center", alignContent: 'center' }}>
+                        <Text
+                            style={{
+                                fontFamily: 'Bold',
+                                fontSize: 20,
+                            }}
+                        >
+                            {Utils.getPriceFormat(discountPrice)}
+                        </Text>
+                        <Text
+                            style={{
+                                fontFamily: 'Bold',
+                                fontSize: 16,
+                                marginLeft: 10,
+                                textDecorationLine: "line-through"
+                            }}
+                        >
+                            {Utils.getPriceFormat(salesPrice)}
+                        </Text>
+                    </View>
+                </View>
+            );
+        }
 
         return (
             <TouchableOpacity activeOpacity={1} onPress={_self._onPress}>
@@ -1195,7 +1266,7 @@ class FeedsItem extends Component {
                         />
                     </View>
                     <View style={{ flex: 1, paddingTop: 30 }}>
-                        <Text style={{ fontFamily: 'Bold', fontSize: 22, marginBottom: 10 }}>{Utils.getPriceFormat(price)}</Text>
+                        {price}
                         <Text style={{ fontFamily: 'Medium', fontSize: 16 }}>{name}</Text>
                         {color}
                         {stockState}
@@ -1206,20 +1277,44 @@ class FeedsItem extends Component {
         );
     }
 
+    _getOverlay = () => {
+        const _self = this,
+            { name = '', labels = [] } = _self.props.data || {},
+            type = labels[0];
+
+        let view = null;
+        if (FEEDSTYPE['VIDEO'] == type) {
+            view = (
+                <View style={{ position: 'absolute', width: '100%', height: '100%', left: 0, right: 0, top: 0, right: 0, zIndex: 2, overflow: 'hidden' }}>
+                    <Image
+                        style={{ opacity: 0.7, resizeMode: 'cover', width: '100%', height: '100%', bottom: 0, position: 'absolute', zIndex: 1 }}
+                        source={ICONS['gradient']}
+                    />
+                    <Text style={{ zIndex: 2, position: 'absolute', bottom: 0, paddingLeft: 20, paddingBottom: 10, fontSize: 20, color: '#FFFFFF', width: '70%', fontFamily: 'Medium' }}>{name}</Text>
+                </View>
+            );
+        }
+        return view;
+    }
+
     _getImage = () => {
         const _self = this,
-            { image = '', labels = [] } = _self.props.data,
+            { image = '', labels = [] } = _self.props.data || {},
             type = labels[0],
             w = Dimensions.get('window').width,
-            h = w / FEEDS_IMAGE_RATE[type];
+            h = w / FEEDS_IMAGE_RATE[type],
+            overlay = _self._getOverlay();
 
         return (
             <TouchableOpacity activeOpacity={1} onPress={_self._onPress}>
-                <Image
-                    style={{ height: h }}
-                    source={{ uri: Utils.getImage(image) }}
-                />
-                {_self._heartAnim()}
+                <View style={{ borderWidth: 1, borderColor: '#dcdcdc' }}>
+                    <Image
+                        style={{ height: h }}
+                        source={{ uri: Utils.getImage(image) }}
+                    />
+                    {overlay}
+                    {_self._heartAnim()}
+                </View>
             </TouchableOpacity>
         );
     }
@@ -1235,8 +1330,8 @@ class FeedsItem extends Component {
         if (desc != '')
             view = (
                 <View style={{ flexDirection: 'row', height: 40, borderColor: '#dcdcdc', borderRadius: 3, borderTopEndRadius: 0, borderTopLeftRadius: 0, borderWidth: 1, borderTopWidth: 0 }}>
-                    <TouchableOpacity style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} activeOpacity={0.8} onPress={_self._onPress}>
-                        <Text style={{ fontSize: 16, fontWeight: '500' }}>{desc}</Text>
+                    <TouchableOpacity style={{ flex: 1, justifyContent: 'center', alignItems: 'flex-end' }} activeOpacity={0.8} onPress={_self._onPress}>
+                        <Text style={{ fontSize: 16, fontWeight: '500', fontFamily: 'Medium' }}>{desc}</Text>
                     </TouchableOpacity>
                     <Image
                         style={{ width: 40, height: 40 }}
@@ -1263,9 +1358,9 @@ class FeedsItem extends Component {
 
         /*
         test
-        if( labels[0] != 'instagram' )
-            return null;
-        */
+        if (labels[0] != 'promo')
+            return null;*/
+
         return (
             <View style={{ margin: 10, marginBottom: 20 }}>
                 <View style={{ position: 'relative' }}>
@@ -1814,7 +1909,8 @@ class Viewers extends Component {
 
     _renderItem = ({ item, key, index }) => {
         const _self = this,
-            { itemType = '', viewType = '' } = _self.props.config,
+            { config = {} } = _self.props,
+            { itemType = '', viewType = '' } = config,
             { loaded, total } = _self.state;
 
         if (!loaded)
@@ -1840,7 +1936,7 @@ class Viewers extends Component {
             case ITEMTYPE['COUPON']:
                 return <CouponListItem data={item} />;
             case ITEMTYPE['FOLLOWLIST']:
-                return <FollowListItem data={item} />;
+                return <FollowListItem onRemove={_self._removeItem} data={item} config={config} />;
             case ITEMTYPE['SERVICELIST']:
                 return <ServiceListItem callback={_self._callback} data={item} />;
             case ITEMTYPE['VIDEO']:
@@ -1900,6 +1996,10 @@ class Viewers extends Component {
                 _self._preload(false);
             });
         } else if (itemType == ITEMTYPE['FOLLOWLIST']) {
+            
+            _self.props.config['deleteURI'] = obj['deleteURI'] || {};
+            _self.props.config['uri'] = obj['url'] || {}; /* filtrelemede url değiştiği için burada son tıklanan butonun url genel config eşitlenir böylece sayfa refresh olduğu zaman son url istek atar */
+            
             _self._preload(true);
             _self.setAjx({ uri: obj['uri'] || '', data: obj['data'] || {} }, () => {
                 _self._preload(false);
@@ -1920,7 +2020,6 @@ class Viewers extends Component {
             { itemType, filterData = {} } = _self.props.config,
             { noResult = false } = _self.state,
             { filtered = false } = filterData;
-
 
         switch (itemType) {
             case ITEMTYPE['ADDRESS']: {
@@ -2009,6 +2108,8 @@ class Viewers extends Component {
                     {
                         title: 'Fiyatı Düşenler',
                         itemType: 'followList',
+                        deleteURI: { key: 'user', subKey: 'deletePriceFollowUpProduct' },
+                        url: { key: 'user', subKey: 'getPriceFollowUpList' },
                         uri: Utils.getURL({ key: 'user', subKey: 'getPriceFollowUpList' }),
                         keys: {
                             id: 'productId',
@@ -2019,6 +2120,8 @@ class Viewers extends Component {
                     {
                         title: 'Stoğa Girenler',
                         itemType: 'followList',
+                        deleteURI: { key: 'user', subKey: 'deleteStockFollowUpProduct' },
+                        url: { key: 'user', subKey: 'getStockFollowUpList' },
                         uri: Utils.getURL({ key: 'user', subKey: 'getStockFollowUpList' }),
                         keys: {
                             id: 'productId',

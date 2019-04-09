@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import {
+    View,
+} from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 import { CartPage, AddressPage, PaymentPage, ExtraPageDetail, OrderSuccess } from 'root/app/viewer/';
 import { MinimalHeader } from 'root/app/components/';
@@ -27,7 +30,7 @@ export default class CartNavigation extends Component {
         if (type == 'normal')
             return <MinimalHeader onPress={_onClose} title="Sepetim" progress={progress} />
         else if (type == 'order')
-            return <MinimalHeader wrapperStyle={style} title="" onPress={_onClose} />
+            return <MinimalHeader wrapperStyle={style} title="" onPress={_onClose} right={<View />} />
     }
 
     navigator = createStackNavigator(
