@@ -345,8 +345,8 @@ export default class StoreNavigator extends Component {
         else
             ico = (
                 <View style={buttonWrp}>
-                    <IconButton callback={_onMain} ico={'list'} />
                     <IconButton callback={_onSearch} ico={'searchMap'} />
+                    <IconButton callback={_onMain} ico={'list'} />
                 </View>
             );
 

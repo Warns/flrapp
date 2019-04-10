@@ -205,7 +205,7 @@
             },
             {
                 "showMenu": false,
-                "title": "DEĞERLER",
+                "title": "DEĞERLERİMİZ",
                 "type": "webViewer",
                 "uri": {
                     "key": "content",
@@ -389,6 +389,18 @@
                 "img": "/UPLOAD/APP/assets/menu-makeup.png",
                 "children": [
                     {
+                        "title": "TÜM MAKYAJ ÜRÜNLERİ",
+                        "id": "18655",
+                        "img": "/UPLOAD/APP/assets/menu-makeup.png",
+                        "children": [
+                            {
+                                "title": "TÜM MAKYAJ ÜRÜNLERİ",
+                                "id": "18655",
+                                "img": "https://mcdn.flormar.com.tr/UPLOAD/APP/assets/menu-makeup.png"
+                            }
+                        ]
+                    },
+                    {
                         "title": "YÜZ",
                         "id": "18708",
                         "img": "/UPLOAD/categories-images/yuz.jpg",
@@ -566,6 +578,18 @@
                 "img": "/UPLOAD/APP/assets/menu-skincare.png",
                 "children": [
                     {
+                        "title": "TÜM CİLT BAKIM ÜRÜNLERİ",
+                        "id": "18658",
+                        "img": "/UPLOAD/APP/assets/menu-skincare.png",
+                        "children": [
+                            {
+                                "title": "TÜM CİLT BAKIM ÜRÜNLERİ",
+                                "id": "18658",
+                                "img": "https://mcdn.flormar.com.tr/UPLOAD/APP/assets/menu-skincare.png"
+                            }
+                        ]
+                    },
+                    {
                         "title": "YÜZ BAKIMI",
                         "id": "18826",
                         "img": "/UPLOAD/categories-images/cilt-vucut.jpg",
@@ -633,6 +657,18 @@
                 "id": "18821",
                 "img": "/UPLOAD/APP/assets/menu-accessories.png",
                 "children": [
+                    {
+                        "title": "TÜM AKSESUAR ÜRÜNLERİ",
+                        "id": "18821",
+                        "img": "/UPLOAD/APP/assets/menu-accessories.png",
+                        "children": [
+                            {
+                                "title": "TÜM AKSESUAR ÜRÜNLERİ",
+                                "id": "18821",
+                                "img": "https://mcdn.flormar.com.tr/UPLOAD/APP/assets/menu-accessories.png"
+                            }
+                        ]
+                    },
                     {
                         "title": "YÜZ",
                         "id": "18835",
