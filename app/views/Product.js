@@ -17,6 +17,10 @@ import {
   Review
 } from './product';
 
+import {
+  CLOSE_PRODUCT_DETAILS
+} from "root/app/helper/Constant";
+
 class DetailsPage extends React.Component {
   render() { return <Details {...this.props} /> }
 }
@@ -67,13 +71,17 @@ const ProductNavigator = createStackNavigator(
 
 class ProductView extends React.Component {
 
+  _onRequestClose = () => {
+    this.props.dispatch({ type: CLOSE_PRODUCT_DETAILS, Value: {} });
+  }
+
   render() {
     return (
       <Modal
         animationType='none'
         transparent={true}
         visible={this.props.product.visibility}
-        onRequestClose={() => { alert('zizpzpzz'); }}
+        onRequestClose={this._onRequestClose}
       >
         <ProductNavigator {...this.props} />
       </Modal>

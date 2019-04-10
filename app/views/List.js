@@ -111,7 +111,7 @@ export default class List extends React.Component {
 
   state = {
     fadeAnim: new Animated.Value(0),
-    items: [],
+    items: [{ productType: 'fake' }, { productType: 'fake' }, { productType: 'fake' }, { productType: 'fake' }, { productType: 'fake' }, { productType: 'fake' }],
     itemsAll: [],
     sliceNumber: 0,
     sliceSize: 4,
@@ -314,7 +314,12 @@ export default class List extends React.Component {
 
   _renderItem = ({ item, index }) => {
 
-    if (item.productType == 'cover') {
+    if (item.productType == 'fake') {
+      return (
+        <ListItemSkeleton index={index} />
+      )
+    }
+    else if (item.productType == 'cover') {
       return (
         <View style={{ height: 200, width: Math.floor(SCREEN_DIMENSIONS.width * .5), overflow: 'hidden' }}>
           <Image source={{ uri: item.img }} style={{ height: 200, width: SCREEN_DIMENSIONS.width, marginLeft: item.side == 'right' ? '-100%' : 0, resizeMode: 'cover', }} />
@@ -444,7 +449,7 @@ export default class List extends React.Component {
       <View ref={(c) => { this._listView = c; }} style={{ flex: 1, backgroundColor: '#ffffff' }}>
         <ListHeader onFiltersChange={this._onFiltersChange} totalProductCount={totalProductCount} sorts={sorts} filters={filters} onDisplayChange={this._onDisplayChange} textureDisplay={this.state.textureDisplay} />
         <FlatList
-          style={{ flex: 1, flexDirection: 'column' }}
+          style={{ flex: 1, flexDirection: 'column', }}
           scrollEnabled={true}
           data={this.state.items}
           numColumns='2'
@@ -645,6 +650,31 @@ class ListItem extends React.Component {
           </View>
         </View>
       </TouchableOpacity>
+    );
+  }
+};
+
+class ListItemSkeleton extends React.Component {
+
+  render() {
+
+    let { index } = this.props;
+
+    let _width = Math.floor(SCREEN_DIMENSIONS.width * .5);
+    let _height = Math.floor(_width * 5 / 4);
+    let _boxHeight = _height + 55;
+
+    let borderStyle = index % 2 == 0 ? { borderRightWidth: 1, borderRightColor: '#dddddd' } : {};
+
+    return (
+
+      <View style={[{ flex: 1, minHeight: _boxHeight, borderBottomWidth: 1, borderBottomColor: '#dddddd' }, borderStyle]}>
+        <View style={{ width: _width - 60, height: _height - 60, margin: 30, backgroundColor: '#eeeeee' }}></View>
+        <View style={{ padding: 30, paddingTop: 0, flexDirection: 'column', flex: 1 }}>
+          <View style={{ width: 90, maxHeight: 10, flex: 1, marginBottom: 5, backgroundColor: '#dddddd' }}></View>
+          <View style={{ width: 40, maxHeight: 10, flex: 1, backgroundColor: '#dddddd' }}></View>
+        </View>
+      </View>
     );
   }
 };

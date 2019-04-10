@@ -68,9 +68,15 @@ const Cart = class Main extends Component {
         const _self = this;
         _self.props.dispatch({ type: SET_CART_PROGRESS, value: { progress: '1/3', cartLocation: 'basket' } });
 
-        /* 
-            NOT: ilk açılışta sepetin 2 kere tetiklenmemesi için kontrol ekliyoruz. Böylece kullanıcı bir sonraki sayfada kargo seçimi yapınca fiyat güncelleneceği için tekrar buraya döndüğünde sepetin tekrardan update edilmesi lazım. 
+        /*
+        
+            NOT: ilk açılışta sepetin 2 kere tetiklenmemesi için kontrol ekliyoruz. 
+                 Böylece kullanıcı bir sonraki sayfada kargo seçimi yapınca fiyat
+                 güncelleneceği için tekrar buraya döndüğünde sepetin tekrardan 
+                 update edilmesi lazım.
+        
         */
+
         if (_self._begining)
             _self._onUpdate();
         _self._begining = true;

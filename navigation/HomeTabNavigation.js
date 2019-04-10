@@ -78,11 +78,17 @@ class Feeds extends React.Component {
 
   componentDidMount() {
     store.dispatch({ type: SET_MAIN_NAVIGATION, value: this.props.navigation });
+    BackHandler.addEventListener("hardwareBackPress", this._onBackPress);
   }
 
   componentWillMount() {
     this.props.navigation.setParams({ title: 'YENİLER' });
   }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener("hardwareBackPress", this._onBackPress);
+  }
+
 
   render() {
     let props = this.props;

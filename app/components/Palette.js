@@ -165,6 +165,7 @@ class Palette extends React.Component {
           visible={this.state.visible}
           animationType="slide"
           transparent={true}
+          onRequestClose={this._closeModal}
         >
           <View style={{ flex: 1, maxHeight: 200, height: 200, backgroundColor: "rgba(0,0,0,.2)" }}>
             <TouchableOpacity style={{ height: 200 }} onPress={this._closeModal}>
