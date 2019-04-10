@@ -111,7 +111,7 @@ class CustomModals extends Component {
           flex: 1
         }}
       >
-        <Form callback={_self._formCallback} postData={postData} data={FORMDATA[itemType]} />
+        <Form cancelForm={_self._onClose} callback={_self._formCallback} postData={postData} data={FORMDATA[itemType]} />
       </KeyboardAvoidingView>);
     else if (type == SET_VIDEO_PLAYER) {
       const { items = [], selected = 0 } = data;
@@ -144,7 +144,7 @@ class CustomModals extends Component {
         animationType='slide'
         transparent={false}
         visible={_self.props.customModal.visibility}
-        onRequestClose={() => { }}
+        onRequestClose={() => { _self._onClose(); }}
       >
         {_self._getViewer()}
       </Modal>

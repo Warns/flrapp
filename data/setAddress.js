@@ -8,7 +8,19 @@ module.exports = {
         keys: {
             arr: 'addresses',
         },
+
+        /* 
+            default değerlerde belirtilen case gerçekleşirse form disabled oluyor  
+        */
+        disableForm: {
+            readOnly: {
+                value: true,
+                msg: '! Bu fatura adresinizi daha önce bir siparişinizde kullandığınız için değiştiremiyorsunuz.'
+            }
+        }
     },
+
+    buttonText: 'KAYDET',
 
     /* uri: istek yapılacak url */
     uri: Utils.getURL({ key: 'address', subKey: 'setAddress' }),

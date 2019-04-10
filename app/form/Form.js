@@ -82,6 +82,7 @@ class Form extends Component {
             loading: false,
             errMsg: [],
             defaultData: [],
+            disabledFormMsg: [],
             show: true, // form gizle-goster
             control: true, // hata durumu için
         };
@@ -133,7 +134,7 @@ class Form extends Component {
             /* default value varsa formu gizleriz serverdan default dataları çektikten sonra formu tekrardan gösteririz. */
             const { postData = {} } = _self.props;
             _self.setState({ show: false });
-            _self.ajx({ uri: defValue.uri || '', data: postData }, function ({ type, d }) { 
+            _self.ajx({ uri: defValue.uri || '', data: postData }, function ({ type, d }) {
                 if (type == 'success') {
                     const keys = defValue['keys'] || '';
                     let data = [];
@@ -143,6 +144,7 @@ class Form extends Component {
                         data = d.data || [];
 
                     _self.setState({ defaultData: data, show: true });
+                    _self._setDisabledForm();
                 }
             })
         }
@@ -436,6 +438,48 @@ class Form extends Component {
         store.dispatch({ type: SHOW_CUSTOM_POPUP, value: { visibility: true, ...obj['modal'] } });
     }
 
+    /* 
+        default değerlerde belirtilen case gerçekleşirse form disabled oluyor  
+    */
+    _setDisabledForm = () => {
+        const _self = this,
+            { defValue = {} } = _self.props.data || {},
+            { defaultData = '' } = _self.state,
+            { disableForm = '' } = defValue;
+
+        if (disableForm != '' && defaultData != '') {
+            const arr = Object.entries(disableForm),
+                msg = [];
+            if (arr.length > 0) {
+                arr.forEach(([key, item]) => {
+                    if (defaultData[key] == item['value'])
+                        msg.push(item['msg'] || '');
+                });
+            }
+
+            if (msg.length > 0)
+                _self.setState({ disabledFormMsg: msg });
+        }
+    }
+
+    _getDisabledMsg = () => {
+        const _self = this,
+            { disabledFormMsg = [] } = _self.state;
+
+        let view = [];
+        if (disabledFormMsg.length > 0) {
+            Object
+                .entries(disabledFormMsg)
+                .forEach(([key, value]) => {
+                    view.push(<Text style={{ marginBottom: 5, fontWeight: 'bold' }} key={key}>{value}</Text>);
+                });
+
+            view = <View style={{ paddingBottom: 15 }}>{view}</View>
+        }
+
+        return view;
+    }
+
     /* serverdan dönen json ile form datasının default değerlerini eşitlemek */
     _setDefault = (itm) => {
         const _self = this,
@@ -521,12 +565,37 @@ class Form extends Component {
             arr[i]._onReset();
     }
 
+    _onPressCancel = () => {
+        const _self = this,
+            { cancelForm } = this.props;
+        if (cancelForm)
+            cancelForm();
+    }
+
+    _getCancelButton = () => {
+        const _self = this,
+            { disabledFormMsg = [] } = _self.state,
+            { cancelButtonText = 'İPTAL' } = _self.props.data,
+            button = disabledFormMsg.length > 0 ? <DefaultButton name={cancelButtonText} textColor="#ffffff" boxColor="#000000" borderColor="#000000" callback={_self._onPressCancel.bind(_self)}>{cancelButtonText}</DefaultButton> : null;
+
+        return button;
+    }
+
+    _getButton = () => {
+        const _self = this,
+            { disabledFormMsg = [] } = _self.state,
+            { buttonText = 'GİRİŞ YAP', showButton = true } = _self.props.data,
+            button = (showButton && disabledFormMsg.length == 0) ? <DefaultButton name={buttonText} textColor="#ffffff" boxColor="#000000" borderColor="#000000" callback={_self._onPress.bind(_self)}>{buttonText}</DefaultButton> : null;
+
+        return button;
+    }
+
     _getViewer = () => {
         const _self = this,
             { show } = _self.state,
-            { theme = 'DARK', buttonText = 'GİRİŞ YAP', buttonStyle = {}, buttonFontStyle = {}, showButton = true } = _self.props.data,
             { scrollEnabled = true } = _self.props,
-            button = showButton ? <DefaultButton name={buttonText} textColor="#ffffff" boxColor="#000000" borderColor="#000000" callback={_self._onPress.bind(_self)}>{buttonText}</DefaultButton> : null;
+            button = _self._getButton(),
+            cancelButton = _self._getCancelButton();
 
         if (!show)
             return preload();
@@ -538,9 +607,11 @@ class Form extends Component {
                     style={{ flex: 1, }}>
                     <CustomKeyboard style={[{ flex: 1 }]}>
                         <View style={[{ flex: 1, paddingLeft: 40, paddingRight: 40, paddingBottom: 40 }, { ..._self.props.style }]}>
+                            {_self._getDisabledMsg()}
                             {_self._getAllErrMsg()}
                             {_self.add()}
                             {button}
+                            {cancelButton}
                         </View>
                     </CustomKeyboard >
                 </ScrollView>

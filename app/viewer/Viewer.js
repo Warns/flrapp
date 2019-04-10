@@ -593,8 +593,8 @@ class FollowListItem extends Component {
             { data = {}, onRemove, config = {} } = _self.props;
         Utils.confirm({ message: Translation['confirm']['removeMessage'] }, ({ type }) => {
             if (type == 'ok') {
-                const { productId } = data; 
-                Globals.AJX({ _self: _self, uri: Utils.getURL(config['deleteURI']), data: { productId: productId } }, (res) => { 
+                const { productId } = data;
+                Globals.AJX({ _self: _self, uri: Utils.getURL(config['deleteURI']), data: { productId: productId } }, (res) => {
                     const { status, message } = res;
                     if (onRemove && status == 200)
                         setTimeout(() => {
@@ -1265,7 +1265,7 @@ class FeedsItem extends Component {
                             source={{ uri: Utils.getImage(image) }}
                         />
                     </View>
-                    <View style={{ flex: 1, paddingTop: 30 }}>
+                    <View style={{ flex: 1, paddingTop: 30, paddingRight: 10 }}>
                         {price}
                         <Text style={{ fontFamily: 'Medium', fontSize: 16 }}>{name}</Text>
                         {color}
@@ -1331,7 +1331,7 @@ class FeedsItem extends Component {
             view = (
                 <View style={{ flexDirection: 'row', height: 40, borderColor: '#dcdcdc', borderRadius: 3, borderTopEndRadius: 0, borderTopLeftRadius: 0, borderWidth: 1, borderTopWidth: 0 }}>
                     <TouchableOpacity style={{ flex: 1, justifyContent: 'center', alignItems: 'flex-end' }} activeOpacity={0.8} onPress={_self._onPress}>
-                        <Text style={{ fontSize: 16, fontWeight: '500', fontFamily: 'Medium' }}>{desc}</Text>
+                        <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{desc}</Text>
                     </TouchableOpacity>
                     <Image
                         style={{ width: 40, height: 40 }}
@@ -1996,10 +1996,10 @@ class Viewers extends Component {
                 _self._preload(false);
             });
         } else if (itemType == ITEMTYPE['FOLLOWLIST']) {
-            
+
             _self.props.config['deleteURI'] = obj['deleteURI'] || {};
             _self.props.config['uri'] = obj['url'] || {}; /* filtrelemede url değiştiği için burada son tıklanan butonun url genel config eşitlenir böylece sayfa refresh olduğu zaman son url istek atar */
-            
+
             _self._preload(true);
             _self.setAjx({ uri: obj['uri'] || '', data: obj['data'] || {} }, () => {
                 _self._preload(false);
