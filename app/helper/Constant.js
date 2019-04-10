@@ -68,6 +68,7 @@ export const ICONS = {
   lips1: require("root/assets/images/lips2.png"),
   lips2: require("root/assets/images/lips3.png"),
   lips3: require("root/assets/images/lips4.png"),
+  gradient: require('root/assets/images/gradient.png')
 };
 
 /* VIEWER SAYFA TİPLERİ */

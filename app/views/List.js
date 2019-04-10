@@ -613,13 +613,13 @@ class ListItem extends React.Component {
 
     let price = item.discountRate > 0 ? (
       <View style={{ flexDirection: 'row', alignItems: 'center', position: 'relative' }}>
-        <Text style={{ fontSize: 18, fontFamily: 'brandon', fontWeight: 'bold', color: '#BE1066' }}>₺{item.salePrice}</Text>
-        <Text style={{ fontSize: 14, fontFamily: 'brandon', marginLeft: 7, textDecorationLine: 'line-through' }}>₺{item.listPrice}</Text>
+        <Text style={{ fontSize: 18, fontFamily: 'brandon', fontWeight: 'bold', color: '#BE1066' }}>{Utils.getPriceFormat(item.salePrice)}</Text>
+        <Text style={{ fontSize: 14, fontFamily: 'brandon', marginLeft: 7, textDecorationLine: 'line-through' }}>{Utils.getPriceFormat(item.listPrice)}</Text>
         <Text style={{ fontSize: 13, fontFamily: 'proxima', right: 0, position: "absolute" }}>%{item.discountRate}</Text>
       </View>
     ) : (
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Text style={{ fontSize: 18, fontFamily: 'brandon', fontWeight: 'bold' }}>₺{item.salePrice}</Text>
+          <Text style={{ fontSize: 18, fontFamily: 'brandon', fontWeight: 'bold' }}>{Utils.getPriceFormat(item.salePrice)}</Text>
         </View>
       );
 

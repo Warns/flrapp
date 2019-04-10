@@ -36,7 +36,7 @@ class ReadMoreText extends Component {
             { more = 'Daha fazla', less = 'Daha az', numberOfLines = 6, lessText = '', moreText = '' } = _self.props,
             buttonLabel = _self.state.expanded ? less : more,
             ico = _self.state.expanded ? 'upArrow' : 'bottomArrow',
-            htm = _self.state.expanded ? Entities.decode(moreText) : Entities.decode(lessText);
+            htm = _self.state.expanded ? Entities.decode(moreText) : Entities.decode(lessText + '...');
 
         return (
             <View>

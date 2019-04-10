@@ -44,6 +44,7 @@
                 "title": "TAKİP LİSTEM",
                 "type": "listViewer",
                 "itemType": "followList",
+                "deleteURI": { "key": "user", "subKey": "deletePriceFollowUpProduct" },
                 "uri": {
                     "key": "user",
                     "subKey": "getPriceFollowUpList"

@@ -46,6 +46,7 @@ class DateTimePicker extends Component {
             error = false,
             errorMsg = null,
             dateFormat = 'DD.MM.YYYY',
+            disabled = false
         } = this.props.data;
 
         const {
@@ -66,6 +67,7 @@ class DateTimePicker extends Component {
                 error={error}
                 errorMsg={errorMsg}>
                 <DatePicker
+                    disabled={disabled}
                     style={{ flex: 1, }}
                     date={this.state.value}
                     mode="date"

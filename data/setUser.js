@@ -55,7 +55,7 @@ module.exports = {
                     disabled: true,
                     css: {
                         wrapperStyle: {
-                            backgroundColor: '#f6f6f6'
+                            backgroundColor: '#eee'
                         }
                     }
                 }
@@ -77,7 +77,7 @@ module.exports = {
                     disabled: true,
                     css: {
                         wrapperStyle: {
-                            backgroundColor: '#f6f6f6'
+                            backgroundColor: '#eee'
                         }
                     }
                 },
@@ -124,7 +124,7 @@ module.exports = {
                     disabled: true,
                     css: {
                         wrapperStyle: {
-                            backgroundColor: '#f6f6f6'
+                            backgroundColor: '#eee'
                         }
                     }
                 },
@@ -144,6 +144,12 @@ module.exports = {
                     },
                     maxDate: -14,
                     validation: [{ key: 'isEmpty' }, { key: 'isDate' },],
+                    disabled: true,
+                    css: {
+                        wrapperStyle: {
+                            backgroundColor: '#eee'
+                        }
+                    }
                 },
             ]
         },

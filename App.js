@@ -131,6 +131,7 @@ export default class App extends React.Component {
         require('root/assets/images/order-success-rect.png'),
         require('root/assets/images/order-success-txt.png'),
         require('root/assets/images/order-success-icon.png'),
+        require('root/assets/images/gradient.png'),
       ]),
       Font.loadAsync({
         // We include SpaceMono because we use it in HomeScreen.js. Feel free
