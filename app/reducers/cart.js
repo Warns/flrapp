@@ -26,6 +26,7 @@ import {
 const Utils = require('root/app/helper/Global.js');
 
 const cartInitialState = {
+    activeTitle: 'SEPETİM',
     progress: '1/3',
     name: 'Cart',
     cartProductsNumber: 0,
@@ -361,10 +362,11 @@ export default function cart(state = cartInitialState, action) {
             }
         };
         case SET_CART_PROGRESS: {
-            const { progress, cartLocation } = action.value || {};
+            const { progress, cartLocation, activeTitle } = action.value || {};
             return {
                 ...state,
                 progress: progress,
+                activeTitle: activeTitle,
                 optin: { ...state.optin, cartLocation: cartLocation }
             }
         };

@@ -351,19 +351,24 @@ class SelectionBox extends React.Component {
 
 class ListItem extends React.Component {
     _onPress = () => {
-        const { order } = this.props.item;
+        const { order, disabled = false } = this.props.item;
+
+        if( disabled ) return false;
+
         this.props.onPressItem(order || this.props.index);
     }
     render() {
 
-        const { item, selected } = this.props;
+        const { item = {}, selected } = this.props,
+        { disabled = false } = item;
+
         return (
             <TouchableOpacity
                 activeOpacity={0.8}
                 onPress={this._onPress}>
                 <View style={{ flex: 1, flexDirection: "row", borderBottomColor: "#d8d8d8", borderBottomWidth: 1, alignItems: "center", height: 60, paddingRight: 10, paddingLeft: 10, marginLeft: 20, marginRight: 20 }}>
                     <View style={{ flex: 1 }}>
-                        <Text numberOfLines={1} style={[styles.normal, styles.bold, { color: '#000000' }]}>{item.name}</Text>
+                        <Text numberOfLines={1} style={[styles.normal, styles.bold, { color: disabled ? '#c1c1c1' : '#000000' }]}>{item.name}</Text>
                     </View>
                     {selected ? <Image source={require("root/assets/icons/check.png")} style={[{ width: 40, height: 40, marginRight: 5, left: 10, }]} /> : null}
                 </View>

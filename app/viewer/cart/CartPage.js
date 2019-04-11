@@ -66,7 +66,7 @@ const Cart = class Main extends Component {
     _begining = false;
     onWillFocus = () => {
         const _self = this;
-        _self.props.dispatch({ type: SET_CART_PROGRESS, value: { progress: '1/3', cartLocation: 'basket' } });
+        _self.props.dispatch({ type: SET_CART_PROGRESS, value: { activeTitle: 'SEPETİM', progress: '1/3', cartLocation: 'basket' } });
 
         /*
         

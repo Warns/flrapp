@@ -201,7 +201,7 @@ const Address = class Main extends Component {
 
     onWillFocus = () => {
         const _self = this;
-        _self.props.dispatch({ type: SET_CART_PROGRESS, value: { progress: '2/3', cartLocation: 'delivery' } });
+        _self.props.dispatch({ type: SET_CART_PROGRESS, value: { activeTitle: 'TESLİMAT', progress: '2/3', cartLocation: 'delivery' } });
     }
 
     componentDidMount() {

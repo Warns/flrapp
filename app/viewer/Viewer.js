@@ -46,7 +46,7 @@ import {
     ReadMoreText,
     ShareButton,
 } from 'root/app/components';
-import { RatingButton, DoubleClickButton, IconButton, BoxButton } from 'root/app/UI';
+import { RatingButton, DoubleClickButton, IconButton, BoxButton, DefaultButton } from 'root/app/UI';
 import { CountryPicker, SelectBox } from 'root/app/form';
 import { connect } from 'react-redux';
 import { AddressListItem, BankTransferListItem } from './';
@@ -289,7 +289,9 @@ class CartListItem extends Component {
     _getView = () => {
         const _self = this,
             { data = {}, viewType = '' } = _self.props,
-            { shortName, productName = '', total } = data;
+            { shortName, productName = '', total = 0, firstPriceTotal = 0 } = data;
+
+        const prc = total == firstPriceTotal ? <Text style={{ fontFamily: 'Bold', fontSize: 16 }}>{Utils.getPriceFormat(total)}</Text> : <View style={{ flexDirection: 'row', alignItems: 'center' }}><Text style={{ fontFamily: 'Bold', fontSize: 16 }}>{Utils.getPriceFormat(total)}</Text><Text style={{ marginLeft: 10, fontFamily: 'Bold', fontSize: 13, textDecorationLine: "line-through" }}>{Utils.getPriceFormat(firstPriceTotal)}</Text></View>
 
         if (viewType == 'miniCart')
             return (
@@ -301,7 +303,7 @@ class CartListItem extends Component {
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 16 }}>
                         <Text numberOfLines={1} style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#555555' }}>{shortName}</Text>
-                        <Text style={{ fontFamily: 'Bold', fontSize: 16 }}>{Utils.getPriceFormat(total)}</Text>
+                        {prc}
                     </View>
                 </View>
             );
@@ -319,7 +321,7 @@ class CartListItem extends Component {
 
                         <SelectBox fontStyle={{ fontSize: 12, fontFamily: 'RegularTyp2', }} showHeader={false} wrapperStyle={{ width: 85, height: 30, borderRadius: 15 }} containerStyle={{ marginBottom: 0 }} closed={true} callback={_self._onChange} data={_self.getSelectValue()} />
 
-                        <Text style={{ fontFamily: 'Bold', fontSize: 16 }}>{Utils.getPriceFormat(total)}</Text>
+                        {prc}
                     </View>
                 </View>
             );
@@ -405,6 +407,20 @@ class FavoriteListItem extends Component {
         });
     }
 
+    _onShowProduct = () => {
+        const _self = this,
+            { productId } = _self.props.data;
+        store.dispatch({
+            type: OPEN_PRODUCT_DETAILS,
+            value: {
+                id: productId,
+                measurements: {},
+                animate: false,
+                sequence: 0
+            }
+        });
+    }
+
     render() {
 
         const _self = this,
@@ -414,15 +430,19 @@ class FavoriteListItem extends Component {
         return (
             <View style={{ flexDirection: 'row', paddingTop: 20, paddingBottom: 20, paddingRight: 20, paddingLeft: 10, borderBottomColor: '#dcdcdc', borderBottomWidth: 1, marginLeft: 10, marginRight: 10 }}>
                 <View style={{ width: 60, justifyContent: 'center', }}>
-                    <Image
-                        style={{ height: 60 }}
-                        source={{ uri: Utils.getImage(smallImageUrl) }}
-                    />
+                    <TouchableOpacity activeOpacity={0.8} onPress={_self._onShowProduct}>
+                        <Image
+                            style={{ height: 60 }}
+                            source={{ uri: Utils.getImage(smallImageUrl) }}
+                        />
+                    </TouchableOpacity>
                 </View>
                 <View style={{ flex: 1 }}>
                     <View>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <Text numberOfLines={1} style={{ fontFamily: 'Medium', fontSize: 15 }}>{productName}</Text>
+                            <TouchableOpacity activeOpacity={0.8} onPress={_self._onShowProduct}>
+                                <Text numberOfLines={1} style={{ fontFamily: 'Medium', fontSize: 15 }}>{productName}</Text>
+                            </TouchableOpacity>
                             <IconButton ico={'closedIco'} callback={_self._onRemove} />
                         </View>
                         <Text numberOfLines={1} style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#555555' }}>{shortName}</Text>
@@ -430,8 +450,20 @@ class FavoriteListItem extends Component {
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 21 }}>
                         <Text style={{ fontFamily: 'Bold', fontSize: 16 }}>{Utils.getPriceFormat(salePrice)}</Text>
-                        <BoxButton callback={_self._onAddToCart}>{addTo}</BoxButton>
+                        <DefaultButton
+                            containerStyle={{ height: 36, paddingLeft: 15, paddingRight: 15 }}
+                            callback={_self._onAddToCart}
+                            name={addTo}
+                            boxColor="#FFFFFF"
+                            textColor="#000000"
+                            borderColor="#000000"
+                            animateOnTap={true}
+                            endName="EKLENDİ"
+                        />
                     </View>
+
+
+
                 </View>
             </View>
         )
@@ -502,19 +534,20 @@ class CouponListItem extends Component {
         super(props);
     }
     /* 
-    {
+      {
         "couponKey": "SUPER75",
-        "priceTypeId": 333,
-        "startDate": "2018-07-05T00:00:00",
-        "endDate": "2018-08-20T00:00:00",
         "description": "75 TL ve Üzeri Alışverişlerde Supershine Lipstick Bordeaux Silk Hediye",
         "email": "",
-        "userCategoryId": 0,
-        "usageCountPerUser": 10000,
-        "totalUsageCount": 100000000,
+        "endDate": "2018-08-20T00:00:00",
+        "isVisibleInCouponPage": null,
         "onlyForFirstUser": false,
-        "isVisibleInCouponPage": null
-      }
+        "priceTypeId": 333,
+        "startDate": "2018-07-05T00:00:00",
+        "statusName": "Süresi Doldu",
+        "totalUsageCount": 100000000,
+        "usageCountPerUser": 10000,
+        "userCategoryId": 0,
+        }
     */
 
     _setDateFormat = (k) => {
@@ -524,7 +557,7 @@ class CouponListItem extends Component {
 
     render() {
         let _self = this,
-            { couponKey, description, startDate = '', endDate = '' } = _self.props.data;
+            { couponKey, description, startDate = '', endDate = '', statusName = '' } = _self.props.data;
 
         startDate = _self._setDateFormat(startDate);
         endDate = _self._setDateFormat(endDate);
@@ -534,17 +567,17 @@ class CouponListItem extends Component {
                 <Text style={{ fontFamily: 'Bold', fontSize: 14, marginBottom: 6 }}>{couponKey}</Text>
                 <Text style={{ fontFamily: 'RegularTyp2', fontSize: 14, }}>{description}</Text>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10, paddingBottom: 15 }}>
-                    <View>
+                    <View style={{ flex: 1 }}>
                         <Text style={{ fontFamily: 'RegularTyp2', fontSize: 12, color: '#828282', paddingBottom: 6 }}>{'Başlangıç Tarihi'}</Text>
                         <Text style={{ fontFamily: 'RegularTyp2', fontSize: 14 }}>{startDate}</Text>
                     </View>
-                    <View>
+                    <View style={{ flex: 1 }}>
                         <Text style={{ fontFamily: 'RegularTyp2', fontSize: 12, color: '#828282', paddingBottom: 6 }}>{'Bitiş Tarihi'}</Text>
                         <Text style={{ fontFamily: 'RegularTyp2', fontSize: 14 }}>{endDate}</Text>
                     </View>
-                    <View>
+                    <View style={{ flex: 1 }}>
                         <Text style={{ fontFamily: 'RegularTyp2', fontSize: 12, color: '#828282', paddingBottom: 6 }}>{'Durum'}</Text>
-                        <Text style={{ fontFamily: 'RegularTyp2', fontSize: 14 }}></Text>
+                        <Text style={{ fontFamily: 'RegularTyp2', fontSize: 14 }}>{statusName}</Text>
                     </View>
                 </View>
             </View>
@@ -607,6 +640,20 @@ class FollowListItem extends Component {
         });
     }
 
+    _onShowProduct = () => {
+        const _self = this,
+            { productId } = _self.props.data;
+        store.dispatch({
+            type: OPEN_PRODUCT_DETAILS,
+            value: {
+                id: productId,
+                measurements: {},
+                animate: false,
+                sequence: 0
+            }
+        });
+    }
+
     render() {
         const _self = this,
             { shortName, productName, smallImageUrl, salePrice } = _self.props.data,
@@ -615,22 +662,35 @@ class FollowListItem extends Component {
         return (
             <View style={{ flexDirection: 'row', paddingTop: 20, paddingBottom: 20, paddingRight: 20, paddingLeft: 10, borderBottomColor: '#dcdcdc', borderBottomWidth: 1, marginLeft: 10, marginRight: 10 }}>
                 <View style={{ width: 60, justifyContent: 'center', }}>
-                    <Image
-                        style={{ height: 60 }}
-                        source={{ uri: Utils.getImage(smallImageUrl) }}
-                    />
+                    <TouchableOpacity activeOpacity={0.8} onPress={_self._onShowProduct}>
+                        <Image
+                            style={{ height: 60 }}
+                            source={{ uri: Utils.getImage(smallImageUrl) }}
+                        />
+                    </TouchableOpacity>
                 </View>
                 <View style={{ flex: 1 }}>
                     <View>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <Text numberOfLines={1} style={{ fontFamily: 'Medium', fontSize: 15, width: '90%' }}>{productName}</Text>
+                            <TouchableOpacity activeOpacity={0.8} onPress={_self._onShowProduct}>
+                                <Text numberOfLines={1} style={{ fontFamily: 'Medium', fontSize: 15, width: '90%' }}>{productName}</Text>
+                            </TouchableOpacity>
                             <IconButton ico={'closedIco'} callback={_self._onRemove} />
                         </View>
                         <Text numberOfLines={1} style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#555555' }}>{shortName}</Text>
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 21 }}>
                         <Text style={{ fontFamily: 'Bold', fontSize: 16 }}>{Utils.getPriceFormat(salePrice)}</Text>
-                        <BoxButton callback={_self._onAddToCart}>{addTo}</BoxButton>
+                        <DefaultButton
+                            containerStyle={{ height: 36, paddingLeft: 15, paddingRight: 15 }}
+                            callback={_self._onAddToCart}
+                            name={addTo}
+                            boxColor="#FFFFFF"
+                            textColor="#000000"
+                            borderColor="#000000"
+                            animateOnTap={true}
+                            endName="EKLENDİ"
+                        />
                     </View>
                 </View>
             </View>

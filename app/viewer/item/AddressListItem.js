@@ -222,13 +222,13 @@ class AddressList extends Component {
 
     render() {
         const _self = this,
-            { addressName, address } = _self.props.data,
+            { fullName, address } = _self.props.data,
             itemButtonType = _self._getItemType();
 
         return (
             <View style={{ flexDirection: 'column', marginLeft: 10, marginRight: 10, marginBottom: 10, paddingTop: 16, paddingBottom: 12, paddingRight: 10, paddingLeft: 10, borderBottomColor: '#dcdcdc', borderBottomWidth: 1, }}>
                 <View>
-                    <Text style={{ fontFamily: 'Medium', fontSize: 15 }}>{addressName}</Text>
+                    <Text style={{ fontFamily: 'Medium', fontSize: 15 }}>{fullName}</Text>
                     <Text style={{ fontFamily: 'RegularTyp2', fontSize: 13, color: '#555555' }}>{address}</Text>
                 </View>
                 {itemButtonType}

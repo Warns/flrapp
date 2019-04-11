@@ -38,6 +38,7 @@ module.exports = {
           placeholder: '00/00',
           mask: '99/99',
           validation: [{ key: 'isEmpty' }, { key: 'isCustomDate' }],
+          keyboardType: 'numeric',
           css: {
             errorMsgStyle: {
               opacity: 0

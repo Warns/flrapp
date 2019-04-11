@@ -562,7 +562,7 @@ const Payment = class Main extends Component {
 
     onWillFocus = () => {
         const _self = this;
-        _self.props.dispatch({ type: SET_CART_PROGRESS, value: { progress: '3/3', cartLocation: 'payment' } });
+        _self.props.dispatch({ type: SET_CART_PROGRESS, value: { activeTitle: 'ÖDEME', progress: '3/3', cartLocation: 'payment' } });
     }
 
     componentWillUnmount() {

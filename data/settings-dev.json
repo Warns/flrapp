@@ -237,6 +237,7 @@
                 }
             },
             {
+                "customClass": "ems-page-quality-policy",
                 "showMenu": false,
                 "title": "KALİTE POLİTİKAMIZ",
                 "type": "webViewer",

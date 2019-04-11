@@ -69,8 +69,8 @@ class SelectBox extends Component {
 
     _getItems = () => {
         const { values = [] } = this.props.data;
-        return values.map((item, ind) => {
-            return { order: ind, id: item['value'], name: item['key'] };
+        return values.map((item, ind) => { 
+            return { order: ind, id: item['value'], name: item['key'], disabled: item['disabled'] || false };
         });
     }
 

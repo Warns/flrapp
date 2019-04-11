@@ -97,7 +97,7 @@ module.exports = {
                         alignItems: 'center'
                     },
                     modal: {
-                        modalTitle: "Şifremi Değiştir",
+                        modalTitle: "ŞİFREMİ DEĞİŞTİR",
                         type: "SET_FORM",
                         itemType: "changePassword"
                     }
@@ -159,7 +159,7 @@ module.exports = {
                     id: 'gender',
                     title: 'Cinsiyet',
                     type: 'select',
-                    values: [{ key: Translation['dropdown']['choose'] || 'Seçiniz', value: -1 }, { key: 'Erkek', value: 'E' }, { key: 'Kadın', value: 'K' }],
+                    values: [{ key: Translation['dropdown']['choose'] || 'Seçiniz', value: -1, disabled: true }, { key: 'Erkek', value: 'E' }, { key: 'Kadın', value: 'K' }],
                     value: -1,
                     multiple: false,
                     validation: [{ key: 'isSelection' }],

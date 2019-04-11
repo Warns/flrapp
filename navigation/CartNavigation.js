@@ -25,10 +25,12 @@ export default class CartNavigation extends Component {
                 navigation.goBack(null);
         },
             { cart } = store.getState(),
-            { progress = "1/3" } = cart;
+            { progress = "1/3", activeTitle = 'SEPETİM' } = cart;
+
+            console.log('activeTitle', activeTitle);
 
         if (type == 'normal')
-            return <MinimalHeader onPress={_onClose} title="Sepetim" progress={progress} />
+            return <MinimalHeader onPress={_onClose} title={activeTitle} progress={progress} />
         else if (type == 'order')
             return <MinimalHeader wrapperStyle={style} title="" onPress={_onClose} right={<View />} />
     }
