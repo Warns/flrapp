@@ -27,8 +27,6 @@ export default class CartNavigation extends Component {
             { cart } = store.getState(),
             { progress = "1/3", activeTitle = 'SEPETİM' } = cart;
 
-            console.log('activeTitle', activeTitle);
-
         if (type == 'normal')
             return <MinimalHeader onPress={_onClose} title={activeTitle} progress={progress} />
         else if (type == 'order')

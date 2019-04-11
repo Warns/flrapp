@@ -3,6 +3,7 @@ import {
     REMOVE_USER,
     SET_CART_NUM,
     SET_CART_ITEMS,
+    SET_USER_POINTS,
 } from 'root/app/helper/Constant';
 import { store } from 'root/app/store';
 Utils = require('root/app/helper/Global.js');
@@ -35,9 +36,18 @@ export default function user(state = userInitialState, action) {
         case SET_CART_NUM: return {
             ID: action.value
         };
+        case SET_USER_POINTS: {
+            return {
+                ...state,
+                user: {
+                    ...state.user,
+                    points: action.value
+                }
+            }
+        };
         case SET_USER: {
 
-            console.log('set user')
+            console.log('set user');
 
             let optin_value = JSON.stringify(action.value.user);
 

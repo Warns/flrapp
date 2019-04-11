@@ -20,7 +20,8 @@ import {
     RESET_PAYMENT,
     SET_ORDER_SUCCESS_MESSAGE,
     SET_CART_ITEMS,
-    SHOW_PRELOADING
+    SHOW_PRELOADING,
+    SET_USER_POINTS
 } from 'root/app/helper/Constant';
 import {
     cardType,
@@ -563,6 +564,16 @@ const Payment = class Main extends Component {
     onWillFocus = () => {
         const _self = this;
         _self.props.dispatch({ type: SET_CART_PROGRESS, value: { activeTitle: 'ÖDEME', progress: '3/3', cartLocation: 'payment' } });
+
+        /* 
+            sepet son aşamada kullanıcı puan bilgisinin güncellenmesi, site içi kullanıcı puanı için ek önlem olarak yazıldı
+        */
+
+        setAjx({ _self: _self, uri: Utils.getURL({ key: 'user', subKey: 'getUser' }), data: {} }, (res) => {
+            const { status, data = {} } = res;
+            if( status == 200 )
+            _self.props.dispatch({ type: SET_USER_POINTS, value: data['points'] || 0 });
+        });
     }
 
     componentWillUnmount() {
