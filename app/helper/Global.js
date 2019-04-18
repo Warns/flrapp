@@ -7,6 +7,7 @@ module.exports = {
   bazaarVoiceApiKey: 'ca0fITp8PBeW9pf7e9vzn0BABaSeJVjOBqp6EWZVZCXsA',
   //prefix: 'https://www.flormar.com.tr',
   prefix: 'https://dev-facelift.flormar.com.tr',
+  //prefix: 'https://simulasyon.flormar.com.tr',
   imagePrefix: 'flormar.com.tr',
   URLs: {
     style: {

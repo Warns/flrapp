@@ -244,7 +244,7 @@ export default function cart(state = cartInitialState, action) {
                 optin: { ...state.optin, usePoint: action.value }
             };
 
-            console.log('extra point', data['optin']);
+            //console.log('extra point', data['optin']);
 
             setCart(data['optin'], () => {
                 setTimeout(() => {

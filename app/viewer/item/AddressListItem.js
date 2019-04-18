@@ -60,12 +60,15 @@ class AddressList extends Component {
 
     _onPress = () => {
         const _self = this,
-            { callback, data = {} } = _self.props;
+            { callback, data = {} } = _self.props,
+            { readOnly = false } = data;
+
         if (callback)
             callback({
                 showPopup: true,
                 type: SET_FORM,
                 itemType: 'setAddress',
+                modalTitle: readOnly ? 'ADRES GÖRÜNTÜLE' : 'ADRES DÜZENLE',
                 postData: { addressId: data['addressId'] || '' }
             });
     }
@@ -189,8 +192,10 @@ class AddressList extends Component {
 
     _getItemType = () => {
         const _self = this,
+            { readOnly = false } = _self.props.data,
             { itemButtonType = 'default' } = _self.props.config,
-            { remove, edit } = Translation['address'] || {};
+            { remove, edit, viewer } = Translation['address'] || {},
+            buttonText = readOnly ? viewer : edit;
 
         /* adres düzenleme ve sepet adımlarındaki seçimlerde ayrım yapmak için kullanırız. */
         let view = null;
@@ -200,14 +205,14 @@ class AddressList extends Component {
                     <TouchableOpacity activeOpacity={0.8} onPress={_self._onRemove}>
                         <Text style={{ fontFamily: 'RegularTyp2', fontSize: 15 }}>{remove}</Text>
                     </TouchableOpacity>
-                    <BoxButton callback={_self._onPress}>{edit}</BoxButton>
+                    <BoxButton callback={_self._onPress}>{buttonText}</BoxButton>
                 </View>
             );
         else if (itemButtonType == 'cart')
             view = (
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 21 }}>
                     <TouchableOpacity activeOpacity={0.8} onPress={_self._onPress}>
-                        <Text style={{ fontFamily: 'RegularTyp2', fontSize: 15 }}>{edit}</Text>
+                        <Text style={{ fontFamily: 'RegularTyp2', fontSize: 15 }}>{buttonText}</Text>
                     </TouchableOpacity>
                     <View style={{ flexDirection: 'row' }}>
                         {_self._getBillAddressButton()}

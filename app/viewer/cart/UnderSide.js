@@ -224,14 +224,18 @@ const UnderSide = class Main extends Component {
         const _self = this,
             { cartInfo = {}, optin = {} } = _self.props.cart,
             { cargoId = 0 } = optin,
-            { subTotal = 0, discountTotal = 0, shippingTotal = 0, taxTotal = 0 } = cartInfo || {},
+            { subTotal = 0, discountTotal = 0, shippingTotal = 0, taxTotal = 0, sitePoint = 0 } = cartInfo || {},
             form = _self._getForm(),
             formButton = _self._getFormButton();
-
 
             let cargo = null;
             if( cargoId != 0 )
                 cargo = _self._getCartItem({ key: 'Kargo', value: shippingTotal == 0 ? 'ücretsiz' : Utils.getPriceFormat(shippingTotal) });
+
+            let stPoint = null;
+            if( sitePoint != 0 )
+                cargo = _self._getCartItem({ key: 'Ekstra puan kullanımı', value: Utils.getPriceFormat(sitePoint) });
+
 
         return (
             <View style={{ marginTop: 45, padding: 20, paddingTop: 10, paddingBottom: 10, backgroundColor: '#FFFFFF' }}>
@@ -240,6 +244,7 @@ const UnderSide = class Main extends Component {
                 <View style={{ paddingLeft: 10, paddingRight: 10 }}>
                     {_self._getCartItem({ key: 'Ara toplam', value: Utils.getPriceFormat(subTotal) })}
                     {/*_self._getCartItem({ key: 'KDV', value: Utils.getPriceFormat(taxTotal) })*/}
+                    {stPoint}
                     {cargo}
                     {_self._getCartItem({ key: 'İndirim', value: Utils.getPriceFormat(discountTotal) })}
                 </View>

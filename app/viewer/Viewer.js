@@ -500,7 +500,7 @@ class OrderListItem extends Component {
         /*    if (callback)
             callback({ type: ORDER_LIST_CLICKED, data: data });*/
 
-        store.dispatch({ type: SHOW_CUSTOM_POPUP, value: { visibility: true, type: ORDER_LIST_CLICKED, data: { data: data } } });
+        store.dispatch({ type: SHOW_CUSTOM_POPUP, value: { modalTitle: 'SİPARİŞ DETAYI', visibility: true, type: ORDER_LIST_CLICKED, data: { data: data } } });
     }
 
     render() {

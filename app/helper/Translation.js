@@ -18,6 +18,7 @@ module.exports = {
     address: {
         remove: 'Sil',
         edit: 'Düzenle',
+        viewer: 'Görüntüle',
         select: 'SEÇ',
         selected: 'SEÇİLDİ',
         selectShipAddress: 'TESLİMAT ADRESİ',

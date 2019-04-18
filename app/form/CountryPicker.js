@@ -113,8 +113,9 @@ class CountryPicker extends Component {
             obj = {};
         obj[keys['id']] = -1;
         obj[keys['name']] = drpChoose;
-        data = [obj, ...data];
+        obj['disabled'] = true;
 
+        data = [obj, ...data];
         return data;
     }
 
@@ -162,7 +163,8 @@ class CountryPicker extends Component {
             { keys } = _self.config[key] || {};
 
         return data.map((item, order) => {
-            return { order: order, id: item[keys['id']], name: item[keys['name']] };
+            const { disabled = false } = item;
+            return { disabled: disabled, order: order, id: item[keys['id']], name: item[keys['name']] };
         });
     }
 

@@ -167,7 +167,7 @@
                     "arr": "html"
                 },
                 "data": {
-                    "contentId": 21283
+                    "contentId": 23110
                 },
                 "siteURI": "/biz-kimiz/"
             },
@@ -183,7 +183,7 @@
                     "arr": "html"
                 },
                 "data": {
-                    "contentId": 21284
+                    "contentId": 23111
                 },
                 "siteURI": "/tarihce/"
             },
@@ -200,7 +200,7 @@
                     "arr": "html"
                 },
                 "data": {
-                    "contentId": 21285
+                    "contentId": 23112
                 }
             },
             {
@@ -216,7 +216,7 @@
                     "arr": "html"
                 },
                 "data": {
-                    "contentId": 21286
+                    "contentId": 23113
                 }
             },
             {
@@ -233,7 +233,7 @@
                     "arr": "html"
                 },
                 "data": {
-                    "contentId": 21287
+                    "contentId": 23114
                 }
             },
             {
@@ -250,10 +250,11 @@
                     "arr": "html"
                 },
                 "data": {
-                    "contentId": 21289
+                    "contentId": 23116
                 }
             },
             {
+                "showMenu": false,
                 "title": "İNSAN KAYNAKLARI POLİTİKASI",
                 "type": "webViewer",
                 "uri": {
@@ -265,7 +266,7 @@
                     "arr": "html"
                 },
                 "data": {
-                    "contentId": 21293
+                    "contentId": 23120
                 }
             },
             {
@@ -281,7 +282,7 @@
                     "arr": "html"
                 },
                 "data": {
-                    "contentId": 21294
+                    "contentId": 23121
                 }
             },
             {
@@ -297,7 +298,7 @@
                     "arr": "html"
                 },
                 "data": {
-                    "contentId": 21295
+                    "contentId": 23122
                 }
             },
             {
@@ -311,7 +312,7 @@
                     "arr": "html"
                 },
                 "data": {
-                    "contentId": 21303
+                    "contentId": 23130
                 },
                 "siteURI": "/iade-islemleri/"
             },
@@ -326,7 +327,7 @@
                     "arr": "html"
                 },
                 "data": {
-                    "contentId": 21298
+                    "contentId": 23125
                 },
                 "siteURI": "/mesafeli-satis-sozlesmesi/"
             },
@@ -345,11 +346,26 @@
                     "customParameters": [
                         {
                             "key": "icr",
-                            "value": "21304"
+                            "value": "23131"
                         }
                     ]
                 },
                 "siteURI": "/sikca-sorulan-sorular/"
+            },
+            {
+                "title": "İNSAN KAYNAKLARI",
+                "type": "webViewer",
+                "uri": {
+                    "key": "content",
+                    "subKey": "getContent"
+                },
+                "keys": {
+                    "arr": "html"
+                },
+                "data": {
+                    "contentId": 23120
+                },
+                "siteURI": "/insan-kaynaklari-politikasi/"
             },
             {
                 "title": "KİŞİSEL VERİLERİN KORUNMASI",
@@ -362,7 +378,7 @@
                     "arr": "html"
                 },
                 "data": {
-                    "contentId": 21539
+                    "contentId": 23360
                 },
                 "siteURI": "/kvk/"
             }

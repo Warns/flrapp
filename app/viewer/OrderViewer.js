@@ -6,6 +6,11 @@ import {
     Text,
     Image,
 } from 'react-native';
+import { store } from 'root/app/store.js';
+import {
+    SHOW_CUSTOM_POPUP,
+    SET_WEBVIEW,
+} from 'root/app/helper/Constant';
 
 const Translation = require('root/app/helper/Translation.js');
 const Utils = require('root/app/helper/Global.js');
@@ -76,11 +81,15 @@ class OrderViewer extends Component {
 
     _getValue = ({ key, value }) => {
         const prc = ['totalPriceWithoutProm', 'shippingTotal', 'totalPrice'], /* TL simgesi alacak alanlar */
+            date = ['orderDate'],
             bold = ['totalPrice'], /* bold olan alanlar */
             fontFamily = bold.includes(key) ? 'Bold' : 'Regular';
 
         if (prc.includes(key))
             value = Utils.getPriceFormat(value);
+
+        if (date.includes(key))
+            value = Utils.getDateFormat(value);
 
         return <Text style={{ flex: 2, fontFamily: fontFamily, fontSize: 16, }}>{value}</Text>
     }
@@ -135,14 +144,32 @@ class OrderViewer extends Component {
 
     }
 
+    /* 
+        kargo takip
+    */
+    _onCargoTrack = () => {
+        const _self = this,
+            data = _self.state.data || {},
+            { cargo = [] } = data;
+        if (cargo.length > 0)
+            store.dispatch({
+                type: SHOW_CUSTOM_POPUP,
+                value: {
+                    visibility: true,
+                    type: SET_WEBVIEW,
+                    data: { url: cargo[0]['cargoTrackUrl'] || '' }
+                }
+            });
+    }
+
     _getCargoButton = () => {
         const _self = this,
             data = _self.state.data;
-        let view = null;
+        let view = null; console.log(data);
         if (data['cargo'].length > 0)
             view = (
                 <View style={{ paddingLeft: 20, paddingRight: 20, marginTop: 24 }}>
-                    <Buttons>{Translation['orders']['buttonCargoFollow']}</Buttons>
+                    <Buttons onPress={_self._onCargoTrack}>{Translation['orders']['buttonCargoFollow']}</Buttons>
                 </View>
             );
 

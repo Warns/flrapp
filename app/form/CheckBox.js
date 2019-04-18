@@ -23,10 +23,11 @@ import {
 class CheckBox extends Component {
     constructor(props) {
         super(props);
-        const { value = false } = this.props.data
+        const { value = false } = this.props.data;
+
         this.state = {
             value: value,
-            anim: new Animated.Value(0),
+            anim: new Animated.Value(value ? 1 : 0),
         }
     }
 
