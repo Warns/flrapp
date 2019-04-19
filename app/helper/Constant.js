@@ -238,6 +238,7 @@ export const REMOVE_USER = "REMOVE_USER";
 export const SET_CART_NUM = "SET_CART_NUM";
 
 /* menu */
+export const SET_MENU_TYPE = "SET_MENU_TYPE";
 export const SHOW_MENU = "SHOW_MENU";
 export const HIDE_MENU = "HIDE_MENU";
 

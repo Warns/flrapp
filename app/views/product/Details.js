@@ -243,9 +243,11 @@ class ProductDetails extends React.Component {
 
   /* yerli üretim */
   _domesticProduction = data => {
-    let b = false;
+    let b = false,
+      ids = 266;
+
     Object.entries(data).forEach(([key, value]) => {
-      if (value["productTypeId"] == 272) b = true;
+      if (value["productTypeId"] == ids) b = true;
     });
 
     return b ? (

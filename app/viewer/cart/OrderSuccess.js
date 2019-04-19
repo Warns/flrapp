@@ -9,7 +9,8 @@ import { connect } from 'react-redux';
 import {
     ICONS,
     ASSISTANT_SHOW,
-    NAVIGATE
+    NAVIGATE,
+    SET_MENU_TYPE,
 } from 'root/app/helper/Constant';
 import {
     BoxButton
@@ -31,8 +32,28 @@ class Main extends Component {
     }
 
     _onGotoHome = () => {
-        const _self = this;
-        _self.props.dispatch({ type: NAVIGATE, value: { item: { navigation: 'Home' } } });
+        const _self = this,
+        obj = {
+            "item": {
+                "data": {},
+                "itemType": "order",
+                "keys": {
+                    "arr": "orders",
+                    "id": "orderId",
+                },
+                "navigation": "ExtraUser",
+                "title": "SİPARİŞLERİM",
+                "type": "listViewer",
+                "uri": {
+                    "key": "order",
+                    "subKey": "getOrder",
+                }
+            }
+        };
+        _self.props.dispatch({ type: SET_MENU_TYPE, value: 'user' });
+        _self.props.dispatch({ type: NAVIGATE, value: obj });
+        
+        //_self.props.dispatch({ type: NAVIGATE, value: { item: { navigation: 'Home' } } });
     }
 
     render() {
@@ -62,7 +83,7 @@ class Main extends Component {
 
                 <View style={{ flex: 1, marginLeft: 50, marginRight: 50, }}>
                     <Text style={{ paddingTop: 20, paddingBottom: 20, fontSize: 16, fontFamily: 'Regular', textAlign: 'center' }}>{orderSuccessMessage}</Text>
-                    <BoxButton wrapperStyle={{ height: 48, }} callback={_self._onGotoHome}>ANASAYFAYA GİT</BoxButton>
+                    <BoxButton wrapperStyle={{ height: 48, }} callback={_self._onGotoHome}>SİPARİŞLERİM</BoxButton>
                 </View>
             </View>
         );
