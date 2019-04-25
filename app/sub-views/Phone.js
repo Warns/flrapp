@@ -63,7 +63,7 @@ class Phone extends React.Component {
         <View style={{ flex: 1 }}>
           <View style={{ padding: 40, paddingBottom: 20, paddingTop: 20 }}>
             <Text style={{ fontFamily: 'Bold', fontSize: 20 }}>MERHABA</Text>
-            <Text style={{ color: '#000000', lineHeight: 18, fontSize: 15 }}>Cep telefonunu gir, üyelik onay kodunu hemen gönderelim.</Text>
+            <Text style={{ color: '#000000', lineHeight: 18, fontSize: 15 }}>Flormar olarak kişisel bilgilerinin güvenliğini önemsiyoruz, bu nedenle sadece ilk girişinde telefonuna gelen onay kodunu girerek telefonunu doğrula</Text>
           </View>
           <Form callback={this._onSubmit} data={formData} />
         </View>

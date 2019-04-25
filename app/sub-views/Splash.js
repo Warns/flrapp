@@ -45,9 +45,9 @@ class Splash extends React.Component {
     videoIsPlaying: true,
     localStorage: {},
     images: [
-      { thumb: Utils.prefix + "/UPLOAD/APP/assets/slider-1.png", title: 'Hoş geldin!', text: 'Flormar\'ın yeni uygulamasında seni neler bekliyor? Sana özel önerilerle mobil alışveriş keyfi!', video: false },
-      { thumb: Utils.prefix + "/UPLOAD/APP/assets/slider-2.png", title: 'Neden extra üyesi olmalısın?', text: 'Her siparişinde 5% ekstra TL kazan, Sana özel kampanyalar ile alışverişinin keyfini sür!' },
-      { thumb: Utils.prefix + "/UPLOAD/APP/assets/slider-3.png", title: 'Neden şimdi üye olmalısın?', text: 'İlk siparişinde online’a özel indirim ve bedava kargo imkanından yararlan!' }
+      { thumb: Utils.prefix + "/UPLOAD/APP/assets/slider-1.png", title: 'Hoş geldin!', text: 'Yenilenen Flormar Mobil uygulaması ile sana özel içerik ve kampanyalarla mobil alışveriş deneyiminin keyfini çıkar.', video: false },
+      { thumb: Utils.prefix + "/UPLOAD/APP/assets/slider-2.png", title: 'Flormar Extra', text: 'Her adımda kazandıran Flormar Extra üyesi olmak için mobil uygulamada üyelik oluşturman yeterli! Mobil uygulamaya üye olan herkes Flormar Extra üyesi oluyor, her siparişinde %5 Extra TL* kazanıyor.\n\n*1 Extra TL = 1 TL' },
+      { thumb: Utils.prefix + "/UPLOAD/APP/assets/slider-3.png", title: 'Heme üye ol', text: 'Online’a özel ilk siparişinde tüm ürünlerde net 40% indirim kazan! \n\n*Kargo bedava ' }
     ],
     activeSlide: 0,
   }
