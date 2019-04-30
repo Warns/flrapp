@@ -54,7 +54,7 @@ class Loading extends React.Component {
   }
 
   _loadInitialState = async () => {
-
+    
     globals.getSecureStorage('__OPTIN__', (answer) => {
 
       if (answer !== 'no') {
