@@ -328,14 +328,15 @@ class CrediCard extends Component {
 
     _getExtraPoint = () => {
         const _self = this,
-            { cartInfo = {} } = _self.props.cart || {},
+            { cartInfo = {}, optin = {} } = _self.props.cart || {},
+            { usePoint = 0 } = optin,
             { netTotal = 0 } = cartInfo,
             points = _self._getPoints();
 
         let view = null;
         if (points != 0 /*&& points <= netTotal*/) {
             const txt = points + ' TL Ekstra Puanımı Kullanmak İstiyorum';
-            view = <CheckBox containerStyle={{ marginLeft: 20, marginRight: 20, marginBottom: 0, }} closed={true} callback={_self._onChangeExtraPoint} data={{ desc: txt }} />;
+            view = <CheckBox containerStyle={{ marginLeft: 20, marginRight: 20, marginBottom: 0, }} closed={true} callback={_self._onChangeExtraPoint} data={{ desc: txt, value: usePoint == 1 ? true : false, updated: true }} />;
         }
 
         return view;

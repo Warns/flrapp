@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
     ScrollView,
     View,
+    Alert,
 } from 'react-native';
 import { Viewer } from 'root/app/viewer/';
 import {
@@ -155,7 +156,7 @@ const Cart = class Main extends Component {
                         const { status, message } = answer;
                         setTimeout(() => {
                             if (status == 400) {
-                                alert(message);
+                                Alert.alert(message);
                             } else {
                                 if (navigation)
                                     navigation.navigate('Address', {});

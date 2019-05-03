@@ -1359,18 +1359,19 @@ class FeedsItem extends Component {
 
     _getImage = () => {
         const _self = this,
-            { image = '', labels = [] } = _self.props.data || {},
+            { image = '', url = '', labels = [] } = _self.props.data || {},
             type = labels[0],
             w = Dimensions.get('window').width,
             h = w / FEEDS_IMAGE_RATE[type],
-            overlay = _self._getOverlay();
+            overlay = _self._getOverlay(),
+            uri = type == FEEDSTYPE['INSTAGRAM'] ? url : Utils.getImage(image);
 
         return (
             <TouchableOpacity activeOpacity={1} onPress={_self._onPress}>
                 <View style={{ borderWidth: 1, borderColor: '#dcdcdc' }}>
                     <Image
                         style={{ height: h }}
-                        source={{ uri: Utils.getImage(image) }}
+                        source={{ uri: uri }}
                     />
                     {overlay}
                     {_self._heartAnim()}
@@ -1417,10 +1418,10 @@ class FeedsItem extends Component {
             { labels = [] } = _self.props.data;
 
         /*
-        test
-        if (labels[0] != 'promo')
-            return null;*/
-
+        test*/
+        if (labels[0] != 'instagram')
+            return null;
+console.log(_self.props.data)
         return (
             <View style={{ margin: 10, marginBottom: 20 }}>
                 <View style={{ position: 'relative' }}>

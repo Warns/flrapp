@@ -202,6 +202,10 @@ const Address = class Main extends Component {
     onWillFocus = () => {
         const _self = this;
         _self.props.dispatch({ type: SET_CART_PROGRESS, value: { activeTitle: 'TESLİMAT', progress: '2/3', cartLocation: 'delivery' } });
+
+        _self.setAjx({ uri: Utils.getURL({ key: 'cart', subKey: 'getCart' }), data: { cartLocation: 'delivery' } }, (res) => {
+            _self.props.dispatch({ type: SET_CART_INFO, value: res.data });
+        });
     }
 
     componentDidMount() {
@@ -212,10 +216,6 @@ const Address = class Main extends Component {
             _self._Listener = navigation.addListener('willFocus', _self.onWillFocus);
 
         _self._isMounted = true;
-
-        _self.setAjx({ uri: Utils.getURL({ key: 'cart', subKey: 'getCart' }), data: { cartLocation: 'delivery' } }, (res) => {
-            _self.props.dispatch({ type: SET_CART_INFO, value: res.data });
-        });
     }
 
     componentWillUnmount() {

@@ -175,7 +175,7 @@ fetchProductDetails = (id) => {
                     name: answer.data.product.shortName
                 });
 
-                colors.sort((a, b) => (a.shortCode > b.shortCode) ? 1 : ((b.shortCode > a.shortCode) ? -1 : 0));
+                colors.sort((a, b) => (a.productId > b.productId) ? 1 : ((b.productId > a.productId) ? -1 : 0));
 
                 store.dispatch({ type: UPDATE_PRODUCT_DETAILS_ITEM, value: { product: answer.data.product, colors: colors } });
 

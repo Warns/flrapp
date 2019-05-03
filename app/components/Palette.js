@@ -27,7 +27,7 @@ class Palette extends React.Component {
     let { items, selected, width } = this.props;
 
     for (i in items)
-      if (items[i].shortCode === selected)
+      if (items[i].productId === selected)
         break;
     index = i;
 
@@ -47,14 +47,16 @@ class Palette extends React.Component {
   _keyExtractor = (item, index) => index + 'k';
 
   _renderItem = ({ item, index }) => {
-    let sel = item.shortCode == this.state.selected ? true : false;
+    let sel = item.productId == this.state.selected ? true : false;
+    
     return (
       <ListItem isSelected={sel} width={this.state.width} item={item} index={index} onPressItem={this._onPressItem} />
     )
   }
 
   _renderModalItem = ({ item, index }) => {
-    let sel = item.shortCode == this.state.selected ? true : false;
+    let sel = item.productId == this.state.selected ? true : false;
+    
     return (
       <ModalListItem isSelected={sel} width={this.state.width} item={item} index={index} onPressItem={this._onPressItem} />
     )
@@ -74,7 +76,7 @@ class Palette extends React.Component {
 
     this.setState({
       index: index,
-      selected: item.shortCode,
+      selected: item.productId,
     })
 
     //console.log(this.state)

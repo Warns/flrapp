@@ -295,7 +295,7 @@ class ProductDetails extends React.Component {
           <Palette
             width={SCREEN_DIMENSIONS.width}
             items={colors}
-            selected={item.shortCode}
+            selected={item.productId}
             onPress={this._changeColor}
           />
         ) : null;

@@ -241,6 +241,7 @@ export default function cart(state = cartInitialState, action) {
             const data = {
                 ...state,
                 creditCart: { ...state.creditCart, usePoint: action.value },
+                bankTransfer: { ...state.bankTransfer, usePoint: action.value },
                 optin: { ...state.optin, usePoint: action.value }
             };
 

@@ -35,9 +35,13 @@ class CheckBox extends Component {
     updated: checkbox redux bağladığımızda yapılan değişikliğin yansıması için kullanırız. Diğer durumlar için çalıştırmamak gerekiyor.
     */
     componentWillReceiveProps(nextProps) {
-        const { value, updated = false } = nextProps.data;
-        if (this.state.value != value && updated) {
-            this.setState({ value: value });
+        const _self = this,
+            { value, updated = false } = nextProps.data;
+        if (_self.state.value != value && updated) {
+            _self.setState({ value: value });
+            setTimeout(() => {
+                _self.onChange();
+            }, 10);
         }
     }
 
