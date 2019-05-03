@@ -247,12 +247,12 @@ module.exports = {
       k = _t.prefix + k;
     return k;
   },
-  getNumberFormat: function( k ){
+  getNumberFormat: function (k) {
     k = k || '0';
-    return parseFloat( k.replace(/\./g, '').replace(/\,/g, '.') );
+    return parseFloat(k.replace(/\./g, '').replace(/\,/g, '.'));
   },
   getPriceFormat: function (k) {
-    k = ( k || '0' );
+    k = (k || '0');
     /* fiyat formatlama */
     return '₺' + k.toString().replace(/\./g, ',');
   },
@@ -287,6 +287,26 @@ module.exports = {
       k = k.substr(1, k.length);
 
     return k.replace(/\(/g, '').replace(/\)/g, '').replace(/\s+/g, '');
+  },
+  getPrdCodeToArr: function (k) {
+    /* 
+     584579 ,584555 ,584553 ,584534 ,584530 ,584510
+     =>
+     [584579,584555,584553,584534,584530,584510]
+   */
+
+    k = k || '';
+    const _t = this,
+      code = [];
+
+    k = _t.cleanText(k).split(',');
+    for (var i = 0; i <= k.length; ++i) {
+      var n = k[i];
+      if (n != '' && n)
+        code.push({ productId: n });
+    }
+
+    return code;
   },
   ajx: function ({ uri = '', method = 'GET', headers = {} }, callback) {
     return fetch(uri, {

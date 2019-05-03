@@ -982,16 +982,18 @@ class CustomDetailListItem extends Component {
     }
 
     _getReleatedProduct = () => {
-        const _self = this,
+        let _self = this,
             { products = '' } = _self.props.data;
 
+        products = Utils.getPrdCodeToArr(products);
+        
         let view = null;
-        if (products != '')
+        if (products.length > 0)
             view = (
                 (
                     <View>
                         <Text style={{ fontFamily: 'Bold', fontSize: 16, marginBottom: 20, marginLeft: 20 }}>İLGİLİ ÜRÜNLER</Text>
-                        <HorizontalProducts items={item.productRecommends} onPress={this._changeProduct} />
+                        <HorizontalProducts items={products} onPress={this._changeProduct} />
                     </View>
                 )
             );
@@ -1421,7 +1423,7 @@ class FeedsItem extends Component {
         test*/
         if (labels[0] != 'instagram')
             return null;
-console.log(_self.props.data)
+        console.log(_self.props.data);
         return (
             <View style={{ margin: 10, marginBottom: 20 }}>
                 <View style={{ position: 'relative' }}>
