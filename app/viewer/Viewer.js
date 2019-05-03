@@ -1420,10 +1420,10 @@ class FeedsItem extends Component {
             { labels = [] } = _self.props.data;
 
         /*
-        test*/
+        test
         if (labels[0] != 'instagram')
-            return null;
-        console.log(_self.props.data);
+            return null;*/
+
         return (
             <View style={{ margin: 10, marginBottom: 20 }}>
                 <View style={{ position: 'relative' }}>
