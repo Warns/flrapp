@@ -9,10 +9,17 @@ import {
 } from 'react-native';
 import {
     ICONS,
+    SHOW_CUSTOM_POPUP, 
+    OPEN_PRODUCT_DETAILS,
 } from 'root/app/helper/Constant';
 import YoutubePlayer from 'root/app/sub-views/YoutubePlayer';
+import {
+    HorizontalProducts,
+} from 'root/app/components';
+import { store } from 'root/app/store';
 
 const Translation = require('root/app/helper/Translation.js');
+const Utils = require('root/app/helper/Global.js');
 
 class InstagramDetail extends Component {
     constructor(props) {
@@ -135,12 +142,34 @@ class InstagramDetail extends Component {
         );
     }
 
+    _changeProduct = (id) => {
+        store.dispatch({ type: SHOW_CUSTOM_POPUP, value: { visibility: false, data: {}, type: '', itemType: '' } });
+        store.dispatch({ type: OPEN_PRODUCT_DETAILS, value: { id: id, measurements: {}, animate: false, sequence: 0 } });
+    }
+
+    _getProducts = () => {
+        let _self = this,
+            view = null,
+            { productIds = '' } = _self.props.data,
+            products = Utils.getPrdCodeToArr(productIds);
+        if (products.length > 0)
+            view = (
+                <View style={{ marginTop: 30, marginBottom: 10 }}>
+                    <Text style={{ fontFamily: 'Bold', fontSize: 16, marginBottom: 20, marginLeft: 20 }}>İLGİLİ ÜRÜNLER</Text>
+                    <HorizontalProducts items={products} onPress={this._changeProduct} />
+                </View>
+            );
+
+        return view;
+    }
+
     render() {
         const _self = this;
         return (
             <ScrollView style={{ flex: 1 }}>
                 {_self._getHead()}
                 {_self._getBody()}
+                {_self._getProducts()}
             </ScrollView>
         );
     }

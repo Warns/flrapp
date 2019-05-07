@@ -45,7 +45,7 @@ const DATA = {
 
 /* footer config */
 const CONFIG = {
-    buttonText: 'ÖDEME YAP',
+    buttonText: 'ALIŞVERİŞİ TAMAMLA',
     coupon: false
 };
 
