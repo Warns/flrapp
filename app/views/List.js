@@ -23,6 +23,8 @@ import { MinimalHeader } from 'root/app/components';
 
 import ProductView from './Product';
 
+import HTML from 'react-native-render-html';
+
 styles = require('../../app/styles.js');
 globals = require('../../app/globals.js');
 const Utils = require('root/app/helper/Global.js');
@@ -40,8 +42,15 @@ class CategoryDesc extends React.Component {
     this.state = {
       expand: false
     }
-
   }
+
+  CUSTOM_STYLE = {
+    tagsStyles: { p: { fontSize: 16, color: '#6c6c6c', lineHeight: 24, fontFamily: 'RegularTyp2' }, b: { fontSize: 16, color: '#000000', lineHeight: 24, fontFamily: 'RegularTyp2' } },
+    imagesMaxWidth: Dimensions.get('window').width,
+    onLinkPress: (evt, href) => { Linking.openURL(href); },
+    debug: false
+};
+
   _onExpand = () => {
     const _self = this,
       { expand } = _self.state;
@@ -60,9 +69,7 @@ class CategoryDesc extends React.Component {
           <Text style={{ color: '#6c6c6c', fontSize: 16, fontFamily: 'Bold' }}>
             {title}
           </Text>
-          <Text style={{ color: '#6c6c6c', fontSize: 16, fontFamily: 'RegularTyp2' }}>
-            {desc}
-          </Text>
+          <HTML {..._self.CUSTOM_STYLE} html={desc} />
         </View>
       );
 

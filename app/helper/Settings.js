@@ -25,7 +25,7 @@ class Setting extends Component {
             _self.props.dispatch({ type: SET_SETTINGS, value: settings });
         });
         */
-        const settings = require('root/data/settings-dev.json');
+        const settings = require('root/data/settings-live.json');
         _self.props.dispatch({ type: SET_SETTINGS, value: settings });
 
         /* https://www.segmentify.com/dev/integration_rest/#user-session-management */
