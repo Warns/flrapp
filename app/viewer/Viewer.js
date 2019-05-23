@@ -1175,12 +1175,14 @@ class FeedsItem extends Component {
                     }*/
                 }
             });
-        } else if (FEEDSTYPE['CAMPAING'] == labels[0] || FEEDSTYPE['COLLECTION'] == labels[0]) {
-            const { title = '', utp = '', galleryImage = '' } = params,
+        } else if (FEEDSTYPE['CAMPAING'] == labels[0] || FEEDSTYPE['COLLECTION'] == labels[0]) { 
+            const { title = '', utp = '', galleryImage = '', desc = '', catCode = '' } = params,
                 data = [{
                     title: name,
                     img: Utils.getImage(galleryImage),
-                    utpId: utp
+                    utpId: utp,
+                    desc: desc,
+                    id: catCode
                 }];
 
             store.dispatch({ type: SET_CATEGORIES, value: data });
