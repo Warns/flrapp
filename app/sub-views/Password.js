@@ -92,7 +92,6 @@ class Password extends React.Component {
         <MinimalHeader title="" right={<View />} onPress={this._onBackPress} />
         <View style={{ flex: 1 }}>
           <View style={{ padding: 40, paddingBottom: 20, paddingTop: 20 }}>
-            <Text style={{ fontFamily: 'Bold', fontSize: 20 }}>EVET. SON ADIM!</Text>
             {error}
           </View>
           <Form callback={this._onSubmit} data={FORMDATA['optin_password']} />

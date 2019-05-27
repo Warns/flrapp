@@ -47,7 +47,7 @@ class Splash extends React.Component {
     images: [
       { thumb: Utils.prefix + "/UPLOAD/APP/assets/slider-1.png", title: 'Hoş geldin!', text: 'Yenilenen Flormar Mobil uygulaması ile sana özel içerik ve kampanyalarla mobil alışveriş deneyiminin keyfini çıkar.', video: false },
       { thumb: Utils.prefix + "/UPLOAD/APP/assets/slider-2.png", title: 'Flormar Extra', text: 'Her adımda kazandıran Flormar Extra üyesi olmak için mobil uygulamada üyelik oluşturman yeterli! Mobil uygulamaya üye olan herkes Flormar Extra üyesi oluyor, her siparişinde %5 Extra TL* kazanıyor.\n\n*1 Extra TL = 1 TL' },
-      { thumb: Utils.prefix + "/UPLOAD/APP/assets/slider-3.png", title: 'Heme üye ol', text: 'Online’a özel ilk siparişinde tüm ürünlerde net 40% indirim kazan! \n\n*Kargo bedava ' }
+      { thumb: Utils.prefix + "/UPLOAD/APP/assets/slider-3.png", title: 'Hemen üye ol', text: 'Online’a özel ilk siparişinde tüm ürünlerde net 40% indirim kazan! \n\n*Kargo bedava ' }
     ],
     activeSlide: 0,
   }
@@ -197,7 +197,7 @@ class Splash extends React.Component {
         <Animated.View style={{ width: '100%', position: 'absolute', bottom: 0, flexDirection: "column-reverse", padding: 30, opacity: reverseFadeAnim }}>
           <DefaultButton
             callback={this._continueToHome}
-            name="GEÇ"
+            name="Atla"
             boxColor="transparent"
             textColor="#ffffff"
             borderColor='rgba(0,0,0,0)'
@@ -207,13 +207,13 @@ class Splash extends React.Component {
             <View style={{ flex: 1, marginRight: 5 }}>
               <DefaultButton
                 callback={this._onLoginPressed}
-                name="GİRİŞ YAP"
+                name="GİRİŞ YAP / ÜYE OL"
                 boxColor="#ffffff"
                 textColor="#000000"
                 borderColor="rgba(0,0,0,0)"
               />
             </View>
-            <View style={{ flex: 1, marginLeft: 5 }}>
+            { /* <View style={{ flex: 1, marginLeft: 5 }}>
               <DefaultButton
                 callback={this._onSignupPressed}
                 name="ÜYE OL"
@@ -221,7 +221,7 @@ class Splash extends React.Component {
                 textColor="#000000"
                 borderColor="rgba(0,0,0,0)"
               />
-            </View>
+    </View> */ }
           </View>
         </Animated.View>
 

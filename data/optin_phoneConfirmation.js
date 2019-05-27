@@ -2,8 +2,8 @@ module.exports = {
 
   sendAjx: false,
   allErrMessage: false,
-  buttonText:'ONAY KODU GÖNDER',
-  
+  buttonText: 'ONAY KODUNU DOĞRULA',
+
   fields: [
     {
       items: [
@@ -13,7 +13,7 @@ module.exports = {
           type: 'text',
           placeholder: '',
           value: '',
-          mask: '99999',
+          mask: '999999',
           validation: [{ key: 'isEmpty' }],
           keyboardType: 'numeric',
         }

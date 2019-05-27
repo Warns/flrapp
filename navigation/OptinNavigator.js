@@ -19,6 +19,7 @@ import EmailPage from 'root/app/sub-views/Email';
 import PasswordPage from 'root/app/sub-views/Password';
 import PasswordResetPage from 'root/app/sub-views/PasswordReset';
 import SignupPage from 'root/app/sub-views/Signup';
+import SubscriptionPage from 'root/app/sub-views/Subscription';
 
 import { CartHeader, DefaultHeader, MinimalHeader } from 'root/app/components/';
 
@@ -51,6 +52,10 @@ class Signup extends React.Component {
   render() { return <SignupPage {...this.props} /> }
 }
 
+class Subscription extends React.Component {
+  render() { return <SubscriptionPage {...this.props} /> }
+}
+
 class PasswordReset extends React.Component {
   render() { return <PasswordResetPage {...this.props} /> }
 }
@@ -64,6 +69,7 @@ const OptinNavigator = createStackNavigator(
     Email: { screen: Email },
     Password: { screen: Password },
     Signup: { screen: Signup },
+    Subscription: { screen: Subscription },
     PasswordReset: { screen: PasswordReset },
   },
   {

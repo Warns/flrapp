@@ -25,7 +25,7 @@ class Phone extends React.Component {
 
   _onSubmit = (obj) => {
     let formattedMobileNumber = obj.data.mobilePhone.replace(/\)/g, '').replace(/\(/g, '').replace(/\ /g, '').substr(1);
-    let verificationNumber = Utils.generateSMSVerificationCode(5);
+    let verificationNumber = Utils.generateSMSVerificationCode(6);
 
     this.setState({
       mobileNumber: obj.data.mobilePhone,

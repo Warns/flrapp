@@ -35,7 +35,7 @@ class Main extends React.Component {
                         }}
                         source={ICONS['campaingTitle']}
                     />
-                    <View style={{ borderColor: '#FFFFFF', borderWidth: 3, backgroundColor: '#4acacf', width: 101, height: 101, borderRadius: 101, alignItems: 'center', justifyContent: 'center' }}>
+                    <View style={{ borderColor: '#FFFFFF', borderWidth: 3, backgroundColor: '#FF2B94', width: 101, height: 101, borderRadius: 101, alignItems: 'center', justifyContent: 'center' }}>
                         <Text style={{ fontSize: 16, color: '#FFFFFF', fontFamily: 'RegularTyp2' }}>Bakiyeniz</Text>
                         <Text style={{ fontSize: 30, color: '#FFFFFF', fontFamily: 'Regular' }}>{Utils.getPriceFormat(points)}</Text>
                     </View>

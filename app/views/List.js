@@ -49,7 +49,7 @@ class CategoryDesc extends React.Component {
     imagesMaxWidth: Dimensions.get('window').width,
     onLinkPress: (evt, href) => { Linking.openURL(href); },
     debug: false
-};
+  };
 
   _onExpand = () => {
     const _self = this,
@@ -281,10 +281,12 @@ export default class List extends React.Component {
 
     //console.log(answer.data.products[0]);
 
-    if (this.props.category.img && answer.data.filters.findIndex(obj => obj.isSelected == true) == -1) {
-      _items.splice((answer.data.totalProductCount < 4 ? 0 : 4), 0,
-        { productType: 'cover', side: 'left', img: this.props.category.img },
-        { productType: 'cover', side: 'right', img: this.props.category.img });
+    if (this.props.category.desc == '') {
+      if (this.props.category.img && answer.data.filters.findIndex(obj => obj.isSelected == true) == -1) {
+        _items.splice((answer.data.totalProductCount < 4 ? 0 : 4), 0,
+          { productType: 'cover', side: 'left', img: this.props.category.img },
+          { productType: 'cover', side: 'right', img: this.props.category.img });
+      }
     }
     //console.log('list loaded', answer);
 

@@ -8,14 +8,15 @@ import { connect } from 'react-redux';
 class PhoneConfirmation extends React.Component {
 
   state = {
-    time: 180,
+    time: 120,
     message: '',
     canClick: true,
     email: null,
+    canGoBack: false,
   }
 
   componentDidMount() {
-    this.setState({ message: '' });
+    this.setState({ message: '', canGoBack: false });
     this._startTimer();
   }
 
@@ -35,7 +36,10 @@ class PhoneConfirmation extends React.Component {
   }
 
   _onBackPress = () => {
-    this.props.navigation.navigate('Phone');
+    let { canGoBack } = this.state;
+    if (canGoBack) {
+      this.props.navigation.navigate('Phone');
+    }
   }
 
   _onSubmit = (obj) => {
@@ -50,11 +54,12 @@ class PhoneConfirmation extends React.Component {
       if (time > 0) {
         if (obj.data.mobilePhone == phone_verification) {
           this.setState({ canClick: true });
+          clearInterval(this.interval);
           this._Continue();
           //this._checkEmosPhoneNumber();
         }
         else {
-          this.setState({ canClick: true });
+          this.setState({ canClick: true, canGoBack: true });
           this.setState({ message: "Onay kodu geçerli değil, Lütfen kontrol edip tekrar dene." })
         }
       }

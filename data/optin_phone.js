@@ -19,10 +19,10 @@ module.exports = {
         }
       ]
     },
-    {
-      /* 
+    /*{
+       
         yeni üye yaratılıyorsa sms flag 1 veya giriş yapılıyorsa sms flag 1 olarak güncellenmeli
-      */
+      
       items: [
         {
           id: 'isSmsSubscribe',
@@ -33,5 +33,6 @@ module.exports = {
         }
       ]
     },
+    */
   ]
 };

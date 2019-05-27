@@ -160,6 +160,7 @@ export const FORMDATA = {
   optin_email: require("root/data/optin_email.js"),
   optin_password: require("root/data/optin_password.js"),
   optin_signup: require("root/data/optin_signup.js"),
+  optin_subscription: require("root/data/optin_subscription.js"),
   optin_resetpassword: require("root/data/optin_resetpassword.js"),
   //Review
   review_submission: require("root/data/review_submission.js")

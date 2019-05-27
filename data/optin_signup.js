@@ -52,7 +52,7 @@ module.exports = {
                     value: '',
                     mask: '0999 999 99 99',
                     customFormat: (k) => {
-                        return Utils.customPhoneFormat( k );
+                        return Utils.customPhoneFormat(k);
                     },
                     validation: [{ key: 'isEmpty' }, { key: 'isPhone' },],
                     keyboardType: 'numeric',
@@ -78,7 +78,7 @@ module.exports = {
                     placeholder: '',
                     value: '',
                     customFormat: (k) => {
-                        return Utils.customDateFormat( k );
+                        return Utils.customDateFormat(k);
                     },
                     maxDate: -14,
                     validation: [{ key: 'isEmpty' }, { key: 'isDate' },],
@@ -119,31 +119,6 @@ module.exports = {
                         }
                     }
                 },
-            ]
-        },
-        {
-            items: [
-                {
-                    id: 'isMailSubscribe',
-                    title: 'E-Posta',
-                    desc: 'E-Posta ile bilgilendirme istiyorum',
-                    type: 'chekbox',
-                    value: false,
-                    //validation: [{ key: 'isChecked' },],
-                },
-            ]
-        },
-        {
-            items: [
-                {
-                    id: 'isSmsSubscribe',
-                    title: 'SMS iptal',
-                    desc: 'SMS iptali için 3347 RET FLR yazarak mesaj gönderebilirsin.SMS ve e-posta almak istemiyorsan 0850 333 0 319 nolu çağrı merkezimizden bize ulaşabilirsin.',
-                    type: 'chekbox',
-                    value: false,
-                    //validation: [{ key: 'isChecked' },],
-                },
-
             ]
         },
 

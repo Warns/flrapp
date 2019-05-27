@@ -27,7 +27,7 @@ class ExtraBtn extends Component {
 
         return (
             <TouchableOpacity activeOpacity={1} onPress={_self._onPress}>
-                <View style={{ backgroundColor: '#2dccd3', height: 70, flexDirection: 'row', justifyContent: 'space-between' }}>
+                <View style={{ backgroundColor: '#000000', height: 70, flexDirection: 'row', justifyContent: 'space-between' }}>
                     <Image
                         style={{ width: 113, height: 70 }}
                         source={ICONS['flormarExtra']}
