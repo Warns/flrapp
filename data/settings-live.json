@@ -655,56 +655,37 @@
                         ]
                     },
                     {
-                        "title": "YÜZ",
-                        "id": "18835",
+                        "title": "FIRÇA VE SÜNGER",
+                        "id": "18836",
                         "img": "/UPLOAD/categories-images/aksesuar.jpg",
                         "children": [
                             {
-                                "title": "TÜM YÜZ AKSESUARLARI",
-                                "id": "18821"
-                            },
-                            {
-                                "title": "FIRÇA",
+                                "title": "TÜM FIRÇA VE SÜNGER AKSESUARLARI",
                                 "id": "18836"
                             },
                             {
-                                "title": "YARDIMCI MALZEMELER",
-                                "id": "18837"
+                                "title": "YÜZ FIRÇASI",
+                                "id": "19348"
                             },
                             {
-                                "title": "SÜNGER",
-                                "id": "18922"
-                            },
-                            {
-                                "title": "APLİKATÖR",
-                                "id": "18923"
-                            }
-                        ]
-                    },
-                    {
-                        "title": "GÖZ",
-                        "id": "18838",
-                        "img": "/UPLOAD/categories-images/aksesuar.jpg",
-                        "children": [
-                            {
-                                "title": "TÜM GÖZ AKSESUARLARI",
-                                "id": "18838"
-                            },
-                            {
-                                "title": "FIRÇA",
+                                "title": "GÖZ VE KAŞ FIRÇASI",
                                 "id": "18839"
                             },
                             {
-                                "title": "YARDIMCI MALZEMELER",
-                                "id": "18840"
+                                "title": "DUDAK FIRÇASI",
+                                "id": "19349"
                             },
                             {
-                                "title": "TAKMA KİRPİK",
-                                "id": "18841"
+                                "title": "SÜNGERLER VE APLİKATÖRLER",
+                                "id": "19350"
                             },
                             {
-                                "title": "APLİKATÖR",
-                                "id": "18930"
+                                "title": "FIRÇA SETİ",
+                                "id": "19351"
+                            },
+                            {
+                                "title": "FIRÇA TEMİZLEYİCİ",
+                                "id": "19352"
                             }
                         ]
                     },
@@ -718,8 +699,8 @@
                                 "id": "18843"
                             },
                             {
-                                "title": "MAKAS",
-                                "id": "18844"
+                                "title": "MANİKÜR MALZEMELERİ",
+                                "id": "19353"
                             },
                             {
                                 "title": "TÖRPÜ",
@@ -730,8 +711,8 @@
                                 "id": "18846"
                             },
                             {
-                                "title": "YARDIMCI MALZEMELER",
-                                "id": "18848"
+                                "title": "TIRNAK MAKASI",
+                                "id": "18844"
                             },
                             {
                                 "title": "NAIL ART",
@@ -740,13 +721,25 @@
                         ]
                     },
                     {
-                        "title": "DİĞER",
-                        "id": "18850",
+                        "title": "YARDIMCI MALZEMELER",
+                        "id": "19354",
                         "img": "/UPLOAD/categories-images/aksesuar.jpg",
                         "children": [
                             {
-                                "title": "DİĞER ÜRÜNLER",
-                                "id": "18850"
+                                "title": "TÜM YARDIMCI MALZEMELER",
+                                "id": "19354"
+                            },
+                            {
+                                "title": "MAKYAJ TEMİZLEME PAMUĞU",
+                                "id": "19356"
+                            },
+                            {
+                                "title": "TAKMA KİRPİK",
+                                "id": "18841"
+                            },
+                            {
+                                "title": "MAKYAJ GEREÇLERİ",
+                                "id": "19355"
                             }
                         ]
                     }

@@ -32,6 +32,7 @@ import {
 import Dahi from 'root/app/extra/yapaytech';
 
 const Utils = require('root/app/helper/Global.js');
+const Globals = require("root/app/globals.js");
 
 //globals = require('../globals.js');
 
@@ -42,6 +43,24 @@ class Assistant extends React.Component {
     assistantIsVisible: false,
     boxAnim: new Animated.Value(0),
     opacity: 0,
+  }
+
+  componentDidMount() {
+    const _self = this,
+      { onRef } = _self.props;
+
+    _self._isMounted = true;
+
+    if (onRef) onRef(this);
+  }
+
+  componentWillUnmount() {
+    const _self = this,
+      { onRef } = _self.props;
+
+    _self._isMounted = false;
+
+    if (onRef) onRef(null);
   }
 
   _openModal = () => {
@@ -96,6 +115,36 @@ class Assistant extends React.Component {
         event={(type, data) => {
           const { id = '', labels = '', } = data;
           switch (type) {
+            case "barcode": {
+              const { barcode = '' /*'8690604539086',*/ } = data;
+              Globals.AJX(
+                {
+                  _self: _self,
+                  uri: Utils.getURL({
+                    key: "product",
+                    subKey: "getProductIdByBarcode"
+                  }),
+                  data: { barcode: barcode }
+                },
+                res => {
+                  const { status, data = {} } = res,
+                    { productId = '' } = data;
+
+                  if (status == 200) {
+                    _self.props.dispatch({
+                      type: OPEN_PRODUCT_DETAILS,
+                      value: {
+                        id: productId,
+                        measurements: {},
+                        animate: false,
+                        sequence: 0
+                      }
+                    });
+                  }
+                }
+              );
+              break;
+            }
             case "Webview": {
               _self.props.dispatch({
                 type: SHOW_CUSTOM_POPUP,
@@ -105,6 +154,7 @@ class Assistant extends React.Component {
                   data: data
                 }
               });
+              break;
             }
             case "external": {
 
@@ -166,6 +216,8 @@ class Assistant extends React.Component {
                   type: SHOW_CUSTOM_POPUP,
                   value: { visibility: true, type: SET_VIEWER, data: data }
                 });
+
+                break;
 
               } else if (FEEDSTYPE['CAMPAING'] == labels || FEEDSTYPE['COLLECTION'] == labels) {
 

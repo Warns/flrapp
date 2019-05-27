@@ -21,6 +21,7 @@ module.exports = {
       getProductList: '/webapi/v3/Product/getProductList',
       getProductDetail: '/webapi/v3/Product/getProductDetail',
       getProductVideos: '/mobile-app-product-video-export.html',
+      getProductIdByBarcode: '/webapi/v3/Product/getProductIdByBarcode'
     },
     user: {
       addFavoriteProduct: '/webapi/v3/User/addFavoriteProduct',
