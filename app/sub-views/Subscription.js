@@ -47,7 +47,8 @@ class Signup extends React.Component {
   render() {
 
     let formData = FORMDATA['optin_subscription'];
-    //formData.fields[0].items[0].value = this.props.optin.phone_formatted;
+    formData.fields[0].items[0].value = this.props.optin.isMailSubscribe;
+    formData.fields[1].items[0].value = this.props.optin.isSmsSubscribe;
 
     return (
       <SafeAreaView style={{ flex: 1 }}>
@@ -56,7 +57,7 @@ class Signup extends React.Component {
           keyboardShouldPersistTaps='handled'
           style={{ flex: 1 }}>
           <View style={{ padding: 40, paddingBottom: 20, paddingTop: 20 }}>
-            <Text style={{ fontFamily: 'Bold', fontSize: 20 }}>EVET! SON ADIM.</Text>
+            <Text style={{ fontFamily: 'Bold', fontSize: 20, lineHeight: 26 }}>SANA ÖZEL KAMPANYALAR, İNDİRİMLER, TÜM YENİLİK VE FIRSATLARDAN İLK SENİN HABERİN OLSUN!</Text>
           </View>
           <Form callback={this._onSubmit} data={formData} scrollEnabled={false} />
         </ScrollView>

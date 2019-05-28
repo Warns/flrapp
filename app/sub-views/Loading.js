@@ -54,7 +54,7 @@ class Loading extends React.Component {
   }
 
   _loadInitialState = async () => {
-    
+
     globals.getSecureStorage('__OPTIN__', (answer) => {
 
       if (answer !== 'no') {
@@ -64,6 +64,18 @@ class Loading extends React.Component {
         console.log('-----> secure ===>', _optin);
 
         this.setState({ password: _optin.password });
+
+        let __phone = "0530 975 25 66";
+
+        console.log(Utils.formatMobilePhoneNumber(__phone), _optin.email);
+
+        this.props.dispatch({
+          type: 'UPDATE_OPTIN', value: {
+            phone: __phone,
+            phone_formatted: "0" + Utils.formatMobilePhoneNumber(__phone),
+            email: _optin.email,
+          }
+        });
 
         if (_optin.userLoggedOut == true)
           this._getOut(false);

@@ -416,6 +416,9 @@ module.exports = {
 
     return filter;
   },
+  formatMobilePhoneNumber: function (num) {
+    return num.replace(/\)/g, '').replace(/\(/g, '').replace(/\ /g, '').substr(1);
+  },
   generateSMSVerificationCode: function (length, options) {
     if (isNaN(length)) {
       throw new TypeError('Length must be a number', 'generate-sms-verification-code/index.js', 3)

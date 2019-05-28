@@ -23,6 +23,8 @@ const userInitialState = {
         cegid: null,
         signup: false,
         userLogout: false,
+        isMailSubscribe: false,
+        isSmsSubscribe: false,
     },
 
     user: {},

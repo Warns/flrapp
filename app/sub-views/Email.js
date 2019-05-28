@@ -66,6 +66,7 @@ class Email extends React.Component {
   }
 
   render() {
+
     let { message } = this.state;
     let formData = FORMDATA['optin_email'];
     formData.fields[0].items[0].value = this.props.optin.email;
@@ -77,7 +78,7 @@ class Email extends React.Component {
         <MinimalHeader title="" right={<View />} onPress={this._onBackPress} />
         <View style={{ flex: 1 }}>
           <View style={{ padding: 40, paddingBottom: 20, paddingTop: 20 }}>
-            <Text style={{ color: '#000000', lineHeight: 18, fontSize: 15 }}>Email adresini yaz.</Text>
+            <Text style={{ color: '#000000', lineHeight: 18, fontSize: 15 }}>Flormar.com.tr üyeliğine ait email adresini gir.</Text>
             {error}
           </View>
           <Form callback={this._onSubmit} data={formData} />

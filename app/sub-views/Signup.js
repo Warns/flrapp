@@ -47,7 +47,8 @@ class Signup extends React.Component {
   render() {
 
     let formData = FORMDATA['optin_signup'];
-    //formData.fields[0].items[0].value = this.props.optin.phone_formatted;
+    formData.fields[1].items[0].value = this.props.optin.email;
+    formData.fields[1].items[1].value = this.props.optin.phone_formatted;
 
     return (
       <SafeAreaView style={{ flex: 1 }}>

@@ -45,9 +45,9 @@ class Splash extends React.Component {
     videoIsPlaying: true,
     localStorage: {},
     images: [
-      { thumb: Utils.prefix + "/UPLOAD/APP/assets/slider-1.png", title: 'Hoş geldin!', text: 'Yenilenen Flormar Mobil uygulaması ile sana özel içerik ve kampanyalarla mobil alışveriş deneyiminin keyfini çıkar.', video: false },
-      { thumb: Utils.prefix + "/UPLOAD/APP/assets/slider-2.png", title: 'Flormar Extra', text: 'Her adımda kazandıran Flormar Extra üyesi olmak için mobil uygulamada üyelik oluşturman yeterli! Mobil uygulamaya üye olan herkes Flormar Extra üyesi oluyor, her siparişinde %5 Extra TL* kazanıyor.\n\n*1 Extra TL = 1 TL' },
-      { thumb: Utils.prefix + "/UPLOAD/APP/assets/slider-3.png", title: 'Hemen üye ol', text: 'Online’a özel ilk siparişinde tüm ürünlerde net 40% indirim kazan! \n\n*Kargo bedava ' }
+      { thumb: Utils.prefix + "/UPLOAD/APP/assets/slider-1.png", curve: require('../../assets/images/splash-white-background-2.png'), title: 'HOŞ GELDİN!', text: 'Yenilenen Flormar Mobil uygulaması ile sana özel içerik ve kampanyalarla mobil alışveriş deneyiminin keyfini çıkar.', video: false },
+      { thumb: Utils.prefix + "/UPLOAD/APP/assets/slider-2.png", curve: require('../../assets/images/splash-white-background-1.png'), title: 'FLORMAR EXTRA', text: 'Flormar Extra üyesi olmak için mobil uygulamaya giriş yap, her siparişte %5 Extra TL* kazan.\n\n*1 Extra TL = 1 TL' },
+      { thumb: Utils.prefix + "/UPLOAD/APP/assets/slider-3.png", curve: require('../../assets/images/splash-white-background-2.png'), title: 'HEMEN ÜYE OL', text: 'Online’a özel ilk siparişinde tüm ürünlerde net 40% indirim kazan! \n\n*Kargo bedava ' }
     ],
     activeSlide: 0,
   }
@@ -111,9 +111,10 @@ class Splash extends React.Component {
     return (
       <View style={{ flex: 1, width: DIMENSIONS.width, height: DIMENSIONS.height }}>
         {media}
-        <View style={{ position: 'absolute', bottom: 220, left: DIMENSIONS.width * .1, alignItems: 'center', width: DIMENSIONS.width * .8 }}>
-          <Text style={{ fontSize: 20, fontFamily: 'Bold', color: '#ffffff' }}>{obj.item.title}</Text>
-          <Text style={{ color: '#ffffff', fontSize: 15, textAlign: 'center', }}>{obj.item.text}</Text>
+        <View style={{ backgroundColor: '#ffffff', position: 'absolute', bottom: 0, alignItems: 'center', width: '100%', padding: 35, height: 310, }}>
+          <Image source={obj.item.curve} style={{ width: DIMENSIONS.width, height: DIMENSIONS.width * .25, resizeMode: 'cover', position: 'absolute', top: -DIMENSIONS.width * .2 }} />
+          <Text style={{ fontSize: 20, fontFamily: 'Bold', color: '#000000' }}>{obj.item.title}</Text>
+          <Text style={{ color: '#000000', fontSize: 15, textAlign: 'center', }}>{obj.item.text}</Text>
         </View>
       </View>
     );
@@ -132,13 +133,13 @@ class Splash extends React.Component {
       <Pagination
         dotsLength={images.length}
         activeDotIndex={activeSlide}
-        containerStyle={{ position: 'absolute', width: '100%', bottom: 160 }}
+        containerStyle={{ position: 'absolute', width: '100%', bottom: 110 }}
         dotStyle={{
           width: 10,
           height: 10,
           borderRadius: 5,
           marginHorizontal: 0,
-          backgroundColor: 'rgba(255, 255, 255, 0.92)'
+          backgroundColor: 'rgba(150, 150, 150, 0.9)'
         }}
         inactiveDotStyle={{
           // Define styles for inactive dots here
@@ -185,7 +186,7 @@ class Splash extends React.Component {
           itemWidth={DIMENSIONS.width}
           itemHeight={DIMENSIONS.height}
           inactiveSlideScale={1}
-          inactiveSlideOpacity={.5}
+          inactiveSlideOpacity={1}
           activeSlideAlignment='center'
           hasParallaxImages={true}
           layoutCardOffset={0}
@@ -193,13 +194,14 @@ class Splash extends React.Component {
         />
         {this.pagination}
         <Image style={{ width: 180, position: 'absolute', top: 30, resizeMode: 'contain', alignSelf: 'center', zIndex: 1 }} source={require('../../assets/images/logo-w.png')} />
+        {/*<Image style={{ opacity: .3, width: '100%', height: 340, position: 'absolute', bottom: 0, resizeMode: 'cover', zIndex: 1 }} source={require('../../assets/images/splash-white-background.png')} />*/}
 
-        <Animated.View style={{ width: '100%', position: 'absolute', bottom: 0, flexDirection: "column-reverse", padding: 30, opacity: reverseFadeAnim }}>
+        <Animated.View style={{ width: '100%', position: 'absolute', bottom: 0, flexDirection: "column-reverse", padding: 30, paddingBottom: 10, opacity: reverseFadeAnim }}>
           <DefaultButton
             callback={this._continueToHome}
             name="Atla"
             boxColor="transparent"
-            textColor="#ffffff"
+            textColor="#000000"
             borderColor='rgba(0,0,0,0)'
 
           />
@@ -208,8 +210,8 @@ class Splash extends React.Component {
               <DefaultButton
                 callback={this._onLoginPressed}
                 name="GİRİŞ YAP / ÜYE OL"
-                boxColor="#ffffff"
-                textColor="#000000"
+                boxColor="#000000"
+                textColor="#ffffff"
                 borderColor="rgba(0,0,0,0)"
               />
             </View>

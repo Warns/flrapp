@@ -20,11 +20,11 @@ class Phone extends React.Component {
 
   _onBackPress = () => {
     this.props.navigation.navigate('Splash');
-    this.props.dispatch({ type: 'UPDATE_OPTIN', value: { phone: null, phone_formatted: null, phone_verification: null } });
+    //this.props.dispatch({ type: 'UPDATE_OPTIN', value: { phone: null, phone_formatted: null, phone_verification: null } });
   }
 
   _onSubmit = (obj) => {
-    let formattedMobileNumber = obj.data.mobilePhone.replace(/\)/g, '').replace(/\(/g, '').replace(/\ /g, '').substr(1);
+    let formattedMobileNumber = Utils.formatMobilePhoneNumber(obj.data.mobilePhone);
     let verificationNumber = Utils.generateSMSVerificationCode(6);
 
     this.setState({
@@ -45,6 +45,8 @@ class Phone extends React.Component {
 
   _Continue = () => {
 
+    console.log('====>', this.props.optin);
+
     let { mobileNumber, formattedMobileNumber, verificationNumber } = this.state;
 
     this.props.dispatch({ type: 'UPDATE_OPTIN', value: { phone: mobileNumber, phone_formatted: formattedMobileNumber, phone_verification: verificationNumber } });
@@ -63,7 +65,7 @@ class Phone extends React.Component {
         <View style={{ flex: 1 }}>
           <View style={{ padding: 40, paddingBottom: 20, paddingTop: 20 }}>
             <Text style={{ fontFamily: 'Bold', fontSize: 20 }}>MERHABA</Text>
-            <Text style={{ color: '#000000', lineHeight: 18, fontSize: 15 }}>Flormar olarak kişisel bilgilerinin güvenliğini önemsiyoruz, bu nedenle sadece ilk girişinde telefonuna gelen onay kodunu girerek telefonunu doğrula</Text>
+            <Text style={{ color: '#000000', lineHeight: 18, fontSize: 15 }}>Flormar olarak kişisel bilgilerinin güvenliğini önemsiyoruz, bu nedenle sadece ilk girişinde telefonuna gelen onay kodunu girerek telefonunu doğrula.</Text>
           </View>
           <Form callback={this._onSubmit} data={formData} />
         </View>

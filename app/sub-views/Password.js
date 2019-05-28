@@ -56,7 +56,7 @@ class Password extends React.Component {
 
       this.props.dispatch({ type: 'UPDATE_OPTIN', value: { password: this.state.password } });
       this.props.dispatch({ type: SET_USER, value: { user: { ...answer.data, password: this.state.password } || {} } });
-      this._Continue()
+      this._Continue(answer.data);
 
     } else {
       this.setState({ message: "Hatalı şifre, lütfen kontrol et." });
@@ -65,26 +65,29 @@ class Password extends React.Component {
     store.dispatch({ type: SHOW_PRELOADING, value: false });
   }
 
-  _Continue = () => {
-
-    console.log('continue.......');
-
+  _Continue = (data) => {
     let _self = this;
+
+    //if (data.isMailSubscribe && data.isSmsSubscribe) {
     setTimeout(() => {
       _self.props.navigation.navigate("Home");
       _self.props.dispatch({ type: ASSISTANT_SHOW, value: true });
     }, 10);
+    /*} else {
+      _self.props.dispatch({ type: 'UPDATE_OPTIN', value: { isMailSubscribe: data.isMailSubscribe, isSmsSubscribe: data.isSmsSubscribe } });
+      _self.props.navigation.navigate("Subscription");
+    }*/
+
+
   }
 
   _onResetPressed = () => {
-    let { email } = this.state;
-
     this.props.navigation.navigate('PasswordReset');
   }
 
   render() {
     let { message } = this.state;
-    let error = message == '' ? <Text style={{ color: '#000000', lineHeight: 18, fontSize: 15 }}>şifreni gir.</Text> : <Text style={{ color: '#FF2B94', fontSize: 15 }}>{message}</Text>;
+    let error = message == '' ? <Text style={{ color: '#000000', lineHeight: 18, fontSize: 15 }}>Flormar.com.tr üyeliğine ait şifreni gir.</Text> : <Text style={{ color: '#FF2B94', fontSize: 15 }}>{message}</Text>;
     let resetPassword = message == '' ? null : <DefaultButton callback={this._onResetPressed} name="ŞİFREMİ UNUTTUM" boxColor="#ffffff" textColor="#000000" borderColor="rgba(0,0,0,0)" />;
 
     return (

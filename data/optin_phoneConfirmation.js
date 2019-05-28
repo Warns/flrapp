@@ -2,13 +2,13 @@ module.exports = {
 
   sendAjx: false,
   allErrMessage: false,
-  buttonText: 'ONAY KODUNU DOĞRULA',
+  buttonText: 'GÖNDER',
 
   fields: [
     {
       items: [
         {
-          id: 'mobilePhone',
+          id: 'mobilePhoneConfirmation',
           title: 'Onay Kodu',
           type: 'text',
           placeholder: '',

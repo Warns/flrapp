@@ -12,7 +12,7 @@ module.exports = {
   /* işlem başarıyla gerçekleşmişse ve özel bir mesaj göstermek isteniliyorsa mesaj bu kısma yazılır */
   successMessage: '',
 
-  buttonText: 'DEVAM ET',
+  buttonText: 'TAMAMLA',
 
   fields: [
     {

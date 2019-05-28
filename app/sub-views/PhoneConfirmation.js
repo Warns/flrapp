@@ -38,6 +38,7 @@ class PhoneConfirmation extends React.Component {
   _onBackPress = () => {
     let { canGoBack } = this.state;
     if (canGoBack) {
+      clearInterval(this.interval);
       this.props.navigation.navigate('Phone');
     }
   }
@@ -52,7 +53,7 @@ class PhoneConfirmation extends React.Component {
       this.setState({ canClick: false });
 
       if (time > 0) {
-        if (obj.data.mobilePhone == phone_verification) {
+        if (obj.data.mobilePhoneConfirmation == phone_verification) {
           this.setState({ canClick: true });
           clearInterval(this.interval);
           this._Continue();
@@ -92,7 +93,7 @@ class PhoneConfirmation extends React.Component {
   */
 
   _Continue = () => {
-    this.props.dispatch({ type: 'UPDATE_OPTIN', value: { email: this.state.email, phone_checked: true } });
+    this.props.dispatch({ type: 'UPDATE_OPTIN', value: { /*email: this.state.email,*/ phone_checked: true } });
     this.props.navigation.navigate('Email');
   }
 
