@@ -143,6 +143,27 @@ module.exports = {
       .catch(function (error) { console.log('error', error); });
 
   },
+  dispatchEvent: function (event) {
+    var timestamp = new Date();
+
+    var _body = {
+      apiKey: '40e251c5-131e-422e-a7aa-17b4a9b44408',
+      type: event.type,
+      timestamp: timestamp.getTime(),
+      properties: {
+        ...event.properties,
+        tz: timestamp.getTimezoneOffset(),
+      }
+    }
+
+    fetch('https://api.corebi.com/rest-api/v1/collector/log',
+      {
+        method: 'POST',
+        body: JSON.stringify(_body),
+      })
+      .then(function (response) { return null; })
+      .catch(function (error) { console.log('error', error); });
+  },
 
   // set encrypted local async storage
   setSecureStorage: async function (key, value) {
@@ -190,7 +211,7 @@ module.exports = {
       },
       body: JSON.stringify({
         "to": this.exponentPushToken,
-        "title":"hello",
+        "title": "hello",
         "body": "world dsfsdfsdf dsfsdklfjsdklfjsfj",
         "badge": 0
       })

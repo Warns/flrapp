@@ -111,10 +111,12 @@ class Splash extends React.Component {
     return (
       <View style={{ flex: 1, width: DIMENSIONS.width, height: DIMENSIONS.height }}>
         {media}
-        <View style={{ backgroundColor: '#ffffff', position: 'absolute', bottom: 0, alignItems: 'center', width: '100%', padding: 35, height: 310, }}>
-          <Image source={obj.item.curve} style={{ width: DIMENSIONS.width, height: DIMENSIONS.width * .25, resizeMode: 'cover', position: 'absolute', top: -DIMENSIONS.width * .2 }} />
-          <Text style={{ fontSize: 20, fontFamily: 'Bold', color: '#000000' }}>{obj.item.title}</Text>
-          <Text style={{ color: '#000000', fontSize: 15, textAlign: 'center', }}>{obj.item.text}</Text>
+        <View style={{ position: 'absolute', bottom: 0, width: '100%', }}>
+          <Image source={obj.item.curve} style={{ width: DIMENSIONS.width, height: DIMENSIONS.width * .1, resizeMode: 'cover' }} />
+          <View style={{ backgroundColor: '#ffffff', padding: 35, paddingTop: 20, alignItems: 'center', height: 300 }}>
+            <Text style={{ fontSize: 20, fontFamily: 'Bold', color: '#000000' }}>{obj.item.title}</Text>
+            <Text style={{ color: '#000000', fontSize: 15, textAlign: 'center', }}>{obj.item.text}</Text>
+          </View>
         </View>
       </View>
     );
