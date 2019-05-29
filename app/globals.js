@@ -53,6 +53,8 @@ module.exports = {
     let HEADERS = this.CLIENT.Auth != null ?
       {
         'UDID': _this.exponentPushToken || '',
+        'DEVICE': Platform.OS || '',
+        'OSVERSION': Platform.Version || '',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Session': this.CLIENT.Auth.session,
@@ -203,6 +205,7 @@ module.exports = {
 
     this.exponentPushToken = await Expo.Notifications.getExpoPushTokenAsync();
 
+    /*
     return fetch('https://exp.host/--/api/v2/push/send', {
       method: 'POST',
       headers: {
@@ -216,6 +219,8 @@ module.exports = {
         "badge": 0
       })
     });
+    */
+
     /*.then((response) => {
       return response.json();
     })
