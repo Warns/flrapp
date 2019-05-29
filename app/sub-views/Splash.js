@@ -52,8 +52,25 @@ class Splash extends React.Component {
     activeSlide: 0,
   }
 
-  componentDidMount() {
+  onWillFocus = () => {
+    const _self = this;
+    _self.props.dispatch({ type: ASSISTANT_SHOW, value: false });
+  }
 
+  componentDidMount() {
+    const _self = this,
+      { navigation } = _self.props;
+
+    if (navigation)
+      _self._Listener = navigation.addListener('willFocus', _self.onWillFocus);
+  }
+
+  componentWillUnmount() {
+    const _self = this,
+      { navigation } = _self.props;
+
+    if (navigation)
+      _self._Listener.remove();
   }
 
   _continueToHome = () => {
