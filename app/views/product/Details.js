@@ -195,33 +195,19 @@ class ProductDetails extends React.Component {
   };
 
   _addToFavorites = () => {
-
-    //if (!this.state.favoriteButton.status) {
+    this.setState({ favoriteButton: { ...this.state.favoriteButton, status: true } });
     this.props.dispatch({
       type: ADD_TO_FAVORITES,
-      value: { id: this.props.product.item.productId }
+      value: { id: this.props.product.item.productId, do: "ADD" }
     });
-    /*
-        } else {
-          this.props.dispatch({
-            type: REMOVE_FROM_FAVORITES,
-            value: { id: this.props.product.item.productId }
-          });
-        }
-    
-        this.setState({
-          favoriteButton: {
-            ...this.state.favoriteButton,
-            status: !this.state.favoriteButton.status
-          }
-        });
-        */
+
   };
 
   _removeFromFavorites = () => {
+    this.setState({ favoriteButton: { ...this.state.favoriteButton, status: false } });
     this.props.dispatch({
-      type: REMOVE_FROM_FAVORITES,
-      value: { id: this.props.product.item.productId }
+      type: ADD_TO_FAVORITES,
+      value: { id: this.props.product.item.productId, do: "REMOVE" }
     });
   }
 
@@ -286,6 +272,8 @@ class ProductDetails extends React.Component {
       colors,
       videos
     } = this.props.product;
+
+    console.log(this.props.product);
 
     if (item) {
       const images = [];
@@ -419,15 +407,24 @@ class ProductDetails extends React.Component {
         </View>
       ) : null;
 
+      /*
+      let _favoriteButton = (
+        <DefaultButton
+          callback={this._addToFavorites}
+          name={favoriteButton.status ? favoriteButton.b : favoriteButton.a}
+          borderColor={favoriteButton.status ? "#FF2B94" : "#000000"} />
+      );
+      */
+
       let _favoriteButton = favoriteButton.status ? (
         <DefaultButton
-          callback={() => { this._removeFromFavorites() }}
+          callback={this._removeFromFavorites}
           name={favoriteButton.b}
           borderColor="#FF2B94"
         />
       ) : (
           <DefaultButton
-            callback={() => { this._addToFavorites() }}
+            callback={this._addToFavorites}
             name={favoriteButton.a}
           />
         );

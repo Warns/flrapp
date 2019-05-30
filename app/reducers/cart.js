@@ -100,18 +100,13 @@ export default function cart(state = cartInitialState, action) {
             };
         };
         case ADD_TO_FAVORITES: {
-            console.log('ADDDDDD');
             if (action.value.id) {
-                addFavoriteProduct(action.value);
+                if (action.value.do == "ADD")
+                    addFavoriteProduct(action.value);
+                else if (action.value.do == "REMOVE")
+                    deleteFavoriteProduct(action.value);
             }
         };
-        case REMOVE_FROM_FAVORITES: {
-            console.log('REMOVEEEE');
-            if (action.value.id) {
-                deleteFavoriteProduct(action.value);
-            }
-        }
-
         case SET_CART_ADDRESS: {
             const { optin = {} } = state,
                 { differentAddress = false } = optin,
@@ -440,7 +435,6 @@ addCartLine = (obj) => {
 }
 
 addFavoriteProduct = (obj) => {
-    console.log('adddd', obj.id);
     globals.fetch(
         Utils.getURL({ key: 'user', subKey: 'addFavoriteProduct' }),
         JSON.stringify({
@@ -452,7 +446,6 @@ addFavoriteProduct = (obj) => {
 }
 
 deleteFavoriteProduct = (obj) => {
-    console.log('deleteeee', obj.id);
     globals.fetch(
         Utils.getURL({ key: 'user', subKey: 'deleteFavoriteProduct' }),
         JSON.stringify({
