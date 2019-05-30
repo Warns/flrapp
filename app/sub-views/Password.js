@@ -4,8 +4,10 @@ import { MinimalHeader } from 'root/app/components';
 import { Form } from 'root/app/form';
 import {
   FORMDATA,
+  UPDATE_OPTIN,
+  ASSISTANT_SHOW,
+  UPDATE_USER,
   SET_USER,
-  ASSISTANT_SHOW
 } from 'root/app/helper/Constant';
 import { connect } from 'react-redux';
 import { DefaultButton } from 'root/app/UI';
@@ -26,10 +28,12 @@ class Password extends React.Component {
 
   _onBackPress = () => {
     this.props.navigation.navigate('Email');
-    this.props.dispatch({ type: 'UPDATE_OPTIN', value: { emos: null } });
+    this.props.dispatch({ type: UPDATE_OPTIN, value: { emos: null } });
   }
 
   _onSubmit = (obj) => {
+
+    console.log('on submit');
     let { email } = this.props.optin;
 
     this.setState({
@@ -52,9 +56,11 @@ class Password extends React.Component {
 
   _fetchResultHandler = (answer) => {
 
+    console.log('anser', answer);
+
     if (answer.status == 200) {
 
-      this.props.dispatch({ type: 'UPDATE_OPTIN', value: { password: this.state.password } });
+      this.props.dispatch({ type: UPDATE_OPTIN, value: { password: this.state.password } });
       this.props.dispatch({ type: SET_USER, value: { user: { ...answer.data, password: this.state.password } || {} } });
       this._Continue(answer.data);
 
@@ -68,17 +74,16 @@ class Password extends React.Component {
   _Continue = (data) => {
     let _self = this;
 
-    //if (data.isMailSubscribe && data.isSmsSubscribe) {
-    setTimeout(() => {
-      _self.props.navigation.navigate("Home");
-      _self.props.dispatch({ type: ASSISTANT_SHOW, value: true });
-    }, 10);
-    /*} else {
-      _self.props.dispatch({ type: 'UPDATE_OPTIN', value: { isMailSubscribe: data.isMailSubscribe, isSmsSubscribe: data.isSmsSubscribe } });
+    if (data.isMailSubscribe && data.isSmsSubscribe) {
+      setTimeout(() => {
+        _self.props.navigation.navigate("Home");
+        _self.props.dispatch({ type: ASSISTANT_SHOW, value: true });
+        _self.props.dispatch({ type: UPDATE_USER, value: {} });
+      }, 10);
+    } else {
+      _self.props.dispatch({ type: UPDATE_OPTIN, value: { isMailSubscribe: data.isMailSubscribe, isSmsSubscribe: data.isSmsSubscribe } });
       _self.props.navigation.navigate("Subscription");
-    }*/
-
-
+    }
   }
 
   _onResetPressed = () => {

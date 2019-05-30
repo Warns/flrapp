@@ -1,9 +1,11 @@
 import {
     SET_USER,
+    UPDATE_USER,
     REMOVE_USER,
     SET_CART_NUM,
     SET_CART_ITEMS,
     SET_USER_POINTS,
+    UPDATE_OPTIN,
 } from 'root/app/helper/Constant';
 import { store } from 'root/app/store';
 Utils = require('root/app/helper/Global.js');
@@ -49,13 +51,7 @@ export default function user(state = userInitialState, action) {
         };
         case SET_USER: {
 
-            console.log('set user');
-
-            let optin_value = JSON.stringify(action.value.user);
-
-            globals.setSecureStorage('__OPTIN__', optin_value);
             fetchCartDetails();
-
             getUserToken(action.value);
 
             return {
@@ -63,7 +59,25 @@ export default function user(state = userInitialState, action) {
                 ...action.value
             }
         };
-        case 'UPDATE_OPTIN': return {
+        case UPDATE_USER: {
+            console.log('*****', state.user);
+
+            let new_settings = {
+                mobilePhone: state.optin.phone_formatted,
+                isMailSubscribe: state.optin.isMailSubscribe,
+                isSmsSubscribe: state.optin.isSmsSubscribe,
+                smsVerificationCode: state.optin.phone_verification,
+            }
+
+            let optin_value = JSON.stringify({ ...state.user, ...new_settings });
+
+            globals.setSecureStorage('__OPTIN__', optin_value);
+
+            setUserDetails(new_settings);
+
+
+        };
+        case UPDATE_OPTIN: return {
             ...state,
             optin: {
                 ...state.optin,
@@ -95,6 +109,8 @@ export default function user(state = userInitialState, action) {
     }
 }
 
+// USER ACTIONS
+
 fetchCartDetails = async () => {
     globals
         .fetch(Utils.getURL({ key: 'cart', subKey: 'getCart' }), JSON.stringify({ 'cartLocation': 'basket' }), (answer) => {
@@ -111,4 +127,13 @@ getUserToken = async (obj) => {
         if (result['type'] == 'success')
             store.dispatch({ type: 'SET_USER_BAZAARVOICE_TOKEN', value: result.data });
     });
+}
+
+setUserDetails = async (obj) => {
+    console.log('setuperldjf');
+    globals.fetch(
+        Utils.getURL({ key: 'user', subKey: 'setUser' }),
+        JSON.stringify(obj), (answer) => {
+            console.log(answer);
+        });
 }

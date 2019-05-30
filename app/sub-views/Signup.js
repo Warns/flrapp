@@ -32,14 +32,13 @@ class Signup extends React.Component {
     } else {
       this.setState({ message: obj.data.message });
     }
-
   }
 
   _Continue = (data) => {
     let _self = this;
     this.props.dispatch({ type: SET_USER, value: { user: data || {} } });
     setTimeout(() => {
-      _self.props.navigation.navigate("Home");
+      _self.props.navigation.navigate("Subscription");
       _self.props.dispatch({ type: ASSISTANT_SHOW, value: true });
     }, 10);
   }

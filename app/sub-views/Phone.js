@@ -56,8 +56,15 @@ class Phone extends React.Component {
 
   render() {
 
+
+
+    let phoneNo = this.props.optin.phone_formatted.substr(1) != 0 ? "0" + this.props.optin.phone_formatted : this.props.optin.phone_formatted;
+
+
+    console.log(phoneNo, '>>>>>');
+
     let formData = FORMDATA['optin_phone'];
-    formData.fields[0].items[0].value = this.props.optin.phone_formatted;
+    formData.fields[0].items[0].value = phoneNo;
 
     return (
       <SafeAreaView style={{ flex: 1 }}>

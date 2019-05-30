@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { MinimalHeader } from 'root/app/components';
 import { Form } from 'root/app/form';
-import { FORMDATA, SET_USER, ASSISTANT_SHOW } from 'root/app/helper/Constant';
+import { FORMDATA, SET_USER, ASSISTANT_SHOW, UPDATE_OPTIN, UPDATE_USER } from 'root/app/helper/Constant';
 import { connect } from 'react-redux';
 
 const Utils = require('root/app/helper/Global.js');
@@ -25,22 +25,20 @@ class Signup extends React.Component {
   }
 
   _onSubmit = (obj) => {
-    if (obj.type == 'success') {
-      const { postData = {}, data = {} } = obj,
-        d = { ...postData, ...data.data };
-      this._Continue(d);
-    } else {
-      this.setState({ message: obj.data.message });
-    }
 
+    console.log('..//...>', obj);
+
+    this.props.dispatch({ type: UPDATE_OPTIN, value: { ...obj.data } });
+
+    this._Continue();
   }
 
-  _Continue = (data) => {
+  _Continue = () => {
     let _self = this;
-    this.props.dispatch({ type: SET_USER, value: { user: data || {} } });
     setTimeout(() => {
       _self.props.navigation.navigate("Home");
       _self.props.dispatch({ type: ASSISTANT_SHOW, value: true });
+      this.props.dispatch({ type: UPDATE_USER, value: {} });
     }, 10);
   }
 

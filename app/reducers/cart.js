@@ -100,11 +100,13 @@ export default function cart(state = cartInitialState, action) {
             };
         };
         case ADD_TO_FAVORITES: {
+            console.log('ADDDDDD');
             if (action.value.id) {
                 addFavoriteProduct(action.value);
             }
         };
         case REMOVE_FROM_FAVORITES: {
+            console.log('REMOVEEEE');
             if (action.value.id) {
                 deleteFavoriteProduct(action.value);
             }
@@ -165,7 +167,7 @@ export default function cart(state = cartInitialState, action) {
                 ...state,
                 optin: { ...state.optin, cargoId: action.value }
             };
-            
+
             setCart(data['optin'], () => {
                 setTimeout(() => {
                     getCart('payment');
@@ -438,21 +440,25 @@ addCartLine = (obj) => {
 }
 
 addFavoriteProduct = (obj) => {
+    console.log('adddd', obj.id);
     globals.fetch(
         Utils.getURL({ key: 'user', subKey: 'addFavoriteProduct' }),
         JSON.stringify({
-            "productId": obj.id,
+            productId: obj.id,
         }), (answer) => {
-            // do nothing
+            // do nothing 
+            console.log(answer);
         });
 }
 
 deleteFavoriteProduct = (obj) => {
+    console.log('deleteeee', obj.id);
     globals.fetch(
         Utils.getURL({ key: 'user', subKey: 'deleteFavoriteProduct' }),
         JSON.stringify({
-            "productId": obj.id,
+            productId: obj.id,
         }), (answer) => {
             // do nothing
+            console.log(answer);
         });
 }

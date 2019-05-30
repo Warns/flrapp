@@ -235,8 +235,10 @@ export const OPEN_VIDEO_PLAYER = "OPEN_VIDEO_PLAYER";
 
 /* user */
 export const SET_USER = "SET_USER";
+export const UPDATE_USER = "UPDATE_USER"
 export const REMOVE_USER = "REMOVE_USER";
 export const SET_CART_NUM = "SET_CART_NUM";
+export const UPDATE_OPTIN = "UPDATE_OPTIN";
 
 /* menu */
 export const SET_MENU_TYPE = "SET_MENU_TYPE";

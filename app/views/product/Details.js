@@ -195,25 +195,35 @@ class ProductDetails extends React.Component {
   };
 
   _addToFavorites = () => {
-    this.setState({
-      favoriteButton: {
-        ...this.state.favoriteButton,
-        status: !this.state.favoriteButton.status
-      }
-    });
 
-    if (this.state.favoriteButton.status) {
-      this.props.dispatch({
-        type: ADD_TO_FAVORITES,
-        value: { id: this.props.product.item.productId }
-      });
-    } else {
-      this.props.dispatch({
-        type: REMOVE_FROM_FAVORITES,
-        value: { id: this.props.product.item.productId }
-      });
-    }
+    //if (!this.state.favoriteButton.status) {
+    this.props.dispatch({
+      type: ADD_TO_FAVORITES,
+      value: { id: this.props.product.item.productId }
+    });
+    /*
+        } else {
+          this.props.dispatch({
+            type: REMOVE_FROM_FAVORITES,
+            value: { id: this.props.product.item.productId }
+          });
+        }
+    
+        this.setState({
+          favoriteButton: {
+            ...this.state.favoriteButton,
+            status: !this.state.favoriteButton.status
+          }
+        });
+        */
   };
+
+  _removeFromFavorites = () => {
+    this.props.dispatch({
+      type: REMOVE_FROM_FAVORITES,
+      value: { id: this.props.product.item.productId }
+    });
+  }
 
   /* nasıl uygulanır */
   _getDetailContent = () => {
@@ -411,13 +421,13 @@ class ProductDetails extends React.Component {
 
       let _favoriteButton = favoriteButton.status ? (
         <DefaultButton
-          callback={this._addToFavorites}
+          callback={() => { this._removeFromFavorites() }}
           name={favoriteButton.b}
           borderColor="#FF2B94"
         />
       ) : (
           <DefaultButton
-            callback={this._addToFavorites}
+            callback={() => { this._addToFavorites() }}
             name={favoriteButton.a}
           />
         );

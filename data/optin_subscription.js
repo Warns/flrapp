@@ -1,17 +1,7 @@
-const Utils = require('root/app/helper/Global.js');
-const Translation = require('root/app/helper/Translation.js');
-
 module.exports = {
 
-  /* uri: istek yapılacak url */
-  uri: Utils.getURL({ key: 'user', subKey: 'createUser' }),
-
-  /* allErrMessage: true durumunda tüm hata mesajları sayfanın en üstünde, false durumunda ilgili elementin altında gösterilir */
+  sendAjx: false,
   allErrMessage: false,
-
-  /* işlem başarıyla gerçekleşmişse ve özel bir mesaj göstermek isteniliyorsa mesaj bu kısma yazılır */
-  successMessage: '',
-
   buttonText: 'TAMAMLA',
 
   fields: [

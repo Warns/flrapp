@@ -12,7 +12,7 @@ module.exports = {
           title: 'Cep Telefonu',
           type: 'text',
           placeholder: '',
-          value: '05309752566',
+          value: '',
           mask: '0999 999 99 99',
           validation: [{ key: 'isEmpty' }, { key: 'isCustomPhone' },],
           keyboardType: 'numeric',
