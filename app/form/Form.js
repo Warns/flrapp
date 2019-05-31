@@ -430,7 +430,7 @@ class Form extends Component {
             case 'stars':
                 return <StarSelect callback={_callback} control={validation} key={id} data={obj} />
             case 'info':
-                return <FormInfo key={id} data={obj} />
+                return <FormInfo callback={_callback} control={validation} key={id} data={obj} />
             default:
                 return null;
         }
