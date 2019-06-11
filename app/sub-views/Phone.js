@@ -39,13 +39,14 @@ class Phone extends React.Component {
       + "&gsm=" + formattedMobileNumber
       + "&text=" + escape(verificationNumber + " koduyla FLORMAR'a giris yapabilirsin.");
 
-    sendVerificationSMS(data, this._Continue);
-    //setTimeout(() => { this._Continue(); }, 222);
+    //sendVerificationSMS(data, this._Continue);
+    console.log(verificationNumber);
+    setTimeout(() => { this._Continue(); }, 222);
   }
 
   _Continue = () => {
 
-    console.log('====>', this.props.optin);
+    //console.log('====>', this.props.optin);
 
     let { mobileNumber, formattedMobileNumber, verificationNumber } = this.state;
 
@@ -56,12 +57,9 @@ class Phone extends React.Component {
 
   render() {
 
+    const { phone_formatted = "" } = this.props.optin || {};
 
-
-    let phoneNo = this.props.optin.phone_formatted.substr(1) != 0 ? "0" + this.props.optin.phone_formatted : this.props.optin.phone_formatted;
-
-
-    console.log(phoneNo, '>>>>>');
+    let phoneNo = phone_formatted.substr(1) != 0 ? "0" + phone_formatted : phone_formatted;
 
     let formData = FORMDATA['optin_phone'];
     formData.fields[0].items[0].value = phoneNo;

@@ -5,6 +5,7 @@ import {
     Text,
     Image,
     Keyboard,
+    StyleSheet,
 } from 'react-native';
 import { Viewer } from 'root/app/viewer/';
 import {
@@ -124,7 +125,7 @@ const UnderSide = class Main extends Component {
         let view = null;
         if (coupon && !cartNoResult)
             view = <ProductActionButton
-                wrapperStyle={{ paddingLeft: 10, marginBottom: 10, marginTop: -10  }}
+                wrapperStyle={{ paddingLeft: 10, marginBottom: 10, marginTop: -10 }}
                 name={txt}
                 expanded={showCoupon}
                 onPress={_self._onShowCoupon}
@@ -228,13 +229,13 @@ const UnderSide = class Main extends Component {
             form = _self._getForm(),
             formButton = _self._getFormButton();
 
-            let cargo = null;
-            if( cargoId != 0 )
-                cargo = _self._getCartItem({ key: 'Kargo', value: shippingTotal == 0 ? 'ücretsiz' : Utils.getPriceFormat(shippingTotal) });
+        let cargo = null;
+        if (cargoId != 0)
+            cargo = _self._getCartItem({ key: 'Kargo', value: shippingTotal == 0 ? 'ücretsiz' : Utils.getPriceFormat(shippingTotal) });
 
-            let stPoint = null;
-            if( usedSitePoint != 0 )
-                stPoint = _self._getCartItem({ key: 'Ekstra puan kullanımı', value: Utils.getPriceFormat(usedSitePoint) });
+        let stPoint = null;
+        if (usedSitePoint != 0)
+            stPoint = _self._getCartItem({ key: 'Ekstra puan kullanımı', value: Utils.getPriceFormat(usedSitePoint) });
 
 
         return (
@@ -260,8 +261,10 @@ const UnderSide = class Main extends Component {
             { totalCount = 0 } = _self.state,
             title = totalCount == 0 ? null : (<View
                 style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingBottom: 20 }}>
-                <Text style={{ fontFamily: 'Bold', fontSize: 16 }}>FIRSATLAR</Text>
-                <Text style={{ paddingLeft: 5, fontFamily: 'Bold', fontSize: 16, color: 'rgb(255, 43, 148)' }}>{totalCount}</Text>
+                <Text style={{ fontFamily: 'Bold', fontSize: 16, lineHeight: 20, }}>FIRSATLAR</Text>
+                <View style={styles.bubble}>
+                    <Text style={styles.bubbleText}>{totalCount}</Text>
+                </View>
             </View>);
 
         let view = null;
@@ -320,3 +323,22 @@ const UnderSide = class Main extends Component {
 
 function mapStateToProps(state) { return state }
 export default connect(mapStateToProps)(UnderSide);
+
+const styles = StyleSheet.create({
+    bubble: {
+        backgroundColor: '#ffffff',
+        width: 20,
+        height: 20,
+        borderRadius: 10,
+        marginLeft: 10,
+        borderWidth: 1,
+        borderColor: '#FE136F',
+        justifyContent: 'center',
+        alignItems: 'center',
+        top: -3,
+    },
+    bubbleText: {
+        color: '#FE136F',
+        fontSize: 11,
+    }
+});

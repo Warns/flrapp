@@ -14,6 +14,7 @@ import {
   SET_USER,
 } from 'root/app/helper/Constant';
 import { connect } from 'react-redux';
+import { Constants } from 'expo';
 
 const Utils = require('root/app/helper/Global.js');
 globals = require('root/app/globals.js');
@@ -33,6 +34,34 @@ class Loading extends React.Component {
     // this is used in all pages
     this.props.dispatch({ type: SET_SCREEN_DIMENSIONS, value: { window: DIMENSIONS, topMargin: TOP_MARGIN, OS: Platform.OS, isX: TOP_MARGIN == 30 } });
     this.props.dispatch({ type: SET_NAVIGATION, value: this.props.navigation });
+
+    /*
+    this.props.dispatch({
+      type: 'SET_CLIENT_PROPERTIES', value: {
+
+        device_name: Constants.deviceName,
+        session: Constants.sessionId,
+        platform: Platform.OS,
+        version: Platform.Version,
+        screen_dimensions: DIMENSIONS.width + 'x' + DIMENSIONS.height,
+        device_year_class: Constants.deviceYearClass,
+
+      }
+    });
+    */
+
+    /*
+    console.log({
+
+      device_name: Constants.deviceName,
+      session: Constants.sessionId,
+      platform: Platform.OS,
+      version: Platform.Version,
+      screen_dimensions: DIMENSIONS.width + 'x' + DIMENSIONS.height,
+      device_year_class: Constants.deviceYearClass,
+
+    });
+    */
 
     Animated.timing(
       this.state.anim, {
@@ -61,7 +90,7 @@ class Loading extends React.Component {
 
         let _optin = JSON.parse(answer);
 
-        console.log('-----> secure ===>', _optin);
+        //console.log('-----> secure ===>', _optin);
 
         this.setState({ password: _optin.password });
 
@@ -98,12 +127,15 @@ class Loading extends React.Component {
 
   _fetchResultHandler = (answer) => {
 
+    //console.log('----- ANSWER', answer);
+
     if (answer.status == 200) {
 
       this.props.dispatch({ type: SET_USER, value: { user: { ...answer.data, password: this.state.password } || {} } });
       this._Continue(true)
 
     } else {
+      console.log('sds');
       this._getOut(false);
     }
   }

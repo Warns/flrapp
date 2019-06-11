@@ -29,7 +29,7 @@ class Setting extends Component {
         _self.props.dispatch({ type: SET_SETTINGS, value: settings });
 
         /* https://www.segmentify.com/dev/integration_rest/#user-session-management */
-        Utils.ajx({ uri: 'https://dcetr9.segmentify.com/get/key?count=2&apiKey=61c97507-5c1f-46c6-9b50-2aa9d1d73316' }, (res) => {
+        Utils.ajx({ uri: 'https://gandalf.segmentify.com/get/key?count=2&apiKey=61c97507-5c1f-46c6-9b50-2aa9d1d73316' }, (res) => {
             if (res['type'] == 'success')
                 _self.props.dispatch({ type: SET_SEGMENTIFY_USER_SESSION, value: res['data'] || [] });
         });

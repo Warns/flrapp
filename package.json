@@ -17,6 +17,7 @@
     "react-native": "https://github.com/expo/react-native/archive/sdk-28.0.0.tar.gz",
     "react-native-credit-card-input": "^0.4.1",
     "react-native-datepicker": "^1.7.2",
+    "react-native-gesture-handler": "^1.3.0",
     "react-native-global-props": "^1.1.3",
     "react-native-map-clustering": "^1.3.0",
     "react-native-masked-text": "^1.9.2",
@@ -30,6 +31,7 @@
     "react-redux": "^5.0.7",
     "redux": "^4.0.0",
     "rn-placeholder": "^1.3.0",
-    "supercluster": "4.1.1"
+    "supercluster": "4.1.1",
+    "whatwg-fetch": "^2.0.4"
   }
 }

@@ -14,6 +14,18 @@ module.exports = {
 
     buttonText: 'BİLGİLERİ KAYDET',
 
+    /* post için oluşturulan nesneye sabit bir alan eklenecekse bu kısma */
+    addFields: [
+        {
+            id: 'isSmsSubscribe',
+            value: false
+        },
+        {
+            id: 'isMailSubscribe',
+            value: false,
+        }
+    ],
+
     fields: [
         {
             items: [

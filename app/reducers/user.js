@@ -16,7 +16,7 @@ const userInitialState = {
 
     optin: {
         phone: null,
-        phone_formatted: null,
+        phone_formatted: "",
         phone_verification: null,
         phone_checked: false,
         email: null,
@@ -51,6 +51,8 @@ export default function user(state = userInitialState, action) {
         };
         case SET_USER: {
 
+            //console.log('>>>>>>> SET_USER', action.value);
+
             fetchCartDetails();
             getUserToken(action.value);
 
@@ -60,13 +62,22 @@ export default function user(state = userInitialState, action) {
             }
         };
         case UPDATE_USER: {
-            console.log('*****', state.user);
+            //console.log('*****  UPDATE_USER', state.user);
 
-            let new_settings = {
-                mobilePhone: state.optin.phone_formatted,
-                isMailSubscribe: state.optin.isMailSubscribe,
-                isSmsSubscribe: state.optin.isSmsSubscribe,
-                smsVerificationCode: state.optin.phone_verification,
+            let new_settings = {};
+
+            if (action.value.updateSubscriptions == true) {
+                new_settings = {
+                    mobilePhone: state.optin.phone_formatted,
+                    isMailSubscribe: state.optin.isMailSubscribe,
+                    isSmsSubscribe: state.optin.isSmsSubscribe,
+                    smsVerificationCode: state.optin.phone_verification,
+                }
+            } else {
+                new_settings = {
+                    mobilePhone: state.optin.phone_formatted,
+                    smsVerificationCode: state.optin.phone_verification,
+                }
             }
 
             let optin_value = JSON.stringify({ ...state.user, ...new_settings });
@@ -130,10 +141,9 @@ getUserToken = async (obj) => {
 }
 
 setUserDetails = async (obj) => {
-    console.log('setuperldjf');
     globals.fetch(
         Utils.getURL({ key: 'user', subKey: 'setUser' }),
         JSON.stringify(obj), (answer) => {
-            console.log(answer);
+            //console.log('this is set user answer', answer);
         });
 }

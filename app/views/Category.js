@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 import { TabNavigator, createMaterialTopTabNavigator } from 'react-navigation';
 
-import { 
+import {
   SET_SELECTED_CATEGORY,
   NAVIGATE,
 } from 'root/app/helper/Constant';
@@ -31,14 +31,14 @@ import ListPage from './List';
 function tabs(categories) {
   let routes = [];
   categories.forEach(element => {
-    routes[element.title] = tab( element );
+    routes[element.title] = tab(element);
     //routes[element.title].params = 'nanay';
   });
 
   return routes;
 }
 
-function tab( category ){
+function tab(category) {
 
   //console.log( category );
   //const {} = this.props;
@@ -46,38 +46,38 @@ function tab( category ){
 
   //console.log( category );
 
-  return{
-    screen:  props => getTabForCategory({ category: category, props: props }),
-    navigationOptions:{
+  return {
+    screen: props => getTabForCategory({ category: category, props: props }),
+    navigationOptions: {
       title: category.selector,
     }
   }
 }
 
-function getTabForCategory( {category, props} ){
+function getTabForCategory({ category, props }) {
   return <ListPage {...props} category={category} />;
 }
 
-export default class CategoryTabs extends React.Component{
+export default class CategoryTabs extends React.Component {
 
   _goBack = () => {
-    
+
   }
 
   _cats = store.getState().general.categories
 
   static navigationOptions = ({ navigation }) => {
-    const {state, setParams} = navigation;
+    const { state, setParams } = navigation;
     return {
       title: 'hellow',
-      header: () => <MinimalHeader onPress={()=> store.dispatch({type: NAVIGATE, value:{item:{navigation:"Home"}}}) } nav={navigation} title={ store.getState().general.selectedCategory } />,
+      header: () => <MinimalHeader onPress={() => store.dispatch({ type: NAVIGATE, value: { item: { navigation: "Home" } } })} nav={navigation} title={store.getState().general.selectedCategory} />,
       headerBackTitle: null,
       headerTintColor: "#7410E0",
     };
   };
 
   CategoriesNavigator = createMaterialTopTabNavigator(
-    tabs( this._cats ),
+    tabs(this._cats),
     {
       tabBarComponent: this._cats.length > 1 ? CustomHorizontalTabs : null,
       lazy: true,
@@ -86,7 +86,7 @@ export default class CategoryTabs extends React.Component{
     }
   );
 
-  render(){
+  render() {
 
     //console.log('>>>>>', store.getState().general.selectedCategory);
 
@@ -94,8 +94,8 @@ export default class CategoryTabs extends React.Component{
 
     //return(<View />);
 
-    return( <this.CategoriesNavigator /> );
-    
+    return (<this.CategoriesNavigator />);
+
   }
 }
 
@@ -107,16 +107,16 @@ class CustomHorizontalTabs extends React.Component {
     this.jumpToIndex(obj.routeName);
   }
 
-  render(){
+  render() {
 
     //console.log('kkkkkkk', this.props.navigationState.routes[this.props.navigationState.index].key );
 
     const routes = this.props.navigationState.routes,
-    i = this.props.navigationState.index;
+      i = this.props.navigationState.index;
 
-    store.dispatch({type:SET_SELECTED_CATEGORY, value:this.props.navigationState.routes[this.props.navigationState.index].key});
+    store.dispatch({ type: SET_SELECTED_CATEGORY, value: this.props.navigationState.routes[this.props.navigationState.index].key });
 
-    return(
+    return (
       <Minus99HorizontalTabs items={routes} selected={i} callback={this._onTabsPress} />
     )
   }

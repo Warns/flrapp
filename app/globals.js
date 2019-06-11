@@ -181,7 +181,10 @@ module.exports = {
     try {
       const value = await Expo.SecureStore.getItemAsync(key);
       if (value !== null) {
-        callback(value);
+        if (value.length > 0)
+          callback(value);
+        else
+          callback('no');
       } else {
         callback('no');
       }
@@ -278,7 +281,7 @@ module.exports = {
   },
   seg: function ({ data }, callback) {
     const _self = this,
-      uri = 'https://dcetr9.segmentify.com/add/events/v1.json?apiKey=61c97507-5c1f-46c6-9b50-2aa9d1d73316',
+      uri = 'https://gandalf.segmentify.com/add/events/v1.json?apiKey=61c97507-5c1f-46c6-9b50-2aa9d1d73316',
       origin = Utils.prefix,
       { user = {}, segmentify = {} } = store.getState(),
       obj = {

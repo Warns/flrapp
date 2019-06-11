@@ -89,7 +89,7 @@ module.exports = {
         product: 'Satın al',
         blog: 'İletiyi incele',
         collection: 'Koleksiyonu keşfet',
-        campaing: 'Detaylar'
+        campaing: 'Kampanya Detaylarını İncele'
     },
     getErrorMsg: function ({ key = '', title = '', value = '' }) {
         const _t = this;

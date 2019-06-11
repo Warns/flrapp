@@ -38,7 +38,7 @@ class Signup extends React.Component {
     setTimeout(() => {
       _self.props.navigation.navigate("Home");
       _self.props.dispatch({ type: ASSISTANT_SHOW, value: true });
-      this.props.dispatch({ type: UPDATE_USER, value: {} });
+      this.props.dispatch({ type: UPDATE_USER, value: { updateSubscriptions: true } });
     }, 10);
   }
 

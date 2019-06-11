@@ -14,7 +14,7 @@ class PasswordReset extends React.Component {
   state = {
     email: null,
     message: '',
-    sent: true,
+    sent: false,
   };
 
   _onBackPress = () => {
@@ -25,7 +25,6 @@ class PasswordReset extends React.Component {
     this.setState({
       email: obj.data.email,
       message: '',
-      sent: false,
     });
 
     globals.fetch(

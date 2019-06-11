@@ -986,7 +986,7 @@ class CustomDetailListItem extends Component {
             { products = '' } = _self.props.data;
 
         products = Utils.getPrdCodeToArr(products);
-        
+
         let view = null;
         if (products.length > 0)
             view = (
@@ -1175,7 +1175,7 @@ class FeedsItem extends Component {
                     }*/
                 }
             });
-        } else if (FEEDSTYPE['CAMPAING'] == labels[0] || FEEDSTYPE['COLLECTION'] == labels[0]) { 
+        } else if (FEEDSTYPE['CAMPAING'] == labels[0] || FEEDSTYPE['COLLECTION'] == labels[0]) {
             const { title = '', utp = '', galleryImage = '', desc = '', catCode = '' } = params,
                 data = [{
                     title: name,
@@ -1446,12 +1446,13 @@ class OpportunityListItem extends Component {
     }
     render() {
         const _self = this,
-            { index } = _self.props,
+            { index, totalCount } = _self.props,
             { desc = '' } = _self.props.data,
-            leftSpace = index == 0 ? 20 : 0;
+            leftSpace = index == 0 ? 20 : 0,
+            _width = totalCount == 1 ? HTML_DEFAULT_PROPS.imagesMaxWidth - 40 : 220;
 
         return (
-            <View style={{ backgroundColor: '#FFFFFF', width: 220, minHeight: 130, marginRight: 10, marginLeft: leftSpace, padding: 15, }}>
+            <View style={{ backgroundColor: '#FFFFFF', width: _width, minHeight: 130, marginRight: 10, marginLeft: leftSpace, padding: 15, }}>
                 <HTML {...HTML_DEFAULT_PROPS} html={desc} />
             </View>
         )
@@ -1989,7 +1990,7 @@ class Viewers extends Component {
             case ITEMTYPE['CUSTOMDETAIL']:
                 return <CustomDetailListItem key={key} index={index} callback={_self._callback} data={item} />;
             case ITEMTYPE['OPPORTUNITY']:
-                return <OpportunityListItem key={key} index={index} callback={_self._callback} data={item} />;
+                return <OpportunityListItem key={key} index={index} callback={_self._callback} data={item} totalCount={total} />;
             case ITEMTYPE['CARTLIST']:
                 return <CartListItem viewType={viewType} totalCount={total} index={index} key={key} callback={_self._callback} onUpdateItem={_self._onUpdateItem} onRemove={_self._removeItem} data={item} />;
             case ITEMTYPE['ADDRESS']:

@@ -654,7 +654,7 @@ class ListItem extends React.Component {
 
             {price}
             <Text numberOfLines={2} style={{ marginTop: 5, width: _width - 30, fontSize: 13, fontFamily: 'proxima' }}>{item.productName}</Text>
-            <Text style={{ position: 'absolute', left: 15, bottom: 23, fontSize: 13, fontFamily: 'proxima', color: '#9B9B9B' }}>{numOfColors}</Text>
+            <Text style={{ position: 'absolute', left: 15, bottom: 21, fontSize: 13, fontFamily: 'proxima', color: '#9B9B9B' }}>{numOfColors}</Text>
             <Text style={{ position: 'absolute', left: 15, bottom: 5, fontSize: 13, fontFamily: 'proxima', color: '#BE1066' }}>{trigger}</Text>
           </View>
         </View>

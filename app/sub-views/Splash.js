@@ -47,7 +47,7 @@ class Splash extends React.Component {
     images: [
       { thumb: Utils.prefix + "/UPLOAD/APP/assets/slider-1.png", curve: require('../../assets/images/splash-white-background-2.png'), title: 'HOŞ GELDİN!', text: 'Yenilenen Flormar Mobil uygulaması ile sana özel içerik ve kampanyalarla mobil alışveriş deneyiminin keyfini çıkar.', video: false },
       { thumb: Utils.prefix + "/UPLOAD/APP/assets/slider-2.png", curve: require('../../assets/images/splash-white-background-1.png'), title: 'FLORMAR EXTRA', text: 'Flormar Extra üyesi olmak için mobil uygulamaya giriş yap, her siparişte %5 Extra TL* kazan.\n\n*1 Extra TL = 1 TL' },
-      { thumb: Utils.prefix + "/UPLOAD/APP/assets/slider-3.png", curve: require('../../assets/images/splash-white-background-2.png'), title: 'HEMEN ÜYE OL', text: 'Online’a özel ilk siparişinde tüm ürünlerde net 40% indirim kazan! \n\n*Kargo bedava ' }
+      { thumb: Utils.prefix + "/UPLOAD/APP/assets/slider-3.png", curve: require('../../assets/images/splash-white-background-2.png'), title: 'HEMEN ÜYE OL', text: 'Online’a özel ilk siparişinde tüm ürünlerde net 25% indirim kazan! \n\n*Kargo bedava ' }
     ],
     activeSlide: 0,
   }

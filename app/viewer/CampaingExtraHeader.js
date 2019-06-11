@@ -38,7 +38,7 @@ class Main extends React.Component {
     _getDesc = () => {
         const _self = this,
             { expand = false } = _self.state,
-            desc = `Lorem Ipsum, <b>dizgi ve baskı</b> endüstrisinde kullanılan mıgır metinlerdir. Lorem Ipsum, adı bilinmeyen bir matbaacının bir hurufat numune kitabı oluşturmak üzere bir yazı galerisini alarak karıştırdığı 1500'lerden `;
+            desc = `Flormar mobil uygulama, website, ve mağazalarından yapacağın her alışverişinde sana Extra TL’ler kazandıracak, özel günlerinde sürprizler yapacak bir bağlılık programıdır.`;
 
         let view = null;
         if (expand)
@@ -56,7 +56,20 @@ class Main extends React.Component {
             { user = {} } = _self.props.user || {},
             { points = '0', userId = '' } = user;
 
-        if (userId == '') return null;
+        if (userId == '') return (
+            <View style={{ flex: 1, alignItems: 'center', marginTop: 20, }}>
+                <TouchableOpacity activeOpacity={0.8} onPress={_self._onExpand}>
+                    <View style={{ flexDirection: 'row', paddingLeft: 15, alignItems: 'center' }}>
+                        <Text style={{ fontFamily: 'RegularTyp2', fontSize: 16, color: '#4a4a4a' }}>Flormar Extra nedir?</Text>
+                        <Image
+                            style={{ width: 40, height: 40 }}
+                            source={ICONS['downArrow']}
+                        />
+                    </View>
+                </TouchableOpacity>
+                {_self._getDesc()}
+            </View >
+        );
 
         return (
             <View style={{ flex: 1, alignItems: 'center' }}>
@@ -88,14 +101,14 @@ class Main extends React.Component {
 
                 <TouchableOpacity activeOpacity={0.8} onPress={_self._onExpand}>
                     <View style={{ flexDirection: 'row', paddingLeft: 15, alignItems: 'center' }}>
-                        <Text style={{ fontFamily: 'RegularTyp2', fontSize: 16, color: '#4a4a4a' }}>Kampanya koşulları</Text>
+                        <Text style={{ fontFamily: 'RegularTyp2', fontSize: 16, color: '#4a4a4a' }}>Flormar Extra nedir?</Text>
                         <Image
                             style={{ width: 40, height: 40 }}
                             source={ICONS['downArrow']}
                         />
                     </View>
                 </TouchableOpacity>
-                {_self._getDesc()}    
+                {_self._getDesc()}
             </View>
         );
     }

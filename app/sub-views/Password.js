@@ -78,7 +78,7 @@ class Password extends React.Component {
       setTimeout(() => {
         _self.props.navigation.navigate("Home");
         _self.props.dispatch({ type: ASSISTANT_SHOW, value: true });
-        _self.props.dispatch({ type: UPDATE_USER, value: {} });
+        _self.props.dispatch({ type: UPDATE_USER, value: { updateSubscriptions: false } });
       }, 10);
     } else {
       _self.props.dispatch({ type: UPDATE_OPTIN, value: { isMailSubscribe: data.isMailSubscribe, isSmsSubscribe: data.isSmsSubscribe } });
