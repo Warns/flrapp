@@ -6,6 +6,7 @@ import {
     Modal,
     Image,
     Text,
+    Alert
 } from 'react-native';
 import { Viewer, CrediCart, Foot } from 'root/app/viewer/';
 import {
@@ -152,7 +153,7 @@ class CreditCart extends Component {
         } else {
             // error
             setTimeout(() => {
-                alert(message);
+                Alert.alert(message);
             }, 100);
 
         }
@@ -293,7 +294,7 @@ class CreditCart extends Component {
                     arr.push('Lütfen satış sözleşmesini okuyup onaylayınız');
 
                 if (arr.length > 0)
-                    alert(arr.join('\n'));
+                    Alert.alert(arr.join('\n'));
                 else
                     _self._applyForm();
             });

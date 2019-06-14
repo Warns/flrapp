@@ -14,6 +14,8 @@ import {
 import { connect } from 'react-redux';
 import Cart from '../Cart';
 
+const Utils = require('root/app/helper/Global.js');
+
 // Let's go
 
 class MinimalHdr extends React.Component {
@@ -56,7 +58,7 @@ class MinimalHdr extends React.Component {
             </TouchableOpacity>
             <View style={{ flex: 1, justifyContent: 'center' }}>
               <TouchableOpacity onPress={this._onBackPress}>
-                <Text style={styles.title}>{this.props.title.toUpperCase()}</Text>
+                <Text style={styles.title}>{Utils.toUpperCase(this.props.title || '' )}</Text>
               </TouchableOpacity>
             </View>
             <View style={{ paddingRight: 10, justifyContent: 'center' }}>

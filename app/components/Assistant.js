@@ -111,7 +111,7 @@ class Assistant extends React.Component {
         header={<MinimalHeader noMargin={true} title="Kapat" onPress={_self._closed} />}
         onRef={ref => (_self.props.dispatch({ type: SET_ASSISTANT, value: ref }))}
         user={userID}
-        token="2de6962972e9a6c1f84e423441be409a"
+        token="89400cde1b7e4df233b195554d93c69f"
         event={(type, data) => {
           const { id = '', labels = '', } = data;
           switch (type) {

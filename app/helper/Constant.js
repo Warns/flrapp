@@ -68,7 +68,7 @@ export const ICONS = {
   lips1: require("root/assets/images/lips2.png"),
   lips2: require("root/assets/images/lips3.png"),
   lips3: require("root/assets/images/lips4.png"),
-  gradient: require('root/assets/images/gradient.png')
+  gradient: require("root/assets/images/gradient.png")
 };
 
 /* VIEWER SAYFA TİPLERİ */
@@ -116,9 +116,9 @@ export const FEEDS_IMAGE_RATE = {
   video: 1.7857, // 750X420
   instagram: 1,
   promo: 1.2295, // 750x610
-  product: .8, // 435x544
+  product: 0.8, // 435x544
   blog: 1.2295, // 750x610
-  collection: 1.2295, // 750X610
+  collection: 1.2295 // 750X610
 };
 
 export const CLICK = "CLICK";
@@ -188,11 +188,12 @@ export const FORMSTYLE = {
 
 /* settings */
 export const SET_SETTINGS = "SET_SETTINGS";
+export const SET_CLIENT_PROPERTIES = "SET_CLIENT_PROPERTIES";
 
 /* root navigation */
-export const SET_MAIN_NAVIGATION = 'SET_MAIN_NAVIGATION';
-export const SET_NAVIGATION = 'SET_NAVIGATION';
-export const NAVIGATE = 'NAVIGATE';
+export const SET_MAIN_NAVIGATION = "SET_MAIN_NAVIGATION";
+export const SET_NAVIGATION = "SET_NAVIGATION";
+export const NAVIGATE = "NAVIGATE";
 
 /* cart */
 export const BANK_TRANSFER = "bankTransfer";
@@ -235,7 +236,7 @@ export const OPEN_VIDEO_PLAYER = "OPEN_VIDEO_PLAYER";
 
 /* user */
 export const SET_USER = "SET_USER";
-export const UPDATE_USER = "UPDATE_USER"
+export const UPDATE_USER = "UPDATE_USER";
 export const REMOVE_USER = "REMOVE_USER";
 export const SET_CART_NUM = "SET_CART_NUM";
 export const UPDATE_OPTIN = "UPDATE_OPTIN";

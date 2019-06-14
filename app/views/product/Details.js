@@ -273,7 +273,7 @@ class ProductDetails extends React.Component {
       videos
     } = this.props.product;
 
-    console.log(this.props.product);
+    //console.log(this.props.product);
 
     if (item) {
       const images = [];
@@ -456,7 +456,7 @@ class ProductDetails extends React.Component {
             <Text
               style={{ fontSize: 13, fontFamily: "proxima", marginLeft: 10 }}
             >
-              %{item.discountRate}
+              %{item.discountRate} indirim
             </Text>
           </View>
         ) : (

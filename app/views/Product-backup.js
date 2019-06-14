@@ -16,7 +16,7 @@ import {
 import { connect } from 'react-redux';
 import Carousel from 'react-native-snap-carousel';
 
-const SCREEN_DIMENSIONS = Dimensions.get('screen');
+let SCREEN_DIMENSIONS  = Dimensions.get('screen');
 const HEADER_HEIGHT = Platform.OS === 'android' ? 80 : 65;
 const TOP = Platform.OS === 'android' ? 10 : 0;
 const DETAIL_HEADER_HEIGHT = Platform.OS === 'android' ? 52 : 65;

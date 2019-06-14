@@ -307,7 +307,7 @@ class SelectionBox extends React.Component {
                 <View style={{ marginLeft: 20, marginRight: 20, marginBottom: 10, height: 50, borderColor: '#cccccc', borderWidth: 1, borderRadius: 5 }}>
                     <TextInput
                         style={[styles.searchInput, { backgroundColor: '#FFFFFF' }]}
-                        placeholder='Search'
+                        placeholder='Arama'
                         onChangeText={searchTerm => this.setState({ searchTerm })}
                         underlineColorAndroid='transparent'
                         onFocus={this._onInputFocus}

@@ -17,7 +17,7 @@ import Carousel from 'react-native-snap-carousel';
 //import ViewOverflow from 'react-native-view-overflow';
 const Entities = require('html-entities').AllHtmlEntities;
 
-const SCREEN_DIMENSIONS = Dimensions.get('screen');
+let SCREEN_DIMENSIONS  = Dimensions.get('screen');
 
 import { DefaultButton } from '../UI';
 import { MinimalHeader, Palette } from '../components';

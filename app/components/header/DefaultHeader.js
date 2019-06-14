@@ -46,11 +46,11 @@ class DefaultHdr extends Component {
   _getUserMenu = () => {
 
     const _self = this,
-      { user = {} } = _self.props.user,
-      { firstName = '', gender = 'E' } = user,
+      { user = {} } = _self.props.user || {},
+      { userId = '', gender = 'E' } = user,
       ico = gender == 'E' ? 'userMen' : 'userWomen';
 
-    if (firstName != '') {
+    if (userId != '') {
 
       return (
         <TouchableOpacity style={{ padding: 5, paddingRight: 0 }} onPress={this._onUserMenuPress}>
@@ -67,9 +67,11 @@ class DefaultHdr extends Component {
   render() {
     const _self = this;
 
-    let { topMargin } = this.props.general.SCREEN_DIMENSIONS;
+    let { topMargin } = this.props.general.SCREEN_DIMENSIONS,
+      { user = {} } = _self.props.user || {},
+      { userId = '' } = user;
 
-    let _account = this.props.user.user.firstName ? _self._getUserMenu() : (
+    let _account = userId ? _self._getUserMenu() : (
       <TouchableOpacity activeOpacity={.8} onPress={this._onLoginPress}>
         <View style={{ backgroundColor: '#ffffff', borderColor: '#BBBBBB', borderWidth: 1, borderRadius: 5, height: 36, minWidth: 80, paddingLeft: 9, paddingRight: 9, justifyContent: 'center', alignItems: 'center' }}>
           <Text style={{ fontSize: 14, fontFamily: 'Medium' }}>GİRİŞ YAP</Text>

@@ -3,6 +3,7 @@ import {
     View,
     ScrollView,
     Text,
+    Alert,
 } from 'react-native';
 import { Viewer, Foot } from 'root/app/viewer/';
 import {
@@ -106,7 +107,7 @@ class BankTransfer extends Component {
         } else {
             // error
             setTimeout(() => {
-                alert(message);
+                Alert.alert(message);
             }, 100);
         }
     }
@@ -149,7 +150,7 @@ class BankTransfer extends Component {
             arr.push('Lütfen satış sözleşmesini okuyup onaylayınız');
 
         if (arr.length > 0)
-            alert(arr.join('\n'));
+            Alert.alert(arr.join('\n'));
         else
             _self._applyForm();
     }
@@ -199,7 +200,7 @@ class BankTransfer extends Component {
     }
 
     render() {
-        
+
         const _self = this,
             dsc = _self._getDsc(),
             extraPoint = _self._getExtraPoint();

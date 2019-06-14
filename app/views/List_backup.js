@@ -20,7 +20,7 @@ var RCTUIManager = require('NativeModules').UIManager;
 styles = require('../../app/styles.js');
 globals = require('../../app/globals.js');
 
-const SCREEN_DIMENSIONS = {};
+let SCREEN_DIMENSIONS  = {};
 const HEADER_HEIGHT = Platform.OS === 'android' ? 80 : 65;
 const TOP = Platform.OS === 'android' ? 10 : 0;
 const DETAIL_HEADER_HEIGHT = Platform.OS === 'android' ? 52 : 65;

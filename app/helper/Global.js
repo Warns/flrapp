@@ -155,6 +155,16 @@ module.exports = {
     k = k || '';
     return k.replace(/\s+/g, '');
   },
+  toUpperCase: function (k) {
+    k = k || '';
+    var letters = { "i": "İ", "ş": "Ş", "ğ": "Ğ", "ü": "Ü", "ö": "Ö", "ç": "Ç", "ı": "I" },
+      n = '';
+    for (var i = 0; i < k.length; ++i) {
+      var j = k[i];
+      n += (letters[j] || j);
+    }
+    return n.toUpperCase() || '';
+  },
   clearHtmlTag: function (k) {
     /* https://css-tricks.com/snippets/javascript/strip-html-tags-in-javascript/ */
     k = k || '';
@@ -448,7 +458,7 @@ module.exports = {
       });
     return count;
   },
-  objectMapping: function ({ data = {}, mapping = {} }) {
+  objectMapping: function ({ data = {}, control = '', mapping = {} }) {
     /*
         NOT:
         örneğin kampanyalar sayfası 
@@ -460,22 +470,45 @@ module.exports = {
 
         { prmLPImg: 'image', prmCamID: 'utpCode', prmCamSlug: 'slug', prmDesc: 'desc', prmCat: 'catCode', prmTitle: 'title' }
     */
+
     const arr = [];
     Object
       .entries(data)
       .forEach(([ind, item]) => {
-        const { bannerName = '' } = item,
+        const { bannerName = '', parameters = '' } = item,
           obj = { name: bannerName };
-        Object
-          .entries(item['parameters'])
-          .forEach(([childInd, child]) => {
-            const key = child['parameterKey'] || '',
-              value = child['parameterValue'] || '';
 
-            obj['id'] = ind;
-            obj[mapping[key] || ''] = value;
-          })
-        arr.push(obj);
+        if (parameters != '' && parameters != null)
+          Object
+            .entries(parameters)
+            .forEach(([childInd, child]) => {
+              const key = child['parameterKey'] || '',
+                value = child['parameterValue'] || '';
+
+              obj['id'] = ind;
+              obj[mapping[key] || ''] = value;
+            });
+
+        /* 
+          prmVisible için ek kontrol, kampanyalarda listede gozuksun gozukmesini çözmek için kullanılır.
+        */
+        let b = true;
+        if (control != '') {
+          const { key = '', value = '' } = control;
+
+          Object
+            .entries(item['parameters'])
+            .forEach(([childInd, child]) => {
+              const ky = child['parameterKey'] || '',
+                vl = child['parameterValue'] || '';
+
+              if (key == ky && value != vl)
+                b = false;
+            });
+        }
+
+        if (b)
+          arr.push(obj);
       });
 
     return arr;

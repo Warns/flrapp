@@ -14,7 +14,8 @@ import { DefaultButton, IconButton } from 'root/app/UI';
 import {
     ICONS,
     SET_LOCATION,
-    NAVIGATE
+    NAVIGATE,
+    ASSISTANT_SHOW
 } from 'root/app/helper/Constant';
 import { store } from 'root/app/store';
 import { MapView } from 'expo';
@@ -63,17 +64,22 @@ class AddressDetail extends Component {
     }
 
     _callToStore = () => {
-        const _self = this,
+        let _self = this,
             { phoneNo = '' } = _self.props.data;
 
-        if (phoneNo != '')
+        if (phoneNo != '') {
+            if (phoneNo[0] != '')
+                phoneNo = 0 + phoneNo;
+
             Linking.openURL('tel:' + Utils.cleanText(phoneNo));
+        }
+
     }
 
     _directions = () => {
         const _self = this,
             { permission = false, location = {} } = store.getState().location || {},
-            { latitude = '', longitude = '' } = ( location || {} )['coords'] || {},
+            { latitude = '', longitude = '' } = (location || {})['coords'] || {},
             { serviceLatitude = '', serviceLongitude = '' } = _self.props.data;
 
         if (serviceLatitude != '' && serviceLongitude != '') {
@@ -301,6 +307,16 @@ export default class StoreNavigator extends Component {
         }, (k) => {
             store.dispatch({ type: SET_LOCATION, value: { permission: false, location: null } });
         });
+
+
+    }
+
+    componentDidMount() {
+        store.dispatch({ type: ASSISTANT_SHOW, value: false });
+    }
+
+    componentWillUnmount() {
+        store.dispatch({ type: ASSISTANT_SHOW, value: true });
     }
 
     _getHeader = ({ props, root = false, ref = '' }) => {
