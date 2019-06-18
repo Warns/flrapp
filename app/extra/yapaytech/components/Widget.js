@@ -32,8 +32,8 @@ const styles = StyleSheet.create({
     borderColor: "#e1e1e1",
     alignItems: "center",
     justifyContent: "center",
-    bottom: 15,
-    right: 15,
+    bottom: 10,
+    right: 10,
     overflow: "hidden"
   },
   widgetImage: { width: WidgetSize, height: WidgetSize }

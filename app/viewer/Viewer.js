@@ -315,22 +315,22 @@ class CartListItem extends Component {
           {Utils.getPriceFormat(total)}
         </Text>
       ) : (
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <Text style={{ fontFamily: "Bold", fontSize: 16 }}>
-            {Utils.getPriceFormat(total)}
-          </Text>
-          <Text
-            style={{
-              marginLeft: 10,
-              fontFamily: "Bold",
-              fontSize: 13,
-              textDecorationLine: "line-through"
-            }}
-          >
-            {Utils.getPriceFormat(firstPriceTotal)}
-          </Text>
-        </View>
-      );
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <Text style={{ fontFamily: "Bold", fontSize: 16 }}>
+              {Utils.getPriceFormat(total)}
+            </Text>
+            <Text
+              style={{
+                marginLeft: 10,
+                fontFamily: "Bold",
+                fontSize: 13,
+                textDecorationLine: "line-through"
+              }}
+            >
+              {Utils.getPriceFormat(firstPriceTotal)}
+            </Text>
+          </View>
+        );
 
     if (viewType == "miniCart")
       return (
@@ -1515,28 +1515,28 @@ class FeedsItem extends Component {
         quantity: 1
       };
 
-    Globals.seg({ data: data }, res => {});
+    Globals.seg({ data: data }, res => { });
   };
 
   _segClick = () => {
     const _self = this,
-      { productId } = _self.props.data,
-      { segmentify = {} } = _self.props.rdx,
-      { instanceID } = segmentify;
-    data = {
-      name: "INTERACTION",
-      type: "click",
-      instanceId: instanceID,
-      interactionId: productId
-    };
+      { productId, instanceId = '' } = _self.props.data,
+      data = {
+        name: "INTERACTION",
+        type: "click",
+        instanceId: instanceId,
+        interactionId: productId
+      };
 
-    Globals.seg({ data: data }, res => {});
+    Globals.seg({ data: data }, res => { });
   };
 
   /* feeds item tıklamada */
   _onPress = () => {
     const _self = this,
       { productId, labels = [], name, image, params = {} } = _self.props.data;
+
+    _self._segClick();
 
     if (FEEDSTYPE["BLOGPOST"] == labels[0]) {
       const data = {
@@ -1620,12 +1620,12 @@ class FeedsItem extends Component {
       FEEDSTYPE["COLLECTION"] == labels[0]
     ) {
       const {
-          title = "",
-          utp = "",
-          galleryImage = "",
-          desc = "",
-          catCode = ""
-        } = params,
+        title = "",
+        utp = "",
+        galleryImage = "",
+        desc = "",
+        catCode = ""
+      } = params,
         data = [
           {
             title: name,
@@ -1799,7 +1799,7 @@ class FeedsItem extends Component {
         Math.round(
           (Utils.getNumberFormat(discountPrice) /
             Utils.getNumberFormat(salesPrice)) *
-            100
+          100
         );
       price = (
         <View>
@@ -2342,8 +2342,8 @@ class Viewers extends Component {
 
   _addStyle = () => {
     const regular = Asset.fromModule(
-        require("root/assets/fonts/proximanova-regular.otf")
-      ).uri,
+      require("root/assets/fonts/proximanova-regular.otf")
+    ).uri,
       bold = Asset.fromModule(
         require("root/assets/fonts/BrandonGrotesque-Medium.otf")
       ).uri,
@@ -2428,70 +2428,67 @@ class Viewers extends Component {
     return data;
   };
 
-  _getSegData = data => {
+  /* 
+    her bir node için impression All tetiklenecek
+  */
+
+  _getSegImpressionAll = (instanceId) => {
+    const obj = {
+      name: "INTERACTION",
+      type: "impression",
+      instanceId: instanceId,
+      interactionId: instanceId
+    };
+
+    Globals.seg({ data: obj });
+  }
+
+  /*
+
+  */
+  _getSegData = (data, instanceId) => {
     //return data['video|THIS_WEEK|NONE'];
     let arr = [];
     Object.keys(data).map(key => {
       const k = data[key] || [];
       if (k.length > 0) {
         Object.keys(k).map(m => {
-          arr.push(k[m]);
+          const obj = k[m];
+          obj['instanceId'] = instanceId;
+          arr.push(obj);
         });
       }
     });
     return arr;
   };
 
+  /* 
+   tüm nodelardaki datayı dönüp alacak
+  */
+  _getSegAllData = (responses) => {
+    let _self = this,
+      k = responses.length,
+      data = [];
+    for (var i = 0; i < k; ++i) {
+      const { params = {} } = responses[i],
+        { instanceId = '' } = params,
+        n = _self._getSegData(params["recommendedProducts"] || [], instanceId);
+
+      _self._getSegImpressionAll(instanceId);
+
+      data = data.concat(n);
+    }
+    return data;
+  }
+
   /* segmentify özel */
   _setSeg = res => {
     const _self = this;
     if (res["type"] == "success") {
       let { responses = [] } = res.data,
-        key = Globals.getSegKey(responses),
-        { params = {} } = responses[0][0],
-        //--> data = params['recommendedProducts'][key] || [],
-        data = _self._getSegData(params["recommendedProducts"] || []),
-        instanceId = params["instanceId"] || "",
-        obj = {
-          name: "INTERACTION",
-          type: "impression",
-          instanceId: instanceId,
-          interactionId: instanceId
-        };
+        data = _self._getSegAllData(responses[0] || []);
 
-      _self.props.dispatch({
-        type: SET_SEGMENTIFY_INSTANCEID,
-        value: instanceId
-      });
-
-      /*data = [
-                {
-                    name: 'dsasdasd',
-                    labels: ['blog'],
-                    image: '/UPLOAD/collection/Campaign-Web-Mobileweb-1500x500decemberurunseti.jpg',
-
-                    productId: 20961 // collection, blog
-                }
-
-            ];*/
-
-      /* feeds ilk yüklendiğinde 1 defa impresionlar tetiklenecek  */
-      Globals.seg({ data: obj }, response => {
-        if (data.length == 0)
-          _self.setState({ data: [], total: 0, loaded: true, noResult: true });
-        else
-          _self.setState({
-            data: data,
-            total: Object.keys(data).length || 0,
-            loaded: true
-          });
-
-        if (_self._callback) _self._callback({ type: DATA_LOADED, data: data });
-
-        /* sepet için gerekti */
-        if (_self.props.response)
-          _self.props.response({ type: DATA_LOADED, data: res.data });
-      });
+      _self.applySegData(data);
     } else {
       _self.setState({ data: [], total: 0, loaded: true, noResult: true });
 
@@ -2499,12 +2496,30 @@ class Viewers extends Component {
     }
   };
 
+  applySegData = (data) => {
+    const _self = this;
+    if (data.length == 0)
+      _self.setState({ data: [], total: 0, loaded: true, noResult: true });
+    else
+      _self.setState({
+        data: data,
+        total: Object.keys(data).length || 0,
+        loaded: true
+      });
+
+    if (_self._callback) _self._callback({ type: DATA_LOADED, data: data });
+
+    /* sepet için gerekti */
+    if (_self.props.response)
+      _self.props.response({ type: DATA_LOADED, data: res.data });
+  }
+
   /* */
   setAjx = ({ uri, data = {} }, callback) => {
     const _self = this,
       { type = VIEWERTYPE["LIST"] } = _self.props.config;
 
-    Globals.AJX({ _self: _self, uri: uri, data: data }, function(res) {
+    Globals.AJX({ _self: _self, uri: uri, data: data }, function (res) {
       const { keys, customClass = "", customFunc = "" } = _self.props.config,
         keyArr = keys["arr"] || "",
         keyTotal = keys["total"] || "",
@@ -2986,7 +3001,7 @@ class Viewers extends Component {
             "interactionId": productId
         };*/
 
-    Globals.seg({ data: data }, res => {});
+    Globals.seg({ data: data }, res => { });
   };
 
   _onViewableItemChanged = ({ index, item }) => {

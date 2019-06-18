@@ -152,11 +152,7 @@ export default class ChatInputLine extends React.Component {
         {this.props.text || !this.voice ? (
           <TouchableOpacity style={styles.center} onPress={this.sendMessage}>
             <Text style={styles.sendbutton}>
-              <MaterialIcons
-                name="send"
-                size={24}
-                color="#fc3394"
-              />
+              <MaterialIcons name="send" size={24} color="#fc3394" />
             </Text>
           </TouchableOpacity>
         ) : (
@@ -170,6 +166,40 @@ export default class ChatInputLine extends React.Component {
             </Text>
           </TouchableOpacity>
         )}
+{/* 
+        {!!this.props.text && (
+          <TouchableOpacity style={styles.center} onPress={this.sendMessage}>
+            <Text style={styles.sendbutton}>
+              <MaterialIcons name="send" size={24} color="#fc3394" />
+            </Text>
+          </TouchableOpacity>
+        )}
+        {!this.props.text && (
+          <TouchableOpacity
+            style={styles.center}
+            onPress={() => {
+              this.props.event("openqrcode");
+            }}
+          >
+            <Text style={styles.sendbutton}>
+              <Image
+                style={{ width: 48, height: 48 }}
+                source={require("../assets/barcode-scan.png")}
+              />
+            </Text>
+          </TouchableOpacity>
+        )}
+        {this.voice && !this.props.text && (
+          <TouchableOpacity style={styles.center} onPress={this.micStart}>
+            <Text style={styles.micbutton}>
+              <MaterialIcons
+                name="mic"
+                size={30}
+                color={this.state.s ? "red" : "#fc3394"}
+              />
+            </Text>
+          </TouchableOpacity>
+        )} */}
       </View>
     );
   }

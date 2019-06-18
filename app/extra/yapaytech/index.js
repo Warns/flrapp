@@ -12,60 +12,7 @@ import {
 import { Constants, Permissions } from "expo";
 import Chat from "./components/ChatScreen";
 import Widget from "./components/Widget";
-
-// Mock Data
-/* const Utils = { getURL: () => {} };
-const Globals = {
-  AJX: (_, cb) =>
-    cb({
-      data: {
-        suggestions: [
-          {
-            listPrice: 29.99,
-            productGroupsCount: 5,
-            productId: 584519,
-            productName: "CARING LIP COLOR",
-            productPageName: "/caring-lip-color-center/",
-            salePrice: 15,
-            shortCode: "002",
-            shortName: "CENTER",
-            smallPicture:
-              "/UPLOAD/Flormar/mobile_image_1/thumb/0313103-002_small.jpg",
-            thumbPicture: "/UPLOAD/Flormar/mobile_image_1/thumb/0313103-002.jpg"
-          },
-          {
-            listPrice: 29.99,
-            productGroupsCount: 5,
-            productId: 584519,
-            productName: "CARING LIP COLOR",
-            productPageName: "/caring-lip-color-center/",
-            salePrice: 15,
-            shortCode: "002",
-            shortName: "CENTER",
-            smallPicture:
-              "/UPLOAD/Flormar/mobile_image_1/thumb/0313103-002_small.jpg",
-            thumbPicture: "/UPLOAD/Flormar/mobile_image_1/thumb/0313103-002.jpg"
-          },
-          {
-            listPrice: 29.99,
-            productGroupsCount: 5,
-            productId: 584519,
-            productName: "CARING LIP COLOR",
-            productPageName: "/caring-lip-color-center/",
-            salePrice: 15,
-            shortCode: "002",
-            shortName: "CENTER",
-            smallPicture:
-              "/UPLOAD/Flormar/mobile_image_1/thumb/0313103-002_small.jpg",
-            thumbPicture: "/UPLOAD/Flormar/mobile_image_1/thumb/0313103-002.jpg"
-          }
-        ]
-      },
-      innerMessage: null,
-      message: null,
-      status: 200
-    })
-}; */
+import Barcode from "./components/Barcode";
 
 // Production
 const Utils = require("root/app/helper/Global.js");
@@ -124,7 +71,8 @@ export default class DahiChat extends React.Component {
       open: false,
       bottom: new Animated.Value(height),
       backdrop: new Animated.Value(0),
-      height: new Animated.Value(height / 2)
+      height: new Animated.Value(height / 2),
+      barcode: false
     };
     this.fullscreen = this.fullscreen.bind(this);
     this.openChat = this.openChat.bind(this);
@@ -173,11 +121,11 @@ export default class DahiChat extends React.Component {
             const it = suggestions[i];
             values.push({
               title:
-                (it.salePrice ? `**₺${it.salePrice}**\n` : "") + it.productName,
+                (it.listPrice ? `**₺${it.listPrice}**\n` : "") + it.productName,
               subtitle: it.productGroupsCount
                 ? `${it.productGroupsCount} Renk`
                 : "",
-              image_url: Utils.prefix + it.smallPicture,
+              image_url: "http://www.flormar.com.tr" + it.smallPicture,
               default_action: {
                 type: "web_url",
                 title: "Ürünü Gör",
@@ -225,7 +173,9 @@ export default class DahiChat extends React.Component {
         break;
       case "dahi":
         if (data.type === "search" && data.query) this._search(data.query);
-
+        break;
+      case "openqrcode":
+        this.setState({ barcode: true });
         break;
       default:
         this.props.event(type, data);
@@ -347,6 +297,12 @@ export default class DahiChat extends React.Component {
               ref={this._chat}
             />
           </Animated.View>
+          {this.state.barcode && (
+            <Barcode
+              close={() => this.setState({ barcode: false })}
+              event={this.on}
+            />
+          )}
         </View>
       </React.Fragment>
     );

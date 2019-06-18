@@ -314,7 +314,7 @@ export default class List extends React.Component {
 
   _listResultHandler = answer => {
     let _items = answer.data.products;
-    console.log("answer", answer);
+    //console.log("answer", answer);
 
     //console.log(answer.data.products[0]);
 

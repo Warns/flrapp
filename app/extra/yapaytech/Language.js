@@ -59,7 +59,11 @@ I18n.translations = {
     privacypolicy: "Privacy Policy",
     termsofservice: "Terms of Service",
     nowlistening: "Listening Now",
-    sendinglocation: "Sending Location Info"
+    sendinglocation: "Sending Location Info",
+
+    //scanner
+    scanner_access: "Give Camera Access for Scanner",
+    scanner_close: "Close"
   },
   tr: {
     feedback: "Geri Dönüş",
@@ -105,7 +109,10 @@ I18n.translations = {
     privacypolicy: "Gizlilik Sözleşmesi",
     termsofservice: "Kullanım Koşulları",
     nowlistening: "Şimdi Dinliyorum",
-    sendinglocation: "Konum Bilgileri Yollanıyor"
+    sendinglocation: "Konum Bilgileri Yollanıyor",
+    //scanner
+    scanner_access: "Barkod okuyucu için kamera yetkisi ver.",
+    scanner_close: "Kapat"
   },
   de: {
     pid: "7001e460de4fa9424d0dce0bd1ba0d2d"

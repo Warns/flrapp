@@ -47,11 +47,11 @@ module.exports = {
   // calls any url and returns the result.
   _fetchURL: function(query, data, callback) {
     var _this = this;
-    console.log(
+    /*console.log(
       "z<xz<xz<x",
       this.CLIENT.Auth.session,
       this.CLIENT.Auth.token_type + " " + this.CLIENT.Auth.access_token
-    );
+    );*/
     // if there is token use headers with token info.
     let HEADERS =
       this.CLIENT.Auth != null
@@ -88,7 +88,7 @@ module.exports = {
         const header = response.headers || {},
           map = header.map || {},
           session = map.session || "";
-        console.log("session", response.headers);
+        //console.log("session", response.headers);
         if (session != "" && _this.CLIENT.Auth)
           _this.CLIENT.Auth.session = session;
 

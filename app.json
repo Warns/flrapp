@@ -9,7 +9,7 @@
       "ios",
       "android"
     ],
-    "version": "5.0.2",
+    "version": "6.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "notification": {
@@ -32,7 +32,12 @@
     },
     "android": {
       "package": "com.flormar.flormar",
-      "versionCode": 2
+      "versionCode": 101,
+      "permissions": [
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION",
+        "CAMERA"
+      ]
     }
   }
 }

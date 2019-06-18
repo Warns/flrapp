@@ -22,6 +22,17 @@ const sleep = time =>
     setTimeout(resolve, time);
   });
 
+const WEBVIEW_PROPS = {
+  style: { flex: 1 },
+  javaScriptEnabled: true,
+  scrollEnabled: false,
+  allowFileAccess: true,
+  allowUniversalAccessFromFileURLs: true,
+  useWebKit: true,
+  originWhitelist: ["*", "file://", "assets://", "asset://"],
+  mixedContentMode: "always"
+};
+
 async function getLocation(props) {
   try {
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
@@ -51,13 +62,23 @@ async function getLocation(props) {
 class ChatView extends React.Component {
   constructor() {
     super();
-    this.state = {};
+    this.state = { fromLocal: true };
     this.eventLib = this.eventLib.bind(this);
     this.onError = this.onError.bind(this);
     this.web = React.createRef();
     this.randomId = Math.random();
     this.cache = [];
-    this.fontfamily = Asset.fromModule(require("../assets/proximanova-regular.otf")).uri;
+    this.fontfamily = Asset.fromModule(
+      require("../assets/proximanova-regular.otf")
+    ).uri;
+  }
+
+  componentDidMount() {
+    Asset.fromModule(require("../assets/rn.html"))
+      .downloadAsync()
+      .then(() => {
+        this.setState({ loaded: true });
+      });
   }
 
   get nav() {
@@ -83,6 +104,7 @@ class ChatView extends React.Component {
   }
 
   onError(err) {
+    if (this.state.fromLocal) this.setState({ fromLocal: false });
     //Sentry.captureException(err);
   }
 
@@ -189,24 +211,22 @@ class ChatView extends React.Component {
   get url() {
     let temp =
       this.html || (this.html = Asset.fromModule(require("../assets/rn.html")));
-    return temp.localUri || `${temp.uri}#__react_native`;
+    return (
+      (this.state.fromLocal && temp.localUri) || `${temp.uri}#__react_native`
+    );
   }
 
   render() {
+    if (!this.state.loaded) return null;
+    console.log(this.url);
     return (
       <WebView
         source={{ uri: this.url }}
-        javaScriptEnabled
         injectedJavaScript={this.injectScript}
-        scrollEnabled={false}
-        style={{ flex: 1 }}
-        //scalesPageToFit={false}
         ref={this.web}
-        mixedContentMode={"always"}
         onMessage={this.eventLib}
         onError={this.onError}
-        //onNavigationStateChange={this.urlCheck}
-        //onShouldStartLoadWithRequest={this.urlCheck}
+        {...WEBVIEW_PROPS}
       />
     );
   }

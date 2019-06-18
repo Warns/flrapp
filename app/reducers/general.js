@@ -177,7 +177,7 @@ fetchProductDetails = id => {
     }),
     answer => {
       //console.log('answer for detail', answer.status)
-      console.log("answer ", answer);
+      //console.log("answer ", answer);
 
       if (answer.status == 200) {
         let colors = [];
