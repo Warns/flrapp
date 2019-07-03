@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   View,
   Text,
@@ -11,11 +11,11 @@ import {
   WebView,
   Platform,
   KeyboardAvoidingView,
-  Linking,
-} from 'react-native';
+  Linking
+} from "react-native";
 
-import { connect } from 'react-redux';
-import { MinimalHeader } from '../components/header/MinimalHeader';
+import { connect } from "react-redux";
+import { MinimalHeader } from "../components/header/MinimalHeader";
 import {
   SET_ASSISTANT,
   ASSISTANT_OPENED,
@@ -27,23 +27,22 @@ import {
   SET_SELECTED_CATEGORY,
   NAVIGATE,
   SET_VIEWER,
-  SET_WEBVIEW,
-} from 'root/app/helper/Constant';
-import Dahi from 'root/app/extra/yapaytech';
+  SET_WEBVIEW
+} from "root/app/helper/Constant";
+import Dahi from "root/app/extra/yapaytech";
 
-const Utils = require('root/app/helper/Global.js');
+const Utils = require("root/app/helper/Global.js");
 const Globals = require("root/app/globals.js");
 
 //globals = require('../globals.js');
 
 class Assistant extends React.Component {
-
   state = {
     expanded: false,
     assistantIsVisible: false,
     boxAnim: new Animated.Value(0),
-    opacity: 0,
-  }
+    opacity: 0
+  };
 
   componentDidMount() {
     const _self = this,
@@ -66,16 +65,14 @@ class Assistant extends React.Component {
   _openModal = () => {
     this.setState({ assistantIsVisible: true });
     this._animateBox();
-  }
+  };
 
   _animateBox = () => {
-    Animated.timing(
-      this.state.boxAnim, {
-        toValue: 1,
-        duration: 300,
-        easing: Easing.out(Easing.cubic),
-      }
-    ).start();
+    Animated.timing(this.state.boxAnim, {
+      toValue: 1,
+      duration: 300,
+      easing: Easing.out(Easing.cubic)
+    }).start();
   };
 
   _closeModal = () => {
@@ -84,39 +81,45 @@ class Assistant extends React.Component {
       expanded: false
     });
     this.state.boxAnim.setValue(0);
-  }
+  };
 
   _expand = () => {
     this.setState({ expanded: true });
-  }
+  };
 
-  _onMessage = (m) => {
+  _onMessage = m => {
     console.log(m);
-  }
+  };
 
   _closed = () => {
     const _self = this;
     /* toogle olduğu için kapanacak */
     _self.props.dispatch({ type: ASSISTANT_OPENED });
-  }
+  };
 
   render() {
-
     const _self = this,
       { user = {} } = _self.props,
-      userID = user.userId || '';
+      userID = user.userId || "";
 
     return (
       <Dahi
-        header={<MinimalHeader noMargin={true} title="Kapat" onPress={_self._closed} />}
-        onRef={ref => (_self.props.dispatch({ type: SET_ASSISTANT, value: ref }))}
+        header={
+          <MinimalHeader
+            noMargin={true}
+            title="Kapat"
+            onCardPress={_self._closed}
+            onPress={_self._closed}
+          />
+        }
+        onRef={ref => _self.props.dispatch({ type: SET_ASSISTANT, value: ref })}
         user={userID}
         token="89400cde1b7e4df233b195554d93c69f"
         event={(type, data) => {
-          const { id = '', labels = '', } = data;
+          const { id = "", labels = "" } = data;
           switch (type) {
             case "barcode": {
-              const { barcode = '' /*'8690604539086',*/ } = data;
+              const { barcode = "" /*'8690604539086',*/ } = data;
               Globals.AJX(
                 {
                   _self: _self,
@@ -128,7 +131,7 @@ class Assistant extends React.Component {
                 },
                 res => {
                   const { status, data = {} } = res,
-                    { productId = '' } = data;
+                    { productId = "" } = data;
 
                   if (status == 200) {
                     _self.props.dispatch({
@@ -157,8 +160,7 @@ class Assistant extends React.Component {
               break;
             }
             case "external": {
-
-              if (labels == FEEDSTYPE['PRODUCT'])
+              if (labels == FEEDSTYPE["PRODUCT"])
                 _self.props.dispatch({
                   type: OPEN_PRODUCT_DETAILS,
                   value: {
@@ -168,8 +170,8 @@ class Assistant extends React.Component {
                     sequence: 0
                   }
                 });
-              else if (labels == FEEDSTYPE['VIDEO']) {
-                const { videoName = '', youtubeId = '' } = data;
+              else if (labels == FEEDSTYPE["VIDEO"]) {
+                const { videoName = "", youtubeId = "" } = data;
                 _self.props.dispatch({
                   type: SHOW_CUSTOM_POPUP,
                   value: {
@@ -179,34 +181,34 @@ class Assistant extends React.Component {
                       selected: 0,
                       items: [
                         {
-                          "provider": "youtube",
-                          "text": videoName,
-                          "videoId": youtubeId
+                          provider: "youtube",
+                          text: videoName,
+                          videoId: youtubeId
                         }
                       ]
                     }
                   }
                 });
-              } else if (FEEDSTYPE['BLOGPOST'] == labels) {
+              } else if (FEEDSTYPE["BLOGPOST"] == labels) {
                 const data = {
-                  "type": "htmlToJSON",
-                  "itemType": "customDetail",
-                  "uri": {
-                    "key": "export",
-                    "subKey": "getExport"
+                  type: "htmlToJSON",
+                  itemType: "customDetail",
+                  uri: {
+                    key: "export",
+                    subKey: "getExport"
                   },
-                  "keys": {
-                    "id": "id",
-                    "arr": "html",
-                    "obj": "data",
-                    "objArr": "content"
+                  keys: {
+                    id: "id",
+                    arr: "html",
+                    obj: "data",
+                    objArr: "content"
                   },
-                  "data": {
-                    "exportType": "mobiAppFeedsDetail",
-                    "customParameters": [
+                  data: {
+                    exportType: "mobiAppFeedsDetail",
+                    customParameters: [
                       {
-                        "key": "icr",
-                        "value": id
+                        key: "icr",
+                        value: id
                       }
                     ]
                   }
@@ -218,21 +220,36 @@ class Assistant extends React.Component {
                 });
 
                 break;
-
-              } else if (FEEDSTYPE['CAMPAING'] == labels || FEEDSTYPE['COLLECTION'] == labels) {
-
-                const { title = '', utp = '', image_link = '', desc = '', catCode = '' } = data,
-                  arr = [{
-                    title: title,
-                    img: Utils.getImage(image_link),
-                    utpId: utp,
-                    desc: desc,
-                    id: catCode  //--> kategori id'si 
-                  }];
+              } else if (
+                FEEDSTYPE["CAMPAING"] == labels ||
+                FEEDSTYPE["COLLECTION"] == labels
+              ) {
+                const {
+                    title = "",
+                    utp = "",
+                    image_link = "",
+                    desc = "",
+                    catCode = ""
+                  } = data,
+                  arr = [
+                    {
+                      title: title,
+                      img: Utils.getImage(image_link),
+                      utpId: utp,
+                      desc: desc,
+                      id: catCode //--> kategori id'si
+                    }
+                  ];
 
                 _self.props.dispatch({ type: SET_CATEGORIES, value: arr });
-                _self.props.dispatch({ type: SET_SELECTED_CATEGORY, value: title });
-                _self.props.dispatch({ type: NAVIGATE, value: { item: { navigation: 'Category' } } });
+                _self.props.dispatch({
+                  type: SET_SELECTED_CATEGORY,
+                  value: title
+                });
+                _self.props.dispatch({
+                  type: NAVIGATE,
+                  value: { item: { navigation: "Category" } }
+                });
               }
 
               break;
@@ -248,20 +265,19 @@ class Assistant extends React.Component {
       />
     );
 
-
     /* let topMargin = this.state.boxAnim.interpolate({
        inputRange: [0, 1],
        outputRange: [100, 0],
      });
- 
+
      let vailHeight = this.state.expanded ? 0 : null;
      let area = this.state.expanded ? null : <TouchableOpacity style={styles.area} activeOpacity={1} onPress={this._expand} />;
- 
+
      let header = this.state.expanded ? <MinimalHeader title="" onBackPress={this._closeModal} /> : null;
- 
-       
+
+
      return (
- 
+
        <View style={styles.wrapper}>
          <TouchableOpacity activeOpacity={.9} onPress={this._openModal}>
            <View style={styles.circle}>
@@ -291,7 +307,7 @@ class Assistant extends React.Component {
            </View>
          </Modal>
        </View>
- 
+
      )
      */
   }
@@ -299,50 +315,49 @@ class Assistant extends React.Component {
 
 const styles = StyleSheet.create({
   wrapper: {
-    backgroundColor: 'rgba(0,0,0,.1)',
+    backgroundColor: "rgba(0,0,0,.1)",
     width: 52,
     height: 52,
-    position: 'absolute',
-    overflow: 'hidden',
+    position: "absolute",
+    overflow: "hidden",
     bottom: 15,
     right: 15,
     borderRadius: 26,
     padding: 1,
     ...Platform.select({
       ios: {
-        zIndex: 9,
+        zIndex: 9
       },
       android: {
-        elevation: 999,
+        elevation: 999
       }
-    }),
+    })
   },
   circle: {
-    backgroundColor: '#dddddd',
+    backgroundColor: "#dddddd",
     width: 50,
     height: 50,
     borderRadius: 25,
-    overflow: 'hidden',
+    overflow: "hidden",
     ...Platform.select({
       ios: {
-        zIndex: 9,
+        zIndex: 9
       },
       android: {
-        elevation: 999,
+        elevation: 999
       }
-    }),
+    })
   },
   area: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
     bottom: 0,
     right: 0,
     flex: 1,
-    zIndex: 1,
+    zIndex: 1
   }
 });
-
 
 // filter state
 function mapStateToProps(state) {

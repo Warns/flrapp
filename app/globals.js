@@ -19,7 +19,7 @@ module.exports = {
   // FUNCTIONS
 
   // this is the fetch function you call from outside.
-  fetch: function(url, data, callback) {
+  fetch: function (url, data, callback) {
     if (this.CLIENT.Auth != null) {
       var d = new Date(),
         now = d.getTime(), //- d.getTimezoneOffset() * 60000,
@@ -45,7 +45,7 @@ module.exports = {
   },
 
   // calls any url and returns the result.
-  _fetchURL: function(query, data, callback) {
+  _fetchURL: function (query, data, callback) {
     var _this = this;
     /*console.log(
       "z<xz<xz<x",
@@ -56,19 +56,19 @@ module.exports = {
     let HEADERS =
       this.CLIENT.Auth != null
         ? {
-            UDID: _this.exponentPushToken || "",
-            DEVICE: Platform.OS || "",
-            OSVERSION: Platform.Version || "",
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Session: this.CLIENT.Auth.session,
-            Authorization:
-              this.CLIENT.Auth.token_type + " " + this.CLIENT.Auth.access_token
-          }
+          UDID: _this.exponentPushToken || "",
+          DEVICE: Platform.OS || "",
+          OSVERSION: Platform.Version || "",
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Session: this.CLIENT.Auth.session,
+          Authorization:
+            this.CLIENT.Auth.token_type + " " + this.CLIENT.Auth.access_token
+        }
         : {
-            Accept: "application/json",
-            "Content-Type": "application/json"
-          };
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        };
 
     // Logging the outgoing request details.
     _this._log({
@@ -94,7 +94,7 @@ module.exports = {
 
         return response.json();
       })
-      .then(function(json) {
+      .then(function (json) {
         // logging the incoming response.
         //_this._log(json);
         return callback(json);
@@ -102,7 +102,7 @@ module.exports = {
       .catch(error => callback("error", error));
   },
 
-  _requestAccessToken: function(url, data, callback) {
+  _requestAccessToken: function (url, data, callback) {
     var _this = this;
 
     this._fetchURL(
@@ -134,23 +134,23 @@ module.exports = {
     );
   },
 
-  refreshSecureStorage: function() {
+  refreshSecureStorage: function () {
     this.setSecureStorage("__USER__", JSON.stringify(this.CLIENT));
   },
 
   // update this function according to your log service.
-  _log: function(data) {
+  _log: function (data) {
     fetch("http://localhost:8888/log/?v=" + JSON.stringify(data), {
       method: "POST"
     })
-      .then(function(response) {
+      .then(function (response) {
         return null;
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log("error", error);
       });
   },
-  dispatchEvent: function(event) {
+  dispatchEvent: function (event) {
     var timestamp = new Date();
     var client_properties = store.getState().general.client_properties || {};
     var _uuid = this.exponentPushToken || "";
@@ -173,16 +173,16 @@ module.exports = {
       method: "POST",
       body: JSON.stringify(_body)
     })
-      .then(function(response) {
+      .then(function (response) {
         return null;
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log("error", error);
       });
   },
 
   // set encrypted local async storage
-  setSecureStorage: async function(key, value) {
+  setSecureStorage: async function (key, value) {
     try {
       await Expo.SecureStore.setItemAsync(key, value);
     } catch (error) {
@@ -191,7 +191,7 @@ module.exports = {
   },
 
   // get encrypted local async storage
-  getSecureStorage: async function(key, callback) {
+  getSecureStorage: async function (key, callback) {
     try {
       const value = await Expo.SecureStore.getItemAsync(key);
       if (value !== null) {
@@ -204,7 +204,7 @@ module.exports = {
       console.log(error + "hola");
     }
   },
-  registerForPushNotificationsAsync: async function() {
+  registerForPushNotificationsAsync: async function () {
     const { status: existingStatus } = await Expo.Permissions.getAsync(
       Expo.Permissions.NOTIFICATIONS
     );
@@ -248,7 +248,7 @@ module.exports = {
       alert('hata' + JSON.stringify(res));
     });*/
   },
-  AJX: async function({ _self, uri, data = {} }, callback) {
+  AJX: async function ({ _self, uri, data = {} }, callback) {
     const _t = this;
     _t.fetch(uri, JSON.stringify(data), answer => {
       if (_self._isMounted) {
@@ -264,7 +264,7 @@ module.exports = {
       }
     });
   },
-  _getSegData: function(data) {
+  _getSegData: function (data) {
     let arr = [];
     Object.keys(data).map(key => {
       const k = data[key] || [];
@@ -276,7 +276,7 @@ module.exports = {
     });
     return arr;
   },
-  getSegKey: function(responses) {
+  getSegKey: function (responses) {
     const { params = {} } = responses[0][0],
       { dynamicItems = "[]" } = params,
       items = JSON.parse(dynamicItems)[0],
@@ -289,14 +289,15 @@ module.exports = {
 
     return key || "RECOMMENDATION_SMART_OFFERS|THIS_WEEK|NONE";
   },
-  seg: function({ data }, callback) {
+  seg: function ({ data }, callback) {
     const _self = this,
       uri =
         "https://gandalf.segmentify.com/add/events/v1.json?apiKey=61c97507-5c1f-46c6-9b50-2aa9d1d73316",
       origin = Utils.prefix,
       { user = {}, segmentify = {} } = store.getState(),
+      { userId } = user['user'] || {},
       obj = {
-        userId: user.userId || segmentify["userID"] || "XXXXXXXXXXXXXXXXX",
+        userId: userId || segmentify["userID"] || "XXXXXXXXXXXXXXXXX",
         // hic clinet olmayinca bu hata veriyor. bunu asagidaki ile degistirdim '_self.CLIENT.Auth.session'. ( _self.CLIENT.Auth ? _self.CLIENT.Auth.session : false )
         sessionId:
           _self.CLIENT.Auth.session ||
@@ -310,7 +311,7 @@ module.exports = {
       obj[key] = data[key];
     });
 
-    //console.log(obj);
+    console.log('segmentify', obj);
 
     fetch(uri, {
       method: "POST",
@@ -324,7 +325,7 @@ module.exports = {
       .then(response => {
         return response.json();
       })
-      .then(function(res) {
+      .then(function (res) {
         if (typeof callback !== "undefined")
           callback({ type: "success", data: res });
       })

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   View,
   Text,
@@ -7,66 +7,73 @@ import {
   Easing,
   StyleSheet,
   Modal,
-  TouchableOpacity,
-} from 'react-native';
-import { SecureStore } from 'expo';
-import { connect } from 'react-redux';
-import { NAVIGATE, CLOSE_PRODUCT_DETAILS } from 'root/app/helper/Constant';
+  TouchableOpacity
+} from "react-native";
+import { SecureStore } from "expo";
+import { connect } from "react-redux";
+import { NAVIGATE, CLOSE_PRODUCT_DETAILS } from "root/app/helper/Constant";
 
-globals = require('../globals.js');
+globals = require("../globals.js");
 
 class Cart extends React.Component {
+  state = {};
 
-  state = {
-  }
-
-  componentDidMount() {
-  }
+  componentDidMount() {}
 
   _onPress = () => {
-    
-    this.props.dispatch({ type: NAVIGATE, value: { item: { navigation: "Cart" } } });
-    this.props.dispatch({type:CLOSE_PRODUCT_DETAILS, Value:{}});
-    
-  }
+    const { onCardPress } = this.props;
+
+    if (onCardPress) onCardPress();
+
+    this.props.dispatch({
+      type: NAVIGATE,
+      value: { item: { navigation: "Cart" } }
+    });
+    this.props.dispatch({ type: CLOSE_PRODUCT_DETAILS, Value: {} });
+  };
 
   render() {
-
     const _self = this,
-      bubble = this.props.cartProductsNumber > 0 ?
-        <View style={styles.bubble}>
-          <Text style={styles.bubbleText}>{this.props.cartProductsNumber}</Text>
-        </View>
-        : null;
+      bubble =
+        this.props.cartProductsNumber > 0 ? (
+          <View style={styles.bubble}>
+            <Text style={styles.bubbleText}>
+              {this.props.cartProductsNumber}
+            </Text>
+          </View>
+        ) : null;
 
     return (
       <View>
-        <TouchableOpacity activeOpacity={0.8} onPress={_self._onPress} >
-          <Image style={{ width: 40, height: 40, resizeMode: 'contain' }} source={require('../../assets/images/icons/cart.png')} />
+        <TouchableOpacity activeOpacity={0.8} onPress={_self._onPress}>
+          <Image
+            style={{ width: 40, height: 40, resizeMode: "contain" }}
+            source={require("../../assets/images/icons/cart.png")}
+          />
           {bubble}
         </TouchableOpacity>
       </View>
-    )
+    );
   }
 }
 
 const styles = StyleSheet.create({
   bubble: {
-    backgroundColor: '#ffffff',
+    backgroundColor: "#ffffff",
     width: 20,
     height: 20,
     borderRadius: 10,
-    position: 'absolute',
+    position: "absolute",
     left: 20,
     top: 20,
     borderWidth: 1,
-    borderColor: '#FE136F',
-    justifyContent: 'center',
-    alignItems: 'center',
+    borderColor: "#FE136F",
+    justifyContent: "center",
+    alignItems: "center"
   },
   bubbleText: {
-    color: '#FE136F',
-    fontSize: 11,
+    color: "#FE136F",
+    fontSize: 11
   }
 });
 

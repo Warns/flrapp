@@ -218,7 +218,6 @@ class ChatView extends React.Component {
 
   render() {
     if (!this.state.loaded) return null;
-    console.log(this.url);
     return (
       <WebView
         source={{ uri: this.url }}

@@ -25,7 +25,7 @@ module.exports = {
         {
             items: [
                 {
-                    id: 'fullName',
+                    id: 'addressName',
                     title: 'Kayıt İsmi',
                     type: 'text',
                     value: '',
@@ -33,7 +33,7 @@ module.exports = {
                     regex: 'typ1',
                 },
                 {
-                    id: 'addressName',
+                    id: 'fullName',
                     title: 'Ad Soyad',
                     type: 'text',
                     value: '',

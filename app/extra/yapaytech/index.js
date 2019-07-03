@@ -115,7 +115,7 @@ export default class DahiChat extends React.Component {
         const { status, data = {} } = res,
           { suggestions = [] } = data;
 
-        if (status == 200) {
+        if (status == 200 && suggestions && suggestions.length) {
           let values = [];
           for (let i = 0; i < suggestions.length; i++) {
             const it = suggestions[i];
@@ -136,7 +136,8 @@ export default class DahiChat extends React.Component {
             });
           }
           _self.chat.sendCustom({ type: "horizontalslimarray", values }, true);
-        } else _self.chat.sendCustom({ type: "event", text: "start" });
+        } else
+          _self.chat.sendCustom({ type: "event", text: "__search_empty", searchText });
       }
     );
   };
@@ -149,7 +150,7 @@ export default class DahiChat extends React.Component {
   translateY = new Animated.Value(0);
   _panResponder = PanResponder.create({
     onMoveShouldSetResponderCapture: () => true,
-    onMoveShouldSetPanResponderCapture: () => true,
+    //onMoveShouldSetPanResponderCapture: () => true,
     onPanResponderMove: Animated.event([null, { dy: this.translateY }]),
     onPanResponderRelease: (e, { vy, dy }) => {
       let newHeight = this.state.height.__getValue();
@@ -160,6 +161,10 @@ export default class DahiChat extends React.Component {
       } else if (dy < -20) {
         this.fullscreen();
       } else this.state.height.setValue(newHeight);
+    },
+    onMoveShouldSetPanResponder: (evt, gestureState) => {
+      const { dx, dy } = gestureState;
+      return dx > 2 || dx < -2 || dy > 2 || dy < -2;
     }
   });
 

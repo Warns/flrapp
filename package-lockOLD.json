@@ -1,0 +1,43 @@
+{
+  "name": "root",
+  "main": "node_modules/expo/AppEntry.js",
+  "private": true,
+  "splash": {
+    "backgroundColor": "#FF2B94"
+  },
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "eject": "expo eject"
+  },
+  "dependencies": {
+    "@mapbox/geo-viewport": "0.4.0",
+    "babel-preset-expo": "^5.0.0",
+    "credit-card-type": "^8.0.0",
+    "expo": "^31.0.2",
+    "html-entities": "^1.2.1",
+    "moment": "^2.23.0",
+    "react": "16.5.0",
+    "react-content-loader": "^3.2.0",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-31.0.0.tar.gz",
+    "react-native-credit-card-input": "^0.4.1",
+    "react-native-datepicker": "^1.7.2",
+    "react-native-gesture-handler": "^1.3.0",
+    "react-native-global-props": "^1.1.3",
+    "react-native-map-clustering": "^1.3.0",
+    "react-native-masked-text": "^1.9.2",
+    "react-native-render-html": "^3.10.0",
+    "react-native-safe-area-view": "^0.9.0",
+    "react-native-sideswipe": "^1.4.2",
+    "react-native-snap-carousel": "^3.7.2",
+    "react-native-view-overflow": "^0.0.3",
+    "react-native-voice": "^0.2.6",
+    "react-navigation": "^2.5.2",
+    "react-redux": "^5.0.7",
+    "redux": "^4.0.0",
+    "rn-placeholder": "^1.3.0",
+    "supercluster": "4.1.1",
+    "whatwg-fetch": "^2.0.4"
+  }
+}

@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React from "react";
 import {
   View,
   Text,
@@ -9,41 +8,70 @@ import {
   nativeEvent,
   Easing,
   Image,
-  StyleSheet,
-} from 'react-native';
-import { connect } from 'react-redux';
-import Cart from '../Cart';
+  StyleSheet
+} from "react-native";
+import { connect } from "react-redux";
+import Cart from "../Cart";
 
-const Utils = require('root/app/helper/Global.js');
+const Utils = require("root/app/helper/Global.js");
 
 // Let's go
 
 class MinimalHdr extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
       // state
-    }
+    };
   }
 
   _onBackPress = () => {
     this.props.onPress();
     //this.props.nav.goBack();
-  }
+  };
+
+  _onCardPress = () => {
+    const { onCardPress } = this.props;
+
+    if (onCardPress) onCardPress();
+  };
 
   render() {
-
     let { progress, right } = this.props;
     let { topMargin, window } = this.props.general.SCREEN_DIMENSIONS;
 
-    let _right = right ? right : <Cart />;
-    let _wrapperStyle = this.props.noMargin ? styles.wrapper : { height: 60 + topMargin, paddingTop: topMargin, backgroundColor: '#ffffff' };
+    let _right = right ? right : <Cart onCardPress={this._onCardPress} />;
+    let _wrapperStyle = this.props.noMargin
+      ? styles.wrapper
+      : {
+          height: 60 + topMargin,
+          paddingTop: topMargin,
+          backgroundColor: "#ffffff"
+        };
 
     let _progressBar = progress ? (
-      <View style={{ height: 5, backgroundColor: '#dcdcdc', position: 'relative' }}>
-        <View style={{ height: 5, width: (window.width * eval(progress)), backgroundColor: '#FF2B94' }}></View>
-        <View style={{ position: 'absolute', left: '50%', top: -40, height: 20, width: 50, marginLeft: -25, justifyContent: 'center', alignItems: 'center' }}>
+      <View
+        style={{ height: 5, backgroundColor: "#dcdcdc", position: "relative" }}
+      >
+        <View
+          style={{
+            height: 5,
+            width: window.width * eval(progress),
+            backgroundColor: "#FF2B94"
+          }}
+        />
+        <View
+          style={{
+            position: "absolute",
+            left: "50%",
+            top: -40,
+            height: 20,
+            width: 50,
+            marginLeft: -25,
+            justifyContent: "center",
+            alignItems: "center"
+          }}
+        >
           <Text style={{ fontSize: 15 }}>{progress}</Text>
         </View>
       </View>
@@ -52,16 +80,21 @@ class MinimalHdr extends React.Component {
     return (
       <View>
         <View style={[_wrapperStyle, { ...this.props.wrapperStyle }]}>
-          <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+          <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
             <TouchableOpacity onPress={this._onBackPress}>
-              <Image source={require('../../../assets/images/icons/back.png')} style={{ width: 40, height: 40, resizeMode: 'contain' }} />
+              <Image
+                source={require("../../../assets/images/icons/back.png")}
+                style={{ width: 40, height: 40, resizeMode: "contain" }}
+              />
             </TouchableOpacity>
-            <View style={{ flex: 1, justifyContent: 'center' }}>
+            <View style={{ flex: 1, justifyContent: "center" }}>
               <TouchableOpacity onPress={this._onBackPress}>
-                <Text style={styles.title}>{Utils.toUpperCase(this.props.title || '' )}</Text>
+                <Text style={styles.title}>
+                  {Utils.toUpperCase(this.props.title || "")}
+                </Text>
               </TouchableOpacity>
             </View>
-            <View style={{ paddingRight: 10, justifyContent: 'center' }}>
+            <View style={{ paddingRight: 10, justifyContent: "center" }}>
               {_right}
             </View>
           </View>
@@ -75,16 +108,18 @@ class MinimalHdr extends React.Component {
 const styles = StyleSheet.create({
   wrapper: {
     height: 60,
-    backgroundColor: '#ffffff',
+    backgroundColor: "#ffffff"
   },
   title: {
-    fontFamily: 'brandon',
-    fontSize: 15,
+    fontFamily: "brandon",
+    fontSize: 15
     //lineHeight:17,
   }
 });
 
-function mapStateToProps(state) { return state }
+function mapStateToProps(state) {
+  return state;
+}
 const MinimalHeader = connect(mapStateToProps)(MinimalHdr);
 export { MinimalHeader };
 
