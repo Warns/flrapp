@@ -426,6 +426,19 @@ addCartLine = (obj) => {
 
             if (answer.status == 200) {
                 //do nothing
+
+                // event entegrasyon
+                if ((obj.data || '') != '')
+                    Utils.mapping({
+                        event: 'add_to_cart',
+                        data: obj.data || {},
+                        keys: {
+                            'productName': 'product_name',
+                            'productCode': 'product_id',
+                            'catId': 'category_id',
+                            'salePrice': 'product_price'
+                        }
+                    });
             }
             else {
                 store.dispatch({ type: ADD_CART_ITEM, value: { quantity: -obj.quantity } });

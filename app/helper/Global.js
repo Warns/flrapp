@@ -512,5 +512,70 @@ module.exports = {
       });
 
     return arr;
-  }
+  },
+  mapping: function (o) {
+    /*
+        loglama için mapping: data içerisinde json desenini yollarsınız. keys içerisindeki key value değeerlerini replace edip keys de belirtilen yapıya çevirir. data ve keys yeni objeye dahil edilmez diğer alanlar dahil edilir. 
+
+        {
+            event: 'category_visited',
+            data: {},
+            keys: {
+                title: 'category_name',
+                catId: 'category_id'
+            } 
+        }
+        
+        ex: 
+        Utils.mapping({
+          event: 'category_visited',
+          data: {
+            page: 1,
+            pageSize: 300,
+            catId: 18776,
+            title: 'DUDAK KALEMİ'
+          },
+          keys: {
+            title: 'category_name',
+            catId: 'category_id'
+          }
+        });
+
+        output: 
+        {
+          "category_id": "18776",
+          "category_name": "DUDAK KALEMİ",
+          "event": "category_visited",
+        }
+    */
+
+    o = o || {};
+    var _self = this,
+      data = o['data'] || {},
+      keys = o['keys'] || '',
+      obj = {};
+
+    //console.log(o);
+
+    Object
+      .keys(o)
+      .map(key => {
+        if (key != 'keys' && key != 'data')
+          obj[key] = o[key] || '';
+      });
+
+    if (keys != '')
+      Object
+        .keys(data)
+        .map(key => {
+          const k = _self.trimText((keys[key] || '')),
+            value = data[key] || '';
+          if (k != '' && value != '')
+            obj[k] = value;
+        });
+
+    console.log('send event', obj);
+
+    return obj;
+  },
 };

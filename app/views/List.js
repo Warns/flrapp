@@ -268,16 +268,29 @@ export default class List extends React.Component {
           }]
     */
 
+
+    const data = {
+      page: 1,
+      pageSize: 300,
+      filter: filters,
+      sortType: sorts,
+      catId: category["id"] || "", //18775
+      ...category
+    };
+
+    Utils.mapping({
+      event: 'category_visited',
+      data: data,
+      keys: {
+        title: 'category_name',
+        catId: 'category_id',
+        utpId: 'utp_id'
+      }
+    });
+
     globals.fetch(
       Utils.getURL({ key: "product", subKey: "getProductList" }),
-      JSON.stringify({
-        page: 1,
-        pageSize: 300,
-        filter: filters,
-        sortType: sorts,
-        catId: category["id"] || "", //18775
-        ...category
-      }),
+      JSON.stringify(data),
       this._listResultHandler
     );
   };
@@ -590,7 +603,7 @@ export default class List extends React.Component {
           animationType="none"
           transparent={true}
           visible={this.state.detailIsVisible}
-          onRequestClose={() => {}}
+          onRequestClose={() => { }}
         >
           {detailContent}
         </Modal>
@@ -740,7 +753,7 @@ class ListHeader extends React.Component {
         <Modal
           visible={this.state.filterIsOpen}
           animationType="slide"
-          onRequestClose={() => {}}
+          onRequestClose={() => { }}
         >
           <MinimalHeader
             onPress={this._close}
@@ -894,14 +907,14 @@ class ListItem extends React.Component {
           </Text>
         </View>
       ) : (
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <Text
-            style={{ fontSize: 18, fontFamily: "brandon", fontWeight: "bold" }}
-          >
-            {Utils.getPriceFormat(item.salePrice)}
-          </Text>
-        </View>
-      );
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <Text
+              style={{ fontSize: 18, fontFamily: "brandon", fontWeight: "bold" }}
+            >
+              {Utils.getPriceFormat(item.salePrice)}
+            </Text>
+          </View>
+        );
 
     return (
       <TouchableOpacity

@@ -311,7 +311,7 @@ module.exports = {
       obj[key] = data[key];
     });
 
-    console.log('segmentify', obj);
+    //console.log('segmentify', obj);
 
     fetch(uri, {
       method: "POST",

@@ -220,6 +220,19 @@ fetchProductDetails = id => {
               });
           }
         );
+
+
+        // event entegrasyon
+        Utils.mapping({
+          event: 'product_visited',
+          data: answer.data.product || {},
+          keys: {
+            'productName': 'product_name',
+            'productCode': 'product_id',
+            'catId': 'category_id',
+            'salePrice': 'product_price'
+          }
+        });
       } else {
         // handle error
       }

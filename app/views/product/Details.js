@@ -178,7 +178,7 @@ class ProductDetails extends React.Component {
   _addToCart = () => {
     this.props.dispatch({
       type: ADD_CART_ITEM,
-      value: { id: this.props.product.item.productId, quantity: 1 }
+      value: { id: this.props.product.item.productId, quantity: 1, data: this.props.product.item }
     });
     console.log("add");
   };
@@ -201,6 +201,17 @@ class ProductDetails extends React.Component {
       value: { id: this.props.product.item.productId, do: "ADD" }
     });
 
+    // event entegrasyon
+    Utils.mapping({
+      event: 'add_to_fav',
+      data: this.props.product.item || {},
+      keys: {
+        'productName': 'product_name',
+        'productCode': 'product_id',
+        'catId': 'category_id',
+        'salePrice': 'product_price'
+      }
+    });
   };
 
   _removeFromFavorites = () => {
@@ -208,6 +219,18 @@ class ProductDetails extends React.Component {
     this.props.dispatch({
       type: ADD_TO_FAVORITES,
       value: { id: this.props.product.item.productId, do: "REMOVE" }
+    });
+
+    // event entegrasyon
+    Utils.mapping({
+      event: 'remove_to_fav',
+      data: this.props.product.item || {},
+      keys: {
+        'productName': 'product_name',
+        'productCode': 'product_id',
+        'catId': 'category_id',
+        'salePrice': 'product_price'
+      }
     });
   }
 

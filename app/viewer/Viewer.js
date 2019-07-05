@@ -253,6 +253,20 @@ class CartListItem extends Component {
                 setTimeout(() => {
                   onUpdateItem({ type: REMOVE_CART, data: res });
                 }, 100);
+
+
+              // event entegrasyon
+              Utils.mapping({
+                event: 'removed_from_cart',
+                data: data || {},
+                keys: {
+                  'productName': 'product_name',
+                  'productCode': 'product_id',
+                  'catId': 'category_id',
+                  'salePrice': 'product_price'
+                }
+              });
+
             }
           );
         }
@@ -499,7 +513,7 @@ class FavoriteListItem extends Component {
       { productId } = data;
     store.dispatch({
       type: ADD_CART_ITEM,
-      value: { id: productId, quantity: 1 }
+      value: { id: productId, quantity: 1, data: data }
     });
   };
 
@@ -876,7 +890,7 @@ class FollowListItem extends Component {
       { productId } = data;
     store.dispatch({
       type: ADD_CART_ITEM,
-      value: { id: productId, quantity: 1 }
+      value: { id: productId, quantity: 1, data: data }
     });
   };
 
