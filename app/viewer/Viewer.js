@@ -1260,9 +1260,11 @@ class CampaingItem extends Component {
 
   render() {
     const _self = this,
-      { image } = _self.props.data,
+      { image, platform = 'all|Her İkisi' } = _self.props.data,
       w = Dimensions.get("window").width,
       h = w / FEEDS_IMAGE_RATE["promo"];
+
+    if (platform == 'web|Web') return null;
 
     return (
       <TouchableOpacity activeOpacity={0.8} onPress={_self._onPress}>
@@ -2036,9 +2038,11 @@ class OpportunityListItem extends Component {
   render() {
     const _self = this,
       { index, totalCount } = _self.props,
-      { desc = "" } = _self.props.data,
+      { desc = "", platform = 'all|Her İkisi' } = _self.props.data,
       leftSpace = index == 0 ? 20 : 0,
       _width = totalCount == 1 ? HTML_DEFAULT_PROPS.imagesMaxWidth - 40 : 220;
+
+    if (platform == 'web|Web') return null;
 
     return (
       <View
@@ -2410,7 +2414,8 @@ class Viewers extends Component {
           prmDesc: "desc",
           prmCat: "catCode",
           prmTitle: "title",
-          prmExternal: "external"
+          prmExternal: "external",
+          prmPlatform: "platform"
         }
       });
     } else if (customFunc == "opportunity") {
@@ -2419,7 +2424,8 @@ class Viewers extends Component {
         mapping: {
           prmUniqueKod: "id",
           prmTitle: "title",
-          prmDesc: "desc"
+          prmDesc: "desc",
+          prmPlatform: "platform"
         }
       });
     } else if (customFunc == "customDetailContent") {
