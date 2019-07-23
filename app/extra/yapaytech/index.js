@@ -72,7 +72,8 @@ export default class DahiChat extends React.Component {
       bottom: new Animated.Value(height),
       backdrop: new Animated.Value(0),
       height: new Animated.Value(height / 2),
-      barcode: false
+      barcode: false,
+      barcodeerror: null
     };
     this.fullscreen = this.fullscreen.bind(this);
     this.openChat = this.openChat.bind(this);
@@ -137,7 +138,11 @@ export default class DahiChat extends React.Component {
           }
           _self.chat.sendCustom({ type: "horizontalslimarray", values }, true);
         } else
-          _self.chat.sendCustom({ type: "event", text: "__search_empty", searchText });
+          _self.chat.sendCustom({
+            type: "event",
+            text: "__search_empty",
+            searchText
+          });
       }
     );
   };
@@ -180,10 +185,31 @@ export default class DahiChat extends React.Component {
         if (data.type === "search" && data.query) this._search(data.query);
         break;
       case "openqrcode":
-        this.setState({ barcode: true });
+        this.setState({ barcode: true, barcodeerror: null });
+        try {
+          Keyboard.dismiss();
+        } catch (error) {
+          console.error(error);
+        }
+        break;
+      case "closeqrcode":
+        this.setState({ barcode: false });
+        break;
+      case "closeall":
+        this.setState({ barcode: false });
+        if (this.state.open) this.openChat();
+        break;
+      case "qrnotvalid":
+        this.setState({ barcodeerror: data || true });
+        clearTimeout(this.qrtimer);
+        let delay = (data && data.delay) || 3000;
+        if (delay !== -1)
+          this.qrtimer = setTimeout(() => {
+            if (this.state.barcodeerror) this.setState({ barcodeerror: null });
+          }, delay);
         break;
       default:
-        this.props.event(type, data);
+        this.props.event(type, data, this);
         break;
     }
   }
@@ -306,6 +332,7 @@ export default class DahiChat extends React.Component {
             <Barcode
               close={() => this.setState({ barcode: false })}
               event={this.on}
+              error={this.state.barcodeerror}
             />
           )}
         </View>

@@ -115,7 +115,7 @@ class Assistant extends React.Component {
         onRef={ref => _self.props.dispatch({ type: SET_ASSISTANT, value: ref })}
         user={userID}
         token="89400cde1b7e4df233b195554d93c69f"
-        event={(type, data) => {
+        event={(type, data, ref) => {
           const { id = "", labels = "" } = data;
           switch (type) {
             case "barcode": {
@@ -132,8 +132,9 @@ class Assistant extends React.Component {
                 res => {
                   const { status, data = {} } = res,
                     { productId = "" } = data;
-
+                  
                   if (status == 200) {
+                    ref.on("closeall");
                     _self.props.dispatch({
                       type: OPEN_PRODUCT_DETAILS,
                       value: {
@@ -143,7 +144,8 @@ class Assistant extends React.Component {
                         sequence: 0
                       }
                     });
-                  }
+                  } else
+                    ref.on("qrnotvalid", { message: "Geçersiz barkod numarası." });
                 }
               );
               break;
@@ -225,12 +227,12 @@ class Assistant extends React.Component {
                 FEEDSTYPE["COLLECTION"] == labels
               ) {
                 const {
-                    title = "",
-                    utp = "",
-                    image_link = "",
-                    desc = "",
-                    catCode = ""
-                  } = data,
+                  title = "",
+                  utp = "",
+                  image_link = "",
+                  desc = "",
+                  catCode = ""
+                } = data,
                   arr = [
                     {
                       title: title,

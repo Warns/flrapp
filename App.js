@@ -147,7 +147,16 @@ export default class App extends React.Component {
         require("root/assets/gifs/three-dots.gif"),
         require("root/assets/images/assistant.gif"),
         require("root/assets/images/assistant2.gif"),
-        require("root/assets/images/icons/more.png")
+        require("root/assets/images/icons/more.png"),
+        require("root/app/extra/yapaytech/assets/assistant.gif"),
+        require("root/app/extra/yapaytech/assets/back2x.png"),
+        require("root/app/extra/yapaytech/assets/barcode.png"),
+        require("root/app/extra/yapaytech/assets/barcode-scan.png"),
+        require("root/app/extra/yapaytech/assets/barcodetext.png"),
+        require("root/app/extra/yapaytech/assets/camera.png"),
+        require("root/app/extra/yapaytech/assets/keyboard.png"),
+        require("root/app/extra/yapaytech/assets/down-arrow.png"),
+        require("root/app/extra/yapaytech/assets/speaking.png")
       ]),
       Font.loadAsync({
         // We include SpaceMono because we use it in HomeScreen.js. Feel free

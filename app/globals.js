@@ -296,13 +296,11 @@ module.exports = {
       origin = Utils.prefix,
       { user = {}, segmentify = {} } = store.getState(),
       { userId } = user['user'] || {},
+      sessionId = userId ? _self.CLIENT.Auth.session : ( segmentify["sessionID"] || "YYYYYYYYYYYYYYYY" ),
       obj = {
         userId: userId || segmentify["userID"] || "XXXXXXXXXXXXXXXXX",
         // hic clinet olmayinca bu hata veriyor. bunu asagidaki ile degistirdim '_self.CLIENT.Auth.session'. ( _self.CLIENT.Auth ? _self.CLIENT.Auth.session : false )
-        sessionId:
-          _self.CLIENT.Auth.session ||
-          segmentify["sessionID"] ||
-          "YYYYYYYYYYYYYYYY",
+        sessionId: sessionId,
         device: Platform.OS === "ios" ? "IOS" : "ANDROID",
         pageUrl: origin
       };
