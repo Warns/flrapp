@@ -67,7 +67,7 @@ class Splash extends React.Component {
         curve: require("../../assets/images/splash-white-background-2.png"),
         title: "HEMEN ÜYE OL",
         text:
-          "Online’a özel ilk siparişinde tüm ürünlerde net 25% indirim kazan! \n\n*Kargo bedava "
+          "Online’a özel ilk siparişinde tüm ürünlerde net 25% indirim kazan!\nKupon kodu: WELCOME25 \n\n*Kargo 1 TL "
       }
     ],
     activeSlide: 0
