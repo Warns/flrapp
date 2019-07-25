@@ -40,7 +40,7 @@ class HorizontalProducts extends React.Component {
       Utils.getURL({ key: 'product', subKey: 'getProductList' }),
       JSON.stringify({
         "productIds": Ids,
-        "pageSize": 10,
+        "pageSize": 100,
         "hasStock": true,
       }),
       this._handleFetchResults
@@ -151,7 +151,7 @@ class ProductRender extends React.Component {
           source={{ uri: this.props.item.smallImageUrl }}
         />
         <View>
-          <Text style={{ fontFamily: 'Bold', fontSize: 14 }}>₺{this.props.item.salePrice}</Text>
+          <Text style={{ fontFamily: 'Bold', fontSize: 14 }}>{Utils.getPriceFormat(this.props.item.salePrice)}</Text>
         </View>
         <Text style={{ fontSize: 12 }}>{this.props.item.productName}</Text>
         <Text style={{ fontSize: 12, color: '#9B9B9B' }}>{numOfColors} Renk</Text>

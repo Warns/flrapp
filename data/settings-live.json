@@ -1,4 +1,50 @@
 {
+    "extraOpportunity": {
+        "login": [
+            "Mobil uygulamaya özel Kargo 1 TL",
+            "WELCOME25 koduyla ilk alışverişine %25 indirim!"
+        ],
+        "logoff": [
+            "Mobil uygulamaya özel Kargo 1 TL",
+            "WELCOME25 koduyla ilk alışverişine %25 indirim!"
+        ]
+    },
+    "translation": {
+        "feeds": {
+            "instagramDetail": "Instagram'a git",
+            "instagram": "Keşfet",
+            "video": "Video'yu izle",
+            "promo": "Alışverişe Başla",
+            "product": "Satın al",
+            "blog": "İletiyi incele",
+            "collection": "Koleksiyonu keşfet",
+            "campaing": "Kampanya Detaylarını İncele"
+        },
+        "extra": {
+            "title": "Flormar Extra nedir?",
+            "desc": "Flormar mobil uygulama, website, ve mağazalarından yapacağın her alışverişinde sana Extra TL’ler kazandıracak, özel günlerinde sürprizler yapacak bir bağlılık programıdır."
+        },
+        "intro": [
+            {
+                "thumb": "https://www.flormar.com.tr/UPLOAD/APP/assets/slider-1.png",
+                "curve": "type2",
+                "title": "HOŞ GELDİN!",
+                "text": "Yenilenen Flormar Mobil uygulaması ile sana özel içerik ve kampanyalarla mobil alışveriş deneyiminin keyfini çıkar."
+            },
+            {
+                "thumb": "https://www.flormar.com.tr/UPLOAD/APP/assets/slider-2.png",
+                "curve": "type1",
+                "title": "FLORMAR EXTRA",
+                "text": "Flormar Extra üyesi olmak için mobil uygulamaya giriş yap, her siparişte %5 Extra TL* kazan.\n\n*1 Extra TL = 1 TL"
+            },
+            {
+                "thumb": "https://www.flormar.com.tr/UPLOAD/APP/assets/slider-3.png",
+                "curve": "type2",
+                "title": "HEMEN ÜYE OL",
+                "text": "Online’a özel ilk siparişinde tüm ürünlerde net 25% indirim kazan!\nKupon kodu: WELCOME25 \n\n*Kargo 1 TL "
+            }
+        ]
+    },
     "general": {
         "image_rate": {
             "video": 1.7808,
@@ -44,7 +90,10 @@
                 "title": "TAKİP LİSTEM",
                 "type": "listViewer",
                 "itemType": "followList",
-                "deleteURI": { "key": "user", "subKey": "deletePriceFollowUpProduct" },
+                "deleteURI": {
+                    "key": "user",
+                    "subKey": "deletePriceFollowUpProduct"
+                },
                 "uri": {
                     "key": "user",
                     "subKey": "getPriceFollowUpList"
@@ -171,22 +220,6 @@
                 },
                 "siteURI": "/biz-kimiz/"
             },
-            /*{
-                "showMenu": false,
-                "title": "TARİHÇE",
-                "type": "webViewer",
-                "uri": {
-                    "key": "content",
-                    "subKey": "getContent"
-                },
-                "keys": {
-                    "arr": "html"
-                },
-                "data": {
-                    "contentId": 21284
-                },
-                "siteURI": "/tarihce/"
-            },*/
             {
                 "showMenu": false,
                 "title": "VİZYON & MİSYON",
@@ -628,11 +661,7 @@
                             {
                                 "title": "VÜCUT SPREYLERİ",
                                 "id": "18915"
-                            }/*,
-                            {
-                                "title": "PARFÜMLER",
-                                "id": "18916"
-                            }*/
+                            }
                         ]
                     }
                 ]

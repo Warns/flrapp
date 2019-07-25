@@ -320,10 +320,10 @@ module.exports = {
       },
       body: JSON.stringify(obj)
     })
-      .then(response => {
+      .then(response => { 
         return response.json();
       })
-      .then(function (res) {
+      .then(function (res) { 
         if (typeof callback !== "undefined")
           callback({ type: "success", data: res });
       })

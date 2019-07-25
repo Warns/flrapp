@@ -91,6 +91,34 @@ module.exports = {
         collection: 'Koleksiyonu keşfet',
         campaing: 'Kampanya Detaylarını İncele'
     },
+    extra: {
+        title: 'Flormar Extra nedir?',
+        desc: 'Flormar mobil uygulama, website, ve mağazalarından yapacağın her alışverişinde sana Extra TL’ler kazandıracak, özel günlerinde sürprizler yapacak bir bağlılık programıdır.'
+    },
+    intro: [
+        {
+            thumb: "https://www.flormar.com.tr/UPLOAD/APP/assets/slider-1.png",
+            curve: "type2",
+            title: "HOŞ GELDİN!",
+            text:
+                "Yenilenen Flormar Mobil uygulaması ile sana özel içerik ve kampanyalarla mobil alışveriş deneyiminin keyfini çıkar.",
+            video: false
+        },
+        {
+            thumb: "https://www.flormar.com.tr/UPLOAD/APP/assets/slider-2.png",
+            curve: "type1",
+            title: "FLORMAR EXTRA",
+            text:
+                "Flormar Extra üyesi olmak için mobil uygulamaya giriş yap, her siparişte %5 Extra TL* kazan.\n\n*1 Extra TL = 1 TL"
+        },
+        {
+            thumb: "https://www.flormar.com.tr//UPLOAD/APP/assets/slider-3.png",
+            curve: "type2",
+            title: "HEMEN ÜYE OL",
+            text:
+                "Online’a özel ilk siparişinde tüm ürünlerde net 25% indirim kazan!\nKupon kodu: WELCOME25 \n\n*Kargo 1 TL "
+        }
+    ],
     getErrorMsg: function ({ key = '', title = '', value = '' }) {
         const _t = this;
         return _t['errorMessage'][key].replace(/{{title}}/g, title).replace(/{{value}}/g, value);

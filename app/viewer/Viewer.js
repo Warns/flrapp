@@ -74,6 +74,13 @@ const injectScript = `
   }());
 `;
 
+const _getTranslation = ({ key }) => {
+  const _self = this,
+    { settings = {} } = store.getState() || {},
+    trns = settings['translation'] || {};
+  return trns[key] || Translation[key] || {};
+}
+
 /*
 const config = {
     type: 'favorite',
@@ -321,17 +328,17 @@ class CartListItem extends Component {
   _getView = () => {
     const _self = this,
       { data = {}, viewType = "" } = _self.props,
-      { shortName, productName = "", total = 0, firstPriceTotal = 0 } = data;
+      { shortName, productName = "", total = 0, netTotal = 0, firstPriceTotal = 0 } = data;
 
     const prc =
-      total == firstPriceTotal ? (
+      netTotal == firstPriceTotal ? (
         <Text style={{ fontFamily: "Bold", fontSize: 16 }}>
-          {Utils.getPriceFormat(total)}
+          {Utils.getPriceFormat(netTotal)}
         </Text>
       ) : (
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             <Text style={{ fontFamily: "Bold", fontSize: 16 }}>
-              {Utils.getPriceFormat(total)}
+              {Utils.getPriceFormat(netTotal)}
             </Text>
             <Text
               style={{
@@ -1228,7 +1235,7 @@ class CampaingItem extends Component {
     let view = null;
 
     const _self = this,
-      desc = Translation["feeds"]["campaing"] || "";
+      desc = _getTranslation({ key: 'feeds' })["campaing"] || "";
 
     if (desc != "")
       view = (
@@ -1965,7 +1972,7 @@ class FeedsItem extends Component {
     const _self = this,
       { labels = [] } = _self.props.data,
       type = labels[0],
-      desc = Translation["feeds"][type] || "";
+      desc = _getTranslation({ key: 'feeds' })[type] || "";
 
     if (desc != "")
       view = (

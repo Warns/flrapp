@@ -28,6 +28,7 @@ import {
   OPEN_VIDEO_PLAYER
 } from "root/app/helper/Constant";
 
+const Translation = require("root/app/helper/Translation.js");
 const Utils = require("root/app/helper/Global.js");
 const DIMENSIONS = Dimensions.get("window");
 
@@ -41,35 +42,28 @@ class Splash extends React.Component {
     header: null
   };
 
+  _getSlideItem = () => {
+    const _self = this,
+      { settings = {} } = _self.props || {};
+
+    return settings['translation']['intro'] || Translation['intro'] || [];
+  }
+
+  _getCurve = ({ type }) => {
+    switch (type) {
+      case 'type2':
+        return require("../../assets/images/splash-white-background-2.png");
+      default:
+        return require("../../assets/images/splash-white-background-1.png");
+    }
+  }
+
   state = {
     fadeAnim: new Animated.Value(0),
     loginIsVisible: false,
     videoIsPlaying: true,
     localStorage: {},
-    images: [
-      {
-        thumb: Utils.prefix + "/UPLOAD/APP/assets/slider-1.png",
-        curve: require("../../assets/images/splash-white-background-2.png"),
-        title: "HOŞ GELDİN!",
-        text:
-          "Yenilenen Flormar Mobil uygulaması ile sana özel içerik ve kampanyalarla mobil alışveriş deneyiminin keyfini çıkar.",
-        video: false
-      },
-      {
-        thumb: Utils.prefix + "/UPLOAD/APP/assets/slider-2.png",
-        curve: require("../../assets/images/splash-white-background-1.png"),
-        title: "FLORMAR EXTRA",
-        text:
-          "Flormar Extra üyesi olmak için mobil uygulamaya giriş yap, her siparişte %5 Extra TL* kazan.\n\n*1 Extra TL = 1 TL"
-      },
-      {
-        thumb: Utils.prefix + "/UPLOAD/APP/assets/slider-3.png",
-        curve: require("../../assets/images/splash-white-background-2.png"),
-        title: "HEMEN ÜYE OL",
-        text:
-          "Online’a özel ilk siparişinde tüm ürünlerde net 25% indirim kazan!\nKupon kodu: WELCOME25 \n\n*Kargo 1 TL "
-      }
-    ],
+    images: this._getSlideItem(),
     activeSlide: 0
   };
 
@@ -134,15 +128,15 @@ class Splash extends React.Component {
         style={styles.backgroundImage}
       />
     ) : (
-      <ParallaxImage
-        source={{ uri: obj.item.thumb }}
-        parallaxFactor={0.3}
-        containerStyle={{ flex: 1 }}
-        style={{ resizeMode: "cover" }}
-        showSpinner={true}
-        {...parallaxProps}
-      />
-    );
+        <ParallaxImage
+          source={{ uri: obj.item.thumb }}
+          parallaxFactor={0.3}
+          containerStyle={{ flex: 1 }}
+          style={{ resizeMode: "cover" }}
+          showSpinner={true}
+          {...parallaxProps}
+        />
+      );
 
     return (
       <View
@@ -151,7 +145,7 @@ class Splash extends React.Component {
         {media}
         <View style={{ position: "absolute", bottom: 0, width: "100%" }}>
           <Image
-            source={obj.item.curve}
+            source={this._getCurve({ type: obj.item.curve })}
             style={{
               width: DIMENSIONS.width,
               height: DIMENSIONS.width * 0.1,
@@ -323,7 +317,7 @@ class Splash extends React.Component {
           animationType="none"
           transparent={true}
           visible={this.state.loginIsVisible}
-          onRequestClose={() => {}}
+          onRequestClose={() => { }}
         >
           <SplashHeader onCloseLogin={this._onCloseLogin} />
           <Animated.View

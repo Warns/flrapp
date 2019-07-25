@@ -862,10 +862,31 @@ class ListItem extends React.Component {
 
     let trigger = item.stockQty <= 20 ? "Tükenmek Üzere" : null;
 
-    let thumbnail = textureDisplay
-      ? item.mediumImageUrl.replace("mobile_image_1", "mobile_image_2")
-      : item.mediumImageUrl;
+    /* 
+      texture image
+    */
+    const texture = textureDisplay ? <Image
+      style={{ width: _width, height: _height, resizeMode: "contain", position: 'absolute', left: 0, top: 0, zIndex: 2 }}
+      source={{ uri: item.mediumImageUrl.replace("mobile_image_1", "mobile_image_2") }}
+      onError={() => {
+        this.props.source = item.mediumImageUrl;
+      }}
+    /> : null;
 
+    let thumbnail = <View style={{ position: 'relative' }}>
+      <Image
+        style={{ width: _width, height: _height, resizeMode: "contain" }}
+        source={{ uri: item.mediumImageUrl }}
+        onError={() => {
+          this.props.source = item.mediumImageUrl;
+        }}
+      />
+      {texture}
+    </View>
+
+    /* 
+        price
+    */
     let price =
       item.discountRate > 0 ? (
         <View
@@ -944,13 +965,7 @@ class ListItem extends React.Component {
             borderStyle
           ]}
         >
-          <Image
-            style={{ width: _width, height: _height, resizeMode: "contain" }}
-            source={{ uri: thumbnail }}
-            onError={() => {
-              this.props.source = item.mediumImageUrl;
-            }}
-          />
+          {thumbnail}
           {newFlag}
 
           <View

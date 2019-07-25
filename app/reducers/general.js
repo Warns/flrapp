@@ -1,3 +1,4 @@
+import { Alert } from "react-native";
 import {
   SET_CATEGORIES,
   SET_SCREEN_DIMENSIONS,
@@ -180,59 +181,71 @@ fetchProductDetails = id => {
       //console.log("answer ", answer);
 
       if (answer.status == 200) {
-        let colors = [];
 
-        if (answer.data.product.productGroups)
-          colors = answer.data.product.productGroups;
+        const { data = null } = answer;
 
-        colors.push({
-          productId: answer.data.product.productId,
-          productUrl: answer.data.product.productUrl,
-          shortCode: answer.data.product.shortCode,
-          smallImageUrl: answer.data.product.productImages[0].smallImageUrl,
-          mediumImageUrl: answer.data.product.productImages[0].mediumImageUrl,
-          hasStock: answer.data.product.stockQty > 0 ? true : false,
-          name: answer.data.product.shortName
-        });
+        if (data != null) {
 
-        colors.sort((a, b) =>
-          a.productId > b.productId ? 1 : b.productId > a.productId ? -1 : 0
-        );
+          let colors = [];
 
-        store.dispatch({
-          type: UPDATE_PRODUCT_DETAILS_ITEM,
-          value: { product: answer.data.product, colors: colors }
-        });
+          if (answer.data.product.productGroups)
+            colors = answer.data.product.productGroups;
 
-        // Fetch video
-        Utils.ajx(
-          {
-            uri:
-              Utils.getURL({ key: "product", subKey: "getProductVideos" }) +
-              "?urn=" +
-              id
-          },
-          result => {
-            if (result["type"] == "success")
-              store.dispatch({
-                type: UPDATE_PRODUCT_VIDEOS,
-                value: { videos: result.data.data.videos }
-              });
-          }
-        );
+          colors.push({
+            productId: answer.data.product.productId,
+            productUrl: answer.data.product.productUrl,
+            shortCode: answer.data.product.shortCode,
+            smallImageUrl: answer.data.product.productImages[0].smallImageUrl,
+            mediumImageUrl: answer.data.product.productImages[0].mediumImageUrl,
+            hasStock: answer.data.product.stockQty > 0 ? true : false,
+            name: answer.data.product.shortName
+          });
+
+          colors.sort((a, b) =>
+            a.productId > b.productId ? 1 : b.productId > a.productId ? -1 : 0
+          );
+
+          store.dispatch({
+            type: UPDATE_PRODUCT_DETAILS_ITEM,
+            value: { product: answer.data.product, colors: colors }
+          });
+
+          // Fetch video
+          Utils.ajx(
+            {
+              uri:
+                Utils.getURL({ key: "product", subKey: "getProductVideos" }) +
+                "?urn=" +
+                id
+            },
+            result => {
+              if (result["type"] == "success")
+                store.dispatch({
+                  type: UPDATE_PRODUCT_VIDEOS,
+                  value: { videos: result.data.data.videos }
+                });
+            }
+          );
 
 
-        // event entegrasyon
-        Utils.mapping({
-          event: 'product_visited',
-          data: answer.data.product || {},
-          keys: {
-            'productName': 'product_name',
-            'productCode': 'product_id',
-            'catId': 'category_id',
-            'salePrice': 'product_price'
-          }
-        });
+          // event entegrasyon
+          Utils.mapping({
+            event: 'product_visited',
+            data: answer.data.product || {},
+            keys: {
+              'productName': 'product_name',
+              'productCode': 'product_id',
+              'catId': 'category_id',
+              'salePrice': 'product_price'
+            }
+          });
+
+        }else{
+          store.dispatch({ type: CLOSE_PRODUCT_DETAILS, Value: {} });
+          setTimeout(() => {
+            Alert.alert('ARADIĞINIZ ÜRÜN BULUNAMADI!');  
+          }, 500);
+        }
       } else {
         // handle error
       }

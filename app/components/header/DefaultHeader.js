@@ -31,8 +31,23 @@ class DefaultHdr extends Component {
     }
   }
 
+  _onBackPress = () => {
+    const _self = this;
+    _self.props.dispatch({ type: NAVIGATE, value: { item: { navigation: "Home" } } });
+  }
+
   _onLogoPress = () => {
-    this.props.dispatch({ type: NAVIGATE, value: { item: { navigation: "Home" } } });
+    const _self = this;
+
+    _self.props.dispatch({ type: NAVIGATE, value: { item: { navigation: "Home" } } });
+
+    setTimeout(() => {
+      const { rootNavigation = {} } = _self.props || {},
+        { mainNav } = rootNavigation;
+
+      if (mainNav)
+        mainNav.navigate("Feeds", {});
+    }, 100);
   }
 
   _onLoginPress = () => {
@@ -80,7 +95,7 @@ class DefaultHdr extends Component {
     );
 
     let _left = this.props.backButton == true ? (
-      <TouchableOpacity onPress={this._onLogoPress}>
+      <TouchableOpacity onPress={this._onBackPress}>
         <Image source={require('../../../assets/images/icons/back.png')} style={{ width: 40, height: 40, resizeMode: 'contain' }} />
       </TouchableOpacity>
     ) : _account;

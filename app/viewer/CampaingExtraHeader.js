@@ -2,9 +2,17 @@ import React from "react";
 import { View, Text, Image, Dimensions, TouchableOpacity } from "react-native";
 import { ICONS } from "root/app/helper/Constant";
 import { connect } from "react-redux";
+import { store } from "root/app/store";
 import HTML from "react-native-render-html";
 
+const Translation = require("root/app/helper/Translation.js");
 const Utils = require("root/app/helper/Global.js");
+const _getTranslation = ({ key }) => {
+  const _self = this,
+    { settings = {} } = store.getState() || {},
+    trns = settings['translation'] || {};
+  return trns[key] || Translation[key] || {};
+}
 
 class Main extends React.Component {
   constructor(props) {
@@ -42,10 +50,38 @@ class Main extends React.Component {
     _self.setState({ expand: !expand });
   };
 
+  /* 
+    özel duyurular
+  */
+  _extraOpportunity = () => {
+    let _self = this,
+      { user = {} } = _self.props.user || {},
+      { userId = "" } = user,
+      { settings = {} } = _self.props || {},
+      obj = settings['extraOpportunity'] || {},
+      view = [];
+
+    if (userId == "")
+      obj = obj['logoff'] || [];
+    else
+      obj = obj['login'] || [];
+
+
+    if (obj.length > 0)
+      Object.entries(obj).forEach(([ind, value]) => {
+        view.push(<Text key={'key-' + ind} style={{ fontSize: 16, color: "#4a4a4a", fontFamily: "Bold", paddingBottom: 10, textAlign: "center" }}>{value}</Text>);
+      });
+
+    return view;
+  } 
+
+  /* 
+    flormar extra nedir
+  */
   _getDesc = () => {
     const _self = this,
       { expand = false } = _self.state,
-      desc = `Flormar mobil uygulama, website, ve mağazalarından yapacağın her alışverişinde sana Extra TL’ler kazandıracak, özel günlerinde sürprizler yapacak bir bağlılık programıdır.`;
+      desc = _getTranslation({ key: 'extra' })['desc'];
 
     let view = null;
     if (expand)
@@ -65,6 +101,42 @@ class Main extends React.Component {
     return view;
   };
 
+  _extraDesc = () => {
+    const _self = this,
+      title = _getTranslation({ key: 'extra' })['title'];
+
+    return (
+      <View style={{ alignItems: "center", width: "100%" }}>
+
+        <TouchableOpacity activeOpacity={0.8} onPress={_self._onExpand}>
+          <View
+            style={{
+              flexDirection: "row",
+              paddingLeft: 15,
+              alignItems: "center"
+            }}
+          >
+            <Text
+              style={{
+                fontFamily: "RegularTyp2",
+                fontSize: 16,
+                color: "#4a4a4a"
+              }}
+            >
+              {title}
+            </Text>
+            <Image
+              style={{ width: 40, height: 40 }}
+              source={ICONS["downArrow"]}
+            />
+          </View>
+        </TouchableOpacity>
+
+        {_self._getDesc()}
+      </View>
+    );
+  }
+
   render() {
     const _self = this,
       { user = {} } = _self.props.user || {},
@@ -73,52 +145,8 @@ class Main extends React.Component {
     if (userId == "")
       return (
         <View style={{ flex: 1, alignItems: "center", marginTop: 20 }}>
-          <Text
-            style={{
-              fontSize: 18,
-              color: "#4a4a4a",
-              fontFamily: "Bold",
-              paddingBottom: 10,
-              textAlign: "center"
-            }}
-          >
-            {"Mobil uygulamaya özel Kargo 1 TL"}
-          </Text>
-          <Text
-            style={{
-              fontSize: 16,
-              color: "#4a4a4a",
-              fontFamily: "Bold",
-              paddingBottom: 10,
-              textAlign: "center"
-            }}
-          >
-            {"WELCOME25 koduyla ilk alışverişine %25 indirim!"}
-          </Text>
-          <TouchableOpacity activeOpacity={0.8} onPress={_self._onExpand}>
-            <View
-              style={{
-                flexDirection: "row",
-                paddingLeft: 15,
-                alignItems: "center"
-              }}
-            >
-              <Text
-                style={{
-                  fontFamily: "RegularTyp2",
-                  fontSize: 16,
-                  color: "#4a4a4a"
-                }}
-              >
-                Flormar Extra nedir?
-              </Text>
-              <Image
-                style={{ width: 40, height: 40 }}
-                source={ICONS["downArrow"]}
-              />
-            </View>
-          </TouchableOpacity>
-          {_self._getDesc()}
+          {_self._extraOpportunity()}
+          {_self._extraDesc()}
         </View>
       );
 
@@ -180,53 +208,8 @@ class Main extends React.Component {
         >
           Size özel kazanç dolu kampanyalar
         </Text>
-        <Text
-          style={{
-            fontSize: 18,
-            color: "#4a4a4a",
-            fontFamily: "Bold",
-            paddingBottom: 10,
-            textAlign: "center"
-          }}
-        >
-          {"Mobil uygulamaya özel Kargo 1 TL"}
-        </Text>
-        <Text
-          style={{
-            fontSize: 16,
-            color: "#4a4a4a",
-            fontFamily: "Bold",
-            paddingBottom: 10,
-            textAlign: "center"
-          }}
-        >
-          {"WELCOME25 koduyla ilk alışverişine %25 indirim!"}
-        </Text>
-
-        <TouchableOpacity activeOpacity={0.8} onPress={_self._onExpand}>
-          <View
-            style={{
-              flexDirection: "row",
-              paddingLeft: 15,
-              alignItems: "center"
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: "RegularTyp2",
-                fontSize: 16,
-                color: "#4a4a4a"
-              }}
-            >
-              Flormar Extra nedir?
-            </Text>
-            <Image
-              style={{ width: 40, height: 40 }}
-              source={ICONS["downArrow"]}
-            />
-          </View>
-        </TouchableOpacity>
-        {_self._getDesc()}
+        {_self._extraOpportunity()}
+        {_self._extraDesc()}
       </View>
     );
   }

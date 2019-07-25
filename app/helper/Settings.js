@@ -48,28 +48,43 @@ class Setting extends Component {
         });
     }
 
+    /* 
+        settings json load
+    */
+    IsValidJSONString(str) {
+        try {
+            JSON.parse(str);
+        } catch (e) {
+            return false;
+        }
+        return true;
+    }
+
+    _setSettings = () => {
+        const _self = this,
+            settings = require('root/data/settings-live.json');
+
+        _self.props.dispatch({ type: SET_SETTINGS, value: settings });
+
+        Globals.AJX({ _self: _self, uri: Utils.getURL({ key: 'export', subKey: 'getExport' }), data: { "exportType": "mobiAppSettingsJson" } }, (res) => {
+            const k = res['data']['html'] || '';
+            if (k != '' && _self.IsValidJSONString(k)) { 
+                const settings = JSON.parse(k || '{}');
+                _self.props.dispatch({ type: SET_SETTINGS, value: settings });
+            }
+        });
+    }
+
     componentDidMount() {
         const _self = this;
         _self._isMounted = true;
-        /*
-        Globals.AJX({ _self: _self, uri: _self.getUri(), data: { "exportType": "mobiAppSettingsJson" } }, (res) => {
-            const settings = JSON.parse(res['data']['html'] || '{}');
-            _self.props.dispatch({ type: SET_SETTINGS, value: settings });
-        });
-        */
-        const settings = require('root/data/settings-live.json');
-        _self.props.dispatch({ type: SET_SETTINGS, value: settings });
 
-
+        _self._setSettings();
         _self._setSeg();
     }
 
     componentWillUnmount() {
         this._isMounted = false;
-    }
-
-    getUri = () => {
-        return Utils.getURL({ key: 'export', subKey: 'getExport' })
     }
 
     render() {
