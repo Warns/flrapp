@@ -264,6 +264,10 @@ module.exports = {
   },
   getPriceFormat: function (k) {
     k = (k || '0');
+
+    if (k.toString().indexOf('.') != -1 )
+      k = parseFloat(k).toFixed(2);
+
     /* fiyat formatlama */
     return '₺' + k.toString().replace(/\./g, ',');
   },

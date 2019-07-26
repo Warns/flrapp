@@ -25,13 +25,17 @@ class HorizontalProducts extends React.Component {
 
   componentDidMount() {
 
-    let Ids = [];
+    let _self = this,
+      { items = [], customItems = [] } = _self.props,
+      Ids = [];
 
-    for (var i in this.props.items)
-      Ids.push(this.props.items[i].productId);
+    if (items.length > 0) {
+      for (var i in items)
+        Ids.push(items[i].productId);
 
-    this._fetchItems(Ids);
-
+      _self._fetchItems(Ids);
+    } else
+      _self._handleFetchResults({ data: { products: customItems }, status: 200 });
   }
 
   _fetchItems = (Ids) => {

@@ -138,6 +138,9 @@ class Palette extends React.Component {
 */
     //console.log('>>>..', this.state.selected);
 
+
+    const {shortCode = '', name = '' } = items[this.state.index] || {}; 
+
     return (
       <View style={{ flex: 1, backgroundColor: '#ffffff', maxHeight: 165, height: 125, backgroundColor: '#ffffff' }}>
         <FlatList
@@ -156,7 +159,7 @@ class Palette extends React.Component {
           onPress={this._onColorSelectorPress}>
           <View style={{ backgroundColor: '#ffffff', height: 60, flexDirection: 'row', alignItems: 'center', paddingLeft: 20, paddingRight: 20, }}>
             <Text style={{ fontSize: 13, marginRight: 5 }}>RENK</Text>
-            <Text style={{ color: '#6C6C6C', fontSize: 13, }}>{items[this.state.index].shortCode + ' ' + items[this.state.index].name}</Text>
+            <Text style={{ color: '#6C6C6C', fontSize: 13, }}>{shortCode + ' ' + name}</Text>
             <View style={{ height: 28, borderWidth: 1, borderColor: '#979797', borderRadius: 14, paddingLeft: 10, paddingRight: 3, right: 20, position: 'absolute', flexDirection: 'row', alignItems: 'center' }}>
               <Text style={{ fontSize: 12 }}>{items.length}</Text>
               <Image source={(ICONS['downArrow'])} style={{ width: 28, height: 28, resizeMode: 'contain' }} />

@@ -96,7 +96,19 @@ class ProductDetails extends React.Component {
         arr = [];
 
       Object.entries(data).forEach(([key, value]) => {
-        arr.push({ groupId: 1, productId: value["productId"] });
+        //--> arr.push({ groupId: 1, productId: value["productId"] });
+
+        const { params = {}, productId = '', image = '', name = '', labels = [] } = value,
+          { salesPrice = '', colorCount = 0 } = params;
+
+        if (labels[0] == 'product')
+          arr.push({
+            productId: productId,
+            smallImageUrl: image,
+            salePrice: salesPrice,
+            productName: name,
+            productGroups: [...Array(parseFloat(colorCount)).keys()]
+          });
       });
 
       _self.setState({ productRecommends: arr });
@@ -263,7 +275,7 @@ class ProductDetails extends React.Component {
   /* yerli üretim */
   _domesticProduction = data => {
     let b = false,
-      ids = 266;
+      ids = 272;
 
     Object.entries(data).forEach(([key, value]) => {
       if (value["productTypeId"] == ids) b = true;
@@ -349,7 +361,7 @@ class ProductDetails extends React.Component {
               İLGİLİ ÜRÜNLER
             </Text>
             <HorizontalProducts
-              items={productRecommends}
+              customItems={productRecommends}
               onPress={this._changeProduct}
             />
           </View>

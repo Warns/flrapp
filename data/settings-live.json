@@ -398,6 +398,21 @@
                     "contentId": 22049
                 },
                 "siteURI": "/kvk/"
+            },
+            {
+                "title": "BİZE ULAŞIN",
+                "type": "webViewer",
+                "uri": {
+                    "key": "content",
+                    "subKey": "getContent"
+                },
+                "keys": {
+                    "arr": "html"
+                },
+                "data": {
+                    "contentId": 21813
+                },
+                "siteURI": "/bize-ulasin/"
             }
         ],
         "main": [
