@@ -156,7 +156,8 @@ export default class App extends React.Component {
         require("root/app/extra/yapaytech/assets/camera.png"),
         require("root/app/extra/yapaytech/assets/keyboard.png"),
         require("root/app/extra/yapaytech/assets/down-arrow.png"),
-        require("root/app/extra/yapaytech/assets/speaking.png")
+        require("root/app/extra/yapaytech/assets/speaking.png"),
+        require("root/assets/images/yerliuretim.png")
       ]),
       Font.loadAsync({
         // We include SpaceMono because we use it in HomeScreen.js. Feel free
