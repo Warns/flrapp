@@ -115,7 +115,7 @@ class Palette extends React.Component {
 
   render() {
 
-    let { items, width } = this.props;
+    let { items, width, title = 'RENK' } = this.props;
     let colorsArray = [];
 
     //console.log('palette', items.length);
@@ -158,7 +158,7 @@ class Palette extends React.Component {
           activeOpacity={0.9}
           onPress={this._onColorSelectorPress}>
           <View style={{ backgroundColor: '#ffffff', height: 60, flexDirection: 'row', alignItems: 'center', paddingLeft: 20, paddingRight: 20, }}>
-            <Text style={{ fontSize: 13, marginRight: 5 }}>RENK</Text>
+            <Text style={{ fontSize: 13, marginRight: 5 }}>{title}</Text>
             <Text style={{ color: '#6C6C6C', fontSize: 13, }}>{shortCode + ' ' + name}</Text>
             <View style={{ height: 28, borderWidth: 1, borderColor: '#979797', borderRadius: 14, paddingLeft: 10, paddingRight: 3, right: 20, position: 'absolute', flexDirection: 'row', alignItems: 'center' }}>
               <Text style={{ fontSize: 12 }}>{items.length}</Text>

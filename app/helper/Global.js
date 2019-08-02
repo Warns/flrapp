@@ -582,4 +582,21 @@ module.exports = {
 
     return obj;
   },
+  productTypes: function(o){
+    /* 
+      renk, çeşit ayrımı için kullanırız. çeşit için ürün tipi idsi 200
+    */
+    o = o || {};
+    let arr = o['productTypes'] || [],
+    k = 'Renk';
+    if( arr.length > 0 )
+      arr.map((item)=>{
+          const n = item['productTypeId'] || 0;
+          if( n == 200 ){
+            k = 'Çeşit';
+            return false;
+          }
+      })
+    return k;
+  }
 };

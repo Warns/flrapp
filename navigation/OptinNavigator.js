@@ -9,7 +9,10 @@ import {
 import { connect } from 'react-redux';
 import { createStackNavigator } from 'react-navigation';
 import { store } from 'root/app/store';
-import { NAVIGATE } from 'root/app/helper/Constant';
+import { 
+  SET_OPTIN_NAVIGATION,
+  NAVIGATE 
+} from 'root/app/helper/Constant';
 
 import LoadingPage from 'root/app/sub-views/Loading';
 import SplashPage from 'root/app/sub-views/Splash';
@@ -25,6 +28,12 @@ import { CartHeader, DefaultHeader, MinimalHeader } from 'root/app/components/';
 
 
 class Loading extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  componentDidMount() {
+    store.dispatch({ type: SET_OPTIN_NAVIGATION, value: this.props.navigation });
+  }
   render() { return <LoadingPage {...this.props} /> }
 }
 

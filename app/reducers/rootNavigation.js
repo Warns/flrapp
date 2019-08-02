@@ -1,4 +1,5 @@
 import {
+    SET_OPTIN_NAVIGATION,
     SET_MAIN_NAVIGATION,
     SET_NAVIGATION,
     NAVIGATE
@@ -6,12 +7,17 @@ import {
 
 const initialState = {
     root: null,
-    mainNav: null
+    mainNav: null,
+    optinNav: null
 };
 
 export default function rootNavigation(state = initialState, action) {
 
     switch (action.type) {
+        case SET_OPTIN_NAVIGATION: return {
+            ...state,
+            optinNav: action.value
+        };
         case SET_MAIN_NAVIGATION: return {
             ...state,
             mainNav: action.value

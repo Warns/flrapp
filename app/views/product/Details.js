@@ -60,6 +60,19 @@ class ProductDetails extends React.Component {
     productRecommends: []
   };
 
+  _getFavoriteProductList = (id) => {
+
+    globals.fetch(
+      Utils.getURL({ key: 'user', subKey: 'getFavoriteProductList' }),
+      JSON.stringify({ productId: id }), (answer) => {
+        if (answer.status == 200) {
+          setTimeout(() => {
+            console.log(answer);
+          }, 10);
+        }
+      });
+  }
+
   componentDidMount() {
     const _self = this;
     this.props.dispatch({
@@ -171,6 +184,7 @@ class ProductDetails extends React.Component {
   };
 
   _changeColor = id => {
+    this.setState({ favoriteButton: { ...this.state.favoriteButton, status: false } });
     this.props.dispatch({
       type: OPEN_PRODUCT_DETAILS,
       value: { id: id, measurements: {}, animate: false, sequence: 0 }
@@ -179,11 +193,12 @@ class ProductDetails extends React.Component {
   };
 
   _changeProduct = id => {
-    this.setState({ canScroll: true });
+    this.setState({ canScroll: true, favoriteButton: { ...this.state.favoriteButton, status: false } });
     this.props.dispatch({
       type: OPEN_PRODUCT_DETAILS,
       value: { id: id, measurements: {}, animate: false, sequence: 0 }
     });
+
     console.log("p----->", id);
   };
 
@@ -306,7 +321,8 @@ class ProductDetails extends React.Component {
       animate,
       colors,
       videos
-    } = this.props.product;
+    } = this.props.product,
+      paletteTitle = Utils.toUpperCase(Utils.productTypes(item)) || 'RENK';
 
     //console.log(this.props.product);
 
@@ -326,6 +342,7 @@ class ProductDetails extends React.Component {
       let palette =
         colors.length > 1 ? (
           <Palette
+            title={paletteTitle}
             width={SCREEN_DIMENSIONS.width}
             items={colors}
             selected={item.productId}

@@ -97,6 +97,16 @@ const UnderSide = class Main extends Component {
             { onCouponCallback } = _self.props;
         if (onCouponCallback) onCouponCallback(obj);
 
+        /* 
+            kupon kodu aktif edildikten sonra input içerisini silsin        
+        */
+        const { showCoupon = false } = _self.state;
+        if (showCoupon) {
+            const couponCode = _self._getCouponCode();
+            if (couponCode != "" && _self.child)
+                _self.child._onResetForm();
+        }
+
         Keyboard.dismiss();
     };
 

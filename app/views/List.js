@@ -842,8 +842,9 @@ class ListItem extends React.Component {
         : {};
 
     const { productGroups = [] } = item;
-    let numOfColors =
-      productGroups.length > 0 ? productGroups.length + 1 + " Renk" : "";
+    let prdType = Utils.productTypes(item),
+      numOfColors =
+      productGroups.length > 0 ? productGroups.length + 1 + ( " " + prdType ) : "";
 
     let newFlag =
       !item.isNew == true ? null : (
@@ -861,7 +862,7 @@ class ListItem extends React.Component {
       );
 
     let trigger = item.stockQty <= 20 ? "Tükenmek Üzere" : null;
-
+    
     /* 
       texture image
     */

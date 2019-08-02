@@ -139,10 +139,10 @@ const Cart = class Main extends Component {
         //_self.props.dispatch({ type: NAVIGATE, value: { item: { navigation: "Home" } } });
       } else {
         //--> sepet dolu logine git
-        _self.props.dispatch({
-          type: NAVIGATE,
-          value: { item: { navigation: "Optin" } }
-        });
+        const { rootNavigation = {} } = _self.props || {},
+            { optinNav } = rootNavigation;
+          if (optinNav)
+            optinNav.navigate("Phone", {});
       }
     } else if (userId != "") {
       //--> login
