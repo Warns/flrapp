@@ -180,7 +180,6 @@ export default class DahiChat extends React.PureComponent {
         break;
       case "dahi":
         if (data.type === "search" && data.query) this._search(data.query);
-        this.props.event(type, data, this);
         break;
       case "openqrcode":
         this.setState({ barcode: true, barcodeerror: null });
