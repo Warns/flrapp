@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  StyleSheet,
-  TouchableOpacity,
-  TextInput,
-  Text,
-  View,
-  Image
-} from "react-native";
+import { StyleSheet, View } from "react-native";
 import ChatInputLine from "./ChatInputLine";
 
 const styles = StyleSheet.create({
@@ -20,11 +13,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: "#fff",
     margin: 10,
-    marginTop: 0,
+    marginTop: 0
   }
 });
-
-export default class InputContainer extends React.Component {
+let i = 0;
+export default class InputContainer extends React.PureComponent {
   state = { text: "" };
 
   get chat() {

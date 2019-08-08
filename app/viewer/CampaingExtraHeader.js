@@ -1,6 +1,10 @@
 import React from "react";
 import { View, Text, Image, Dimensions, TouchableOpacity } from "react-native";
-import { ICONS } from "root/app/helper/Constant";
+import { 
+  ICONS,
+  SHOW_CUSTOM_POPUP,
+  SET_WEBVIEW,
+} from "root/app/helper/Constant";
 import { connect } from "react-redux";
 import { store } from "root/app/store";
 import HTML from "react-native-render-html";
@@ -73,7 +77,22 @@ class Main extends React.Component {
       });
 
     return view;
-  } 
+  }
+
+  _onExtraTLQueries = () => {
+    const _self = this;
+
+    _self.props.dispatch({
+      type: SHOW_CUSTOM_POPUP,
+      value: {
+        visibility: true,
+        type: SET_WEBVIEW,
+        data: {
+            url: Utils.getURL({ key: "staticPageURI", subKey: "extraTL" })
+        }
+      }
+    });
+  }
 
   /* 
     flormar extra nedir
@@ -95,6 +114,9 @@ class Main extends React.Component {
           }}
         >
           <HTML {..._self.CUSTOM_STYLE} html={desc} />
+          <TouchableOpacity activeOpacity={0.8} onPress={_self._onExtraTLQueries}>
+            <Text style={{ paddingTop: 10, textDecorationLine: "underline", textDecorationStyle: "solid", textDecorationColor: "#000" }}>Extra TL sorgulamak için tıklayınız</Text>
+          </TouchableOpacity>
         </View>
       );
 

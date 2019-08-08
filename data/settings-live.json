@@ -121,7 +121,8 @@
                     "arr": "orders"
                 },
                 "data": {},
-                "navigation": "ExtraUser"
+                "navigation": "ExtraUser",
+                "refreshing": true
             },
             {
                 "title": "KUPONLARIM",

@@ -42,7 +42,9 @@ module.exports = {
       checkGuestMail: '/webapi/v3/User/checkGuestMail',
       CheckUserPhoneNumber: '/webapi/v3/User/CheckUserPhoneNumber',
       deleteStockFollowUpProduct: '/webapi/v3/User/deleteStockFollowUpProduct',
-      deletePriceFollowUpProduct: '/webapi/v3/User/deletePriceFollowUpProduct'
+      deletePriceFollowUpProduct: '/webapi/v3/User/deletePriceFollowUpProduct',
+      addStockFollowUpProduct: '/webapi/v3/User/addStockFollowUpProduct',
+      addPriceFollowUpProduct: '/webapi/v3/User/addPriceFollowUpProduct'
     },
     address: {
       country: '/webapi/v3/Address/getCountry',
@@ -57,6 +59,8 @@ module.exports = {
       getOrder: '/webapi/v3/Order/getOrder', // siparişlerim
       getOrderDetail: '/webapi/v3/Order/getOrderDetail', // sipariş detay
       repeatOrder: '/webapi/v3/Order/repeatOrder', // sipariş tekrarla
+      getCancelationReasonList: '/webapi/v3/Order/getCancelationReasonList',
+      cancelOrder: '/webapi/v3/Order/cancelOrder'
     },
     integrator: {
       /*
@@ -100,6 +104,9 @@ module.exports = {
     },
     cegid: {
       checkPhoneNumber: '/exp-cegid-user/?phone=',
+    },
+    staticPageURI: {
+      extraTL: '/extra-iframe/?mobiapp=true'
     }
   },
   customURLs: {

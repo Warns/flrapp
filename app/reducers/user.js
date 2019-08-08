@@ -5,7 +5,10 @@ import {
   SET_CART_NUM,
   SET_CART_ITEMS,
   SET_USER_POINTS,
-  UPDATE_OPTIN
+  UPDATE_OPTIN,
+  SET_FAVORITE_PRODUCT,
+  GET_FAVORITE_PRODUCT,
+  REFRESH_CART
 } from "root/app/helper/Constant";
 import { store } from "root/app/store";
 Utils = require("root/app/helper/Global.js");
@@ -32,7 +35,9 @@ const userInitialState = {
 
   user: {},
 
-  userBazaarvoiceToken: null
+  userBazaarvoiceToken: null,
+
+  favoriteProducts: {}
 };
 
 export default function user(state = userInitialState, action) {
@@ -50,12 +55,32 @@ export default function user(state = userInitialState, action) {
         }
       };
     }
+    case SET_FAVORITE_PRODUCT: {
+      const { favoriteProducts = {} } = state,
+        { id, type } = action.value;
+
+      if (type == 'ADD')
+        favoriteProducts[id] = 1;
+      else
+        favoriteProducts[id] = 0;
+
+      return {
+        ...state,
+        favoriteProducts: favoriteProducts
+      };
+    }
+    case GET_FAVORITE_PRODUCT: {
+      return {
+        ...state,
+        favoriteProducts: action.value
+      };
+    }
     case SET_USER: {
       //console.log('>>>>>>> SET_USER', action.value);
 
       fetchCartDetails();
       getUserToken(action.value);
-
+      _getFavoriteProducts();
       return {
         ...state,
         ...action.value
@@ -114,6 +139,10 @@ export default function user(state = userInitialState, action) {
         ...state,
         userBazaarvoiceToken: action.value
       };
+    case REFRESH_CART: {
+      fetchCartDetails();
+      return state;
+    }
     default:
       return state;
   }
@@ -125,7 +154,7 @@ fetchCartDetails = async () => {
   globals.fetch(
     Utils.getURL({ key: "cart", subKey: "getCart" }),
     JSON.stringify({ cartLocation: "basket" }),
-    answer => {
+    answer => { 
       if (answer.status == 200) {
         store.dispatch({
           type: SET_CART_ITEMS,
@@ -160,3 +189,29 @@ setUserDetails = async obj => {
     }
   );
 };
+
+
+_getFavoriteProducts = () => {
+  globals.fetch(
+    Utils.getURL({ key: 'user', subKey: 'getFavoriteProductList' }),
+    JSON.stringify({}), (answer) => {
+      const { status, data = {} } = answer,
+        { products = [] } = data;
+      if (status == 200) {
+        if (products.length > 0) {
+          let obj = {};
+
+          products.map((item, ind) => {
+            const key = item['productId'] || '';
+            obj[key] = 1;
+          });
+
+          store.dispatch({
+            type: GET_FAVORITE_PRODUCT,
+            value: obj
+          });
+
+        }
+      }
+    });
+}

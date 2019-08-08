@@ -91,6 +91,9 @@ module.exports = {
         collection: 'Koleksiyonu keşfet',
         campaing: 'Kampanya Detaylarını İncele'
     },
+    favorite: {
+        isLogin: 'Lütfen kullanıcı girişi yapınız.'
+    },
     extra: {
         title: 'Flormar Extra nedir?',
         desc: 'Flormar mobil uygulama, website, ve mağazalarından yapacağın her alışverişinde sana Extra TL’ler kazandıracak, özel günlerinde sürprizler yapacak bir bağlılık programıdır.'

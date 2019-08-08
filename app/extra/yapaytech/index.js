@@ -9,7 +9,7 @@ import {
   PanResponder,
   Keyboard
 } from "react-native";
-import { Constants, Permissions } from "expo";
+import { Constants } from "expo";
 import Chat from "./components/ChatScreen";
 import Widget from "./components/Widget";
 import Barcode from "./components/Barcode";
@@ -64,25 +64,18 @@ const styles = StyleSheet.create({
   }
 });
 
-export default class DahiChat extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      open: false,
-      bottom: new Animated.Value(height),
-      backdrop: new Animated.Value(0),
-      height: new Animated.Value(height / 2),
-      barcode: false,
-      barcodeerror: null
-    };
-    this.fullscreen = this.fullscreen.bind(this);
-    this.openChat = this.openChat.bind(this);
-    this.on = this.on.bind(this);
-    this._chat = React.createRef();
-    /* setTimeout(() => {
-      this.openChat();
-    }, 200); */
-  }
+export default class DahiChat extends React.PureComponent {
+  state = {
+    open: false,
+    bottom: new Animated.Value(height),
+    backdrop: new Animated.Value(0),
+    height: new Animated.Value(height / 2),
+    barcode: false,
+    barcodeerror: null
+  };
+
+  _chat = React.createRef();
+
   componentDidMount() {
     const _self = this,
       { onRef } = _self.props;
@@ -173,8 +166,12 @@ export default class DahiChat extends React.Component {
     }
   });
 
-  on(type, data = {}) {
+  on = (type, data = {}) => {
     switch (type) {
+      case "__boot":
+        this.setState({ boot: true });
+        this.chat.run("dahiKeeper.chat.client.changePanel(true);");
+        break;
       case "chatStatus":
         this.setState({ ready: true });
         break;
@@ -183,6 +180,7 @@ export default class DahiChat extends React.Component {
         break;
       case "dahi":
         if (data.type === "search" && data.query) this._search(data.query);
+        this.props.event(type, data, this);
         break;
       case "openqrcode":
         this.setState({ barcode: true, barcodeerror: null });
@@ -212,13 +210,14 @@ export default class DahiChat extends React.Component {
         this.props.event(type, data, this);
         break;
     }
-  }
+  };
 
   onReady() {
     this.setState({ ready: true });
   }
 
-  openChat(e, cb) {
+  openChat = (e, cb) => {
+    if (!this.state.boot) this.on("__boot");
     let open = !this.state.open;
     const openSpeed = 200,
       closeSpeed = 100;
@@ -257,9 +256,10 @@ export default class DahiChat extends React.Component {
         Keyboard.dismiss();
       });
     }
-  }
+  };
 
-  fullscreen() {
+  fullscreen = () => {
+    if (!this.state.boot) this.on("__boot");
     if (this.state.fullscreen) return this.openChat();
     Animated.timing(this.state.height, {
       toValue: maxHeight - (this.props.header ? 0 : 40),
@@ -268,7 +268,7 @@ export default class DahiChat extends React.Component {
     setTimeout(() => {
       this.setState({ fullscreen: true });
     }, 100);
-  }
+  };
 
   render() {
     return (

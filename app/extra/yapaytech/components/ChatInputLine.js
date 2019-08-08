@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
   micbutton: { width: 40, fontSize: 15, textAlign: "center" }
 });
 
-export default class ChatInputLine extends React.Component {
+export default class ChatInputLine extends React.PureComponent {
   constructor() {
     super();
     this.input = React.createRef();

@@ -89,7 +89,7 @@ class DefaultHdr extends Component {
     let _account = userId ? _self._getUserMenu() : (
       <TouchableOpacity activeOpacity={.8} onPress={this._onLoginPress}>
         <View style={{ backgroundColor: '#ffffff', borderColor: '#BBBBBB', borderWidth: 1, borderRadius: 5, height: 36, minWidth: 80, paddingLeft: 9, paddingRight: 9, justifyContent: 'center', alignItems: 'center' }}>
-          <Text style={{ fontSize: 14, fontFamily: 'Medium' }}>GİRİŞ YAP</Text>
+          <Text style={{ fontSize: 13, fontFamily: 'Medium' }}>GİRİŞ YAP</Text>
         </View>
       </TouchableOpacity>
     );

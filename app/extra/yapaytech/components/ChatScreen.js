@@ -1,10 +1,9 @@
 import React from "react";
-import { View, BackHandler, PixelRatio } from "react-native";
-import { takeSnapshotAsync } from "expo";
+import { View } from "react-native";
 import ChatView from "./ChatView";
 import InputContainer from "./InputContainer";
 
-export default class ChatScreen extends React.Component {
+export default class ChatScreen extends React.PureComponent {
   static navigationOptions = {
     header: null
   };

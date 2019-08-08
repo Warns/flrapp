@@ -1,21 +1,13 @@
 import React from "react";
 import {
   View,
-  Text,
   StyleSheet,
   Image,
-  TouchableWithoutFeedback,
-  WebView,
-  Dimensions,
-  Animated,
-  PanResponder,
-  Easing
+  TouchableWithoutFeedback
 } from "react-native";
-import { Constants } from "expo";
-const { height, width } = Dimensions.get("window");
-const maxHeight = height - Constants.statusBarHeight;
+
 const WidgetSize = 50;
-import { connect } from 'react-redux';
+import { connect } from "react-redux";
 
 const styles = StyleSheet.create({
   container: {
@@ -38,13 +30,13 @@ const styles = StyleSheet.create({
   },
   widgetImage: { width: WidgetSize, height: WidgetSize }
 });
-class Widget extends React.Component {
+
+class Widget extends React.PureComponent {
   render() {
     const _self = this,
       { assistant = {} } = _self.props,
-      { show = true } = assistant,
-      bottom = show ? 0 : -(WidgetSize * 2);
-
+      { show = true } = assistant;
+    bottom = show ? 0 : -(WidgetSize * 2);
     return (
       <View style={[styles.container, { bottom }]}>
         <TouchableWithoutFeedback onPress={this.props.open}>
@@ -60,5 +52,8 @@ class Widget extends React.Component {
   }
 }
 
-function mapStateToProps(state) { return state }
+function mapStateToProps(state) {
+  return state;
+}
+
 export default connect(mapStateToProps)(Widget);

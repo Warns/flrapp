@@ -73,6 +73,17 @@ class CustomModals extends Component {
     super(props);
   }
 
+  _customViewerRefresh = () => {
+    /*
+      özel durumlarda viewer içeriğini güncellemek için kullanırız.
+      Örneğin sipariş iptal ettik popup kapatıldıktan sonra ilgili viewer güncellensin.  
+    */
+    const _self = this,
+      { type, refreshing = false } = _self.props.customModal;
+    if (type == ORDER_LIST_CLICKED && refreshing)
+      refreshing();
+  }
+
   _onClose = () => {
     const _self = this;
     _self.props.dispatch({
@@ -85,6 +96,7 @@ class CustomModals extends Component {
         refreshing: ""
       }
     });
+    _self._customViewerRefresh();
   };
 
   _formCallback = ({ type, data }) => {

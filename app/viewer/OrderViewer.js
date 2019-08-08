@@ -10,7 +10,12 @@ import { store } from 'root/app/store.js';
 import {
     SHOW_CUSTOM_POPUP,
     SET_WEBVIEW,
+    REFRESH_CART
 } from 'root/app/helper/Constant';
+import {
+    BoxButton
+} from 'root/app/UI';
+import { SelectBox } from 'root/app/form';
 
 const Translation = require('root/app/helper/Translation.js');
 const Utils = require('root/app/helper/Global.js');
@@ -32,6 +37,109 @@ class Buttons extends Component {
                     <Text style={{ fontFamily: 'Bold', fontSize: 14 }}>{this.props.children}</Text>
                 </View>
             </TouchableOpacity>
+        );
+    }
+}
+
+class OrderCancelButton extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            reasons: [],
+            activeReasonId: null
+        };
+    }
+
+    componentDidMount() {
+        const _self = this;
+        _self._isMounted = true;
+        _self.setAjx({ uri: Utils.getURL({ key: 'order', subKey: 'getCancelationReasonList' }) }, (res) => {
+            _self.setState({ reasons: res.data.reasons || [] });
+        });
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
+    }
+
+    setAjx = ({ uri, data = {} }, callback) => {
+        const _self = this;
+        Globals.AJX({ _self: _self, uri: uri, data: data }, function (res) {
+            if (res.status == 200)
+                callback(res);
+        });
+    }
+
+    _reasonsCallback = (obj) => {
+        this.setState({ activeReasonId: obj['value'] || -1 });
+    }
+
+    _getReasons = () => {
+        let _self = this,
+            { reasons = [] } = _self.state,
+            view = null,
+            arr = [{ key: Translation['dropdown']['choose'] || 'Seçiniz', value: -1, disabled: true }];
+
+        if (reasons.length > 0) {
+            reasons.map((itm, ind) => {
+                arr.push(
+                    {
+                        value: itm['reasonId'] || '',
+                        key: itm['reasonText'] || ''
+                    }
+                );
+            });
+
+            const prop = {
+                id: 'cancelOrder',
+                title: 'İptal Sebebi',
+                type: 'select',
+                values: arr,
+                value: -1,
+                multiple: false
+            };
+
+            view = (
+                <SelectBox
+                    onRef={ref => (_self.selectbox = ref)}
+                    callback={_self._reasonsCallback}
+                    closed={true}
+                    data={prop}
+                />
+            );
+        }
+        return view;
+    }
+
+    _onPress = () => {
+        const _self = this,
+            { activeReasonId = null } = _self.state,
+            { orderId = '' } = _self.props.data;
+
+        if (activeReasonId != null && activeReasonId != -1) {
+            _self.setAjx({ uri: Utils.getURL({ key: 'order', subKey: 'cancelOrder' }), data: { cancelAllRows: true, orderId: orderId, reasonId: activeReasonId } }, (res) => {
+                if (res.status == 200) {
+                    Utils.alert({ message: res.message || '' }, ({ type }) => {
+                        if (type == 'ok') {
+                            _self.setState({ reasons: [] });
+                            _self.props.changeStatus();
+                        }
+                    });
+                }
+
+            });
+        } else
+            Utils.alert({ message: 'Lütfen iptal sebebini seçiniz.' });
+    }
+
+    render() {
+        const _self = this;
+
+        return (
+            <View style={{ marginTop: 15, marginBottom: 15 }}>
+                {_self._getReasons()}
+                <BoxButton callback={_self._onPress}>Siparişi İptal Et</BoxButton>
+            </View>
         );
     }
 }
@@ -70,7 +178,7 @@ class OrderViewer extends Component {
 
         Globals.AJX({ _self: _self, uri: uri, data: data }, function (res) {
 
-            //console.log(res);
+            //console.log('sipariş detay', res);
 
             _self.setState({ data: res.data.order });
 
@@ -165,7 +273,7 @@ class OrderViewer extends Component {
     _getCargoButton = () => {
         const _self = this,
             data = _self.state.data;
-        let view = null; console.log(data);
+        let view = null;
         if (data['cargo'].length > 0)
             view = (
                 <View style={{ paddingLeft: 20, paddingRight: 20, marginTop: 24 }}>
@@ -174,6 +282,51 @@ class OrderViewer extends Component {
             );
 
         return view;
+    }
+
+
+    _changeStatus = () => {
+        const _self = this;
+        _self.setState({ data: { ..._self.state.data, status: 'İptal' } });
+    }
+
+    _cancelOrderButton = () => {
+        let _self = this,
+            { status = '' } = _self.state.data,
+            view = null;
+
+        if (status == 'Ödeme Bekleniyor')
+            view = <OrderCancelButton changeStatus={_self._changeStatus} data={_self.state.data} />
+
+        return view;
+    }
+
+    _onPressRepeatOrderButton = () => {
+        const _self = this;
+        Utils.confirm({ message: 'Sipariş içerisindeki ürünler sepete eklenecektir, onaylıyor musunuz?' }, ({ type }) => {
+            if (type == 'ok') {
+                const { orderId = '' } = this.props.data.data;
+                Globals.AJX({ _self: _self, uri: Utils.getURL({ key: 'order', subKey: 'repeatOrder' }), data: { orderId: orderId } }, (res) => {
+                    const { status, message } = res;
+                    if (status == 200)
+                        store.dispatch({
+                            type: REFRESH_CART
+                        });
+                    else
+                        Utils.alert({ message: message });
+
+                });
+            }
+        });
+    }
+
+    _repeatOrderButton = () => {
+        const _self = this;
+        return (
+            <View style={{ marginTop: 15, marginBottom: 15 }}>
+                <BoxButton callback={_self._onPressRepeatOrderButton}>Siparişi Tekrarla</BoxButton>
+            </View>
+        );
     }
 
     _getView = () => {
@@ -197,6 +350,8 @@ class OrderViewer extends Component {
                     </View>
                     <View>
                         {_self._getProducts()}
+                        {_self._repeatOrderButton()}
+                        {_self._cancelOrderButton()}
                     </View>
                 </ScrollView>
 

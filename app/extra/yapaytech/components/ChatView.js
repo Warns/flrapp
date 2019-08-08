@@ -1,15 +1,17 @@
 import React from "react";
-import { WebView, Alert, Platform, View, Text } from "react-native";
+import { WebView, Alert, Platform } from "react-native";
 import {
   Speech,
   Permissions,
   Location,
   Asset,
   Linking,
+  Constants,
   IntentLauncherAndroid
 } from "expo";
 import _ from "lodash";
 import I18n from "../Language";
+
 const tryjson = val => {
   try {
     return JSON.parse(val);
@@ -17,10 +19,6 @@ const tryjson = val => {
     return val;
   }
 };
-const sleep = time =>
-  new Promise(resolve => {
-    setTimeout(resolve, time);
-  });
 
 const WEBVIEW_PROPS = {
   style: { flex: 1 },
@@ -59,14 +57,20 @@ async function getLocation(props) {
   }
 }
 
-class ChatView extends React.Component {
+const _randomString = () =>
+  Math.random()
+    .toString(36)
+    .replace(/^0\./g, "");
+const randomString = () => _randomString() + _randomString();
+
+class ChatView extends React.PureComponent {
   constructor() {
     super();
     this.state = { fromLocal: true };
     this.eventLib = this.eventLib.bind(this);
     this.onError = this.onError.bind(this);
     this.web = React.createRef();
-    this.randomId = Math.random();
+    this.randomId = randomString();
     this.cache = [];
     this.fontfamily = Asset.fromModule(
       require("../assets/proximanova-regular.otf")
@@ -109,7 +113,14 @@ class ChatView extends React.Component {
   }
 
   componentWillMount() {
-    let user = { id: "user-" + (this.props.user || this.randomId) };
+    let pid = this.props.token || I18n.t("pid") || "";
+    let uid = this.props.user || Constants.installationId || this.randomId;
+    let user = {
+      id: `user-${pid}-${uid}`,
+      platform: "web",
+      system: "react-native",
+      os: Platform.OS
+    };
     const patchPostMessageFunction = function() {
       var originalPostMessage = window.postMessage;
       var patchedPostMessage = function(message, targetOrigin, transfer) {
@@ -126,7 +137,6 @@ class ChatView extends React.Component {
     let temp = "";
     if (Platform.OS === "ios")
       temp += `(${String(patchPostMessageFunction)})();`;
-    let pid = this.props.token || I18n.t("pid") || "";
     if (pid) pid = `window.dahiKeeper.opt.pid='${pid}';`;
     temp += `(function(){
 			try {
@@ -149,7 +159,6 @@ class ChatView extends React.Component {
     try {
       const regex = /^action:(\/\/)?/;
       let val = e.nativeEvent.data;
-      //console.log('#', val);
       if (regex.test(val)) {
         val = val.replace(regex, "");
         val = tryjson(val);
@@ -161,7 +170,6 @@ class ChatView extends React.Component {
       if (this.props.read) Speech.speak(e.nativeEvent.data, { language: "tr" });
     } catch (error) {
       console.error(error);
-      //Sentry.captureException(error);
     }
   }
 

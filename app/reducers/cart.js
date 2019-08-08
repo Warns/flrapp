@@ -21,6 +21,8 @@ import {
     SET_AGREEMENT,
     SET_ORDER_SUCCESS_MESSAGE,
     SET_ORDER_3D_BUTTON,
+    SET_STOCK_FOLLOWUP_PRODUCT,
+    SET_PRICE_FOLLOWUP_PRODUCT
 } from 'root/app/helper/Constant';
 
 const Utils = require('root/app/helper/Global.js');
@@ -374,6 +376,14 @@ export default function cart(state = cartInitialState, action) {
                 cartNoResult: action.value
             }
         };
+        case SET_STOCK_FOLLOWUP_PRODUCT: {
+            addStockFollowUpProduct(action.value);
+            return state;
+        };
+        case SET_PRICE_FOLLOWUP_PRODUCT: {
+            addPriceFollowUpProduct(action.value);
+            return state;
+        };
 
         default:
             return state;
@@ -466,5 +476,33 @@ deleteFavoriteProduct = (obj) => {
         }), (answer) => {
             // do nothing
             console.log(answer);
+        });
+}
+
+/* 
+    stoğa gelince haber ver
+*/
+addStockFollowUpProduct = (obj) => {
+    globals.fetch(
+        Utils.getURL({ key: 'user', subKey: 'addStockFollowUpProduct' }),
+        JSON.stringify({
+            productId: obj.id || '',
+            email: obj.email || ''
+        }), (answer) => {
+            Utils.alert({ message: 'Stoğumuza Gelince Size Haber Verilecektir.' });
+        });
+}
+
+/* 
+    fiyatı düşünce haber ver
+*/
+addPriceFollowUpProduct = (obj) => {
+    globals.fetch(
+        Utils.getURL({ key: 'user', subKey: 'addPriceFollowUpProduct' }),
+        JSON.stringify({
+            productId: obj.id || '',
+            email: obj.email || ''
+        }), (answer) => {
+            Utils.alert({ message: 'Fiyatı Düşünce Size Haber Verilecek İlginize Teşekkür Ederiz.' });
         });
 }

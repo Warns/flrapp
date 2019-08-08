@@ -37,7 +37,8 @@ import {
   SET_SELECTED_CATEGORY,
   SET_INSTAGRAM,
   FEEDS_IMAGE_RATE,
-  SET_WEBVIEW
+  SET_WEBVIEW,
+  GET_FAVORITE_PRODUCT
 } from "root/app/helper/Constant";
 import {
   HorizontalProducts,
@@ -691,7 +692,8 @@ class OrderListItem extends Component {
         modalTitle: "SİPARİŞ DETAYI",
         visibility: true,
         type: ORDER_LIST_CLICKED,
-        data: { data: data }
+        data: { data: data },
+        refreshing: _self.props.refreshing || false
       }
     });
   };
@@ -2274,6 +2276,7 @@ class CustomFilterHeader extends Component {
 }
 
 class Viewers extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -2542,6 +2545,34 @@ class Viewers extends Component {
   }
 
   /* */
+  _setRdx = (data) => {
+    const _self = this,
+      { config = {} } = _self.props,
+      { itemType = "" } = config;
+
+
+    switch (itemType) {
+      case ITEMTYPE["FAVORITE"]: {
+        let obj = {};
+
+        data.map((item, ind) => {
+          const key = item['productId'] || '';
+          obj[key] = 1;
+        });
+
+        store.dispatch({
+          type: GET_FAVORITE_PRODUCT,
+          value: obj
+        });
+
+        return false;
+      }
+      default:
+        return false;
+    }
+  }
+
+  /* */
   setAjx = ({ uri, data = {} }, callback) => {
     const _self = this,
       { type = VIEWERTYPE["LIST"] } = _self.props.config;
@@ -2597,6 +2628,9 @@ class Viewers extends Component {
 
       /* callback */
       if (typeof callback !== "undefined") callback();
+
+      /* */
+      _self._setRdx(data);
     });
   };
 
@@ -2743,7 +2777,7 @@ class Viewers extends Component {
       case ITEMTYPE["FAVORITE"]:
         return <FavoriteListItem onRemove={_self._removeItem} data={item} />;
       case ITEMTYPE["ORDER"]:
-        return <OrderListItem callback={this._callback} data={item} />;
+        return <OrderListItem refreshing={this._refreshing} callback={this._callback} data={item} />;
       case ITEMTYPE["COUPON"]:
         return <CouponListItem data={item} />;
       case ITEMTYPE["FOLLOWLIST"]:

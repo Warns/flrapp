@@ -145,7 +145,7 @@ const TitleBar = props => {
   );
 };
 
-export default class BarcodeScannerExample extends React.Component {
+export default class BarcodeScannerExample extends React.PureComponent {
   state = {
     hasCameraPermission: null,
     tab: 0

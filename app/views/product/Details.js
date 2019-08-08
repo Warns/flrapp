@@ -22,8 +22,11 @@ import {
   OPEN_PRODUCT_DETAILS,
   ADD_CART_ITEM,
   ADD_TO_FAVORITES,
+  SET_FAVORITE_PRODUCT,
   REMOVE_FROM_FAVORITES,
-  OPEN_VIDEO_PLAYER
+  OPEN_VIDEO_PLAYER,
+  SET_STOCK_FOLLOWUP_PRODUCT,
+  SET_PRICE_FOLLOWUP_PRODUCT
 } from "root/app/helper/Constant";
 import {
   HorizontalProducts,
@@ -31,10 +34,12 @@ import {
   MinimalHeader,
   Palette
 } from "root/app/components";
-import { DefaultButton } from "root/app/UI";
+import { DefaultButton, BlackButton } from "root/app/UI";
 import { Viewer } from "root/app/viewer";
+import { store } from "root/app/store.js";
 
 const Utils = require('root/app/helper/Global.js');
+const Translation = require('root/app/helper/Translation.js');
 globals = require("root/app/globals.js");
 const SCREEN_DIMENSIONS = Dimensions.get("screen");
 
@@ -60,17 +65,26 @@ class ProductDetails extends React.Component {
     productRecommends: []
   };
 
-  _getFavoriteProductList = (id) => {
+  _isLogin = () => {
+    const _self = this,
+      { user = {} } = store.getState() || {},
+      userID = user['user']['userId'] || "",
+      email = user['user']['email'] || "";
 
-    globals.fetch(
-      Utils.getURL({ key: 'user', subKey: 'getFavoriteProductList' }),
-      JSON.stringify({ productId: id }), (answer) => {
-        if (answer.status == 200) {
-          setTimeout(() => {
-            console.log(answer);
-          }, 10);
-        }
-      });
+    return { stt: userID != '' ? true : false, userID: userID, email: email };
+  }
+
+  _getFavoriteProductList = (id) => {
+    const _self = this,
+      { stt = false } = _self._isLogin();
+
+    if (id != '' && stt) {
+      const { user = {} } = store.getState(),
+        { favoriteProducts = {} } = user,
+        n = favoriteProducts[id] || '';
+
+      _self.setState({ favoriteButton: { ..._self.state.favoriteButton, status: n == 1 ? true : false } });
+    }
   }
 
   componentDidMount() {
@@ -79,6 +93,9 @@ class ProductDetails extends React.Component {
       type: "UPDATE_PRODUCT_OBJECT",
       value: { callback: this._initAnimation }
     });
+
+    const { product = {} } = this.props;
+    this._getFavoriteProductList(product['id'] || '');
   }
 
   _initAnimation = () => {
@@ -189,6 +206,8 @@ class ProductDetails extends React.Component {
       type: OPEN_PRODUCT_DETAILS,
       value: { id: id, measurements: {}, animate: false, sequence: 0 }
     });
+
+    this._getFavoriteProductList(id);
     console.log("----->", id);
   };
 
@@ -198,9 +217,49 @@ class ProductDetails extends React.Component {
       type: OPEN_PRODUCT_DETAILS,
       value: { id: id, measurements: {}, animate: false, sequence: 0 }
     });
-
+    this._getFavoriteProductList(id);
     console.log("p----->", id);
   };
+
+  /* 
+    stoğu düşünce haber ver
+  */
+  _stockFollowUpProduct = () => {
+    const _self = this,
+      { stt = false, email } = _self._isLogin();
+
+    if (!stt) {
+      Utils.alert({ message: Translation['favorite']['isLogin'] });
+      return false;
+    }
+
+    setTimeout(() => {
+      _self.props.dispatch({
+        type: SET_STOCK_FOLLOWUP_PRODUCT,
+        value: { id: _self.props.product.item.productId || '', email: email }
+      });
+    }, 1000);
+  }
+
+  /* 
+    fiyatı düşünce haber ver
+  */
+  _priceFollowUpProduct = () => {
+    const _self = this,
+      { stt = false, email } = _self._isLogin();
+
+    if (!stt) {
+      Utils.alert({ message: Translation['favorite']['isLogin'] });
+      return false;
+    }
+
+    setTimeout(() => {
+      _self.props.dispatch({
+        type: SET_PRICE_FOLLOWUP_PRODUCT,
+        value: { id: _self.props.product.item.productId || '', email: email }
+      });
+    }, 333);
+  }
 
   _addToCart = () => {
     this.props.dispatch({
@@ -222,16 +281,32 @@ class ProductDetails extends React.Component {
   };
 
   _addToFavorites = () => {
-    this.setState({ favoriteButton: { ...this.state.favoriteButton, status: true } });
-    this.props.dispatch({
+
+    const _self = this,
+      { stt = false } = _self._isLogin();
+
+    if (!stt) {
+      Utils.alert({ message: Translation['favorite']['isLogin'] });
+      return false;
+    }
+
+    _self.setState({ favoriteButton: { ..._self.state.favoriteButton, status: true } });
+    _self.props.dispatch({
       type: ADD_TO_FAVORITES,
-      value: { id: this.props.product.item.productId, do: "ADD" }
+      value: { id: _self.props.product.item.productId, do: "ADD" }
     });
+
+    //
+    _self.props.dispatch({
+      type: SET_FAVORITE_PRODUCT,
+      value: { id: _self.props.product.item.productId, type: "ADD" }
+    });
+
 
     // event entegrasyon
     Utils.mapping({
       event: 'add_to_fav',
-      data: this.props.product.item || {},
+      data: _self.props.product.item || {},
       keys: {
         'productName': 'product_name',
         'productCode': 'product_id',
@@ -242,10 +317,24 @@ class ProductDetails extends React.Component {
   };
 
   _removeFromFavorites = () => {
+    const _self = this,
+      { stt = false } = _self._isLogin();
+
+    if (!stt) {
+      Utils.alert({ message: Translation['favorite']['isLogin'] });
+      return false;
+    }
+
     this.setState({ favoriteButton: { ...this.state.favoriteButton, status: false } });
     this.props.dispatch({
       type: ADD_TO_FAVORITES,
       value: { id: this.props.product.item.productId, do: "REMOVE" }
+    });
+
+    //
+    this.props.dispatch({
+      type: SET_FAVORITE_PRODUCT,
+      value: { id: this.props.product.item.productId, type: "REMOVE" }
     });
 
     // event entegrasyon
@@ -525,7 +614,27 @@ class ProductDetails extends React.Component {
             </View>
           );
 
-      let stockQty = item.stockQty <= 20 ? "Tükenmek Üzere" : null;
+      let stockQty = item.stockQty <= 20 ? "Tükenmek Üzere" : null,
+        button = item.stockQty > 0 ? (<DefaultButton
+          callback={this._addToCart}
+          name="SEPETE AT"
+          boxColor="#000000"
+          textColor="#ffffff"
+          borderColor="#000000"
+          animateOnTap={true}
+          endName="EKLENDİ"
+        />) : (
+            <DefaultButton
+              callback={this._stockFollowUpProduct}
+              name="GELİNCE HABER VER"
+              boxColor="#000000"
+              textColor="#ffffff"
+              borderColor="#000000"
+              animateOnTap={true}
+              endName="GELİNCE HABER VER"
+            />
+
+          );
 
       return (
         <View>
@@ -572,18 +681,14 @@ class ProductDetails extends React.Component {
 
             <View style={{ flexDirection: "row", height: 80 }}>
               <View style={{ flex: 1, marginRight: 5, height: 50 }}>
-                <DefaultButton
-                  callback={this._addToCart}
-                  name="SEPETE AT"
-                  boxColor="#000000"
-                  textColor="#ffffff"
-                  borderColor="#000000"
-                  animateOnTap={true}
-                  endName="EKLENDİ"
-                />
+                {button}
               </View>
               <View style={{ flex: 1, marginLeft: 5 }}>{_favoriteButton}</View>
             </View>
+
+            <TouchableOpacity style={{ marginBottom: 15 }} activeOpacity={0.8} onPress={this._priceFollowUpProduct}>
+              <Text style={{ fontSize: 14, textDecorationLine: "underline", textDecorationStyle: "solid", textDecorationColor: "#000" }}>Fiyatı düşünce haber ver</Text>
+            </TouchableOpacity>
 
             <View>
               <Text style={styles.defautText}>{item.shortDescription}</Text>
