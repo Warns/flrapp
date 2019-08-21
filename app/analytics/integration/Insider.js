@@ -1,21 +1,16 @@
-const Utils = require('../Utils.js');
-
+//import RNInsider from 'react-native-insider';
 module.exports = {
-    send: function ({ event = '', prop = {} }) {
-        const clientProp = Utils.getClientProperties(),
-            _body = {
-                api_key: '',
-                user_segment: {
-                    ...clientProp
-                },
-                new_event: {
-                    ...prop,
-                    event: event
-                }
-            };
-
-        Utils.ajx({ uri: 'https://mobile.useinsider.com/api/v1/event/insert', body: _body }, (res) => {
-            console.log(res);
-        });
+    send: function ({ event = '', data = {}, customType = 'tagEventWithParameters' }) {
+        console.log('insider', customType, event, data);
+        switch (customType) {
+            case 'tagEventWithParameters':
+                //RNInsider.tagEventWithParameters(event, data);  
+                break;
+            case 'tagEvent':
+                //RNInsider.tagEventWithParameters(event);  
+                break;
+            default:
+                break;
+        }
     }
 };

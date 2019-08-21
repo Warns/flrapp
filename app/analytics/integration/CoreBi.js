@@ -1,6 +1,6 @@
 const Utils = require('../Utils.js');
 module.exports = {
-    send: function ({ event = '', prop = {} }) {
+    send: function ({ event = '', data = {} }) {
         const ts = Utils.getTimeStamp(),
             clientProp = Utils.getClientProperties(),
             _body = {
@@ -9,7 +9,7 @@ module.exports = {
                 timestamp: ts.timestamp,
                 properties: {
                     ...clientProp,
-                    ...prop,
+                    ...data,
                     uuid: '',
                     tz: ts.tz,
                     userID: Utils.getUserID()

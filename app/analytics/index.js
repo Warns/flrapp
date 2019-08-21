@@ -65,9 +65,11 @@ module.exports = {
     
             output: 
             {
-              "category_id": "18776",
-              "category_name": "DUDAK KALEMİ",
               "event": "category_visited",
+              "data": {
+                "category_id": "18776",
+                "category_name": "DUDAK KALEMİ",
+              }
             }
         */
 
@@ -80,13 +82,13 @@ module.exports = {
             data = o['_data'] || {},
             keys = o['_keys'] || '',
             integrationType = o['_integrationType'] || '',
-            obj = {};
+            obj = {},
+            disAllow = ['_keys', '_data', '_integrationType', 'event', 'customType']; /* gelen objede keyi bu array dışında olanları yoksay */
 
         Object
             .keys(o)
             .map(key => {
-                /* gelen objede keyi keys, data, event, integrationType olanların dışındakileri kapsa */
-                if (key != '_keys' && key != '_data' && key != '_integrationType' && key != 'event')
+                if (disAllow.indexOf(key) == -1)
                     obj[key] = o[key] || '';
             });
 
@@ -100,7 +102,7 @@ module.exports = {
                         obj[k] = value;
                 });
 
-        obj = { prop: obj, event: o['event'] || '' };
+        obj = { data: obj, event: o['event'] || '' };
 
         /* 
                 tanımlı tipler buradan yollanır

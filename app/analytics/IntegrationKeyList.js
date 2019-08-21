@@ -39,7 +39,8 @@ module.exports = {
                 title: 'category_name',
                 catId: 'category_id',
                 utpId: 'utp_id'
-            }
+            },
+            customType: 'tagEventWithParameters'
         }
     },
 
