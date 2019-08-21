@@ -33,6 +33,7 @@ import HTML from "react-native-render-html";
 styles = require("../../app/styles.js");
 globals = require("../../app/globals.js");
 const Utils = require("root/app/helper/Global.js");
+const Analytics = require("root/app/analytics");
 
 let SCREEN_DIMENSIONS = {};
 const HEADER_HEIGHT = Platform.OS === "android" ? 80 : 65;
@@ -291,6 +292,8 @@ export default class List extends React.Component {
         utpId: 'utp_id'
       }
     });
+
+    Analytics.send({ event: Analytics.events.category_visited, data: data });
 
     globals.fetch(
       Utils.getURL({ key: "product", subKey: "getProductList" }),

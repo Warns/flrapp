@@ -585,7 +585,7 @@ module.exports = {
             obj[k] = value;
         });
 
-    console.log('send event', obj);
+    //console.log('send event', obj);
 
     return obj;
   },
