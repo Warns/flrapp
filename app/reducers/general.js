@@ -17,6 +17,7 @@ import { store } from "root/app/store";
 
 const Utils = require("root/app/helper/Global.js");
 const Globals = require("root/app/globals.js");
+const Analytics = require("root/app/analytics");
 
 const generalInitialState = {
   categories: [
@@ -226,19 +227,9 @@ fetchProductDetails = id => {
                 });
             }
           );
-
-
-          // event entegrasyon
-          Utils.mapping({
-            event: 'product_visited',
-            data: answer.data.product || {},
-            keys: {
-              'productName': 'product_name',
-              'productCode': 'product_id',
-              'catId': 'category_id',
-              'salePrice': 'product_price'
-            }
-          });
+          
+          
+          Analytics.send({ event: Analytics.events.product_visited, data: answer.data.product });
 
         }else{
           store.dispatch({ type: CLOSE_PRODUCT_DETAILS, Value: {} });

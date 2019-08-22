@@ -15,5 +15,6 @@ module.exports = {
     login: 'login',
     logout: 'logout',
     register: 'register',
-    coupon_used: 'coupon_used'
+    coupon_used: 'coupon_used',
+    remove_coupon: 'remove_coupon'
 };

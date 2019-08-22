@@ -65,6 +65,7 @@ import HTML from "react-native-render-html";
 const Translation = require("root/app/helper/Translation.js");
 const Utils = require("root/app/helper/Global.js");
 const Globals = require("root/app/globals.js");
+const Analytics = require("root/app/analytics");
 const injectScript = `
   (function () {
     window.onclick = function(e) {
@@ -262,18 +263,7 @@ class CartListItem extends Component {
                   onUpdateItem({ type: REMOVE_CART, data: res });
                 }, 100);
 
-
-              // event entegrasyon
-              Utils.mapping({
-                event: 'removed_from_cart',
-                data: data || {},
-                keys: {
-                  'productName': 'product_name',
-                  'productCode': 'product_id',
-                  'catId': 'category_id',
-                  'salePrice': 'product_price'
-                }
-              });
+              Analytics.send({ event: Analytics.events.removed_from_cart, data: data });
 
             }
           );

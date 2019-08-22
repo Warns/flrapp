@@ -1,6 +1,9 @@
 /* 
-    ex: Analytics.send({ event: Analytics.events.category_visited, data: data })
+    ex: 
+    const Analytics = require("root/app/analytics");
+    Analytics.send({ event: Analytics.events.category_visited, data: data })
 */
+
 const Utils = require('./Utils.js');
 const Events = require('./Events.js');
 const IntegrationKeyList = require('./IntegrationKeyList.js');
@@ -22,15 +25,19 @@ module.exports = {
         const _self = this,
             data = o['data'] || '',
             event = o['event'] || '';
-        if (data != '') {
-            Object
-                .entries(_self.keyList)
-                .forEach(([key, item]) => {
-                    var keys = item[event] || '';
-                    if (keys != '')
-                        _self.mapping({ _integrationType: key, _data: data, ...keys });
-                });
-        }
+
+        Object
+            .entries(_self.keyList)
+            .forEach(([key, item]) => {
+                var keys = item[event] || ''; // keylist içinde örneğin insider içerisinde category_visited varmı
+                if (keys != '') {
+                    if (data != '') // data varsa mapping için yolla
+                        _self.mapping({ _integrationType: key, _data: data, ...keys }); // _integrationType: keylist tanımlı olan insider, corebi entegrasyon tipi  
+                    else
+                        _self.sendData({ integrationType: key, data: keys });
+                }
+            });
+
     },
 
     mapping: function (o) {
@@ -104,21 +111,26 @@ module.exports = {
 
         obj = { data: obj, event: o['event'] || '' };
 
+        _self.sendData({ integrationType: integrationType, data: obj });
+    },
+
+    sendData: function ({ integrationType, data }) {
+        const _self = this;
         /* 
-                tanımlı tipler buradan yollanır
+            tanımlı tipler buradan yollanır
         */
         switch (integrationType) {
             case 'corebi':
-                CoreBi.send(obj);
+                CoreBi.send(data);
                 break;
 
             case 'insider':
-                Insider.send(obj);
+                Insider.send(data);
                 break;
 
             default:
                 break;
         }
-    },
+    }
 }
 

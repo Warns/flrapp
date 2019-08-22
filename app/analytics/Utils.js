@@ -31,10 +31,7 @@ module.exports = {
         var timestamp = new Date();
         return { timestamp: timestamp.getTime(), tz: timestamp.getTimezoneOffset() };
     },
-    ajx: function ({ uri = '', method = 'POST', headers = { 'accept': 'application/json', 'content-type': 'application/json' }, body = {} }, callback) {
-
-        console.log(body);
-        
+    ajx: function ({ uri = '', method = 'POST', headers = { 'accept': 'application/json', 'content-type': 'application/json' }, body = {} }, callback) {        
         const _self = this;
         fetch(uri, {
             method: method,

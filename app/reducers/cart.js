@@ -26,6 +26,7 @@ import {
 } from 'root/app/helper/Constant';
 
 const Utils = require('root/app/helper/Global.js');
+const Analytics = require("root/app/analytics");
 
 const cartInitialState = {
     activeTitle: 'SEPETİM',
@@ -436,19 +437,7 @@ addCartLine = (obj) => {
 
             if (answer.status == 200) {
                 //do nothing
-
-                // event entegrasyon
-                if ((obj.data || '') != '')
-                    Utils.mapping({
-                        event: 'add_to_cart',
-                        data: obj.data || {},
-                        keys: {
-                            'productName': 'product_name',
-                            'productCode': 'product_id',
-                            'catId': 'category_id',
-                            'salePrice': 'product_price'
-                        }
-                    });
+                Analytics.send({ event: Analytics.events.add_to_cart, data: obj.data });
             }
             else {
                 store.dispatch({ type: ADD_CART_ITEM, value: { quantity: -obj.quantity } });

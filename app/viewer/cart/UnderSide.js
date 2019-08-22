@@ -19,6 +19,7 @@ import { Form } from "root/app/form";
 import { IconButton } from "root/app/UI";
 
 const Utils = require("root/app/helper/Global.js");
+const Analytics = require("root/app/analytics");
 
 /* Fırsatlar */
 const DATA = {
@@ -105,6 +106,17 @@ const UnderSide = class Main extends Component {
             const couponCode = _self._getCouponCode();
             if (couponCode != "" && _self.child)
                 _self.child._onResetForm();
+
+
+            // kupon kodu eklenme, çıkarma durumunu analitiğe gönderme    
+            const { status = 200 } = obj.data || {};
+            if (status == 200) {
+                if (couponCode == '')
+                    Analytics.send({ event: Analytics.events.coupon_used, data: { couponCode: obj['postData']['couponCode'] } });
+                else
+                    Analytics.send({ event: Analytics.events.remove_coupon, data: { couponCode: obj['postData']['couponCode'] } });
+            }
+
         }
 
         Keyboard.dismiss();

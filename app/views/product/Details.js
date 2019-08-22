@@ -42,6 +42,7 @@ const Utils = require('root/app/helper/Global.js');
 const Translation = require('root/app/helper/Translation.js');
 globals = require("root/app/globals.js");
 const SCREEN_DIMENSIONS = Dimensions.get("screen");
+const Analytics = require("root/app/analytics");
 
 class ProductDetails extends React.Component {
   constructor(props) {
@@ -302,18 +303,7 @@ class ProductDetails extends React.Component {
       value: { id: _self.props.product.item.productId, type: "ADD" }
     });
 
-
-    // event entegrasyon
-    Utils.mapping({
-      event: 'add_to_fav',
-      data: _self.props.product.item || {},
-      keys: {
-        'productName': 'product_name',
-        'productCode': 'product_id',
-        'catId': 'category_id',
-        'salePrice': 'product_price'
-      }
-    });
+    Analytics.send({ event: Analytics.events.add_to_fav, data: _self.props.product.item });
   };
 
   _removeFromFavorites = () => {
@@ -337,17 +327,7 @@ class ProductDetails extends React.Component {
       value: { id: this.props.product.item.productId, type: "REMOVE" }
     });
 
-    // event entegrasyon
-    Utils.mapping({
-      event: 'remove_to_fav',
-      data: this.props.product.item || {},
-      keys: {
-        'productName': 'product_name',
-        'productCode': 'product_id',
-        'catId': 'category_id',
-        'salePrice': 'product_price'
-      }
-    });
+    Analytics.send({ event: Analytics.events.remove_to_fav, data: _self.props.product.item });
   }
 
   /* nasıl uygulanır */

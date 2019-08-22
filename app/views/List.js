@@ -283,16 +283,6 @@ export default class List extends React.Component {
       ...category
     };
 
-    Utils.mapping({
-      event: 'category_visited',
-      data: data,
-      keys: {
-        title: 'category_name',
-        catId: 'category_id',
-        utpId: 'utp_id'
-      }
-    });
-
     Analytics.send({ event: Analytics.events.category_visited, data: data });
 
     globals.fetch(

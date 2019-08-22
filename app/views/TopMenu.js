@@ -21,6 +21,7 @@ import { store } from 'root/app/store';
 const Utils = require('root/app/helper/Global.js');
 const Globals = require('root/app/globals.js');
 const Translation = require('root/app/helper/Translation.js');
+const Analytics = require("root/app/analytics");
 
 class CustomModal extends Component {
     constructor(props) {
@@ -141,6 +142,8 @@ class Menu extends Component {
                                 store.dispatch({ type: HIDE_MENU });
                                 store.dispatch({ type: REMOVE_USER });
                             });
+
+                            Analytics.send({ event: Analytics.events.logout });
                         }
                     });
                 }

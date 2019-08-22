@@ -33,6 +33,7 @@
 module.exports = {
 
     insider: {
+
         category_visited: {
             event: 'category_visited',
             _keys: {
@@ -41,17 +42,176 @@ module.exports = {
                 utpId: 'utp_id'
             },
             customType: 'tagEventWithParameters'
+        },
+
+        add_to_cart: {
+            event: 'add_to_cart',
+            _keys: {
+                'productName': 'product_name',
+                'productCode': 'product_id',
+                'catId': 'category_id',
+                'salePrice': 'product_price'
+            },
+            customType: 'tagEventWithParameters'
+        },
+
+        removed_from_cart: {
+            event: 'removed_from_cart',
+            _keys: {
+                'productName': 'product_name',
+                'productCode': 'product_id',
+                'catId': 'category_id',
+                'salePrice': 'product_price'
+            },
+            customType: 'tagEventWithParameters'
+        },
+
+        add_to_fav: {
+            event: 'add_to_fav',
+            _keys: {
+                'productName': 'product_name',
+                'productCode': 'product_id',
+                'catId': 'category_id',
+                'salePrice': 'product_price'
+            },
+            customType: 'tagEventWithParameters'
+        },
+
+        remove_to_fav: {
+            event: 'remove_to_fav',
+            _keys: {
+                'productName': 'product_name',
+                'productCode': 'product_id',
+                'catId': 'category_id',
+                'salePrice': 'product_price'
+            },
+            customType: 'tagEventWithParameters'
+        },
+
+        remove_to_fav: {
+            event: 'remove_to_fav',
+            _keys: {
+                'productName': 'product_name',
+                'productCode': 'product_id',
+                'catId': 'category_id',
+                'salePrice': 'product_price'
+            },
+            customType: 'tagEventWithParameters'
+        },
+
+        product_visited: {
+            event: 'product_visited',
+            _keys: {
+                'productName': 'product_name',
+                'productCode': 'product_id',
+                'catId': 'category_id',
+                'salePrice': 'product_price'
+            },
+            customType: 'tagEventWithParameters'
+        },
+
+        coupon_used: {
+            event: 'coupon_used',
+            _keys: {
+                'couponCode': 'coupon_code'
+            },
+            customType: 'tagEventWithParameters'
+        },
+
+        remove_coupon: {
+            event: 'remove_coupon',
+            _keys: {
+                'couponCode': 'coupon_code'
+            },
+            customType: 'tagEventWithParameters'
+        },
+
+        logout: {
+            event: 'logout',
+            customType: 'tagEvent'
         }
+
     },
 
     corebi: {
+
         category_visited: {
             event: 'category_visited',
             _keys: {
-                title: 'corebi_category_name',
-                catId: 'corebi_category_id',
-                utpId: 'corebi_utp_id'
+                title: 'category_name',
+                catId: 'category_id',
+                utpId: 'utp_id'
             }
+        },
+
+        add_to_cart: {
+            event: 'add_to_cart',
+            _keys: {
+                'productName': 'product_name',
+                'productCode': 'product_id',
+                'catId': 'category_id',
+                'salePrice': 'product_price'
+            }
+        },
+
+        removed_from_cart: {
+            event: 'removed_from_cart',
+            _keys: {
+                'productName': 'product_name',
+                'productCode': 'product_id',
+                'catId': 'category_id',
+                'salePrice': 'product_price'
+            }
+        },
+
+        add_to_fav: {
+            event: 'add_to_fav',
+            _keys: {
+                'productName': 'product_name',
+                'productCode': 'product_id',
+                'catId': 'category_id',
+                'salePrice': 'product_price'
+            }
+        },
+
+        remove_to_fav: {
+            event: 'remove_to_fav',
+            _keys: {
+                'productName': 'product_name',
+                'productCode': 'product_id',
+                'catId': 'category_id',
+                'salePrice': 'product_price'
+            }
+        },
+
+        product_visited: {
+            event: 'product_visited',
+            _keys: {
+                'productName': 'product_name',
+                'productCode': 'product_id',
+                'catId': 'category_id',
+                'salePrice': 'product_price'
+            }
+        },
+
+        coupon_used: {
+            event: 'coupon_used',
+            _keys: {
+                'couponCode': 'coupon_code'
+            }
+        },
+
+        remove_coupon: {
+            event: 'remove_coupon',
+            _keys: {
+                'couponCode': 'coupon_code'
+            }
+        },
+
+        logout: {
+            event: 'logout'
         }
+
     }
+
 };
