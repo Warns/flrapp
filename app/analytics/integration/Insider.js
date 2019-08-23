@@ -1,12 +1,13 @@
 //import RNInsider from 'react-native-insider';
+const Utils = require('../Utils.js');
 module.exports = {
     customFunc: {
         login: function ({ birthDay = '', email = '', firstName = '', lastName = '', gender = '', mobilePhone = '', userId = '' }) {
-            birthDay = birthDay.split(' ')[ 0 ];
+            birthDay = birthDay.split(' ')[0];
             gender = gender == 'E' ? 'Male' : 'Female';
-            
+
             console.log('customFunc login', birthDay, email, firstName, lastName, gender, mobilePhone, userId);
-            
+
             /*
             RNInsider.tagEvent('login');
             RNInsider.setUserIdentifier(userId);
@@ -20,11 +21,11 @@ module.exports = {
             */
         },
         register: function ({ birthDay = '', email = '', firstName = '', lastName = '', gender = '', mobilePhone = '', userId = '' }) {
-            birthDay = birthDay.split(' ')[ 0 ];
+            birthDay = birthDay.split(' ')[0];
             gender = gender == 'E' ? 'Male' : 'Female';
-            
+
             console.log('customFunc register', birthDay, email, firstName, lastName, gender, mobilePhone, userId);
-            
+
             /*
             RNInsider.tagEvent('register');
             RNInsider.setUserIdentifier(userId);
@@ -37,16 +38,42 @@ module.exports = {
             RNInsider.setCustomAttributeWithBOOL('login', true);
             */
         },
-        logout: function(){
+        logout: function () {
             console.log('logout');
             /*
                 RNInsider.tagEvent('logout');
                 RNInsider.unsetUserIdentifier();
             */
+        },
+
+        item_purchased: function (data) {
+            let { order_id, total_price, products = [] } = data,
+                keys = {
+                    'productName': 'product_name',
+                    'productId': 'product_id',
+                    'allCatIds': 'category_id'
+                },
+                arr = [];
+
+            Object
+                .entries(products)
+                .forEach(([key, item]) => {
+                    console.log(item);
+                    arr.push(Utils.mapping({ data: item, keys: keys }));
+                });
+
+
+            console.log('item_purchased', { order_id, total_price, products: arr });
+
+
+            //RNInsider.tagEventWithParameters('item_purchased', { order_id, total_price, products: arr }); 
+
+
+
         }
     },
     send: function ({ event = '', data = {}, customType = 'tagEventWithParameters' }) {
-        const _self = this;console.log('insider', customType, event, data);
+        const _self = this; console.log('insider', customType, event, data);
         switch (customType) {
             case 'tagEventWithParameters':
                 //RNInsider.tagEventWithParameters(event, data);  

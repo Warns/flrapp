@@ -171,6 +171,32 @@ module.exports = {
             customType: 'setCustomFunc'
         },
 
+        cart_cleared: {
+            event: 'cart_cleared',
+            _keys: {
+                'netTotal': 'total_price'
+            },
+            customType: 'tagEvent'
+        },
+
+        purchase_start: {
+            event: 'purchase_start',
+            _keys: {
+                'netTotal': 'total_price'
+            },
+            customType: 'tagEventWithParameters'
+        },
+
+        item_purchased: {
+            event: 'item_purchased',
+            _keys: {
+                'orderNo': 'order_id',
+                'netTotal': 'total_price',
+                'products': 'products'
+            },
+            customType: 'setCustomFunc'
+        }
+
     },
 
     /* 
@@ -288,6 +314,21 @@ module.exports = {
                 'userId': 'userId'
             }
         },
+
+        cart_cleared: {
+            event: 'cart_cleared',
+            _keys: {
+                'netTotal': 'total_price'
+            }
+        },
+
+        purchase_start: {
+            event: 'purchase_start',
+            _keys: {
+                'netTotal': 'total_price'
+            }
+        }
+        
 
     }
 

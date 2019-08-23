@@ -43,6 +43,8 @@ const PRELOAD = async b => {
   store.dispatch({ type: SHOW_PRELOADING, value: b });
 };
 
+const Analytics = require("root/app/analytics");
+
 /*
     NOT:
 
@@ -118,8 +120,18 @@ const Cart = class Main extends Component {
         value: Utils.getCartCount(data || {})
       });
       _self.props.dispatch({ type: SET_CART_INFO, value: data });
+      _self._sendAnalyticCartData(data);
     }
   };
+
+  _sendAnalyticCartData = (data) => {
+    const _self = this,
+      { netTotal = 0 } = data;
+    if (netTotal == 0)
+      Analytics.send({ event: Analytics.events.cart_cleared, data: data });
+    else
+      Analytics.send({ event: Analytics.events.purchase_start, data: data });
+  }
 
   _onUpdate = () => {
     const _self = this;
@@ -140,9 +152,9 @@ const Cart = class Main extends Component {
       } else {
         //--> sepet dolu logine git
         const { rootNavigation = {} } = _self.props || {},
-            { optinNav } = rootNavigation;
-          if (optinNav)
-            optinNav.navigate("Phone", {});
+          { optinNav } = rootNavigation;
+        if (optinNav)
+          optinNav.navigate("Phone", {});
       }
     } else if (userId != "") {
       //--> login

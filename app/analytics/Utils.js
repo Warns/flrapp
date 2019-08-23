@@ -49,5 +49,31 @@ module.exports = {
                 if (typeof callback !== 'undefined')
                     callback({ type: 'error', data: res });
             });
-    }
+    },
+    mapping: function (o) {    
+        o = o || {};
+        var _self = this,
+          data = o['data'] || {},
+          keys = o['keys'] || '',
+          obj = {};
+    
+        Object
+          .keys(o)
+          .map(key => {
+            if (key != 'keys' && key != 'data')
+              obj[key] = o[key] || '';
+          });
+    
+        if (keys != '')
+          Object
+            .keys(data)
+            .map(key => {
+              const k = _self.trimText((keys[key] || '')),
+                value = data[key] || '';
+              if (k != '' && value != '')
+                obj[k] = value;
+            });
+    
+        return obj;
+      },
 };

@@ -25,6 +25,7 @@ import { CheckBox } from 'root/app/form';
 
 const Utils = require('root/app/helper/Global.js');
 const Globals = require('root/app/globals.js');
+const Analytics = require("root/app/analytics");
 const PRELOAD = async (b) => {
     store.dispatch({ type: SHOW_PRELOADING, value: b });
 }
@@ -99,6 +100,7 @@ class BankTransfer extends Component {
 
         if (status == 200) {
             // success
+            _self._sendAnalyticOrderData(obj);
             store.dispatch({ type: SET_ORDER_SUCCESS_MESSAGE, value: (orderNo + " no'lu " + successText) });
             store.dispatch({ type: SET_CART_ITEMS, value: 0 });
             setTimeout(() => {
@@ -110,6 +112,12 @@ class BankTransfer extends Component {
                 Alert.alert(message);
             }, 100);
         }
+    }
+
+    _sendAnalyticOrderData = (data) => {
+        const _self = this,
+            { cartInfo = {} } = store.getState().cart || {};
+        Analytics.send({ event: Analytics.events.item_purchased, data: { ...data.data, ...cartInfo } });
     }
 
     _applyForm = () => {
