@@ -18,6 +18,7 @@ import { store } from 'root/app/store';
 
 const Utils = require('root/app/helper/Global.js');
 const globals = require('root/app/globals.js');
+const Analytics = require("root/app/analytics");
 
 class Password extends React.Component {
 
@@ -62,6 +63,8 @@ class Password extends React.Component {
 
       this.props.dispatch({ type: UPDATE_OPTIN, value: { password: this.state.password } });
       this.props.dispatch({ type: SET_USER, value: { user: { ...answer.data, password: this.state.password } || {} } });
+      Analytics.send({ event: Analytics.events.login, data: answer.data });
+      
       this._Continue(answer.data);
 
     } else {

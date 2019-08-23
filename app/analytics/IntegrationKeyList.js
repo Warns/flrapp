@@ -32,6 +32,10 @@
 
 module.exports = {
 
+    /* 
+        INSIDER
+    */
+
     insider: {
 
         category_visited: {
@@ -126,12 +130,52 @@ module.exports = {
             customType: 'tagEventWithParameters'
         },
 
+        searched: {
+            event: 'searched',
+            _keys: {
+                'keyword': 'keyword'
+            },
+            customType: 'tagEventWithParameters'
+        },
+
         logout: {
             event: 'logout',
-            customType: 'tagEvent'
-        }
+            customType: 'setCustomFunc'
+        },
+
+        login: {
+            event: 'login',
+            _keys: {
+                'birthDay': 'birthDay',
+                'email': 'email',
+                'firstName': 'firstName',
+                'lastName': 'lastName',
+                'gender': 'gender',
+                'mobilePhone': 'mobilePhone',
+                'userId': 'userId'
+            },
+            customType: 'setCustomFunc'
+        },
+
+        register: {
+            event: 'register',
+            _keys: {
+                'birthDay': 'birthDay',
+                'email': 'email',
+                'firstName': 'firstName',
+                'lastName': 'lastName',
+                'gender': 'gender',
+                'mobilePhone': 'mobilePhone',
+                'userId': 'userId'
+            },
+            customType: 'setCustomFunc'
+        },
 
     },
+
+    /* 
+        COREBI
+    */
 
     corebi: {
 
@@ -208,9 +252,42 @@ module.exports = {
             }
         },
 
+        searched: {
+            event: 'searched',
+            _keys: {
+                'keyword': 'keyword'
+            }
+        },
+
         logout: {
             event: 'logout'
-        }
+        },
+
+        login: {
+            event: 'login',
+            _keys: {
+                'birthDay': 'birthDay',
+                'email': 'email',
+                'firstName': 'firstName',
+                'lastName': 'lastName',
+                'gender': 'gender',
+                'mobilePhone': 'mobilePhone',
+                'userId': 'userId'
+            }
+        },
+
+        register: {
+            event: 'register',
+            _keys: {
+                'birthDay': 'birthDay',
+                'email': 'email',
+                'firstName': 'firstName',
+                'lastName': 'lastName',
+                'gender': 'gender',
+                'mobilePhone': 'mobilePhone',
+                'userId': 'userId'
+            }
+        },
 
     }
 

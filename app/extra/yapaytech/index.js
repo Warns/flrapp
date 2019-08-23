@@ -130,12 +130,22 @@ export default class DahiChat extends React.PureComponent {
             });
           }
           _self.chat.sendCustom({ type: "horizontalslimarray", values }, true);
-        } else
+
+          if (_self.props.event)
+            _self.props.event(
+              "search",
+              { query: searchText, suggestions },
+              _self
+            );
+        } else {
           _self.chat.sendCustom({
             type: "event",
             text: "__search_empty",
             searchText
           });
+          if (_self.props.event)
+            _self.props.event("search-empty", { query: searchText }, _self);
+        }
       }
     );
   };
@@ -173,7 +183,7 @@ export default class DahiChat extends React.PureComponent {
         this.chat.run("dahiKeeper.chat.client.changePanel(true);");
         break;
       case "chatStatus":
-        this.setState({ ready: true });
+        if (!this.state.ready) this.setState({ ready: true });
         break;
       case "inputfocus":
         if (!this.state.fullscreen) this.fullscreen();
@@ -206,7 +216,7 @@ export default class DahiChat extends React.PureComponent {
           }, delay);
         break;
       default:
-        this.props.event(type, data, this);
+        if (this.props.event) this.props.event(type, data, this);
         break;
     }
   };

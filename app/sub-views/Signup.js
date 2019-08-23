@@ -12,6 +12,7 @@ import { FORMDATA, SET_USER, ASSISTANT_SHOW } from 'root/app/helper/Constant';
 import { connect } from 'react-redux';
 
 const Utils = require('root/app/helper/Global.js');
+const Analytics = require("root/app/analytics");
 
 class Signup extends React.Component {
 
@@ -36,7 +37,10 @@ class Signup extends React.Component {
 
   _Continue = (data) => {
     let _self = this;
+
     this.props.dispatch({ type: SET_USER, value: { user: data || {} } });
+    Analytics.send({ event: Analytics.events.register, data: data });
+
     setTimeout(() => {
       _self.props.navigation.navigate("Subscription");
       _self.props.dispatch({ type: ASSISTANT_SHOW, value: true });

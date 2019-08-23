@@ -33,6 +33,7 @@ import Dahi from "root/app/extra/yapaytech";
 
 const Utils = require("root/app/helper/Global.js");
 const Globals = require("root/app/globals.js");
+const Analytics = require("root/app/analytics");
 
 //globals = require('../globals.js');
 
@@ -254,6 +255,11 @@ class Assistant extends React.Component {
                 });
               }
 
+              break;
+            }
+
+            case "search": {
+              Analytics.send({ event: Analytics.events.searched, data: { keyword: data['query'] || '' } });
               break;
             }
 

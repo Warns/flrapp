@@ -81,6 +81,7 @@ export default function user(state = userInitialState, action) {
       fetchCartDetails();
       getUserToken(action.value);
       _getFavoriteProducts();
+
       return {
         ...state,
         ...action.value
@@ -154,7 +155,7 @@ fetchCartDetails = async () => {
   globals.fetch(
     Utils.getURL({ key: "cart", subKey: "getCart" }),
     JSON.stringify({ cartLocation: "basket" }),
-    answer => { 
+    answer => {
       if (answer.status == 200) {
         store.dispatch({
           type: SET_CART_ITEMS,

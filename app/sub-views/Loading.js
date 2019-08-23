@@ -20,6 +20,7 @@ import { Constants } from "expo";
 
 const Utils = require("root/app/helper/Global.js");
 globals = require("root/app/globals.js");
+const Analytics = require("root/app/analytics");
 
 const DIMENSIONS = Dimensions.get("window");
 const TOP_MARGIN =
@@ -159,6 +160,9 @@ class Loading extends React.Component {
         type: SET_USER,
         value: { user: { ...answer.data, password: this.state.password } || {} }
       });
+
+      Analytics.send({ event: Analytics.events.login, data: answer.data });
+
       this._Continue(true);
     } else {
       console.log("sds");

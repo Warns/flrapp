@@ -145,8 +145,9 @@ class ChatView extends React.PureComponent {
 					if(window.dahiKeeper){
           window.dahiKeeper.opt.lang='${I18n.currentLocale()}';
           window.dahiKeeper.opt.fontfamily='${this.fontfamily}';
-					${pid}
-					window.dahiKeeper.normal();
+          ${pid}
+					
+          setTimeout(function(){window.dahiKeeper.normal();}, 100);
 				}
 			}catch(err){
 				alert(err.message);
