@@ -327,6 +327,16 @@ module.exports = {
             _keys: {
                 'netTotal': 'total_price'
             }
+        },
+        
+        item_purchased: {
+            event: 'item_purchased',
+            _keys: {
+                'orderNo': 'order_id',
+                'netTotal': 'total_price',
+                'products': 'products'
+            },
+            customType: 'setCustomFunc'
         }
         
 

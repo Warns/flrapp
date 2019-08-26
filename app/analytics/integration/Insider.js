@@ -13,8 +13,8 @@ module.exports = {
             RNInsider.setUserIdentifier(userId);
             RNInsider.setCustomAttributeWithString('name', firstName);
             RNInsider.setCustomAttributeWithString('last_name', lastName);
-            RNInsider.setCustomAttributeWithString('email', lastName);
-            RNInsider.setCustomAttributeWithString('phone_number', lastName);
+            RNInsider.setCustomAttributeWithString('email', email);
+            RNInsider.setCustomAttributeWithString('phone_number', mobilePhone);
             RNInsider.setCustomAttributeWithString('gender', gender);
             RNInsider.setCustomAttributeWithDate('birthdate', birthDay);
             RNInsider.setCustomAttributeWithBOOL('login', true);
@@ -31,11 +31,11 @@ module.exports = {
             RNInsider.setUserIdentifier(userId);
             RNInsider.setCustomAttributeWithString('name', firstName);
             RNInsider.setCustomAttributeWithString('last_name', lastName);
-            RNInsider.setCustomAttributeWithString('email', lastName);
-            RNInsider.setCustomAttributeWithString('phone_number', lastName);
+            RNInsider.setCustomAttributeWithString('email', email);
+            RNInsider.setCustomAttributeWithString('phone_number', mobilePhone);
             RNInsider.setCustomAttributeWithString('gender', gender);
             RNInsider.setCustomAttributeWithDate('birthdate', birthDay);
-            RNInsider.setCustomAttributeWithBOOL('login', true);
+            RNInsider.setCustomAttributeWithBOOL('register', true);
             */
         },
         logout: function () {
@@ -58,18 +58,11 @@ module.exports = {
             Object
                 .entries(products)
                 .forEach(([key, item]) => {
-                    console.log(item);
                     arr.push(Utils.mapping({ data: item, keys: keys }));
                 });
 
-
             console.log('item_purchased', { order_id, total_price, products: arr });
-
-
             //RNInsider.tagEventWithParameters('item_purchased', { order_id, total_price, products: arr }); 
-
-
-
         }
     },
     send: function ({ event = '', data = {}, customType = 'tagEventWithParameters' }) {

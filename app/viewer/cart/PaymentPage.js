@@ -43,6 +43,7 @@ import { Minus99HorizontalTabs } from 'root/app/components';
 
 const Utils = require('root/app/helper/Global.js');
 const Globals = require('root/app/globals.js');
+const Analytics = require("root/app/analytics");
 const PRELOAD = async (b) => {
     store.dispatch({ type: SHOW_PRELOADING, value: b });
 }
@@ -145,6 +146,7 @@ class CreditCart extends Component {
 
         if (status == 200) {
             // success
+            _self._sendAnalyticOrderData(obj);
             store.dispatch({ type: SET_ORDER_SUCCESS_MESSAGE, value: (orderNo + " no'lu " + successText) });
             store.dispatch({ type: SET_CART_ITEMS, value: 0 });
             setTimeout(() => {
@@ -159,6 +161,12 @@ class CreditCart extends Component {
         }
 
         //const ornek = {"status":200,"message":null,"innerMessage":null,"data":{"orderNo":"SIP0151456440","successText":"Siparişiniz başarıyla alındı. Sipariş ettiğiniz ürünler en kısa sürede teslimat adresinize teslim edilecektir.","url3ds":null}}
+    }
+
+    _sendAnalyticOrderData = (data) => {
+        const _self = this,
+            { cartInfo = {} } = store.getState().cart || {};
+        Analytics.send({ event: Analytics.events.item_purchased, data: { ...data.data, ...cartInfo } });
     }
 
     _onNavigationStateChange(webViewState) {
