@@ -49,7 +49,8 @@ const CONFIG = {
     "data": {
       "name": "PAGE_VIEW",
       "category": "Home Page"
-    }
+    },
+    "focusedRefresh": "true"
   },
   campaing: {
     "title": "KAMPANYALAR",

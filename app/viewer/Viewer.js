@@ -2305,9 +2305,9 @@ class Viewers extends Component {
   onDidFocus = () => {
     const _self = this,
       { navigation, config } = _self.props,
-      { type = VIEWERTYPE["LIST"] } = config;
+      { type = VIEWERTYPE["LIST"], focusedRefresh = 'false' } = config;
 
-    if (navigation) _self._Listener.remove();
+    if (navigation && focusedRefresh == 'false' ) _self._Listener.remove();
 
     if (type == VIEWERTYPE["SEG"])
       Globals.seg({ data: config.data }, _self._setSeg);
