@@ -13,6 +13,7 @@ const IntegrationKeyList = require('./IntegrationKeyList.js');
 */
 const CoreBi = require('./integration/CoreBi.js');
 const Insider = require('./integration/Insider.js');
+const Firebase = require('./integration/Firebase.js');
 
 module.exports = {
 
@@ -28,17 +29,17 @@ module.exports = {
 
         setTimeout(() => {
             Object
-            .entries(_self.keyList)
-            .forEach(([key, item]) => {
-                var keys = item[event] || ''; // keylist içinde örneğin insider içerisinde category_visited varmı
-                if (keys != '') { 
-                    if (data != '') // data varsa mapping için yolla
-                        _self.mapping({ _integrationType: key, _data: data, ...keys }); // _integrationType: keylist tanımlı olan insider, corebi entegrasyon tipi  
-                    else
-                        _self.sendData({ integrationType: key, data: keys });
-                }
-            });
-        }, 500);    
+                .entries(_self.keyList)
+                .forEach(([key, item]) => {
+                    var keys = item[event] || ''; // keylist içinde örneğin insider içerisinde category_visited varmı
+                    if (keys != '') {
+                        if (data != '') // data varsa mapping için yolla
+                            _self.mapping({ _integrationType: key, _data: data, ...keys }); // _integrationType: keylist tanımlı olan insider, corebi entegrasyon tipi  
+                        else
+                            _self.sendData({ integrationType: key, data: keys });
+                    }
+                });
+        }, 500);
     },
 
     mapping: function (o) {
@@ -109,7 +110,7 @@ module.exports = {
                     if (k != '' && value != '')
                         obj[k] = value;
                 });
-                
+
         obj = { data: obj, event: o['event'] || '', customType: o['customType'] || '' };
 
         _self.sendData({ integrationType: integrationType, data: obj });
@@ -127,6 +128,10 @@ module.exports = {
 
             case 'insider':
                 Insider.send(data);
+                break;
+
+            case 'firebase':
+                Firebase.send(data);
                 break;
 
             default:
