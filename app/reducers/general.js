@@ -35,7 +35,8 @@ const generalInitialState = {
     animate: false,
     item: null,
     screenshot: null,
-    videos: []
+    videos: [],
+    refreshing: false
   },
   preloading: false,
   video: {
@@ -90,7 +91,8 @@ export default function general(state = generalInitialState, action) {
           ...state.product,
           item: null,
           visibility: false,
-          measurements: {}
+          measurements: {},
+          refreshing: false
         }
       };
     case "UPDATE_PRODUCT_OBJECT": {

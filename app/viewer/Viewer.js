@@ -1589,7 +1589,8 @@ class FeedsItem extends Component {
           id: productId,
           measurements: {},
           animate: false,
-          sequence: 0
+          sequence: 0,
+          refreshing: _self.props.refreshing
         }
       });
     else if (FEEDSTYPE["VIDEO"] == labels[0])
@@ -2307,7 +2308,7 @@ class Viewers extends Component {
       { navigation, config } = _self.props,
       { type = VIEWERTYPE["LIST"], focusedRefresh = 'false' } = config;
 
-    if (navigation && focusedRefresh == 'false' ) _self._Listener.remove();
+    if (navigation && focusedRefresh == 'false') _self._Listener.remove();
 
     if (type == VIEWERTYPE["SEG"])
       Globals.seg({ data: config.data }, _self._setSeg);
@@ -2504,15 +2505,17 @@ class Viewers extends Component {
   /* segmentify özel */
   _setSeg = res => {
     const _self = this;
-    if (res["type"] == "success") {
-      let { responses = [] } = res.data,
-        data = _self._getSegAllData(responses[0] || []);
+    if (_self._isMounted) {
+      if (res["type"] == "success") {
+        let { responses = [] } = res.data,
+          data = _self._getSegAllData(responses[0] || []);
 
-      _self.applySegData(data);
-    } else {
-      _self.setState({ data: [], total: 0, loaded: true, noResult: true });
+        _self.applySegData(data);
+      } else {
+        _self.setState({ data: [], total: 0, loaded: true, noResult: true });
 
-      if (_self.props.noResult) _self.props.noResult();
+        if (_self.props.noResult) _self.props.noResult();
+      }
     }
   };
 
@@ -2783,7 +2786,7 @@ class Viewers extends Component {
       case ITEMTYPE["VIDEO"]:
         return <VideoListItem data={item} />;
       case ITEMTYPE["FEEDS"]:
-        return <FeedsItem data={item} rdx={_self.props} />;
+        return <FeedsItem refreshing={this._refreshing} data={item} rdx={_self.props} />;
       case ITEMTYPE["CAMPAING"]:
         return <CampaingItem data={item} />;
       default:

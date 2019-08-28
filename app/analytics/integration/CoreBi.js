@@ -55,7 +55,7 @@ module.exports = {
                 }
             };
 
-        console.log('corebi', _body);
+        //console.log('corebi', _body);
         Utils.ajx({ uri: 'https://logv2.corebi.com/api/log', body: _body }, (res) => {
             //console.log(res);
         });

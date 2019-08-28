@@ -66,7 +66,7 @@ module.exports = {
         }
     },
     send: function ({ event = '', data = {}, customType = 'tagEventWithParameters' }) {
-        const _self = this; console.log('insider', customType, event, data);
+        const _self = this; //console.log('insider', customType, event, data);
         switch (customType) {
             case 'tagEventWithParameters':
                 //RNInsider.tagEventWithParameters(event, data);  

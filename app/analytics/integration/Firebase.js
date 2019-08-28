@@ -78,7 +78,7 @@ module.exports = {
         }
     },
     send: function ({ event = '', data = {}, customType = 'tagEventWithParameters' }) {
-        const _self = this; console.log('firebase', customType, event, data);
+        const _self = this; //console.log('firebase', customType, event, data);
         switch (customType) {
             case 'tagEventWithParameters':
                 //Analytics.logEvent(event, data);  

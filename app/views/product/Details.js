@@ -162,7 +162,20 @@ class ProductDetails extends React.Component {
     });
   };
 
+  /* 
+    örneğin feeds kısmında bir ürün açıldı kullanıcı popup kapatınca tekrar refresh olsun.
+  */
+  _refreshing = () => {
+    const _self = this,
+      { refreshing = false } = _self.props.product;
+    if (refreshing)
+      refreshing();
+  }
+
   _close = () => {
+
+    this._refreshing();
+
     this.props.dispatch({ type: CLOSE_PRODUCT_DETAILS, Value: {} });
 
     this.setState({
