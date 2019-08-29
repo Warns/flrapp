@@ -8,7 +8,7 @@ import {
   BackHandler
 } from "react-native";
 import { AppLoading, Asset, Font } from "expo";
-import { Settings, OfflineNotice } from "root/app/helper/";
+import { Settings, OfflineNotice, DeepLinking } from "root/app/helper/";
 import Preloader from "root/app/helper/Preloader";
 import TopMenu from "root/app/views/TopMenu";
 
@@ -68,6 +68,7 @@ export default class App extends React.Component {
                 <View style={styles.statusBarUnderlay} />
               )}
               <OfflineNotice />
+              <DeepLinking />
               <TopMenu />
               <Settings />
               <RootNavigation />

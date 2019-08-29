@@ -684,7 +684,7 @@ class ProductDetails extends React.Component {
             </TouchableOpacity>
 
             <View>
-              <Text style={styles.defautText}>{item.shortDescription}</Text>
+              <Text style={styles.defautText}>{item.shortDescription}{' | '}{item.editorNote}</Text>
               <ProductActionButton
                 name="Ürün Detayı"
                 expanded={detailIsOpen}
