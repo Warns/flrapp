@@ -1,69 +1,46 @@
 import React from 'react';
 import { Platform, Linking } from 'react-native';
 import {
+    SET_VIDEO_PLAYER,
     OPEN_PRODUCT_DETAILS,
-    SHOW_CUSTOM_POPUP, 
-    SET_VIEWER
+    SHOW_CUSTOM_POPUP,
+    SET_VIEWER,
+    SET_CATEGORIES,
+    SET_SELECTED_CATEGORY,
+    NAVIGATE
 } from "root/app/helper/Constant";
 import { store } from 'root/app/store';
 
-class DeepLinking extends React.Component {
-
-    constructor(props) {
-        super(props);
-
-        /* 
-            deeplink ile gelebilecek tipler tanımlanır
-        */
-        this.routes = {
-            product: 'product',
-            blog: 'blog'
-        };
-    }
-
-    componentDidMount() {
-        if (Platform.OS === 'android') {
-            Linking.getInitialURL().then(url => {
-                this.navigate(url);
+const Utils = require("root/app/helper/Global.js");
+const Globals = require("root/app/globals.js");
+const routes = {
+    _isMounted: true, // api istek yapıldığı için gerekli
+    data: [],
+    prefix: {
+        product: 'product',
+        blog: 'blog',
+        video: 'video',
+        collection: 'collection',
+        promo: 'promo',
+        category: 'category'
+    },
+    getData: function (id) {
+        let _self = this, obj = {};
+        Object
+            .entries(_self.data)
+            .forEach(([key, item]) => {
+                if (item['id'] == id) {
+                    obj = item;
+                    return false;
+                }
             });
-        } else {
-            Linking.addEventListener('url', this.handleOpenURL);
-        }
 
-        /* 
-            ex:
-            this.handleOpenURL({ url: 'flormarapp://product/571336' });
-            this.handleOpenURL({ url: 'flormarapp://blog/21904' });
-        */
-
-        this.handleOpenURL({ url: 'flormarapp://blog/21904' });
-    }
-
-    componentWillUnmount() {
-        Linking.removeEventListener('url', this.handleOpenURL);
-    }
-
-    handleOpenURL = (event) => {
-        const { url = '' } = event;
-        this.navigate(url);
-    }
-
-    navigate = (url) => {
-        const _self = this,
-            route = url.replace(/.*?:\/\//g, ''),
-            id = route.indexOf('/') != -1 ? route.match(/\/([^\/]+)\/?$/)[1] : '',
-            routeName = route.split('/')[0] || '';
-
-        _self.gotoRoute({ id: id, name: routeName });
-    }
-
-    /* 
-        projedeki kurguya göre bu fonk. içeriği değişebilir.
-    */
-    gotoRoute = ({ name = '', id = '' }) => {
+        return obj;
+    },
+    navigation: function ({ name = '', id = '' }) {
         const _self = this;
         switch (name) {
-            case _self.routes['product']:
+            case _self.prefix['product']:
                 if (id != '')
                     store.dispatch({
                         type: OPEN_PRODUCT_DETAILS,
@@ -76,7 +53,7 @@ class DeepLinking extends React.Component {
                     });
                 break;
 
-            case _self.routes['blog']:
+            case _self.prefix['blog']:
                 if (id != '') {
 
                     const data = {
@@ -101,20 +78,192 @@ class DeepLinking extends React.Component {
                                 }
                             ]
                         }
-                    }; 
+                    };
 
                     store.dispatch({
                         type: SHOW_CUSTOM_POPUP,
                         value: { visibility: true, type: SET_VIEWER, data: data }
                     });
+                }
+                break;
+
+            case _self.prefix['video']:
+                if (id != '') {
+
+                    const data = _self.getData(id) || {},
+                        { youtubeId = '', videoName = '', imgMobile = '' } = data.attributes || {};
+
+                    if (youtubeId != '')
+                        store.dispatch({
+                            type: SHOW_CUSTOM_POPUP,
+                            value: {
+                                visibility: true,
+                                type: SET_VIDEO_PLAYER,
+                                //modalTitle: videoName || '',
+                                data: {
+                                    selected: 0,
+                                    items: [
+                                        {
+                                            provider: "youtube",
+                                            text: videoName || '',
+                                            thumbnail: Utils.getImage(imgMobile || ''),
+                                            videoId: youtubeId || ''
+                                        }
+                                    ]
+                                }
+                            }
+                        });
+                }
+                break;
+
+            case _self.prefix['collection']:
+                if (id != '') {
+                    const data = _self.getData(id) || {},
+                        { title, description } = data,
+                        { catCode = '', utp = '', galleryImage } = data.attributes || {},
+                        arr = [
+                            {
+                                title: title,
+                                img: Utils.getImage(galleryImage),
+                                utpId: utp,
+                                //desc: description,
+                                id: catCode
+                            }
+                        ];
+
+                    if (catCode != '' || utp != '') {
+                        setTimeout(() => {
+                            store.dispatch({ type: SET_CATEGORIES, value: arr });
+                            store.dispatch({ type: SET_SELECTED_CATEGORY, value: title });
+                            store.dispatch({
+                                type: NAVIGATE,
+                                value: { item: { navigation: "Category" } }
+                            });
+                        }, 100);
+                    }
+                }
+                break;
+
+            case _self.prefix['promo']:
+                if (id != '') {
+                    const data = _self.getData(id) || {},
+                        { title, description } = data,
+                        { catCode = '', utp = '', galleryImage } = data.attributes || {},
+                        arr = [
+                            {
+                                title: title,
+                                img: Utils.getImage(galleryImage),
+                                utpId: utp,
+                                desc: description,
+                                id: catCode
+                            }
+                        ];
+
+                    if (catCode != '' || utp != '') {
+                        setTimeout(() => {
+                            store.dispatch({ type: SET_CATEGORIES, value: arr });
+                            store.dispatch({ type: SET_SELECTED_CATEGORY, value: title });
+                            store.dispatch({
+                                type: NAVIGATE,
+                                value: { item: { navigation: "Category" } }
+                            });
+                        }, 100);
+                    }
+                }
+                break;
+
+            case _self.prefix['category']:
+                if (id != '') {
+                    Globals.AJX(
+                        {
+                            _self: _self,
+                            uri: Utils.getURL({ key: "product", subKey: "getCategoryList" }),
+                            data: { catId: id }
+                        },
+                        res => {
+                            const { status, message = "" } = res;
+                            console.log(res);
+                        });
+
+                    const title = 'apidan gelmeli',
+                        arr = [
+                            {
+                                title: title,
+                                /*img: Utils.getImage(galleryImage),
+                                utpId: utp,
+                                desc: description,*/
+                                id: id
+                            }
+                        ];
+
+                    setTimeout(() => {
+                        store.dispatch({ type: SET_CATEGORIES, value: arr });
+                        store.dispatch({ type: SET_SELECTED_CATEGORY, value: title });
+                        store.dispatch({
+                            type: NAVIGATE,
+                            value: { item: { navigation: "Category" } }
+                        });
+                    }, 100);
 
                 }
-
                 break;
 
             default:
                 break;
         }
+    },
+    init: function (o) {
+        const _self = this;
+        Utils.ajx({ uri: 'https://www.flormar.com.tr/segmentify_flormarapp.txt?user=segmentify&pass=seg!50?1' }, (res) => {
+            if (res['type'] == 'success')
+                _self.data = res['data'] || {};
+
+            _self.navigation(o);
+        });
+    }
+};
+
+class DeepLinking extends React.PureComponent {
+
+    constructor(props) {
+        super(props);
+    }
+
+    componentDidMount() {
+
+        if (Platform.OS === 'android') {
+            Linking.getInitialURL().then(url => {
+                this.navigate(url);
+            });
+        } else {
+            Linking.addEventListener('url', this.handleOpenURL);
+        }
+
+        /* 
+            ex:
+            this.handleOpenURL({ url: 'flormarapp://product/571336' });
+            this.handleOpenURL({ url: 'flormarapp://blog/21904' });
+            this.handleOpenURL({ url: 'flormarapp://video/21937' });
+            this.handleOpenURL({ url: 'flormarapp://collection/14841' });
+            this.handleOpenURL({ url: 'flormarapp://promo/14787' });
+            this.handleOpenURL({ url: 'flormarapp://category/18714' });
+        */
+    }
+
+    componentWillUnmount() {
+        Linking.removeEventListener('url', this.handleOpenURL);
+    }
+
+    handleOpenURL = ({ url = '' }) => {
+        this.navigate(url);
+    }
+
+    navigate = (url) => {
+        const route = url.replace(/.*?:\/\//g, ''),
+            id = route.indexOf('/') != -1 ? route.match(/\/([^\/]+)\/?$/)[1] : '',
+            routeName = route.split('/')[0] || '';
+
+        routes.init({ id: id, name: routeName });
     }
 
     render() {

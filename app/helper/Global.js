@@ -17,6 +17,7 @@ module.exports = {
       getBannerList: '/webapi/v3/Banner/getBannerList'
     },
     product: {
+      getCategoryList: '/webapi/v3/Product/getCategoryList',
       getSearchSuggestionList: '/webapi/v3/Product/getSearchSuggestionList',
       getProductList: '/webapi/v3/Product/getProductList',
       getProductDetail: '/webapi/v3/Product/getProductDetail',
