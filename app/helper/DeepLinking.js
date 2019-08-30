@@ -181,30 +181,37 @@ const routes = {
                             data: { catId: id }
                         },
                         res => {
-                            const { status, message = "" } = res;
-                            console.log(res);
-                        });
+                            const { status, message = "", data } = res;
 
-                    const title = 'apidan gelmeli',
-                        arr = [
-                            {
-                                title: title,
-                                /*img: Utils.getImage(galleryImage),
-                                utpId: utp,
-                                desc: description,*/
-                                id: id
+                            if (status == 200) {
+                                const { categories = [] } = data || {},
+                                    { catId = '', catName = '', imageUrl = '' } = categories[0] || {};
+
+                                if (catId != '') {
+                                    const arr = [
+                                        {
+                                            title: catName,
+                                            img: Utils.getImage(imageUrl),
+                                            //utpId: utp,
+                                            //desc: description,
+                                            id: catId
+                                        }
+                                    ];
+
+                                    setTimeout(() => {
+                                        store.dispatch({ type: SET_CATEGORIES, value: arr });
+                                        store.dispatch({ type: SET_SELECTED_CATEGORY, value: catName });
+                                        store.dispatch({
+                                            type: NAVIGATE,
+                                            value: { item: { navigation: "Category" } }
+                                        });
+                                    }, 100);
+
+                                }
+
                             }
-                        ];
 
-                    setTimeout(() => {
-                        store.dispatch({ type: SET_CATEGORIES, value: arr });
-                        store.dispatch({ type: SET_SELECTED_CATEGORY, value: title });
-                        store.dispatch({
-                            type: NAVIGATE,
-                            value: { item: { navigation: "Category" } }
                         });
-                    }, 100);
-
                 }
                 break;
 
@@ -246,7 +253,7 @@ class DeepLinking extends React.PureComponent {
             this.handleOpenURL({ url: 'flormarapp://video/21937' });
             this.handleOpenURL({ url: 'flormarapp://collection/14841' });
             this.handleOpenURL({ url: 'flormarapp://promo/14787' });
-            this.handleOpenURL({ url: 'flormarapp://category/18714' });
+            this.handleOpenURL({ url: 'flormarapp://category/18655' });
         */
     }
 
