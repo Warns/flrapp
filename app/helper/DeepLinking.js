@@ -147,14 +147,14 @@ const routes = {
             case _self.prefix['promo']:
                 if (id != '') {
                     const data = _self.getData(id) || {},
-                        { title, description } = data,
-                        { catCode = '', utp = '', galleryImage } = data.attributes || {},
+                        { title } = data,
+                        { catCode = '', utp = '', galleryImage, desc } = data.attributes || {},
                         arr = [
                             {
                                 title: title,
                                 img: Utils.getImage(galleryImage),
                                 utpId: utp,
-                                desc: description,
+                                desc: desc,
                                 id: catCode
                             }
                         ];
@@ -221,7 +221,7 @@ const routes = {
     },
     init: function (o) {
         const _self = this;
-        Utils.ajx({ uri: 'https://www.flormar.com.tr/segmentify_flormarapp.txt?user=segmentify&pass=seg!50?1' }, (res) => {
+        Utils.ajx({ uri: 'https://www.flormar.com.tr/mobiapp-all-data.txt' }, (res) => {
             if (res['type'] == 'success')
                 _self.data = res['data'] || {};
 
