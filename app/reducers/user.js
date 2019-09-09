@@ -1,5 +1,7 @@
+import { Platform } from "react-native";
 import {
   SET_USER,
+  SET_USER_CHANGE,
   UPDATE_USER,
   REMOVE_USER,
   SET_CART_NUM,
@@ -86,6 +88,15 @@ export default function user(state = userInitialState, action) {
         ...state,
         ...action.value
       };
+    }
+    case SET_USER_CHANGE: {
+      /* 
+        segmentify logoff tan login durumuna geçişte istek atmak
+      */
+      setTimeout(() => {
+        _setUserChange(action.value);  
+      }, 500);
+      return state;
     }
     case UPDATE_USER: {
       //console.log('*****  UPDATE_USER', state.user);
@@ -215,4 +226,39 @@ _getFavoriteProducts = () => {
         }
       }
     });
+}
+
+function _setUserChange(data) {
+
+  globals.getSecureStorage("__SEGMENTIFY_USER_SESSION__", answer => {
+    if (answer !== "no") {
+      let obj = JSON.parse(answer) || {},
+        userID = obj['userID'] || '',
+        sessionID = obj['sessionID'] || '';
+
+      if (userID != '' && sessionID != '') {
+
+        const bdy = JSON.stringify({
+          "name": "USER_CHANGE",
+          "userId": data['userId'] || '', // login olduktan sonraki user id
+          "oldUserId": userID, //segmentify user id
+          "sessionId": sessionID,
+          "device": Platform.OS === "ios" ? "IOS" : "ANDROID",
+          "pageUrl": "https://www.flormar.com.tr"
+        });
+
+        //console.log('_setUserChange', bdy);
+
+        fetch('https://gandalf.segmentify.com/add/events/v1.json?apiKey=61c97507-5c1f-46c6-9b50-2aa9d1d73316', {
+          method: 'POST',
+          headers: {
+            'origin': 'https://www.flormar.com.tr/',
+            'accept': 'application/json',
+            'content-type': 'application/json'
+          },
+          body: bdy
+        });
+      }
+    }
+  });
 }

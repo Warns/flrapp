@@ -7,7 +7,7 @@ const initialState = {
 };
 
 export default function segmentify(state = initialState, action) {
-    
+
     switch (action.type) {
         case SET_SEGMENTIFY_USER_SESSION: {
             const arr = action.value || [];

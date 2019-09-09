@@ -13,6 +13,7 @@ import {
   SET_NAVIGATION,
   ASSISTANT_SHOW,
   SET_USER,
+  SET_USER_CHANGE,
   SET_CLIENT_PROPERTIES
 } from "root/app/helper/Constant";
 import { connect } from "react-redux";
@@ -161,6 +162,7 @@ class Loading extends React.Component {
         value: { user: { ...answer.data, password: this.state.password } || {} }
       });
 
+      this.props.dispatch({ type: SET_USER_CHANGE, value: { ...answer.data } });
       Analytics.send({ event: Analytics.events.login, data: answer.data });
 
       this._Continue(true);
