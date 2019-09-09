@@ -154,7 +154,8 @@ class ProductDetails extends React.Component {
       data = {
         name: "PRODUCT_VIEW",
         //"productId": integrationId.split('-')[0]
-        productId: id
+        productId: id,
+        noUpdate: true
       };
 
     globals.seg({ data: data }, res => {

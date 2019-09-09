@@ -3055,7 +3055,7 @@ class Viewers extends Component {
             "interactionId": productId
         };*/
 
-    Globals.seg({ data: data }, res => { });
+    //Globals.seg({ data: data }, res => { });
   };
 
   _onViewableItemChanged = ({ index, item }) => {
