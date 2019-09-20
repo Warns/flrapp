@@ -1,7 +1,7 @@
 const Utils = require('../Utils.js');
 module.exports = {
     customFunc: {
-        item_purchased: function (data) {
+        order_completed: function (data) {
             let { order_id, total_price, products = [] } = data,
                 keys = {
                     'productName': 'product_name',

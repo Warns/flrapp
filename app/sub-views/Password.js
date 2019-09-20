@@ -64,10 +64,9 @@ class Password extends React.Component {
 
       this.props.dispatch({ type: UPDATE_OPTIN, value: { password: this.state.password } });
       this.props.dispatch({ type: SET_USER, value: { user: { ...answer.data, password: this.state.password } || {} } });
-      Analytics.send({ event: Analytics.events.login, data: answer.data });
-
       this.props.dispatch({ type: SET_USER_CHANGE, value: { ...answer.data } });
-      
+
+      Analytics.send({ event: Analytics.events.login, data: answer.data });
       this._Continue(answer.data);
 
     } else {

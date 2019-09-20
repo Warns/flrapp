@@ -498,7 +498,7 @@ module.exports = {
         },
         
         item_purchased: {
-            event: 'item_purchased',
+            event: 'order_completed',
             _keys: {
                 'orderNo': 'order_id',
                 'netTotal': 'total_price',
