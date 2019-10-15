@@ -22,7 +22,8 @@ const routes = {
         video: 'video',
         collection: 'collection',
         promo: 'promo',
-        category: 'category'
+        category: 'category',
+        customURL: 'customURL'
     },
     getData: function (id) {
         let _self = this, obj = {};
@@ -215,6 +216,40 @@ const routes = {
                 }
                 break;
 
+            case _self.prefix['customURL']: {
+                if (id != '') {
+                    Globals.AJX(
+                        {
+                            _self: _self,
+                            uri: Utils.getURL({ key: 'content', subKey: 'getDataByUrl' }),
+                            data: { Url: id.replace(Utils.prefix, '') } // API domain gönderilmemeli
+                        },
+                        res => {
+                            const { status, message = "", data } = res;
+
+                            if (status == 200) {
+                                const { id = '', type = '' } = data || {};
+
+                                if (id != '') {
+                                    if (type == 'urn')
+                                        _self.navigation({ name: _self.prefix['product'], id: id });
+                                    else if (type == 'kat')
+                                        _self.navigation({ name: _self.prefix['category'], id: id });
+
+
+                                    console.log('dsadasdasdasdasd', data);
+                                }
+
+
+
+                            }
+
+                        });
+                }
+                break;
+            }
+
+
             default:
                 break;
         }
@@ -247,13 +282,19 @@ class DeepLinking extends React.PureComponent {
         }
 
         /* 
-            ex:
+            not: deeplink url ile gelirse
             this.handleOpenURL({ url: 'flormarapp://product/571336' });
             this.handleOpenURL({ url: 'flormarapp://blog/21904' });
             this.handleOpenURL({ url: 'flormarapp://video/21937' });
             this.handleOpenURL({ url: 'flormarapp://collection/14841' });
             this.handleOpenURL({ url: 'flormarapp://promo/14787' });
             this.handleOpenURL({ url: 'flormarapp://category/18655' });
+        */
+
+        /*
+            not: normal url ile gelirse, API gönderirken domain olmamalı
+            this.handleOpenURL({ url: 'https://www.flormar.com.tr/illuminating-primer-make-up-base-white-classic/' });
+            this.handleOpenURL({ url: 'https://www.flormar.com.tr/bb-krem/' });
         */
     }
 
@@ -266,11 +307,21 @@ class DeepLinking extends React.PureComponent {
     }
 
     navigate = (url) => {
-        const route = url.replace(/.*?:\/\//g, ''),
-            id = route.indexOf('/') != -1 ? route.match(/\/([^\/]+)\/?$/)[1] : '',
-            routeName = route.split('/')[0] || '';
+        const _self = this;
 
-        routes.init({ id: id, name: routeName });
+        if (_self._validateURL(url))
+            routes.navigation({ name: routes.prefix['customURL'], id: url });
+        else {
+            const route = url.replace(/.*?:\/\//g, ''),
+                id = route.indexOf('/') != -1 ? route.match(/\/([^\/]+)\/?$/)[1] : '',
+                routeName = route.split('/')[0] || '';
+
+            routes.init({ id: id, name: routeName });
+        }
+    }
+
+    _validateURL = (value) => {
+        return /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/i.test(value);
     }
 
     render() {

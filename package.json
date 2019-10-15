@@ -25,6 +25,7 @@
     "react-native-datepicker": "^1.7.2",
     "react-native-gesture-handler": "^1.3.0",
     "react-native-global-props": "^1.1.3",
+    "react-native-google-analytics-bridge": "^7.1.0",
     "react-native-map-clustering": "^1.3.0",
     "react-native-masked-text": "^1.9.2",
     "react-native-render-html": "^3.10.0",

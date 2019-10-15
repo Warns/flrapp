@@ -7,6 +7,7 @@ module.exports = {
     searched: 'searched',
     product_visited: 'product_visited',
     add_to_fav: 'add_to_fav',
+    remove_to_fav: 'remove_to_fav',
     removed_from_cart: 'removed_from_cart',
     add_to_cart: 'add_to_cart',
     purchase_start: 'purchase_start',

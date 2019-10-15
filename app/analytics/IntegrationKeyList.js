@@ -53,7 +53,8 @@ module.exports = {
             _keys: {
                 'productName': 'product_name',
                 'productCode': 'product_id',
-                'catId': 'category_id',
+                'catId': 'category_id', 
+                'catName': 'category_name',
                 'salePrice': 'product_price'
             },
             customType: 'tagEventWithParameters'
@@ -64,7 +65,8 @@ module.exports = {
             _keys: {
                 'productName': 'product_name',
                 'productCode': 'product_id',
-                'catId': 'category_id',
+                'catId': 'category_id', 
+                'catName': 'category_name',
                 'salePrice': 'product_price'
             },
             customType: 'tagEventWithParameters'
@@ -75,7 +77,8 @@ module.exports = {
             _keys: {
                 'productName': 'product_name',
                 'productCode': 'product_id',
-                'catId': 'category_id',
+                'catId': 'category_id', 
+                'catName': 'category_name',
                 'salePrice': 'product_price'
             },
             customType: 'tagEventWithParameters'
@@ -86,18 +89,8 @@ module.exports = {
             _keys: {
                 'productName': 'product_name',
                 'productCode': 'product_id',
-                'catId': 'category_id',
-                'salePrice': 'product_price'
-            },
-            customType: 'tagEventWithParameters'
-        },
-
-        remove_to_fav: {
-            event: 'remove_to_fav',
-            _keys: {
-                'productName': 'product_name',
-                'productCode': 'product_id',
-                'catId': 'category_id',
+                'catId': 'category_id', 
+                'catName': 'category_name',
                 'salePrice': 'product_price'
             },
             customType: 'tagEventWithParameters'
@@ -108,7 +101,8 @@ module.exports = {
             _keys: {
                 'productName': 'product_name',
                 'productCode': 'product_id',
-                'catId': 'category_id',
+                'catId': 'category_id', 
+                'catName': 'category_name',
                 'salePrice': 'product_price'
             },
             customType: 'tagEventWithParameters'
@@ -204,168 +198,161 @@ module.exports = {
         FIREBASE
     */
 
-   firebase: {
+    firebase: {
 
-    category_visited: {
-        event: 'category_visited',
-        _keys: {
-            title: 'category_name',
-            catId: 'category_id',
-            utpId: 'utp_id'
+        category_visited: {
+            event: 'category_visited',
+            _keys: {
+                title: 'category_name',
+                catId: 'category_id',
+                utpId: 'utp_id'
+            },
+            customType: 'tagEventWithParameters'
         },
-        customType: 'tagEventWithParameters'
-    },
 
-    add_to_cart: {
-        event: 'add_to_cart',
-        _keys: {
-            'productName': 'product_name',
-            'productCode': 'product_id',
-            'catId': 'category_id',
-            'salePrice': 'product_price'
+        add_to_cart: {
+            event: 'add_to_cart',
+            _keys: {
+                'productName': 'product_name',
+                'productCode': 'product_id',
+                'catId': 'category_id', 
+                'catName': 'category_name',
+                'salePrice': 'product_price'
+            },
+            customType: 'tagEventWithParameters'
         },
-        customType: 'tagEventWithParameters'
-    },
 
-    removed_from_cart: {
-        event: 'removed_from_cart',
-        _keys: {
-            'productName': 'product_name',
-            'productCode': 'product_id',
-            'catId': 'category_id',
-            'salePrice': 'product_price'
+        removed_from_cart: {
+            event: 'removed_from_cart',
+            _keys: {
+                'productName': 'product_name',
+                'productCode': 'product_id',
+                'catId': 'category_id', 
+                'catName': 'category_name',
+                'salePrice': 'product_price'
+            },
+            customType: 'tagEventWithParameters'
         },
-        customType: 'tagEventWithParameters'
-    },
 
-    add_to_fav: {
-        event: 'add_to_fav',
-        _keys: {
-            'productName': 'product_name',
-            'productCode': 'product_id',
-            'catId': 'category_id',
-            'salePrice': 'product_price'
+        add_to_fav: {
+            event: 'add_to_fav',
+            _keys: {
+                'productName': 'product_name',
+                'productCode': 'product_id',
+                'catId': 'category_id', 'catName': 'category_name',
+                'salePrice': 'product_price'
+            },
+            customType: 'tagEventWithParameters'
         },
-        customType: 'tagEventWithParameters'
-    },
 
-    remove_to_fav: {
-        event: 'remove_to_fav',
-        _keys: {
-            'productName': 'product_name',
-            'productCode': 'product_id',
-            'catId': 'category_id',
-            'salePrice': 'product_price'
+        remove_to_fav: {
+            event: 'remove_to_fav',
+            _keys: {
+                'productName': 'product_name',
+                'productCode': 'product_id',
+                'catId': 'category_id', 
+                'catName': 'category_name',
+                'salePrice': 'product_price'
+            },
+            customType: 'tagEventWithParameters'
         },
-        customType: 'tagEventWithParameters'
-    },
 
-    remove_to_fav: {
-        event: 'remove_to_fav',
-        _keys: {
-            'productName': 'product_name',
-            'productCode': 'product_id',
-            'catId': 'category_id',
-            'salePrice': 'product_price'
+        product_visited: {
+            event: 'product_visited',
+            _keys: {
+                'productName': 'product_name',
+                'productCode': 'product_id',
+                'catId': 'category_id', 
+                'catName': 'category_name',
+                'salePrice': 'product_price'
+            },
+            customType: 'tagEventWithParameters'
         },
-        customType: 'tagEventWithParameters'
-    },
 
-    product_visited: {
-        event: 'product_visited',
-        _keys: {
-            'productName': 'product_name',
-            'productCode': 'product_id',
-            'catId': 'category_id',
-            'salePrice': 'product_price'
+        coupon_used: {
+            event: 'coupon_used',
+            _keys: {
+                'couponCode': 'coupon_code'
+            },
+            customType: 'tagEventWithParameters'
         },
-        customType: 'tagEventWithParameters'
-    },
 
-    coupon_used: {
-        event: 'coupon_used',
-        _keys: {
-            'couponCode': 'coupon_code'
+        remove_coupon: {
+            event: 'remove_coupon',
+            _keys: {
+                'couponCode': 'coupon_code'
+            },
+            customType: 'tagEventWithParameters'
         },
-        customType: 'tagEventWithParameters'
-    },
 
-    remove_coupon: {
-        event: 'remove_coupon',
-        _keys: {
-            'couponCode': 'coupon_code'
+        searched: {
+            event: 'searched',
+            _keys: {
+                'keyword': 'keyword'
+            },
+            customType: 'tagEventWithParameters'
         },
-        customType: 'tagEventWithParameters'
-    },
 
-    searched: {
-        event: 'searched',
-        _keys: {
-            'keyword': 'keyword'
+        logout: {
+            event: 'logout',
+            customType: 'setCustomFunc'
         },
-        customType: 'tagEventWithParameters'
-    },
 
-    logout: {
-        event: 'logout',
-        customType: 'setCustomFunc'
-    },
-
-    login: {
-        event: 'login',
-        _keys: {
-            'birthDay': 'birthDay',
-            'email': 'email',
-            'firstName': 'firstName',
-            'lastName': 'lastName',
-            'gender': 'gender',
-            'mobilePhone': 'mobilePhone',
-            'userId': 'userId'
+        login: {
+            event: 'login',
+            _keys: {
+                'birthDay': 'birthDay',
+                'email': 'email',
+                'firstName': 'firstName',
+                'lastName': 'lastName',
+                'gender': 'gender',
+                'mobilePhone': 'mobilePhone',
+                'userId': 'userId'
+            },
+            customType: 'setCustomFunc'
         },
-        customType: 'setCustomFunc'
-    },
 
-    register: {
-        event: 'register',
-        _keys: {
-            'birthDay': 'birthDay',
-            'email': 'email',
-            'firstName': 'firstName',
-            'lastName': 'lastName',
-            'gender': 'gender',
-            'mobilePhone': 'mobilePhone',
-            'userId': 'userId'
+        register: {
+            event: 'register',
+            _keys: {
+                'birthDay': 'birthDay',
+                'email': 'email',
+                'firstName': 'firstName',
+                'lastName': 'lastName',
+                'gender': 'gender',
+                'mobilePhone': 'mobilePhone',
+                'userId': 'userId'
+            },
+            customType: 'setCustomFunc'
         },
-        customType: 'setCustomFunc'
-    },
 
-    cart_cleared: {
-        event: 'cart_cleared',
-        _keys: {
-            'netTotal': 'total_price'
+        cart_cleared: {
+            event: 'cart_cleared',
+            _keys: {
+                'netTotal': 'total_price'
+            },
+            customType: 'tagEvent'
         },
-        customType: 'tagEvent'
-    },
 
-    purchase_start: {
-        event: 'purchase_start',
-        _keys: {
-            'netTotal': 'total_price'
+        purchase_start: {
+            event: 'purchase_start',
+            _keys: {
+                'netTotal': 'total_price'
+            },
+            customType: 'tagEventWithParameters'
         },
-        customType: 'tagEventWithParameters'
+
+        item_purchased: {
+            event: 'order_completed',
+            _keys: {
+                'orderNo': 'order_id',
+                'netTotal': 'total_price',
+                'products': 'products'
+            },
+            customType: 'setCustomFunc'
+        }
+
     },
-
-    item_purchased: {
-        event: 'order_completed',
-        _keys: {
-            'orderNo': 'order_id',
-            'netTotal': 'total_price',
-            'products': 'products'
-        },
-        customType: 'setCustomFunc'
-    }
-
-},
 
     /* 
         COREBI
@@ -387,7 +374,8 @@ module.exports = {
             _keys: {
                 'productName': 'product_name',
                 'productCode': 'product_id',
-                'catId': 'category_id',
+                'catId': 'category_id', 
+                'catName': 'category_name',
                 'salePrice': 'product_price'
             }
         },
@@ -397,7 +385,8 @@ module.exports = {
             _keys: {
                 'productName': 'product_name',
                 'productCode': 'product_id',
-                'catId': 'category_id',
+                'catId': 'category_id', 
+                'catName': 'category_name',
                 'salePrice': 'product_price'
             }
         },
@@ -407,7 +396,8 @@ module.exports = {
             _keys: {
                 'productName': 'product_name',
                 'productCode': 'product_id',
-                'catId': 'category_id',
+                'catId': 'category_id', 
+                'catName': 'category_name',
                 'salePrice': 'product_price'
             }
         },
@@ -417,7 +407,8 @@ module.exports = {
             _keys: {
                 'productName': 'product_name',
                 'productCode': 'product_id',
-                'catId': 'category_id',
+                'catId': 'category_id', 
+                'catName': 'category_name',
                 'salePrice': 'product_price'
             }
         },
@@ -427,7 +418,8 @@ module.exports = {
             _keys: {
                 'productName': 'product_name',
                 'productCode': 'product_id',
-                'catId': 'category_id',
+                'catId': 'category_id', 
+                'catName': 'category_name',
                 'salePrice': 'product_price'
             }
         },
@@ -496,7 +488,7 @@ module.exports = {
                 'netTotal': 'total_price'
             }
         },
-        
+
         item_purchased: {
             event: 'order_completed',
             _keys: {
@@ -506,8 +498,165 @@ module.exports = {
             },
             customType: 'setCustomFunc'
         }
-        
 
-    }
+
+    },
+
+    gtm: {
+
+        category_visited: {
+            event: 'category_visited',
+            _keys: {
+                title: 'category_name',
+                catId: 'category_id',
+                utpId: 'utp_id'
+            },
+            customType: 'tagEventWithParameters'
+        },
+
+        add_to_cart: {
+            event: 'add_to_cart',
+            _keys: {
+                'productName': 'product_name',
+                'productCode': 'product_id',
+                'catId': 'category_id', 
+                'catName': 'category_name',
+                'salePrice': 'product_price'
+            },
+            customType: 'tagEventWithParameters'
+        },
+
+        removed_from_cart: {
+            event: 'removed_from_cart',
+            _keys: {
+                'productName': 'product_name',
+                'productCode': 'product_id',
+                'catId': 'category_id', 
+                'catName': 'category_name',
+                'salePrice': 'product_price'
+            },
+            customType: 'tagEventWithParameters'
+        },
+
+        add_to_fav: {
+            event: 'add_to_fav',
+            _keys: {
+                'productName': 'product_name',
+                'productCode': 'product_id',
+                'catId': 'category_id', 
+                'catName': 'category_name',
+                'salePrice': 'product_price'
+            },
+            customType: 'tagEventWithParameters'
+        },
+
+        remove_to_fav: {
+            event: 'remove_to_fav',
+            _keys: {
+                'productName': 'product_name',
+                'productCode': 'product_id',
+                'catId': 'category_id', 
+                'catName': 'category_name',
+                'salePrice': 'product_price'
+            },
+            customType: 'tagEventWithParameters'
+        },
+
+        product_visited: {
+            event: 'product_visited',
+            _keys: {
+                'productName': 'product_name',
+                'productCode': 'product_id',
+                'catId': 'category_id', 
+                'catName': 'category_name',
+                'salePrice': 'product_price'
+            },
+            customType: 'tagEventWithParameters'
+        },
+
+        coupon_used: {
+            event: 'coupon_used',
+            _keys: {
+                'couponCode': 'coupon_code'
+            },
+            customType: 'tagEventWithParameters'
+        },
+
+        remove_coupon: {
+            event: 'remove_coupon',
+            _keys: {
+                'couponCode': 'coupon_code'
+            },
+            customType: 'tagEventWithParameters'
+        },
+
+        searched: {
+            event: 'searched',
+            _keys: {
+                'keyword': 'keyword'
+            },
+            customType: 'tagEventWithParameters'
+        },
+
+        logout: {
+            event: 'logout',
+            customType: 'setCustomFunc'
+        },
+
+        login: {
+            event: 'login',
+            _keys: {
+                'birthDay': 'birthDay',
+                'email': 'email',
+                'firstName': 'firstName',
+                'lastName': 'lastName',
+                'gender': 'gender',
+                'mobilePhone': 'mobilePhone',
+                'userId': 'userId'
+            },
+            customType: 'setCustomFunc'
+        },
+
+        register: {
+            event: 'register',
+            _keys: {
+                'birthDay': 'birthDay',
+                'email': 'email',
+                'firstName': 'firstName',
+                'lastName': 'lastName',
+                'gender': 'gender',
+                'mobilePhone': 'mobilePhone',
+                'userId': 'userId'
+            },
+            customType: 'setCustomFunc'
+        },
+
+        cart_cleared: {
+            event: 'cart_cleared',
+            _keys: {
+                'netTotal': 'total_price'
+            },
+            customType: 'tagEvent'
+        },
+
+        purchase_start: {
+            event: 'purchase_start',
+            _keys: {
+                'netTotal': 'total_price'
+            },
+            customType: 'tagEventWithParameters'
+        },
+
+        item_purchased: {
+            event: 'order_completed',
+            _keys: {
+                'orderNo': 'order_id',
+                'netTotal': 'total_price',
+                'products': 'products'
+            },
+            customType: 'setCustomFunc'
+        }
+
+    },
 
 };

@@ -6,7 +6,8 @@ module.exports = {
                 keys = {
                     'productName': 'product_name',
                     'productId': 'product_id',
-                    'allCatIds': 'category_id'
+                    'allCatIds': 'category_id',
+                    'catName': 'category_name'
                 },
                 arr = [];
 

@@ -260,7 +260,7 @@ class Assistant extends React.Component {
 
             case "search": {
               Analytics.send({ event: Analytics.events.searched, data: { keyword: data['query'] || '' } });
-              break;
+              return false;
             }
 
             default:

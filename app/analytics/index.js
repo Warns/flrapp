@@ -14,6 +14,7 @@ const IntegrationKeyList = require('./IntegrationKeyList.js');
 const CoreBi = require('./integration/CoreBi.js');
 const Insider = require('./integration/Insider.js');
 const Firebase = require('./integration/Firebase.js');
+const Gtm = require('./integration/GTM.js');
 
 module.exports = {
 
@@ -120,7 +121,8 @@ module.exports = {
         const _self = this;
         /* 
             tanımlı tipler buradan yollanır
-        */
+        */ 
+       //console.log(integrationType, data);
         switch (integrationType) {
             case 'corebi':
                 CoreBi.send(data);
@@ -132,6 +134,10 @@ module.exports = {
 
             case 'firebase':
                 Firebase.send(data);
+                break;
+
+            case 'gtm':
+                Gtm.send(data);
                 break;
 
             default:
