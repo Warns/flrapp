@@ -23,6 +23,7 @@ module.exports = {
     events: Events,
 
     send: function (o) {
+        return false;
         o = o || {};
         const _self = this,
             data = o['data'] || '',

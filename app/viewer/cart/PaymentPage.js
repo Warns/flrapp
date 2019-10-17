@@ -6,7 +6,8 @@ import {
     Modal,
     Image,
     Text,
-    Alert
+    Alert,
+    Platform
 } from 'react-native';
 import { Viewer, CrediCart, Foot } from 'root/app/viewer/';
 import {
@@ -155,9 +156,9 @@ class CreditCart extends Component {
         } else {
             // error
             setTimeout(() => {
-                Alert.alert(message);
-            }, 100);
-
+                if( message != '' )
+                    Alert.alert(message);
+            }, 500);
         }
 
         //const ornek = {"status":200,"message":null,"innerMessage":null,"data":{"orderNo":"SIP0151456440","successText":"Siparişiniz başarıyla alındı. Sipariş ettiğiniz ürünler en kısa sürede teslimat adresinize teslim edilecektir.","url3ds":null}}
@@ -170,10 +171,12 @@ class CreditCart extends Component {
     }
 
     _onNavigationStateChange(webViewState) {
+        /*
         const _self = this,
             { url } = webViewState;
         if (url.indexOf('orderProcessing/confirm3dTransaction') != -1)
             _self.setState({ injectScript: 'window.parent.postMessage(document.body.innerText);' });
+        */
     }
 
     _onLoad = () => {
@@ -191,10 +194,12 @@ class CreditCart extends Component {
 
     _getFrm = () => {
         const _self = this,
-            { frm = '', injectScript = '', loading = false } = _self.state,
+            { frm = '', loading = false } = _self.state,
             pre = loading ? <View style={{ backgroundColor: '#FFFFFF', zIndex: 2, position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center', }}><Image source={ICONS['loading']} style={{ resizeMode: 'cover', width: 60, height: 60, borderRadius: 30, }} /></View> : null;
 
-        let view = null;
+        let view = null,
+        injectScript = Platform.OS === "ios" ? "if (window.location.href.indexOf('orderProcessing/confirm3dTransaction') != -1) window.parent.postMessage(document.body.innerText);" : "if (window.location.href.indexOf('orderProcessing/confirm3dTransaction') != -1) window.ReactNativeWebView.postMessage(document.body.innerText);";
+
         if (frm != '') {
             view = (
                 <View style={{ flex: 1, backgroundColor: 'red' }}>
