@@ -209,17 +209,17 @@ class CreditCart extends Component {
 
         let view = null,
             injectScript = `(function () {
-
             try {
                 setTimeout(function () {
-                    if (window.location.href.indexOf('orderProcessing/confirm3dTransaction') != -1)
-                        window.postMessage(document.body.innerText);
-        
+                    if (window.location.href.indexOf('orderProcessing/confirm3dTransaction') != -1) {
+                        var k = document.body.innerText || '';
+                        if (k != '')
+                            window.parent.postMessage(k);
+                    }
                 }, 100);
             } catch (err) {
                 alert(err.message);
             }
-        
         }());`;
 
         if (frm != '') {

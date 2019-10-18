@@ -59,7 +59,12 @@ module.exports = {
             Object
                 .entries(products)
                 .forEach(([key, item]) => {
-                    arr.push(Utils.mapping({ data: item, keys: keys }));
+                    var d = Utils.mapping({ data: item, keys: keys }),
+                        { product_id = '', product_name = '', category_id = '', category_name = '' } = d;
+
+                    //RNInsider.Instance.trackPurchasedItems(order_id, product_id, product_name, category_name, category_name, item['netTotal'], 'TRY');
+
+                    arr.push(d);
                 });
 
             console.log('order_completed', { order_id, total_price, products: arr });
