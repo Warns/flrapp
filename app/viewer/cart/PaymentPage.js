@@ -78,6 +78,16 @@ const setAjx = ({ _self, uri, data }, callback) => {
     });
 };
 
+const WEBVIEW_PROPS = {
+    javaScriptEnabled: true,
+    scrollEnabled: false,
+    allowFileAccess: true,
+    allowUniversalAccessFromFileURLs: true,
+    //useWebKit: true,
+    //originWhitelist: ["*", "file://", "assets://", "asset://"],
+    mixedContentMode: "always"
+};
+
 /* navigator CreditCart component */
 class CreditCart extends Component {
     constructor(props) {
@@ -156,7 +166,7 @@ class CreditCart extends Component {
         } else {
             // error
             setTimeout(() => {
-                if( message != '' )
+                if (message != '')
                     Alert.alert(message);
             }, 500);
         }
@@ -198,7 +208,19 @@ class CreditCart extends Component {
             pre = loading ? <View style={{ backgroundColor: '#FFFFFF', zIndex: 2, position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center', }}><Image source={ICONS['loading']} style={{ resizeMode: 'cover', width: 60, height: 60, borderRadius: 30, }} /></View> : null;
 
         let view = null,
-        injectScript = Platform.OS === "ios" ? "if (window.location.href.indexOf('orderProcessing/confirm3dTransaction') != -1) window.parent.postMessage(document.body.innerText);" : "if (window.location.href.indexOf('orderProcessing/confirm3dTransaction') != -1) window.ReactNativeWebView.postMessage(document.body.innerText);";
+            injectScript = `(function () {
+
+            try {
+                setTimeout(function () {
+                    if (window.location.href.indexOf('orderProcessing/confirm3dTransaction') != -1)
+                        window.postMessage(document.body.innerText);
+        
+                }, 100);
+            } catch (err) {
+                alert(err.message);
+            }
+        
+        }());`;
 
         if (frm != '') {
             view = (
@@ -211,6 +233,7 @@ class CreditCart extends Component {
                         onMessage={this._onMessage}
                         injectedJavaScript={injectScript}
                         onNavigationStateChange={this._onNavigationStateChange.bind(this)}
+                        {...WEBVIEW_PROPS}
                         ref={component => (this.webview = component)}
                         scalesPageToFit={false}
                         automaticallyAdjustContentInsets={false}
@@ -236,6 +259,7 @@ class CreditCart extends Component {
         /* 3d secure modal */
         return (
             <Modal
+                animationType="none"
                 visible={isVisible}
                 onRequestClose={() => { }}
             >
