@@ -1790,7 +1790,7 @@ class FeedsItem extends Component {
           </Text>
         ) : null,
       stockState =
-        stockQty <= 20 ? (
+        ( stockQty > 0 && stockQty <= 20 ) ? (
           <Text
             style={{
               fontFamily: "RegularTyp2",

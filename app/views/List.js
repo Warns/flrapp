@@ -858,7 +858,7 @@ class ListItem extends React.Component {
         </Text>
       );
 
-    let trigger = item.stockQty <= 20 ? "Tükenmek Üzere" : null;
+    let trigger = ( item.stockQty > 0 && item.stockQty <= 20 ) ? "Tükenmek Üzere" : null;
 
     /* 
       texture image

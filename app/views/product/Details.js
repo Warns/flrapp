@@ -608,7 +608,7 @@ class ProductDetails extends React.Component {
             </View>
           );
 
-      let stockQty = item.stockQty <= 20 ? "Tükenmek Üzere" : null,
+      let stockQty = ( item.stockQty > 0 && item.stockQty <= 20 ) ? "Tükenmek Üzere" : null,
         button = item.stockQty > 0 ? (<DefaultButton
           callback={this._addToCart}
           name="SEPETE AT"
