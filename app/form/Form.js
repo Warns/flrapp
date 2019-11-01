@@ -86,6 +86,8 @@ class Form extends Component {
             show: true, // form gizle-goster
             control: true, // hata durumu için
         };
+
+        this._clicklable = true;
     }
 
     componentDidMount() {
@@ -286,6 +288,8 @@ class Form extends Component {
             _t.setState({ validation: false, errMsg: allErrMsg });
             if (control)
                 _t._send(success);
+            else
+                _t._clicklableState('active');
 
             _t.setState({ control: control });
         }, 1);
@@ -337,10 +341,15 @@ class Form extends Component {
                 if (callback)
                     callback({ type: type, data: d, postData: obj });
 
+
+                _self._clicklableState('active');
+
             });
         } else {
             if (callback)
                 callback({ data: obj });
+
+            _self._clicklableState('active');
         }
     }
 
@@ -554,8 +563,22 @@ class Form extends Component {
         }, 100);
     }
 
+    _clicklableState = (k) => {
+        const _self = this;
+        if (k == 'active')
+            setTimeout(() => {
+                _self._clicklable = true;
+            }, 200);
+        else
+            _self._clicklable = false;
+    }
+
     _onPress = () => {
-        this.setState({ validation: true });
+        const _self = this;
+        if (_self._clicklable) {
+            _self._clicklableState('passive');
+            _self.setState({ validation: true });
+        }
     }
 
     _onResetForm = () => {
