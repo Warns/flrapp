@@ -263,6 +263,12 @@ class Assistant extends React.Component {
               return false;
             }
 
+            case "search-empty": {
+              return false;
+            }
+
+            
+
             default:
               break;
           }
